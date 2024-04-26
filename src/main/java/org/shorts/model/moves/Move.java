@@ -4,7 +4,9 @@ import java.util.Objects;
 
 import org.shorts.Main;
 import org.shorts.battle.Battle;
+import org.shorts.battle.Trainer;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.types.TooManyTypesException;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
@@ -44,24 +46,6 @@ public abstract class Move {
         this.priority = 0;
     }
 
-    protected Move(
-        String name,
-        double power,
-        double accuracy,
-        Type type,
-        int maxPP,
-        boolean contact, int secondaryEffectChance, int priority) {
-        this.name = name;
-        this.power = power;
-        this.accuracy = accuracy;
-        this.type = type;
-        this.maxPP = maxPP;
-        this.currentPP = maxPP;
-        this.contact = contact;
-        this.secondaryEffectChance = secondaryEffectChance;
-        this.priority = priority;
-    }
-
     public String getName() {
         return this.name;
     }
@@ -94,6 +78,10 @@ public abstract class Move {
         return priority;
     }
 
+    public void setPriority() {
+        this.priority = priority;
+    }
+
     public int getSecondaryEffectChance() {
         return secondaryEffectChance;
     }
@@ -106,7 +94,7 @@ public abstract class Move {
         return disabled;
     }
 
-    public double getMultiplier(Pokemon attacker, Pokemon defender, Battle battle) throws Exception {
+    public double getMultiplier(Pokemon attacker, Pokemon defender, Battle battle) throws TooManyTypesException {
         return Type.getMultiplier(attacker.getTypes(), this.type, defender.getTypes());
     }
 
@@ -138,4 +126,57 @@ public abstract class Move {
     public int hashCode() {
         return Objects.hash(name, power, accuracy, type, maxPP, contact, priority, secondaryEffectChance);
     }
+
+    public void doMove(Trainer user, Trainer target, Battle battle) {
+        if (this instanceof StatusMove && target.getLead()
+            .getAbility()
+            .getName()
+            .equals("Magic Bounce")) {
+            target = user;
+        }
+        Pokemon userMon = user.getLead();
+        Pokemon targetMon = target.getLead();
+
+        if (this instanceof StatusMove) {
+            this.trySecondaryEffect(userMon, targetMon, battle);
+        } else {
+            int previousTargetHP = targetMon.getCurrentHP();
+            Integer damage = calculateDamage(userMon, targetMon);
+            userMon.beforeAttack(userMon, targetMon, battle, damage, this.getType());
+            targetMon.beforeHit(targetMon, userMon, battle, damage, this.getType());
+            targetMon.takeDamage(damage);
+            targetMon.afterHit(targetMon, userMon, battle, previousTargetHP);
+
+            //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
+
+            if (targetMon.getCurrentHP() == 0) {
+                targetMon.afterFaint(targetMon, userMon, battle);
+                userMon.afterKO(userMon, targetMon, battle);
+                //TODO: Handle fainting and subsequent switch-in.
+
+            }
+
+            //TODO: Handle recoil damage
+            //if(userMon.getCurrentHP() == 0) {
+            //  //TODO: Handle fainting and subsequent switch-in.
+            //}
+        }
+
+    }
+
+    private int calculateDamage(Pokemon userMon, Pokemon targetMon) {
+        int damage = 0;
+        double multiplier = Type.getMultiplier(
+            userMon.getTypes(),
+            this.getType(),
+            targetMon.getTypes());
+
+        if (multiplier == Type.IMMUNE) {
+            //TODO: LOGGER.info("It didn't affect {}", target.getLead().getNickname());
+            return 0;
+        }
+        //If the target isn't immune to the attack,
+        return damage <= 0 ? 1 : (int) (damage * multiplier);
+    }
+
 }

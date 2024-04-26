@@ -8,9 +8,4 @@ public abstract class StatusMove extends Move {
         String name, double accuracy, Type type, int maxPP) {
         super(name, 0, accuracy, type, maxPP, false, 100);
     }
-
-    protected StatusMove(
-        String name, double accuracy, Type type, int maxPP, int priority) {
-        super(name, 0, accuracy, type, maxPP, false, 100, priority);
-    }
 }
