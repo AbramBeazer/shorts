@@ -1,24 +1,20 @@
 package org.shorts.model.moves;
 
 import java.util.Objects;
-import java.util.Set;
 
+import org.shorts.Main;
+import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public abstract class Move {
+import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
 
-    public static enum MoveGroup {
-        STATUS,
-        PHYSICAL,
-        SPECIAL
-    }
+public abstract class Move {
 
     private String name;
     private double power;
     private double accuracy;
     private Type type;
-    private MoveGroup moveGroup;
 
     private int currentPP;
     private int maxPP;
@@ -26,6 +22,7 @@ public abstract class Move {
     private boolean contact;
 
     private int priority;
+    private int secondaryEffectChance;
 
     private boolean disabled = false;
 
@@ -34,17 +31,16 @@ public abstract class Move {
         double power,
         double accuracy,
         Type type,
-        MoveGroup moveGroup,
         int maxPP,
-        boolean contact) {
+        boolean contact, int secondaryEffectChance) {
         this.name = name;
         this.power = power;
         this.accuracy = accuracy;
         this.type = type;
-        this.moveGroup = moveGroup;
         this.maxPP = maxPP;
         this.currentPP = maxPP;
         this.contact = contact;
+        this.secondaryEffectChance = secondaryEffectChance;
         this.priority = 0;
     }
 
@@ -53,17 +49,16 @@ public abstract class Move {
         double power,
         double accuracy,
         Type type,
-        MoveGroup moveGroup,
         int maxPP,
-        boolean contact, int priority) {
+        boolean contact, int secondaryEffectChance, int priority) {
         this.name = name;
         this.power = power;
         this.accuracy = accuracy;
         this.type = type;
-        this.moveGroup = moveGroup;
         this.maxPP = maxPP;
         this.currentPP = maxPP;
         this.contact = contact;
+        this.secondaryEffectChance = secondaryEffectChance;
         this.priority = priority;
     }
 
@@ -83,10 +78,6 @@ public abstract class Move {
         return this.type;
     }
 
-    public MoveGroup getMoveGroup() {
-        return this.moveGroup;
-    }
-
     public int getCurrentPP() {
         return this.currentPP;
     }
@@ -103,15 +94,30 @@ public abstract class Move {
         return priority;
     }
 
+    public int getSecondaryEffectChance() {
+        return secondaryEffectChance;
+    }
+
+    public void setSecondaryEffectChance(int secondaryEffectChance) {
+        this.secondaryEffectChance = secondaryEffectChance;
+    }
+
     public boolean isDisabled() {
         return disabled;
     }
 
-    public double getMultiplier(Set<Type> attackerTypes, Set<Type> defenderTypes) throws Exception {
-        return Type.getMultiplier(attackerTypes, this.type, defenderTypes);
+    public double getMultiplier(Pokemon attacker, Pokemon defender, Battle battle) throws Exception {
+        return Type.getMultiplier(attacker.getTypes(), this.type, defender.getTypes());
     }
 
-    public void secondaryEffect(Pokemon attacker, Pokemon defender) {
+    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+        final int chance = getSecondaryEffectChance() * (attacker.getAbility().equals(SERENE_GRACE) ? 2 : 1);
+        if (Main.RANDOM.nextInt(100) < chance) {
+            applySecondaryEffect(attacker, defender, battle);
+        }
+    }
+
+    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
     }
 
     @Override
@@ -124,12 +130,12 @@ public abstract class Move {
         }
         Move other = (Move) Objects.requireNonNull(o);
         return this.name.equals(other.name) && this.power == other.power && this.accuracy == other.accuracy
-            && this.type.equals(other.type) && this.moveGroup.equals(other.moveGroup) && this.maxPP == other.maxPP
-            && this.contact == other.contact && this.priority == other.priority;
+            && this.type.equals(other.type) && this.maxPP == other.maxPP && this.contact == other.contact
+            && this.priority == other.priority && this.secondaryEffectChance == other.secondaryEffectChance;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, power, accuracy, type, moveGroup, maxPP, contact, priority);
+        return Objects.hash(name, power, accuracy, type, maxPP, contact, priority, secondaryEffectChance);
     }
 }

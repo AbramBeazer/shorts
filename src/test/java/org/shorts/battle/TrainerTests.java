@@ -6,13 +6,14 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.model.Status;
-import org.shorts.model.abilities.Ability;
-import org.shorts.model.items.HeldItem;
+import org.shorts.model.items.HeavyDutyBoots;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.Squirtle;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.model.abilities.Torrent.TORRENT;
+import static org.shorts.model.items.Leftovers.LEFTOVERS;
 
 public class TrainerTests {
 
@@ -24,8 +25,8 @@ public class TrainerTests {
         pokemon = new Squirtle();
         pokemon.setMaxHP(100);
         pokemon.setCurrentHP(100);
-        pokemon.setAbility(new Ability("Torrent"));
-        pokemon.setHeldItem(new HeldItem("Leftovers"));
+        pokemon.setAbility(TORRENT);
+        pokemon.setHeldItem(LEFTOVERS);
         trainer = new Trainer("Ash", List.of(pokemon));
     }
 
@@ -100,7 +101,7 @@ public class TrainerTests {
 
     @Test
     void testStickyBoots() {
-        pokemon.setHeldItem(new HeldItem("Heavy-Duty Boots"));
+        pokemon.setHeldItem(HeavyDutyBoots.HEAVY_DUTY_BOOTS);
         trainer.setStickyWeb(true);
         trainer.setRocks(true);
         trainer.setSpikes(3);
@@ -115,7 +116,7 @@ public class TrainerTests {
     @Test
     void testStickyBootsAbsorbToxicSpikes() {
         pokemon.setTypes(Set.of(Type.POISON));
-        pokemon.setHeldItem(new HeldItem("Heavy-Duty Boots"));
+        pokemon.setHeldItem(HeavyDutyBoots.HEAVY_DUTY_BOOTS);
         trainer.setStickyWeb(true);
         trainer.setRocks(true);
         trainer.setSpikes(3);

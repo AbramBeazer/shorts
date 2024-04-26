@@ -2,6 +2,7 @@ package org.shorts.model.pokemon;
 
 import java.util.Set;
 
+import org.shorts.battle.Battle;
 import org.shorts.model.Nature;
 import org.shorts.model.PokedexEntry;
 import org.shorts.model.Status;
@@ -9,6 +10,8 @@ import org.shorts.model.abilities.Ability;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.moves.Move;
 import org.shorts.model.types.Type;
+
+import static org.shorts.model.abilities.Levitate.LEVITATE;
 
 public class Pokemon {
 
@@ -35,7 +38,15 @@ public class Pokemon {
     private int speed;
     private int stageSpeed;
     private Status status = Status.NONE;
+    //TODO: Add stackable statuses (confused, cursed, in love, etc.)
     private HeldItem heldItem;
+
+    private boolean usingDig = false;
+    private boolean usingFly = false;
+    private boolean usingDive = false;
+    private boolean usingBounce = false;
+
+    private boolean groundedOverride = false;
 
     private int sleepCounter = 0;
 
@@ -138,6 +149,9 @@ public class Pokemon {
     }
 
     public void setMaxHP(int maxHP) {
+        if (maxHP < 1) {
+            throw new IllegalArgumentException("Max HP must be at least 1");
+        }
         this.maxHP = maxHP;
     }
 
@@ -319,11 +333,104 @@ public class Pokemon {
     }
 
     public boolean isGrounded() {
-        return !this.types.contains(Type.FLYING) && !this.ability.getName().equals("Levitate")
-            && !this.getHeldItem().getName().equals("Air Balloon");
+        if (groundedOverride) {
+            return true;
+        } else {
+            return !this.types.contains(Type.FLYING) && !this.ability.equals(LEVITATE)
+                && !this.getHeldItem().getName().equals("Air Balloon");
+        }
+    }
+
+    public boolean isUsingDig() {
+        return usingDig;
+    }
+
+    public void setUsingDig(boolean usingDig) {
+        this.usingDig = usingDig;
+    }
+
+    public boolean isUsingFly() {
+        return usingFly;
+    }
+
+    public void setUsingFly(boolean usingFly) {
+        this.usingFly = usingFly;
+    }
+
+    public boolean isUsingDive() {
+        return usingDive;
+    }
+
+    public void setUsingDive(boolean usingDive) {
+        this.usingDive = usingDive;
+    }
+
+    public boolean isUsingBounce() {
+        return usingBounce;
+    }
+
+    public void setUsingBounce(boolean usingBounce) {
+        this.usingBounce = usingBounce;
     }
 
     public static Pokemon fromPokedexEntry(PokedexEntry entry) {
         return new Pokemon(entry.getPokedexNo(), entry.getSpeciesName(), entry.getSpeciesName(), entry.getTypes());
+    }
+
+    public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
+        ability.afterEntry(self, opponent, battle);
+        heldItem.afterEntry(self, opponent, battle);
+    }
+
+    public void beforeAttack(Pokemon self, Pokemon opponent, Battle battle, Integer damage, Type moveType) {
+        ability.beforeAttack(self, opponent, battle, damage, moveType);
+        heldItem.beforeAttack(self, opponent, battle, damage, moveType);
+    }
+
+    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle) {
+        ability.afterAttack(self, opponent, battle);
+        heldItem.afterAttack(self, opponent, battle);
+    }
+
+    public void afterDrop(Pokemon self, Pokemon opponent, Battle battle) {
+        ability.afterDrop(self, opponent, battle);
+        heldItem.afterDrop(self, opponent, battle);
+    }
+
+    public void beforeHit(Pokemon self, Pokemon opponent, Battle battle, Integer damage, Type moveType) {
+        /* TODO: Ability goes first because of cases where either ability or item nullifies damage, e.g. Levitate and Shuca Berry.
+            My hope is that this will prevent items from being wasted.*/
+        ability.beforeHit(self, opponent, battle, damage, moveType);
+        heldItem.beforeHit(self, opponent, battle, damage, moveType);
+    }
+
+    public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP) {
+        ability.afterHit(self, opponent, battle, previousHP);
+        heldItem.afterHit(self, opponent, battle, previousHP);
+    }
+
+    public void afterStatus(Pokemon self, Pokemon opponent, Battle battle) {
+        ability.afterStatus(self, opponent, battle);
+        heldItem.afterStatus(self, opponent, battle);
+    }
+
+    public void beforeTurn(Pokemon self, Pokemon opponent, Battle battle) {
+        ability.beforeTurn(self, opponent, battle);
+        heldItem.beforeTurn(self, opponent, battle);
+    }
+
+    public void afterTurn(Pokemon self, Pokemon opponent, Battle battle) {
+        ability.afterTurn(self, opponent, battle);
+        heldItem.afterTurn(self, opponent, battle);
+    }
+
+    public void afterFaint(Pokemon self, Pokemon opponent, Battle battle) {
+        ability.afterFaint(self, opponent, battle);
+        heldItem.afterFaint(self, opponent, battle);
+    }
+
+    public void afterKO(Pokemon self, Pokemon opponent, Battle battle) {
+        ability.afterKO(self, opponent, battle);
+        heldItem.afterKO(self, opponent, battle);
     }
 }

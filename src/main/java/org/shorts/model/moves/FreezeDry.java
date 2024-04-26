@@ -3,29 +3,28 @@ package org.shorts.model.moves;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.shorts.battle.Battle;
 import org.shorts.model.Status;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-import static org.shorts.Main.RANDOM;
-
-public class FreezeDry extends Move {
+public class FreezeDry extends SpecialMove {
 
     public FreezeDry() {
-        super("Freeze-Dry", 70, 100, Type.ICE, MoveGroup.SPECIAL, 32, false);
+        super("Freeze-Dry", 70, 100, Type.ICE, 32, false, 10);
     }
 
     @Override
-    public double getMultiplier(Set<Type> attackerTypes, Set<Type> defenderTypes) throws Exception {
-        Set<Type> modifiedDefenderTypes = defenderTypes.stream().filter(type -> !type.equals(Type.WATER)).collect(
+    public double getMultiplier(Pokemon attacker, Pokemon defender, Battle battle) throws Exception {
+        Set<Type> modifiedDefenderTypes = defender.getTypes().stream().filter(type -> !type.equals(Type.WATER)).collect(
             Collectors.toSet());
-        double multiplier = Type.getMultiplier(attackerTypes, this.getType(), modifiedDefenderTypes);
-        return defenderTypes.contains(Type.WATER) ? multiplier * 2 : multiplier;
+        double multiplier = Type.getMultiplier(attacker.getTypes(), this.getType(), modifiedDefenderTypes);
+        return defender.getTypes().contains(Type.WATER) ? multiplier * 2 : multiplier;
     }
 
     @Override
-    public void secondaryEffect(Pokemon attacker, Pokemon defender) {
-        if (RANDOM.nextInt(10) == 0) {
+    public void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+        if (!defender.getTypes().contains(Type.ICE)) {
             defender.setStatus(Status.FREEZE);
         }
     }

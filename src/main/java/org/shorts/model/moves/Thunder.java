@@ -1,22 +1,21 @@
 package org.shorts.model.moves;
 
-import org.shorts.Main;
+import org.shorts.battle.Battle;
 import org.shorts.model.Status;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class Thunder extends Move {
+public class Thunder extends SpecialMove {
 
     public Thunder() {
-        super("Thunder", 120, 70, Type.ELECTRIC, MoveGroup.SPECIAL, 16, false);
+        super("Thunder", 120, 70, Type.ELECTRIC, 16, false, 30);
     }
 
     @Override
-    public void secondaryEffect(Pokemon attacker, Pokemon defender) {
+    public void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
         if (!defender.getTypes().contains(Type.ELECTRIC)) {
-            if (Main.RANDOM.nextInt(10) < 3) {
-                defender.setStatus(Status.PARALYZE);
-            }
+            defender.setStatus(Status.PARALYZE);
         }
     }
+
 }

@@ -6,6 +6,7 @@ import org.shorts.Main;
 import org.shorts.model.Status;
 import org.shorts.model.abilities.Ability;
 import org.shorts.model.moves.Move;
+import org.shorts.model.moves.StatusMove;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
@@ -84,37 +85,55 @@ public class SingleBattle extends Battle {
 
     private void doMove(Trainer user, Move move, Trainer target) {
         if (!move.equals(NULL_MOVE)) {
-            if (move.getMoveGroup().equals(Move.MoveGroup.STATUS) &&
-                Type.getMultiplier(user.getLead().getTypes(), move.getType(), target.getLead().getTypes())
-                    != Type.IMMUNE) {
-                move.secondaryEffect(user.getLead(), target.getLead());
+            if (move instanceof StatusMove && target.getLead()
+                .getAbility()
+                .getName()
+                .equals("Magic Bounce")) {
+                target = user;
+            }
+            Pokemon userMon = user.getLead();
+            Pokemon targetMon = target.getLead();
+
+            if (move instanceof StatusMove) {
+                move.trySecondaryEffect(userMon, targetMon, this);
             } else {
-                int damage = calculateDamage(user, move, target);
-                target.getLead().takeDamage(damage);
-                //TODO: Handle Sturdy, Focus Sash, Endure, etc.
-                if (target.getLead().getCurrentHP() == 0) {
+                int previousTargetHP = targetMon.getCurrentHP();
+                Integer damage = calculateDamage(userMon, move, targetMon);
+                userMon.beforeAttack(userMon, targetMon, this, damage, move.getType());
+                targetMon.beforeHit(targetMon, userMon, this, damage, move.getType());
+                targetMon.takeDamage(damage);
+                targetMon.afterHit(targetMon, userMon, this, previousTargetHP);
+
+                //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
+
+                if (targetMon.getCurrentHP() == 0) {
+                    targetMon.afterFaint(targetMon, userMon, this);
+                    userMon.afterKO(userMon, targetMon, this);
                     //TODO: Handle fainting and subsequent switch-in.
+
                 }
+
                 //TODO: Handle recoil damage
-                //if(user.getLead().getCurrentHP() == 0) {
+                //if(userMon.getCurrentHP() == 0) {
                 //  //TODO: Handle fainting and subsequent switch-in.
                 //}
             }
         }
     }
 
-    private int calculateDamage(Trainer user, Move move, Trainer target) {
+    private int calculateDamage(Pokemon userMon, Move move, Pokemon targetMon) {
         int damage = 0;
-        double typeMultiplier = Type.getMultiplier(
-            user.getLead().getTypes(),
+        double multiplier = Type.getMultiplier(
+            userMon.getTypes(),
             move.getType(),
-            target.getLead().getTypes());
-        if (typeMultiplier == Type.IMMUNE) {
+            targetMon.getTypes());
+
+        if (multiplier == Type.IMMUNE) {
             //TODO: LOGGER.info("It didn't affect {}", target.getLead().getNickname());
             return 0;
         }
         //If the target isn't immune to the attack,
-        return damage <= 0 ? 1 : (int) (damage * typeMultiplier);
+        return damage <= 0 ? 1 : (int) (damage * multiplier);
     }
 
     private void handleSwitches(int choiceOne, int choiceTwo) {
@@ -152,8 +171,7 @@ public class SingleBattle extends Battle {
             Pokemon teammate = trainer.getTeam()[i];
             String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().name();
             System.out.println(
-                (i + option) + ")" + "\t(" + teammate.getSpeciesName() + "\t(" + teammate.getCurrentHP()
-                    + "/"
+                (i + option) + ")" + "\t(" + teammate.getSpeciesName() + "\t(" + teammate.getCurrentHP() + "/"
                     + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
         }
         return System.in.read();
