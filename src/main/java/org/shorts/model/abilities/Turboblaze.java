@@ -2,7 +2,7 @@ package org.shorts.model.abilities;
 
 public class Turboblaze extends NullifyingAbility {
 
-    public Turboblaze() {
+    private Turboblaze() {
         super("Turboblaze");
     }
 
