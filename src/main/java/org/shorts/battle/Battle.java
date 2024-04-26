@@ -2,14 +2,12 @@ package org.shorts.battle;
 
 import java.io.IOException;
 
-import org.shorts.model.types.Type;
-
 public abstract class Battle {
 
     protected int weatherTurns = 0;
-    protected Type weatherType = null;
+    protected Weather weather = Weather.NONE;
     protected int terrainTurns = 0;
-    protected Type terrainType = null;
+    protected Terrain terrain = Terrain.NONE;
 
     public abstract void run() throws IOException;
 
@@ -25,12 +23,12 @@ public abstract class Battle {
         this.weatherTurns = weatherTurns;
     }
 
-    public Type getWeatherType() {
-        return weatherType;
+    public Weather getWeather() {
+        return weather;
     }
 
-    public void setWeatherType(Type weatherType) {
-        this.weatherType = weatherType;
+    public void setWeather(Weather weather) {
+        this.weather = weather;
     }
 
     public int getTerrainTurns() {
@@ -41,11 +39,11 @@ public abstract class Battle {
         this.terrainTurns = terrainTurns;
     }
 
-    public Type getTerrainType() {
-        return terrainType;
+    public Terrain getTerrain() {
+        return terrain;
     }
 
-    public void setTerrainType(Type terrainType) {
-        this.terrainType = terrainType;
+    public void setTerrain(Terrain terrain) {
+        this.terrain = terrain;
     }
 }
