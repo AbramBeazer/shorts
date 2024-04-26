@@ -1,11 +1,13 @@
 package org.shorts.model.types;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class TooManyTypesException extends IllegalArgumentException {
 
-    static final String TOO_MANY_TYPES_ERROR_MESSAGE = "No Pokemon can have more than two types";
+    static final String TOO_MANY_TYPES_ERROR_MESSAGE = "No Pokemon can have more than two types! Provided: ";
 
-    @Override
-    public String getMessage() {
-        return TOO_MANY_TYPES_ERROR_MESSAGE;
+    public TooManyTypesException(Set<Type> types) {
+        super(TOO_MANY_TYPES_ERROR_MESSAGE + types.stream().map(Type::toString).collect(Collectors.joining(", ")));
     }
 }

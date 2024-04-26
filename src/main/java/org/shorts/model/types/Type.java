@@ -172,8 +172,11 @@ public class Type implements IType {
 
     public static double getMultiplier(Set<Type> attackerTypes, Type moveType, Set<Type> defenderTypes)
         throws TooManyTypesException {
-        if (attackerTypes.size() > 2 || defenderTypes.size() > 2) {
-            throw new TooManyTypesException();
+        if (attackerTypes.size() > 2) {
+            throw new TooManyTypesException(attackerTypes);
+        }
+        if (defenderTypes.size() > 2) {
+            throw new TooManyTypesException(defenderTypes);
         }
         double multiplier = attackerTypes.stream().anyMatch(type -> type.id == moveType.id) ? STAB : 1;
         for (Type def : defenderTypes) {
@@ -201,6 +204,11 @@ public class Type implements IType {
     @Override
     public int hashCode() {
         return 17 * this.resistances.hashCode() * this.weaknesses.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     private static enum TypeId {
