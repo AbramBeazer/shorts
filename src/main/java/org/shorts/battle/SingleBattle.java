@@ -4,13 +4,8 @@ import java.io.IOException;
 
 import org.shorts.Main;
 import org.shorts.model.Status;
-import org.shorts.model.abilities.Ability;
 import org.shorts.model.moves.Move;
-import org.shorts.model.moves.StatusMove;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.types.Type;
-
-import static org.shorts.model.moves.NullMove.NULL_MOVE;
 
 public class SingleBattle extends Battle {
 
@@ -45,8 +40,8 @@ public class SingleBattle extends Battle {
         //take player input
         int choiceOne = pollPlayerInput(playerOne);
         int choiceTwo = pollPlayerInput(playerTwo);
-        Move moveOne = NULL_MOVE;
-        Move moveTwo = NULL_MOVE;
+        Move moveOne = null;
+        Move moveTwo = null;
 
         //PRIORITY 6
         handleSwitches(choiceOne, choiceTwo);
@@ -58,11 +53,11 @@ public class SingleBattle extends Battle {
         }
 
         if (moveOne.getPriority() > moveTwo.getPriority()) {
-            doMove(playerOne, moveOne, playerTwo);
-            doMove(playerTwo, moveTwo, playerOne);
+            moveOne.doMove(playerOne, playerTwo, this);
+            moveTwo.doMove(playerTwo, playerOne, this);
         } else if (moveTwo.getPriority() > moveOne.getPriority()) {
-            doMove(playerTwo, moveTwo, playerOne);
-            doMove(playerOne, moveOne, playerTwo);
+            moveTwo.doMove(playerTwo, playerOne, this);
+            moveOne.doMove(playerOne, playerTwo, this);
         } else if (moveOne.getPriority() == moveTwo.getPriority()) {
             int speedOne = playerOne.getLead().getSpeed();
             int speedTwo = playerTwo.getLead().getSpeed();
@@ -80,60 +75,6 @@ public class SingleBattle extends Battle {
                 }
             }
         }
-
-    }
-
-    private void doMove(Trainer user, Move move, Trainer target) {
-        if (!move.equals(NULL_MOVE)) {
-            if (move instanceof StatusMove && target.getLead()
-                .getAbility()
-                .getName()
-                .equals("Magic Bounce")) {
-                target = user;
-            }
-            Pokemon userMon = user.getLead();
-            Pokemon targetMon = target.getLead();
-
-            if (move instanceof StatusMove) {
-                move.trySecondaryEffect(userMon, targetMon, this);
-            } else {
-                int previousTargetHP = targetMon.getCurrentHP();
-                Integer damage = calculateDamage(userMon, move, targetMon);
-                userMon.beforeAttack(userMon, targetMon, this, damage, move.getType());
-                targetMon.beforeHit(targetMon, userMon, this, damage, move.getType());
-                targetMon.takeDamage(damage);
-                targetMon.afterHit(targetMon, userMon, this, previousTargetHP);
-
-                //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
-
-                if (targetMon.getCurrentHP() == 0) {
-                    targetMon.afterFaint(targetMon, userMon, this);
-                    userMon.afterKO(userMon, targetMon, this);
-                    //TODO: Handle fainting and subsequent switch-in.
-
-                }
-
-                //TODO: Handle recoil damage
-                //if(userMon.getCurrentHP() == 0) {
-                //  //TODO: Handle fainting and subsequent switch-in.
-                //}
-            }
-        }
-    }
-
-    private int calculateDamage(Pokemon userMon, Move move, Pokemon targetMon) {
-        int damage = 0;
-        double multiplier = Type.getMultiplier(
-            userMon.getTypes(),
-            move.getType(),
-            targetMon.getTypes());
-
-        if (multiplier == Type.IMMUNE) {
-            //TODO: LOGGER.info("It didn't affect {}", target.getLead().getNickname());
-            return 0;
-        }
-        //If the target isn't immune to the attack,
-        return damage <= 0 ? 1 : (int) (damage * multiplier);
     }
 
     private void handleSwitches(int choiceOne, int choiceTwo) {
@@ -147,13 +88,12 @@ public class SingleBattle extends Battle {
             playerTwo.applyEntryHazards();
         }
 
-        //TODO: apply effects of switch-in abilities like Drizzle, Intimidate, etc.
         if (choiceOne > 4) {
-            Ability abilityOne = playerOne.getLead().getAbility();
+            playerOne.getLead().getAbility().afterEntry(playerOne.getLead(), playerTwo.getLead(), this);
         }
 
         if (choiceTwo > 4) {
-            Ability abilityTwo = playerTwo.getLead().getAbility();
+            playerTwo.getLead().getAbility().afterEntry(playerTwo.getLead(), playerOne.getLead(), this);
         }
     }
 
@@ -167,8 +107,8 @@ public class SingleBattle extends Battle {
             option++;
         }
         System.out.println("\n~~~SWITCH POKÉMON~~~");
-        for (int i = 1; i < trainer.getTeam().length; i++) {
-            Pokemon teammate = trainer.getTeam()[i];
+        for (int i = 1; i < trainer.getTeam().size(); i++) {
+            Pokemon teammate = trainer.getTeam().get(i);
             String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().name();
             System.out.println(
                 (i + option) + ")" + "\t(" + teammate.getSpeciesName() + "\t(" + teammate.getCurrentHP() + "/"
