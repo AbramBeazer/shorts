@@ -341,6 +341,10 @@ public class Pokemon {
         }
     }
 
+    public boolean hasFainted() {
+        return currentHP == 0;
+    }
+
     public boolean isUsingDig() {
         return usingDig;
     }
