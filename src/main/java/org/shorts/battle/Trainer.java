@@ -1,7 +1,7 @@
 package org.shorts.battle;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.shorts.model.Status;
@@ -9,10 +9,13 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.TooManyTypesException;
 import org.shorts.model.types.Type;
 
+import static org.shorts.model.abilities.MagicGuard.MAGIC_GUARD;
+import static org.shorts.model.items.HeavyDutyBoots.HEAVY_DUTY_BOOTS;
+
 public class Trainer {
 
     private final String name;
-    private final Pokemon[] team = new Pokemon[6];
+    private final List<Pokemon> team;
     private boolean rocks = false;
 
     private int spikes = 0;
@@ -22,8 +25,13 @@ public class Trainer {
     private boolean stickyWeb = false;
 
     public Trainer(String name, List<Pokemon> team) {
-        this.name = name;
-        team.subList(0, Math.min(team.size(), 6)).toArray(this.team);
+        this.name = Objects.requireNonNull(name, "Come on, tell the professor your name!");
+        this.team = Objects.requireNonNull(team, "Constructor parameter \"team\" is null!");
+        if (team.isEmpty()) {
+            throw new IllegalArgumentException("You can't go into the tall grass without a Pokémon! (Team is empty.)");
+        } else if (team.size() > 6) {
+            throw new IllegalArgumentException("Trainers are permitted to carry a maximum of six Pokémon.");
+        }
     }
 
     public boolean isRocks() {
@@ -62,58 +70,39 @@ public class Trainer {
         return name;
     }
 
-    public Pokemon[] getTeam() {
+    public List<Pokemon> getTeam() {
         return team;
     }
 
     public Pokemon getLead() {
-        return team[0];
+        return team.get(0);
     }
 
     public boolean hasLost() {
-        return Arrays.stream(this.team).allMatch(p -> p.getCurrentHP() == 0);
+        return this.team.stream().allMatch(p -> p.getCurrentHP() == 0);
     }
 
     public void switchPokemon(int indexA, int indexB) {
         if (indexA != indexB) {
-            Pokemon a = this.team[indexA];
-            Pokemon b = this.team[indexB];
-            this.team[indexB] = a;
-            this.team[indexA] = b;
+            Pokemon a = this.team.get(indexA);
+            this.team.set(indexA, team.get(indexB));
+            this.team.set(indexB, a);
         }
     }
 
     public void applyEntryHazards() {
-        Pokemon pokemon = team[0];
-        boolean boots = pokemon.getHeldItem().getName().equals("Heavy-Duty Boots");
-        boolean magicGuard = pokemon.getAbility().getName().equals("Magic Guard");
+        Pokemon pokemon = this.getLead();
+        boolean boots = pokemon.getHeldItem().equals(HEAVY_DUTY_BOOTS);
+        boolean magicGuard = pokemon.getAbility().equals(MAGIC_GUARD);
 
         if (!boots) {
             //Stealth Rock
-            if (rocks) {
-                double multiplier = .125;
-                try {
-                    multiplier *= Type.getMultiplier(Set.of(), Type.ROCK, team[0].getTypes());
-                } catch (TooManyTypesException e) {
-                    System.out.println("Couldn't calculate Stealth Rock multiplier; defaulting to 1/8");
-                }
-                int damage = (int) (multiplier * pokemon.getMaxHP());
-                pokemon.takeDamage(damage);
-            }
+            if (rocks && !magicGuard && faintedFromRocks(pokemon)) {
+                return;
+            }//TODO: What happens if rocks put the mon into Sitrus Berry range before Spikes activates? Does the healing happen before the spikes deal damage?
             if (pokemon.isGrounded()) {
-                if (!magicGuard) {
-                    if (spikes == 1) {
-                        int damage = pokemon.getMaxHP() / 8;
-                        pokemon.takeDamage(damage);
-                    }
-                    if (spikes == 2) {
-                        int damage = pokemon.getMaxHP() / 6;
-                        pokemon.takeDamage(damage);
-                    }
-                    if (spikes == 3) {
-                        int damage = pokemon.getMaxHP() / 4;
-                        pokemon.takeDamage(damage);
-                    }
+                if (!magicGuard && faintedFromSpikes(pokemon)) {
+                    return;
                 }
                 if (toxicSpikes > 0) {
                     if (pokemon.getTypes().contains(Type.POISON)) {
@@ -131,6 +120,34 @@ public class Trainer {
                 absorbToxicSpikes(pokemon);
             }
         }
+    }
+
+    private boolean faintedFromRocks(Pokemon pokemon) {
+        double multiplier = .125;
+        try {
+            multiplier *= Type.getMultiplier(Set.of(), Type.ROCK, pokemon.getTypes());
+        } catch (TooManyTypesException e) {
+            throw new IllegalArgumentException("Couldn't calculate Stealth Rock multiplier; see root exception.");
+        }
+        int damage = (int) (multiplier * pokemon.getMaxHP());
+        pokemon.takeDamage(damage);
+        return pokemon.hasFainted();
+    }
+
+    private boolean faintedFromSpikes(Pokemon pokemon) {
+        if (spikes == 1) {
+            int damage = pokemon.getMaxHP() / 8;
+            pokemon.takeDamage(damage);
+        }
+        if (spikes == 2) {
+            int damage = pokemon.getMaxHP() / 6;
+            pokemon.takeDamage(damage);
+        }
+        if (spikes == 3) {
+            int damage = pokemon.getMaxHP() / 4;
+            pokemon.takeDamage(damage);
+        }
+        return pokemon.hasFainted();
     }
 
     public void addSpikes() {

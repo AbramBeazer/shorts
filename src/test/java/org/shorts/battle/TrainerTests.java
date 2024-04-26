@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.abilities.Torrent.TORRENT;
 import static org.shorts.model.items.Leftovers.LEFTOVERS;
 
-public class TrainerTests {
+class TrainerTests {
 
     Trainer trainer;
     Pokemon pokemon;
