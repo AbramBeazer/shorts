@@ -5,7 +5,7 @@ import org.shorts.model.pokemon.Pokemon;
 
 public class Sturdy extends Ability {
 
-    public Sturdy() {
+    private Sturdy() {
         super("Sturdy");
     }
 

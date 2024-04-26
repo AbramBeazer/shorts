@@ -7,6 +7,6 @@ import org.shorts.model.types.Type;
 public class Pikachu extends Pokemon {
 
     public Pikachu() {
-        super(25, null, "PIKACHU", Set.of(Type.ELECTRIC));
+        super("025", null, "PIKACHU", Set.of(Type.ELECTRIC));
     }
 }

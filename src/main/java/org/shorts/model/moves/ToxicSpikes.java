@@ -4,7 +4,7 @@ import org.shorts.model.types.Type;
 
 public class ToxicSpikes extends StatusMove {
 
-    public ToxicSpikes() {
+    private ToxicSpikes() {
         super("Toxic Spikes", 0, Type.POISON, 32);
     }
 

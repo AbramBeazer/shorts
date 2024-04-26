@@ -4,7 +4,7 @@ import org.shorts.model.types.Type;
 
 public class StealthRock extends StatusMove {
 
-    public StealthRock() {
+    private StealthRock() {
         super("Stealth Rock", 0, Type.ROCK, 32);
     }
 

@@ -4,7 +4,7 @@ import org.shorts.model.types.Type;
 
 public class Spikes extends StatusMove {
 
-    public Spikes() {
+    private Spikes() {
         super("Spikes", 0, Type.GROUND, 32);
     }
 

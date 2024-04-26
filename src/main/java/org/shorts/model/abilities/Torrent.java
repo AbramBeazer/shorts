@@ -6,7 +6,7 @@ import org.shorts.model.types.Type;
 
 public class Torrent extends Ability {
 
-    public Torrent() {
+    private Torrent() {
         super("Torrent");
     }
 

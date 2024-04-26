@@ -9,7 +9,7 @@ import static org.shorts.model.types.Type.FIRE;
 
 public class Scald extends SpecialMove {
 
-    public Scald() {
+    private Scald() {
         super("Scald", 80, 100, Type.WATER, 24, false, 30);
     }
 
@@ -19,4 +19,6 @@ public class Scald extends SpecialMove {
             defender.setStatus(Status.BURN);
         }
     }
+
+    public static final Scald SCALD = new Scald();
 }

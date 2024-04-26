@@ -2,7 +2,7 @@ package org.shorts.model.abilities;
 
 public class MoldBreaker extends NullifyingAbility {
 
-    public MoldBreaker() {
+    private MoldBreaker() {
         super("Mold Breaker");
     }
 

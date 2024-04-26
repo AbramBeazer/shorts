@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 
 public class Spore extends StatusMove {
 
-    public Spore() {
+    private Spore() {
         super("Spore", 0, Type.GRASS, 24);
     }
 
@@ -19,4 +19,6 @@ public class Spore extends StatusMove {
             defender.setStatus(Status.SLEEP);
         }
     }
+
+    public static final Spore SPORE = new Spore();
 }

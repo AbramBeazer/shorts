@@ -7,6 +7,6 @@ import org.shorts.model.types.Type;
 public class Sneasel extends Pokemon {
 
     public Sneasel() {
-        super(215, null, "SNEASEL", Set.of(Type.DARK, Type.ICE));
+        super("215", null, "SNEASEL", Set.of(Type.DARK, Type.ICE));
     }
 }

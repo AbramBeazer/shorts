@@ -2,7 +2,7 @@ package org.shorts.model.abilities;
 
 public class MyceliumMight extends NullifyingAbility {
 
-    public MyceliumMight() {
+    private MyceliumMight() {
         super("Mycelium Might");
     }
 

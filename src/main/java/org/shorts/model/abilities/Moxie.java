@@ -5,7 +5,7 @@ import org.shorts.model.pokemon.Pokemon;
 
 public class Moxie extends Ability {
 
-    public Moxie() {
+    private Moxie() {
         super("Moxie");
     }
 

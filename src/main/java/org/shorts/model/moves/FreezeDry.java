@@ -10,7 +10,7 @@ import org.shorts.model.types.Type;
 
 public class FreezeDry extends SpecialMove {
 
-    public FreezeDry() {
+    private FreezeDry() {
         super("Freeze-Dry", 70, 100, Type.ICE, 32, false, 10);
     }
 
@@ -28,4 +28,6 @@ public class FreezeDry extends SpecialMove {
             defender.setStatus(Status.FREEZE);
         }
     }
+
+    public static final FreezeDry FREEZE_DRY = new FreezeDry();
 }

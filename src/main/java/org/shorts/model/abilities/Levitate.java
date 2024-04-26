@@ -6,7 +6,7 @@ import org.shorts.model.types.Type;
 
 public class Levitate extends Ability {
 
-    public Levitate() {
+    private Levitate() {
         super("Levitate");
     }
 

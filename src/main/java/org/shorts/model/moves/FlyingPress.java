@@ -6,7 +6,7 @@ import org.shorts.model.types.Type;
 
 public class FlyingPress extends PhysicalMove {
 
-    public FlyingPress() {
+    private FlyingPress() {
         super("Flying Press", 100, 100, Type.FIGHTING, 95, true, 0);
     }
 
@@ -16,4 +16,6 @@ public class FlyingPress extends PhysicalMove {
         multiplier *= Type.getMultiplier(attacker.getTypes(), Type.FLYING, defender.getTypes());
         return multiplier;
     }
+
+    public static final FlyingPress FLYING_PRESS = new FlyingPress();
 }

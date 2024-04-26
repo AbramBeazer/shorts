@@ -2,7 +2,7 @@ package org.shorts.model.abilities;
 
 public class Teravolt extends NullifyingAbility {
 
-    public Teravolt() {
+    private Teravolt() {
         super("Teravolt");
     }
 

@@ -4,7 +4,7 @@ import org.shorts.model.types.Type;
 
 public class StickyWeb extends StatusMove {
 
-    public StickyWeb() {
+    private StickyWeb() {
         super("Sticky Web", 0, Type.BUG, 32);
     }
 

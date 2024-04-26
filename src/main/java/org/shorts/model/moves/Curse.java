@@ -7,7 +7,7 @@ import static org.shorts.model.types.Type.GHOST;
 
 public class Curse extends StatusMove {
 
-    public Curse() {
+    private Curse() {
         super("Curse", 0, GHOST, 16);
     }
 
@@ -24,4 +24,6 @@ public class Curse extends StatusMove {
             attacker.changeDefense(1);
         }
     }
+
+    public static final Curse CURSE = new Curse();
 }

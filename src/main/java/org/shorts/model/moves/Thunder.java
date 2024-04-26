@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 
 public class Thunder extends SpecialMove {
 
-    public Thunder() {
+    private Thunder() {
         super("Thunder", 120, 70, Type.ELECTRIC, 16, false, 30);
     }
 
@@ -18,4 +18,5 @@ public class Thunder extends SpecialMove {
         }
     }
 
+    public static final Thunder THUNDER = new Thunder();
 }

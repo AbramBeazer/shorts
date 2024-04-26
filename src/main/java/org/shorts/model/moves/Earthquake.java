@@ -1,12 +1,13 @@
 package org.shorts.model.moves;
 
 import org.shorts.battle.Battle;
+import org.shorts.battle.Terrain;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
 public class Earthquake extends PhysicalMove {
 
-    public Earthquake() {
+    private Earthquake() {
         super("Earthquake", 100, 100, Type.GROUND, 16, false, 0);
     }
 
@@ -16,7 +17,7 @@ public class Earthquake extends PhysicalMove {
         if (defender.isUsingDig()) {
             multiplier *= 2;
         }
-        if (battle.getTerrainType().getName().equals("Grassy")) {
+        if (battle.getTerrain().equals(Terrain.GRASSY)) {
             multiplier *= 0.5;
         }
         return multiplier;

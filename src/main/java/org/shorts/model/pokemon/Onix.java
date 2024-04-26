@@ -7,6 +7,6 @@ import org.shorts.model.types.Type;
 public class Onix extends Pokemon {
 
     public Onix() {
-        super(95, null, "ONIX", Set.of(Type.ROCK, Type.GROUND));
+        super("095", null, "ONIX", Set.of(Type.ROCK, Type.GROUND));
     }
 }

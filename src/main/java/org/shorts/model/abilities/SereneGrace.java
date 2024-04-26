@@ -2,7 +2,7 @@ package org.shorts.model.abilities;
 
 public class SereneGrace extends Ability {
 
-    public SereneGrace() {
+    private SereneGrace() {
         super("Serene Grace");
     }
 

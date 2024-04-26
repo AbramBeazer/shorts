@@ -7,6 +7,6 @@ import org.shorts.model.types.Type;
 public class Bulbasaur extends Pokemon {
 
     public Bulbasaur() {
-        super(1, null, "BULBASAUR", Set.of(Type.GRASS, Type.POISON));
+        super("001", null, "BULBASAUR", Set.of(Type.GRASS, Type.POISON));
     }
 }
