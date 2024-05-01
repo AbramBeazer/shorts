@@ -15,11 +15,11 @@ public class FreezeDry extends SpecialMove {
     }
 
     @Override
-    public double getMultiplier(Pokemon attacker, Pokemon defender, Battle battle) throws Exception {
-        Set<Type> modifiedDefenderTypes = defender.getTypes().stream().filter(type -> !type.equals(Type.WATER)).collect(
+    public double getTypeMultiplier(Type moveType, Set<Type> defenderTypes) {
+        Set<Type> modifiedDefenderTypes = defenderTypes.stream().filter(type -> !type.equals(Type.WATER)).collect(
             Collectors.toSet());
-        double multiplier = Type.getMultiplier(attacker.getTypes(), this.getType(), modifiedDefenderTypes);
-        return defender.getTypes().contains(Type.WATER) ? multiplier * 2 : multiplier;
+        double multiplier = super.getTypeMultiplier(this.getType(), modifiedDefenderTypes);
+        return defenderTypes.contains(Type.WATER) ? multiplier * 2 : multiplier;
     }
 
     @Override

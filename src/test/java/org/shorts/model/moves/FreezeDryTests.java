@@ -18,10 +18,11 @@ import org.shorts.model.pokemon.Squirtle;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.model.abilities.Torrent.TORRENT;
+import static org.shorts.model.moves.FreezeDry.FREEZE_DRY;
 
 class FreezeDryTests {
 
-    private FreezeDry freezeDry;
     private Battle battle;
 
     @BeforeAll
@@ -31,30 +32,29 @@ class FreezeDryTests {
 
     @BeforeEach
     void setup() {
-        freezeDry = new FreezeDry();
         battle = new SingleBattle(new Trainer("a", List.of()), new Trainer("b", List.of()));
     }
 
     @Test
-    void testGetMultiplierOnWaterType() throws Exception {
-        Pokemon attacker = new Bulbasaur();
-        Pokemon defender = new Squirtle();
-        assertThat(freezeDry.getMultiplier(attacker, defender, battle)).isEqualTo(Type.SUPER_EFFECTIVE);
+    void testGetMultiplierOnWaterType() {
+        Pokemon defender = new Squirtle(TORRENT);
+        assertThat(FREEZE_DRY.getTypeMultiplier(FREEZE_DRY.getType(),
+            defender.getTypes())).isEqualTo(Type.SUPER_EFFECTIVE);
     }
 
     @Test
-    void testGetMultiplierQuadEffectiveOnWaterType() throws Exception {
-        Pokemon attacker = new Bulbasaur();
-        Pokemon defender = new Gyarados();
-        assertThat(freezeDry.getMultiplier(attacker, defender, battle)).isEqualTo(Type.QUAD_EFFECTIVE);
+    void testGetMultiplierQuadEffectiveOnWaterType() {
+        Pokemon defender = new Gyarados(TORRENT);
+        assertThat(FREEZE_DRY.getTypeMultiplier(FREEZE_DRY.getType(),
+            defender.getTypes())).isEqualTo(Type.QUAD_EFFECTIVE);
     }
 
     @Test
     void testSecondaryEffect() {
-        Pokemon attacker = new Squirtle();
-        Pokemon defender = new Bulbasaur();
+        Pokemon attacker = new Squirtle(TORRENT);
+        Pokemon defender = new Bulbasaur(TORRENT);
         assertThat(defender.getStatus()).isNotEqualTo(Status.FREEZE);
-        freezeDry.applySecondaryEffect(attacker, defender, battle);
+        FREEZE_DRY.applySecondaryEffect(attacker, defender, battle);
         assertThat(defender.getStatus()).isEqualTo(Status.FREEZE);
     }
 }
