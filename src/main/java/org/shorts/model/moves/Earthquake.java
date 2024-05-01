@@ -12,8 +12,8 @@ public class Earthquake extends PhysicalMove {
     }
 
     @Override
-    public double getMultiplier(Pokemon attacker, Pokemon defender, Battle battle) throws Exception {
-        double multiplier = super.getMultiplier(attacker, defender, battle);
+    public int applyMultipliers(Pokemon attacker, Pokemon defender, Battle battle, int baseDamage) {
+        int multiplier = super.applyMultipliers(attacker, defender, battle, baseDamage);
         if (defender.isUsingDig()) {
             multiplier *= 2;
         }

@@ -1,7 +1,7 @@
 package org.shorts.model.moves;
 
-import org.shorts.battle.Battle;
-import org.shorts.model.pokemon.Pokemon;
+import java.util.Set;
+
 import org.shorts.model.types.Type;
 
 public class FlyingPress extends PhysicalMove {
@@ -11,10 +11,10 @@ public class FlyingPress extends PhysicalMove {
     }
 
     @Override
-    public double getMultiplier(Pokemon attacker, Pokemon defender, Battle battle) throws Exception {
-        double multiplier = super.getMultiplier(attacker, defender, battle);
-        multiplier *= Type.getMultiplier(attacker.getTypes(), Type.FLYING, defender.getTypes());
-        return multiplier;
+    public double getTypeMultiplier(Type moveType, Set<Type> defenderTypes) {
+        return super.getTypeMultiplier(Type.FIGHTING, defenderTypes) * super.getTypeMultiplier(
+            Type.FLYING,
+            defenderTypes);
     }
 
     public static final FlyingPress FLYING_PRESS = new FlyingPress();
