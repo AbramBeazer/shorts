@@ -1,8 +1,8 @@
 package org.shorts.model.items;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.types.Type;
 
 public abstract class HeldItem {
 
@@ -23,7 +23,11 @@ public abstract class HeldItem {
     public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
     }
 
-    public void beforeAttack(Pokemon self, Pokemon opponent, Battle battle, Integer damage, Type moveType) {
+    public double onMovePowerCalc(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+        return 1;
+    }
+
+    public void beforeAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
     }
 
     public void afterAttack(Pokemon self, Pokemon opponent, Battle battle) {
@@ -32,7 +36,7 @@ public abstract class HeldItem {
     public void afterDrop(Pokemon self, Pokemon opponent, Battle battle) {
     }
 
-    public void beforeHit(Pokemon self, Pokemon opponent, Battle battle, Integer damage, Type moveType) {
+    public void beforeHit(Pokemon self, Pokemon opponent, Battle battle, Move move) {
     }
 
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP) {
@@ -54,4 +58,7 @@ public abstract class HeldItem {
     public void afterKO(Pokemon self, Pokemon opponent, Battle battle) {
     }
 
+    public void beforeSwitchOut(Pokemon self, Pokemon opponent, Battle battle) {
+
+    }
 }

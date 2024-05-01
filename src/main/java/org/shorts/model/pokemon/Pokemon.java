@@ -4,13 +4,14 @@ import java.util.Set;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.Nature;
-import org.shorts.model.PokedexEntry;
+import org.shorts.model.Sex;
 import org.shorts.model.Status;
 import org.shorts.model.abilities.Ability;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.moves.Move;
 import org.shorts.model.types.Type;
 
+import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.Levitate.LEVITATE;
 
 public class Pokemon {
@@ -24,6 +25,8 @@ public class Pokemon {
     private Ability ability;
     private Nature nature;
     private Move[] moves = new Move[4];
+
+    private Sex sex;
     private int level;
     private int maxHP;
     private int currentHP;
@@ -50,11 +53,13 @@ public class Pokemon {
 
     private int sleepCounter = 0;
 
-    protected Pokemon(String pokedexNo, String nickname, String speciesName, Set<Type> types) {
+    protected Pokemon(String pokedexNo, String nickname, String speciesName, Set<Type> types, Ability ability) {
         this.pokedexNo = pokedexNo;
         this.nickname = nickname == null || nickname.isBlank() ? speciesName : nickname;
         this.speciesName = speciesName;
         this.types = types;
+        this.ability = ability;
+        this.ability.onGainAbility(this);
     }
 
     public void changeAttack(int stages) {
@@ -140,6 +145,14 @@ public class Pokemon {
         this.nature = nature;
     }
 
+    public Sex getSex() {
+        return sex;
+    }
+
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
+
     public void setLevel(int level) {
         this.level = level;
     }
@@ -157,6 +170,9 @@ public class Pokemon {
 
     public int getAttack() {
         double multiplier = (2 + this.stageAttack) * 0.5;
+        if (this.getStatus() == Status.BURN && !this.getAbility().equals(GUTS)) {
+            multiplier *= 0.5;
+        }
         if (this.stageAttack >= 0) {
             return (int) (this.attack * multiplier);
         } else {
@@ -209,6 +225,9 @@ public class Pokemon {
 
     public int getSpeed() {
         double multiplier = (2 + this.stageSpeed) * 0.5;
+        if (this.getStatus() == Status.PARALYZE) {
+            multiplier *= 0.5;
+        }
         if (this.stageSpeed >= 0) {
             return (int) (this.speed * multiplier);
         } else {
@@ -377,18 +396,37 @@ public class Pokemon {
         this.usingBounce = usingBounce;
     }
 
-    public static Pokemon fromPokedexEntry(PokedexEntry entry) {
-        return new Pokemon(entry.getPokedexNo(), entry.getSpeciesName(), entry.getSpeciesName(), entry.getTypes());
+    public boolean isGroundedOverride() {
+        return groundedOverride;
     }
+
+    public void setGroundedOverride(boolean groundedOverride) {
+        this.groundedOverride = groundedOverride;
+    }
+
+    //    public static Pokemon fromPokedexEntry(PokedexEntry entry) {
+    //        return new Pokemon(
+    //            entry.getPokedexNo(),
+    //            entry.getSpeciesName(),
+    //            entry.getSpeciesName(),
+    //            entry.getTypes(),
+    //            entry.getAbilities().stream().findFirst()
+    //                .get());
+    //    }
 
     public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
         ability.afterEntry(self, opponent, battle);
         heldItem.afterEntry(self, opponent, battle);
     }
 
-    public void beforeAttack(Pokemon self, Pokemon opponent, Battle battle, Integer damage, Type moveType) {
-        ability.beforeAttack(self, opponent, battle, damage, moveType);
-        heldItem.beforeAttack(self, opponent, battle, damage, moveType);
+    public double onMovePowerCalc(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+        return ability.onMovePowerCalc(self, opponent, battle, move)
+            * heldItem.onMovePowerCalc(self, opponent, battle, move);
+    }
+
+    public void beforeAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+        ability.beforeAttack(self, opponent, battle, move);
+        heldItem.beforeAttack(self, opponent, battle, move);
     }
 
     public void afterAttack(Pokemon self, Pokemon opponent, Battle battle) {
@@ -401,11 +439,11 @@ public class Pokemon {
         heldItem.afterDrop(self, opponent, battle);
     }
 
-    public void beforeHit(Pokemon self, Pokemon opponent, Battle battle, Integer damage, Type moveType) {
+    public void beforeHit(Pokemon self, Pokemon opponent, Battle battle, Move move) {
         /* TODO: Ability goes first because of cases where either ability or item nullifies damage, e.g. Levitate and Shuca Berry.
             My hope is that this will prevent items from being wasted.*/
-        ability.beforeHit(self, opponent, battle, damage, moveType);
-        heldItem.beforeHit(self, opponent, battle, damage, moveType);
+        ability.beforeHit(self, opponent, battle, move);
+        heldItem.beforeHit(self, opponent, battle, move);
     }
 
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP) {
@@ -436,5 +474,10 @@ public class Pokemon {
     public void afterKO(Pokemon self, Pokemon opponent, Battle battle) {
         ability.afterKO(self, opponent, battle);
         heldItem.afterKO(self, opponent, battle);
+    }
+
+    public void beforeSwitchOut(Pokemon self, Pokemon opponent, Battle battle) {
+        ability.beforeSwitchOut(self, opponent, battle);
+        heldItem.beforeSwitchOut(self, opponent, battle);
     }
 }
