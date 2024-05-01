@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class Type implements IType {
+public class Type {
 
     public static final double STAB = 1.5;
     public static final double SUPER_EFFECTIVE = 2;
@@ -22,8 +22,24 @@ public class Type implements IType {
     private final List<TypeId> resistances;
     private final List<TypeId> immunities;
 
+    public TypeId getId() {
+        return this.id;
+    }
+
     public String getName() {
         return this.name;
+    }
+
+    public List<TypeId> getWeaknesses() {
+        return weaknesses;
+    }
+
+    public List<TypeId> getResistances() {
+        return resistances;
+    }
+
+    public List<TypeId> getImmunities() {
+        return immunities;
     }
 
     private Type(TypeId id, String name, List<TypeId> weaknesses, List<TypeId> resistances, List<TypeId> immunities) {
@@ -32,6 +48,30 @@ public class Type implements IType {
         this.weaknesses = Objects.requireNonNull(weaknesses, "Type's weaknesses cannot be null");
         this.resistances = Objects.requireNonNull(resistances, "Type's resistances cannot be null");
         this.immunities = Objects.requireNonNull(immunities, "Type's immunities cannot be null");
+    }
+
+    public static double getTypeMultiplier(Type moveType, Set<Type> defenderTypes) throws TooManyTypesException {
+        if (defenderTypes.size() > 2) {
+            throw new TooManyTypesException(defenderTypes);
+        }
+        double multiplier = 1;
+        for (Type def : defenderTypes) {
+            if (def.getWeaknesses().contains(moveType.getId())) {
+                multiplier *= SUPER_EFFECTIVE;
+            } else if (def.getResistances().contains(moveType.getId())) {
+                multiplier *= NOT_VERY_EFFECTIVE;
+            } else if (def.getImmunities().contains(moveType.getId())) {
+                multiplier *= IMMUNE;
+            }
+        }
+        return multiplier;
+    }
+
+    public static double getSTABMultiplier(Type moveType, Set<Type> attackerTypes) throws TooManyTypesException {
+        if (attackerTypes.size() > 2) {
+            throw new TooManyTypesException(attackerTypes);
+        }
+        return attackerTypes.contains(moveType) ? STAB : 1;
     }
 
     public static final Type NORMAL = new Type(
@@ -170,27 +210,6 @@ public class Type implements IType {
         List.of(TypeId.FIGHTING, TypeId.BUG, TypeId.DARK),
         List.of(TypeId.DRAGON));
 
-    public static double getMultiplier(Set<Type> attackerTypes, Type moveType, Set<Type> defenderTypes)
-        throws TooManyTypesException {
-        if (attackerTypes.size() > 2) {
-            throw new TooManyTypesException(attackerTypes);
-        }
-        if (defenderTypes.size() > 2) {
-            throw new TooManyTypesException(defenderTypes);
-        }
-        double multiplier = attackerTypes.stream().anyMatch(type -> type.id == moveType.id) ? STAB : 1;
-        for (Type def : defenderTypes) {
-            if (def.weaknesses.contains(moveType.id)) {
-                multiplier *= SUPER_EFFECTIVE;
-            } else if (def.resistances.contains(moveType.id)) {
-                multiplier *= NOT_VERY_EFFECTIVE;
-            } else if (def.immunities.contains(moveType.id)) {
-                multiplier *= IMMUNE;
-            }
-        }
-        return multiplier;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Type) {
@@ -211,7 +230,7 @@ public class Type implements IType {
         return name;
     }
 
-    private static enum TypeId {
+    private enum TypeId {
         NORMAL,
         FIRE,
         WATER,
