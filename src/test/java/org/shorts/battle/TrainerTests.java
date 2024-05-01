@@ -22,7 +22,7 @@ class TrainerTests {
 
     @BeforeEach
     void setup() {
-        pokemon = new Squirtle();
+        pokemon = new Squirtle(TORRENT);
         pokemon.setMaxHP(100);
         pokemon.setCurrentHP(100);
         pokemon.setAbility(TORRENT);
@@ -38,7 +38,7 @@ class TrainerTests {
     }
 
     @Test
-    void testStealthRockSupereffective() {
+    void testStealthRockSuperEffective() {
         pokemon.setTypes(Set.of(Type.FIRE));
         trainer.setRocks(true);
         trainer.applyEntryHazards();

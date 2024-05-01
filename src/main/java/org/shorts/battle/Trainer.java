@@ -2,7 +2,6 @@ package org.shorts.battle;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import org.shorts.model.Status;
 import org.shorts.model.pokemon.Pokemon;
@@ -125,7 +124,7 @@ public class Trainer {
     private boolean faintedFromRocks(Pokemon pokemon) {
         double multiplier = .125;
         try {
-            multiplier *= Type.getMultiplier(Set.of(), Type.ROCK, pokemon.getTypes());
+            multiplier *= Type.getTypeMultiplier(Type.ROCK, pokemon.getTypes());
         } catch (TooManyTypesException e) {
             throw new IllegalArgumentException("Couldn't calculate Stealth Rock multiplier; see root exception.");
         }
