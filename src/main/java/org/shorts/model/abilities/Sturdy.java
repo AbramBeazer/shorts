@@ -1,10 +1,9 @@
 package org.shorts.model.abilities;
 
 import org.shorts.battle.Battle;
-import org.shorts.model.abilities.nullifying.NullifyingAbility;
 import org.shorts.model.pokemon.Pokemon;
 
-public class Sturdy extends Ability {
+public class Sturdy extends IgnorableAbility {
 
     private Sturdy() {
         super("Sturdy");

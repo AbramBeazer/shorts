@@ -7,6 +7,8 @@ import org.shorts.model.Nature;
 import org.shorts.model.Sex;
 import org.shorts.model.Status;
 import org.shorts.model.abilities.Ability;
+import org.shorts.model.abilities.IgnorableAbility;
+import org.shorts.model.abilities.NullifyingAbility;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.moves.Move;
 import org.shorts.model.types.Type;
@@ -355,8 +357,9 @@ public class Pokemon {
         if (groundedOverride) {
             return true;
         } else {
-            return !this.types.contains(Type.FLYING) && !this.ability.equals(LEVITATE)
-                && !this.getHeldItem().getName().equals("Air Balloon");
+            return !this.types.contains(Type.FLYING) && !this.ability.equals(LEVITATE) && !this.getHeldItem()
+                .getName()
+                .equals("Air Balloon");
         }
     }
 
@@ -414,70 +417,80 @@ public class Pokemon {
     //                .get());
     //    }
 
-    public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
-        ability.afterEntry(self, opponent, battle);
-        heldItem.afterEntry(self, opponent, battle);
+    public void afterEntry(Pokemon opponent, Battle battle) {
+        ability.afterEntry(this, opponent, battle);
+        heldItem.afterEntry(this, opponent, battle);
     }
 
-    public double onMovePowerCalc(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        return ability.onMovePowerCalc(self, opponent, battle, move)
-            * heldItem.onMovePowerCalc(self, opponent, battle, move);
+    public double onMovePowerCalc(Pokemon opponent, Battle battle, Move move) {
+        return ability.onMovePowerCalc(this, opponent, battle, move) * heldItem.onMovePowerCalc(
+            this,
+            opponent,
+            battle,
+            move);
     }
 
-    public void beforeAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        ability.beforeAttack(self, opponent, battle, move);
-        heldItem.beforeAttack(self, opponent, battle, move);
+    public void beforeAttack(Pokemon opponent, Battle battle, Move move) {
+        ability.beforeAttack(this, opponent, battle, move);
+        heldItem.beforeAttack(this, opponent, battle, move);
     }
 
-    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle) {
-        ability.afterAttack(self, opponent, battle);
-        heldItem.afterAttack(self, opponent, battle);
+    public void afterAttack(Pokemon opponent, Battle battle) {
+        ability.afterAttack(this, opponent, battle);
+        heldItem.afterAttack(this, opponent, battle);
     }
 
-    public void afterDrop(Pokemon self, Pokemon opponent, Battle battle) {
-        ability.afterDrop(self, opponent, battle);
-        heldItem.afterDrop(self, opponent, battle);
+    public void afterDrop(Pokemon opponent, Battle battle) {
+        ability.afterDrop(this, opponent, battle);
+        heldItem.afterDrop(this, opponent, battle);
     }
 
-    public void beforeHit(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        /* TODO: Ability goes first because of cases where either ability or item nullifies damage, e.g. Levitate and Shuca Berry.
-            My hope is that this will prevent items from being wasted.*/
-        ability.beforeHit(self, opponent, battle, move);
-        heldItem.beforeHit(self, opponent, battle, move);
+    public double beforeHit(Pokemon opponent, Battle battle, Move move) {
+        double abilityMultiplier = 1;
+        if (!(ability instanceof IgnorableAbility && opponent.getAbility() instanceof NullifyingAbility)) {
+            abilityMultiplier *= ability.beforeHit(this, opponent, battle, move);
+        }
+        if (abilityMultiplier == 0) {
+            return abilityMultiplier;
+        } else {
+            /* TODO: Ability goes first because of cases where either ability or item nullifies damage, e.g. Levitate and Shuca Berry.
+                My hope is that this will prevent items from being wasted.*/
+            return abilityMultiplier * heldItem.beforeHit(this, opponent, battle, move);
+        }
     }
 
-    public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP) {
-        ability.afterHit(self, opponent, battle, previousHP);
-        heldItem.afterHit(self, opponent, battle, previousHP);
+    public void afterHit(Pokemon opponent, Battle battle, int previousHP) {
+        ability.afterHit(this, opponent, battle, previousHP);
+        heldItem.afterHit(this, opponent, battle, previousHP);
     }
 
-    public void afterStatus(Pokemon self, Pokemon opponent, Battle battle) {
-        ability.afterStatus(self, opponent, battle);
-        heldItem.afterStatus(self, opponent, battle);
+    public void afterStatus(Pokemon opponent, Battle battle) {
+        ability.afterStatus(this, opponent, battle);
+        heldItem.afterStatus(this, opponent, battle);
     }
 
-    public void beforeTurn(Pokemon self, Pokemon opponent, Battle battle) {
-        ability.beforeTurn(self, opponent, battle);
-        heldItem.beforeTurn(self, opponent, battle);
+    public void beforeTurn(Pokemon opponent, Battle battle) {
+        ability.beforeTurn(this, opponent, battle);
+        heldItem.beforeTurn(this, opponent, battle);
     }
 
-    public void afterTurn(Pokemon self, Pokemon opponent, Battle battle) {
-        ability.afterTurn(self, opponent, battle);
-        heldItem.afterTurn(self, opponent, battle);
+    public void afterTurn(Pokemon opponent, Battle battle) {
+        ability.afterTurn(this, opponent, battle);
+        heldItem.afterTurn(this, opponent, battle);
     }
 
-    public void afterFaint(Pokemon self, Pokemon opponent, Battle battle) {
-        ability.afterFaint(self, opponent, battle);
-        heldItem.afterFaint(self, opponent, battle);
+    public void afterFaint(Pokemon opponent, Battle battle) {
+        ability.afterFaint(this, opponent, battle);
+        heldItem.afterFaint(this, opponent, battle);
     }
 
-    public void afterKO(Pokemon self, Pokemon opponent, Battle battle) {
-        ability.afterKO(self, opponent, battle);
-        heldItem.afterKO(self, opponent, battle);
+    public void afterKO(Pokemon opponent, Battle battle) {
+        ability.afterKO(this, opponent, battle);
+        heldItem.afterKO(this, opponent, battle);
     }
 
-    public void beforeSwitchOut(Pokemon self, Pokemon opponent, Battle battle) {
-        ability.beforeSwitchOut(self, opponent, battle);
-        heldItem.beforeSwitchOut(self, opponent, battle);
+    public void beforeSwitchOut(Pokemon opponent, Battle battle) {
+        ability.beforeSwitchOut(this, opponent, battle);
+        heldItem.beforeSwitchOut(this, opponent, battle);
     }
 }

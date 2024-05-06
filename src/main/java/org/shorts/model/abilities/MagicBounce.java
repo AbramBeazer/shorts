@@ -1,6 +1,6 @@
 package org.shorts.model.abilities;
 
-public class MagicBounce extends Ability {
+public class MagicBounce extends Ability implements IgnorableAbility {
 
     private MagicBounce() {
         super("Magic Bounce");

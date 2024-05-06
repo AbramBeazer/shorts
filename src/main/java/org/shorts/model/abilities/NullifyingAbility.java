@@ -1,6 +1,4 @@
-package org.shorts.model.abilities.nullifying;
-
-import org.shorts.model.abilities.Ability;
+package org.shorts.model.abilities;
 
 public class NullifyingAbility extends Ability {
 

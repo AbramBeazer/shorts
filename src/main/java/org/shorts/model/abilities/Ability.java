@@ -36,7 +36,8 @@ public abstract class Ability {
     public void afterDrop(Pokemon self, Pokemon opponent, Battle battle) {
     }
 
-    public void beforeHit(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public double beforeHit(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+        return 1;
     }
 
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP) {
