@@ -6,16 +6,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.shorts.battle.SingleBattle;
 import org.shorts.battle.Trainer;
 import org.shorts.model.moves.Move;
-import org.shorts.model.pokemon.Medicham;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.pokemon.Scizor;
 import org.shorts.model.pokemon.Squirtle;
 
-import static org.shorts.model.abilities.AttackDoublingAbility.PURE_POWER;
-import static org.shorts.model.abilities.Torrent.TORRENT;
+import static org.shorts.model.abilities.PinchTypeBoostAbility.SWARM;
+import static org.shorts.model.abilities.PinchTypeBoostAbility.TORRENT;
 import static org.shorts.model.moves.Scald.SCALD;
-import static org.shorts.model.moves.Thunder.THUNDER;
 
-class TorrentTests {
+class PinchTypeBoostAbilityTests {
 
     private SingleBattle battle;
     private Pokemon attacker;
@@ -24,9 +23,11 @@ class TorrentTests {
     @BeforeEach
     void setup() {
         attacker = new Squirtle(TORRENT);
-        defender = new Medicham(PURE_POWER);
+        defender = new Scizor(SWARM);
         attacker.setCurrentHP(attacker.getMaxHP());
-        attacker.setMoves(List.of(SCALD, THUNDER).toArray(new Move[2]));
+        attacker.setMoves(List.of(SCALD).toArray(new Move[1]));
+        defender.setCurrentHP(defender.getMaxHP());
+        defender.setMoves(List.of());
         battle = new SingleBattle(new Trainer("a", List.of(attacker)), new Trainer("b", List.of(defender)));
 
     }
