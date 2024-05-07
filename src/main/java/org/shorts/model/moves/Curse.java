@@ -4,11 +4,12 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 
 import static org.shorts.model.types.Type.GHOST;
+import static org.shorts.model.types.Type.NORMAL;
 
 public class Curse extends StatusMove {
 
     private Curse() {
-        super("Curse", 0, GHOST, 16);
+        super("Curse", 0, NORMAL, 16, true);
     }
 
     @Override
@@ -16,8 +17,12 @@ public class Curse extends StatusMove {
         if (attacker.getTypes().contains(GHOST)) {
             final int previousHP = attacker.getCurrentHP();
             attacker.takeDamage(attacker.getMaxHP() / 2);
-            attacker.afterHit(attacker, defender, battle, previousHP);
+
+            //TODO: Should this be afterHit, or should I have another listener for self-inflicted damage?
+            //TODO: Should this only activate if the user hasn't fainted?
+            attacker.afterHit(defender, battle, previousHP);
             //TODO: Add "cursed" status to defender
+            //defender.iCurseYouBlah();
         } else {
             attacker.changeSpeed(-1);
             attacker.changeAttack(1);

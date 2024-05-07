@@ -12,6 +12,8 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.Pressure.PRESSURE;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
+import static org.shorts.model.moves.Curse.CURSE;
+import static org.shorts.model.types.Type.GHOST;
 import static org.shorts.model.types.Type.IMMUNE;
 
 public abstract class Move {
@@ -148,7 +150,7 @@ public abstract class Move {
 
         this.decrementPP();
         if (userMon != opponentMon && opponentMon.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0
-            && !this.isTargetSelf()) { //This shouldn't activate for regular Curse. Ghost-type Curse will handle this in its own applySecondaryEffect. Is there a better way?
+            && (!this.isTargetSelf() || (this == CURSE && userMon.getTypes().contains(GHOST)))) {
             this.decrementPP();
         }
 
@@ -221,7 +223,7 @@ public abstract class Move {
         return basePower;
     }
 
-    private void decrementPP() {
+    protected void decrementPP() {
         if (this.currentPP > 0) {
             this.currentPP--;
         }
