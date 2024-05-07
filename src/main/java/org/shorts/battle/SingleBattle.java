@@ -36,7 +36,7 @@ public class SingleBattle extends Battle {
     }
 
     @Override
-    public void takeTurns() throws IOException {
+    public void takeTurns() throws Exception {
         //take player input
         int choiceOne = pollPlayerInput(playerOne);
         int choiceTwo = pollPlayerInput(playerTwo);
@@ -52,6 +52,7 @@ public class SingleBattle extends Battle {
             moveTwo = playerTwo.getLead().getMoves()[choiceTwo - 1];
         }
 
+        //TODO: Should I have an "onCalcPriority" method in Pokémon, Ability, and HeldItem?
         if (moveOne.getPriority() > moveTwo.getPriority()) {
             moveOne.doMove(playerOne, playerTwo, this);
             moveTwo.doMove(playerTwo, playerOne, this);
@@ -114,6 +115,12 @@ public class SingleBattle extends Battle {
                 (i + option) + ")" + "\t(" + teammate.getSpeciesName() + "\t(" + teammate.getCurrentHP() + "/"
                     + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
         }
-        return System.in.read();
+        int choice = 0;
+        //Choice is invalid if that Pokémon has fainted or if the move has no PP.
+        do {
+            choice = System.in.read();
+        } while (choice <= 0 || choice > 10 || (choice <= 4 && active.getMoves()[choice - 1].getCurrentPP() <= 0)
+            || (choice > 4 && trainer.getTeam().get(choice - 1).getCurrentHP() > 0));
+        return choice;
     }
 }

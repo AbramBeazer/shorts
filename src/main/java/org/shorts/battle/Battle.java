@@ -15,7 +15,7 @@ public abstract class Battle {
 
     public abstract void chooseLeads() throws IOException;
 
-    public abstract void takeTurns() throws IOException;
+    public abstract void takeTurns() throws Exception;
 
     public int getWeatherTurns() {
         return weatherTurns;
