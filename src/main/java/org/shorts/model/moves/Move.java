@@ -12,6 +12,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.Pressure.PRESSURE;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
+import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
 import static org.shorts.model.moves.Curse.CURSE;
 import static org.shorts.model.types.Type.GHOST;
 import static org.shorts.model.types.Type.IMMUNE;
@@ -113,9 +114,11 @@ public abstract class Move {
     }
 
     public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        final int chance = getSecondaryEffectChance() * (attacker.getAbility().equals(SERENE_GRACE) ? 2 : 1);
-        if (Main.RANDOM.nextInt(100) < chance) {
-            applySecondaryEffect(attacker, defender, battle);
+        if (!attacker.getAbility().equals(SHEER_FORCE)) {
+            final int chance = getSecondaryEffectChance() * (attacker.getAbility().equals(SERENE_GRACE) ? 2 : 1);
+            if (Main.RANDOM.nextInt(100) < chance) {
+                applySecondaryEffect(attacker, defender, battle);
+            }
         }
     }
 
