@@ -11,4 +11,10 @@ public abstract class AbstractStatus {
     public int getTurnsRemaining() {
         return turnsRemaining;
     }
+
+    public void decrementTurns() {
+        if (turnsRemaining > 0) {
+            turnsRemaining--;
+        }
+    }
 }

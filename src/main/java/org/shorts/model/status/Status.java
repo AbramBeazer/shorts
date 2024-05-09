@@ -4,7 +4,7 @@ public class Status extends AbstractStatus {
 
     private StatusType type;
 
-    protected Status(StatusType type, int turnsRemaining) {
+    public Status(StatusType type, int turnsRemaining) {
         super(turnsRemaining);
         this.type = type;
     }

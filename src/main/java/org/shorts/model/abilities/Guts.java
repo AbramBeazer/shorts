@@ -1,8 +1,8 @@
 package org.shorts.model.abilities;
 
 import org.shorts.battle.Battle;
-import org.shorts.model.Status;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.Status;
 
 public class Guts extends Ability {
 
