@@ -3,21 +3,17 @@ package org.shorts.battle;
 import java.io.IOException;
 
 import org.shorts.Main;
-import org.shorts.model.Status;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.Status;
 
 public class SingleBattle extends Battle {
-
-    private final Trainer playerOne;
-    private final Trainer playerTwo;
 
     private Move moveOne;
     private Move moveTwo;
 
     public SingleBattle(Trainer player1, Trainer player2) {
-        this.playerOne = player1;
-        this.playerTwo = player2;
+        super(player1, player2);
     }
 
     @Override
@@ -120,7 +116,7 @@ public class SingleBattle extends Battle {
         do {
             choice = System.in.read();
         } while (choice <= 0 || choice > 10 || (choice <= 4 && active.getMoves()[choice - 1].getCurrentPP() <= 0)
-            || (choice > 4 && trainer.getTeam().get(choice - 1).getCurrentHP() > 0));
+            || (choice > 4 && trainer.getTeam().get(choice - 1).hasFainted()));
         return choice;
     }
 }

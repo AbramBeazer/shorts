@@ -4,12 +4,19 @@ import java.io.IOException;
 
 public abstract class Battle {
 
+    protected final Trainer playerOne;
+    protected final Trainer playerTwo;
     protected int weatherTurns = Weather.INFINITE_WEATHER_DURATION;
     protected Weather weather = Weather.NONE;
 
     protected boolean weatherSuppressed = false;
     protected int terrainTurns = -1;
     protected Terrain terrain = Terrain.NONE;
+
+    public Battle(Trainer player1, Trainer player2) {
+        this.playerOne = player1;
+        this.playerTwo = player2;
+    }
 
     public abstract void run() throws IOException;
 
@@ -59,5 +66,13 @@ public abstract class Battle {
             System.out.println(weather.getDeactivationMessage());
             setWeather(Weather.NONE, Weather.INFINITE_WEATHER_DURATION);
         }
+    }
+
+    public Trainer getPlayerOne() {
+        return playerOne;
+    }
+
+    public Trainer getPlayerTwo() {
+        return playerTwo;
     }
 }
