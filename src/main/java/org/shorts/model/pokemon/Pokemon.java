@@ -17,6 +17,8 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.Levitate.LEVITATE;
+import static org.shorts.model.status.VolatileStatus.VolatileStatusType.ABILITY_IGNORED;
+import static org.shorts.model.status.VolatileStatus.VolatileStatusType.ABILITY_SUPPRESSED;
 import static org.shorts.model.status.VolatileStatus.VolatileStatusType.GROUNDED;
 
 public class Pokemon {
@@ -343,26 +345,34 @@ public class Pokemon {
         this.moves = moves;
     }
 
-    //TODO: Figure out how this is going to work with Mold Breaker and related abilities.
     public boolean isGrounded() {
         if (volatileStatuses.stream().anyMatch(vs -> vs.getType() == GROUNDED)) {
             return true;
         } else {
-            return !(this.types.contains(Type.FLYING) || this.ability.equals(LEVITATE) || this.getHeldItem()
-                .getName()
-                .equals("Air Balloon"));
+            return !(this.types.contains(Type.FLYING) || (this.ability.equals(LEVITATE) && !isAbilityIgnored())
+                || this.getHeldItem().getName().equals("Air Balloon"));
         }
     }
 
-    public boolean isGroundedApplyNullifyingAbility(boolean abilityNullified) {
-        if (volatileStatuses.stream().anyMatch(vs -> vs.getType() == GROUNDED)) {
-            return true;
-        } else {
-            return !(this.types.contains(Type.FLYING) || (this.ability.equals(LEVITATE) && !abilityNullified)
-                || this.getHeldItem()
-                .getName()
-                .equals("Air Balloon"));
-        }
+    public void addVolatileStatus(VolatileStatus status) {
+        this.getVolatileStatuses().add(status);
+    }
+
+    public void removeVolatileStatus(VolatileStatus status) {
+        this.getVolatileStatuses().remove(status);
+    }
+
+    public boolean isAbilityIgnored() {
+        return volatileStatuses.stream().anyMatch(vs -> vs.getType() == ABILITY_IGNORED);
+    }
+
+    public boolean isAbilitySuppressed() {
+        return volatileStatuses.stream().anyMatch(vs -> vs.getType() == ABILITY_SUPPRESSED);
+    }
+
+    public boolean isAbilityIgnoredOrSuppressed() {
+        return volatileStatuses.stream()
+            .anyMatch(vs -> vs.getType() == ABILITY_IGNORED || vs.getType() == ABILITY_SUPPRESSED);
     }
 
     public boolean hasFainted() {
