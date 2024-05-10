@@ -25,7 +25,7 @@ public class ContactStatusAbility extends Ability {
     public static final ContactStatusAbility CUTE_CHARM = new ContactStatusAbility("Cute Charm", INFATUATED);
 
     @Override
-    public double beforeHit(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
         if (move.isContact()
             && Main.RANDOM.nextInt(100) < 30
             && self.getVolatileStatuses()
@@ -40,7 +40,6 @@ public class ContactStatusAbility extends Ability {
                 }
             }
         }
-        return 1;
     } //TODO: Not sure if this should be beforeHit or afterHit. It depends on if the effect should activate even if the attack causes this Pokémon to faint.
     //       I just don't want Static to paralyze an attacker and then give them a Guts boost.
 }

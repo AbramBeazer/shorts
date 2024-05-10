@@ -40,7 +40,7 @@ public abstract class Ability {
         return 1;
     }
 
-    public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP) {
+    public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
     }
 
     public void afterStatus(Pokemon self, Pokemon opponent, Battle battle) {

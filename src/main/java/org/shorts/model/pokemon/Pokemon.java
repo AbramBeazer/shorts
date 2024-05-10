@@ -432,9 +432,9 @@ public class Pokemon {
         }
     }
 
-    public void afterHit(Pokemon opponent, Battle battle, int previousHP) {
-        ability.afterHit(this, opponent, battle, previousHP);
-        heldItem.afterHit(this, opponent, battle, previousHP);
+    public void afterHit(Pokemon opponent, Battle battle, int previousHP, Move move) {
+        ability.afterHit(this, opponent, battle, previousHP, move);
+        heldItem.afterHit(this, opponent, battle, previousHP, move);
     }
 
     public void afterStatus(Pokemon opponent, Battle battle) {

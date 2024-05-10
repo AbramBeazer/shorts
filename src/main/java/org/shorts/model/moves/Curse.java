@@ -21,7 +21,7 @@ public class Curse extends StatusMove {
 
             //TODO: Should this be afterHit, or should I have another listener for self-inflicted damage?
             //TODO: Should this only activate if the user hasn't fainted?
-            attacker.afterHit(defender, battle, previousHP);
+            attacker.afterHit(defender, battle, previousHP, this);
             defender.getVolatileStatuses().add(VolatileStatus.CURSED);
             //TODO: LOGGER.info("{} put a curse on {}!", attacker.getNickname(), defender.getNickname());
         } else {

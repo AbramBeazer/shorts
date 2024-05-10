@@ -160,7 +160,7 @@ public abstract class Move {
             int previousTargetHP = opponentMon.getCurrentHP();
             int damage = calculateDamage(userMon, opponentMon, battle);
             opponentMon.takeDamage(damage);
-            opponentMon.afterHit(userMon, battle, previousTargetHP);
+            opponentMon.afterHit(userMon, battle, previousTargetHP, this);
 
             //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
 
