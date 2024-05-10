@@ -1,20 +1,23 @@
 package org.shorts.model.pokemon;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.Nature;
 import org.shorts.model.Sex;
-import org.shorts.model.Status;
 import org.shorts.model.abilities.Ability;
 import org.shorts.model.abilities.IgnorableAbility;
 import org.shorts.model.abilities.NullifyingAbility;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.moves.Move;
+import org.shorts.model.status.Status;
+import org.shorts.model.status.volatilestatus.VolatileStatus;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.Levitate.LEVITATE;
+import static org.shorts.model.status.volatilestatus.VolatileStatus.VolatileStatusType.GROUNDED;
 
 public class Pokemon {
 
@@ -43,17 +46,8 @@ public class Pokemon {
     private int speed;
     private int stageSpeed;
     private Status status = Status.NONE;
-    //TODO: Add stackable statuses (confused, cursed, in love, etc.)
+    private final Set<VolatileStatus> volatileStatuses = new HashSet<>();
     private HeldItem heldItem;
-
-    private boolean usingDig = false;
-    private boolean usingFly = false;
-    private boolean usingDive = false;
-    private boolean usingBounce = false;
-
-    private boolean groundedOverride = false;
-
-    private int sleepCounter = 0;
 
     protected Pokemon(String pokedexNo, String nickname, String speciesName, Set<Type> types, Ability ability) {
         this.pokedexNo = pokedexNo;
@@ -321,6 +315,10 @@ public class Pokemon {
         this.status = status;
     }
 
+    public Set<VolatileStatus> getVolatileStatuses() {
+        return volatileStatuses;
+    }
+
     public HeldItem getHeldItem() {
         return heldItem;
     }
@@ -345,16 +343,8 @@ public class Pokemon {
         this.moves = moves;
     }
 
-    public int getSleepCounter() {
-        return sleepCounter;
-    }
-
-    public void setSleepCounter(int sleepCounter) {
-        this.sleepCounter = sleepCounter;
-    }
-
     public boolean isGrounded() {
-        if (groundedOverride) {
+        if (volatileStatuses.stream().anyMatch(vs -> vs.getType() == GROUNDED)) {
             return true;
         } else {
             return !this.types.contains(Type.FLYING) && !this.ability.equals(LEVITATE) && !this.getHeldItem()
@@ -365,46 +355,6 @@ public class Pokemon {
 
     public boolean hasFainted() {
         return currentHP == 0;
-    }
-
-    public boolean isUsingDig() {
-        return usingDig;
-    }
-
-    public void setUsingDig(boolean usingDig) {
-        this.usingDig = usingDig;
-    }
-
-    public boolean isUsingFly() {
-        return usingFly;
-    }
-
-    public void setUsingFly(boolean usingFly) {
-        this.usingFly = usingFly;
-    }
-
-    public boolean isUsingDive() {
-        return usingDive;
-    }
-
-    public void setUsingDive(boolean usingDive) {
-        this.usingDive = usingDive;
-    }
-
-    public boolean isUsingBounce() {
-        return usingBounce;
-    }
-
-    public void setUsingBounce(boolean usingBounce) {
-        this.usingBounce = usingBounce;
-    }
-
-    public boolean isGroundedOverride() {
-        return groundedOverride;
-    }
-
-    public void setGroundedOverride(boolean groundedOverride) {
-        this.groundedOverride = groundedOverride;
     }
 
     //    public static Pokemon fromPokedexEntry(PokedexEntry entry) {
@@ -465,8 +415,9 @@ public class Pokemon {
     }
 
     public void afterStatus(Pokemon opponent, Battle battle) {
-        ability.afterStatus(this, opponent, battle);
+        //TODO: HeldItem is first here because Rawst Berry will activate before Water Veil. Is this how it works for all abilities/items?
         heldItem.afterStatus(this, opponent, battle);
+        ability.afterStatus(this, opponent, battle);
     }
 
     public void beforeTurn(Pokemon opponent, Battle battle) {
