@@ -1,6 +1,6 @@
 package org.shorts.model.items;
 
-public class NoItem extends HeldItem {
+public final class NoItem extends HeldItem {
 
     private NoItem() {
         super("No Item");

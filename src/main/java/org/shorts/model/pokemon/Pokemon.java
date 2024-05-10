@@ -17,6 +17,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.Levitate.LEVITATE;
+import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
 import static org.shorts.model.status.VolatileStatus.VolatileStatusType.ABILITY_IGNORED;
 import static org.shorts.model.status.VolatileStatus.VolatileStatusType.ABILITY_SUPPRESSED;
 import static org.shorts.model.status.VolatileStatus.VolatileStatusType.GROUNDED;
@@ -350,7 +351,7 @@ public class Pokemon {
             return true;
         } else {
             return !(this.types.contains(Type.FLYING) || (this.ability.equals(LEVITATE) && !isAbilityIgnored())
-                || this.getHeldItem().getName().equals("Air Balloon"));
+                || this.getHeldItem().equals(AIR_BALLOON));
         }
     }
 
