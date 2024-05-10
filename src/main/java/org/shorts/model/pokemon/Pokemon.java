@@ -12,12 +12,12 @@ import org.shorts.model.abilities.NullifyingAbility;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.moves.Move;
 import org.shorts.model.status.Status;
-import org.shorts.model.status.volatilestatus.VolatileStatus;
+import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.Levitate.LEVITATE;
-import static org.shorts.model.status.volatilestatus.VolatileStatus.VolatileStatusType.GROUNDED;
+import static org.shorts.model.status.VolatileStatus.VolatileStatusType.GROUNDED;
 
 public class Pokemon {
 
@@ -343,13 +343,25 @@ public class Pokemon {
         this.moves = moves;
     }
 
+    //TODO: Figure out how this is going to work with Mold Breaker and related abilities.
     public boolean isGrounded() {
         if (volatileStatuses.stream().anyMatch(vs -> vs.getType() == GROUNDED)) {
             return true;
         } else {
-            return !this.types.contains(Type.FLYING) && !this.ability.equals(LEVITATE) && !this.getHeldItem()
+            return !(this.types.contains(Type.FLYING) || this.ability.equals(LEVITATE) || this.getHeldItem()
                 .getName()
-                .equals("Air Balloon");
+                .equals("Air Balloon"));
+        }
+    }
+
+    public boolean isGroundedApplyNullifyingAbility(boolean abilityNullified) {
+        if (volatileStatuses.stream().anyMatch(vs -> vs.getType() == GROUNDED)) {
+            return true;
+        } else {
+            return !(this.types.contains(Type.FLYING) || (this.ability.equals(LEVITATE) && !abilityNullified)
+                || this.getHeldItem()
+                .getName()
+                .equals("Air Balloon"));
         }
     }
 

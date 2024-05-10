@@ -5,8 +5,6 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
-import static org.shorts.model.types.Type.FIRE;
-
 public class Scald extends SpecialMove {
 
     private Scald() {
@@ -20,14 +18,14 @@ public class Scald extends SpecialMove {
             System.out.println(defender.getNickname() + " was thawed out!");
             defender.setStatus(Status.NONE);
         }
-        super.trySecondaryEffect(attacker, defender, battle);
+        if (Status.BURN.isStatusPossible(attacker, defender, battle)) {
+            super.trySecondaryEffect(attacker, defender, battle);
+        }
     }
 
     @Override
     public void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (!defender.getTypes().contains(FIRE)) {
-            defender.setStatus(Status.newBurn());
-        }
+        defender.setStatus(Status.BURN);
     }
 
     public static final Scald SCALD = new Scald();

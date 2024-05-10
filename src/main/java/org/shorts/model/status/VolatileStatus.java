@@ -27,6 +27,9 @@ public class VolatileStatus extends AbstractStatus {
         return move;
     }
 
+    public static final VolatileStatus INFATUATED = new VolatileStatus(VolatileStatusType.INFATUATED, -1);
+    public static final VolatileStatus CURSED = new VolatileStatus(VolatileStatusType.CURSED, -1);
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof VolatileStatus && this.type.equals(((VolatileStatus) obj).type);
