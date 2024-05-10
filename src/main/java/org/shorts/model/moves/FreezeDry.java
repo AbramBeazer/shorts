@@ -16,15 +16,16 @@ public class FreezeDry extends SpecialMove {
 
     @Override
     public double getTypeMultiplier(Set<Type> defenderTypes) {
-        Set<Type> modifiedDefenderTypes = defenderTypes.stream().filter(type -> !type.equals(Type.WATER)).collect(
-            Collectors.toSet());
+        Set<Type> modifiedDefenderTypes = defenderTypes.stream()
+            .filter(type -> !type.equals(Type.WATER))
+            .collect(Collectors.toSet());
         double multiplier = super.getTypeMultiplier(modifiedDefenderTypes);
         return defenderTypes.contains(Type.WATER) ? multiplier * 2 : multiplier;
     }
 
     @Override
     public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (Status.FREEZE.isStatusPossible(attacker, defender, battle)) {
+        if (Status.FREEZE.isStatusPossible(defender, battle)) {
             super.trySecondaryEffect(attacker, defender, battle);
         }
     }

@@ -13,7 +13,7 @@ public class Thunder extends SpecialMove {
 
     @Override
     public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (Status.PARALYZE.isStatusPossible(attacker, defender, battle)) {
+        if (Status.PARALYZE.isStatusPossible(defender, battle)) {
             super.trySecondaryEffect(attacker, defender, battle);
         }
     }

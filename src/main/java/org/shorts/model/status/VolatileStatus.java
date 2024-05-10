@@ -29,6 +29,12 @@ public class VolatileStatus extends AbstractStatus {
 
     public static final VolatileStatus INFATUATED = new VolatileStatus(VolatileStatusType.INFATUATED, -1);
     public static final VolatileStatus CURSED = new VolatileStatus(VolatileStatusType.CURSED, -1);
+    public static final VolatileStatus ABILITY_SUPPRESSED = new VolatileStatus(
+        VolatileStatusType.ABILITY_SUPPRESSED,
+        -1);
+    public static final VolatileStatus ABILITY_IGNORED = new VolatileStatus(
+        VolatileStatusType.ABILITY_IGNORED,
+        -1);
 
     @Override
     public boolean equals(Object obj) {
@@ -41,8 +47,9 @@ public class VolatileStatus extends AbstractStatus {
     }
 
     public enum VolatileStatusType implements AbstractStatusType {
-        ABILITY_CHANGE,
-        ABILITY_SUPPRESSION,
+        ABILITY_CHANGED, // TODO: Maybe I need to allow this one to take an ability as a member?
+        ABILITY_SUPPRESSED,
+        ABILITY_IGNORED,
         TYPE_CHANGE,
         MIMIC,
         SUBSTITUTE,

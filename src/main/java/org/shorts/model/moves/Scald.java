@@ -18,7 +18,7 @@ public class Scald extends SpecialMove {
             System.out.println(defender.getNickname() + " was thawed out!");
             defender.setStatus(Status.NONE);
         }
-        if (Status.BURN.isStatusPossible(attacker, defender, battle)) {
+        if (Status.BURN.isStatusPossible(defender, battle)) {
             super.trySecondaryEffect(attacker, defender, battle);
         }
     }
