@@ -10,15 +10,15 @@ import org.shorts.TestRandom;
 import org.shorts.battle.Battle;
 import org.shorts.battle.SingleBattle;
 import org.shorts.battle.Trainer;
-import org.shorts.model.Status;
 import org.shorts.model.pokemon.Bulbasaur;
 import org.shorts.model.pokemon.Gyarados;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.Squirtle;
+import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.shorts.model.abilities.Torrent.TORRENT;
+import static org.shorts.model.abilities.PinchTypeBoostAbility.TORRENT;
 import static org.shorts.model.moves.FreezeDry.FREEZE_DRY;
 
 class FreezeDryTests {
