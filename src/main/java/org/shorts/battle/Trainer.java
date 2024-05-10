@@ -3,8 +3,8 @@ package org.shorts.battle;
 import java.util.List;
 import java.util.Objects;
 
-import org.shorts.model.Status;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.Status;
 import org.shorts.model.types.TooManyTypesException;
 import org.shorts.model.types.Type;
 
@@ -22,6 +22,7 @@ public class Trainer {
     private int toxicSpikes = 0;
 
     private boolean stickyWeb = false;
+    private int safeguardTurns = 0;
 
     public Trainer(String name, List<Pokemon> team) {
         this.name = Objects.requireNonNull(name, "Come on, tell the professor your name!");
@@ -65,6 +66,14 @@ public class Trainer {
         this.stickyWeb = stickyWeb;
     }
 
+    public int getSafeguardTurns() {
+        return safeguardTurns;
+    }
+
+    public void setSafeguardTurns(int safeguardTurns) {
+        this.safeguardTurns = safeguardTurns;
+    }
+
     public String getName() {
         return name;
     }
@@ -98,7 +107,7 @@ public class Trainer {
             //Stealth Rock
             if (rocks && !magicGuard && faintedFromRocks(pokemon)) {
                 return;
-            }//TODO: What happens if rocks put the mon into Sitrus Berry range before Spikes activates? Does the healing happen before the spikes deal damage?
+            } //TODO: What happens if rocks put the mon into Sitrus Berry range before Spikes activates? Does the healing happen before the spikes deal damage?
             if (pokemon.isGrounded()) {
                 if (!magicGuard && faintedFromSpikes(pokemon)) {
                     return;

@@ -5,14 +5,14 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.shorts.model.Status;
 import org.shorts.model.items.HeavyDutyBoots;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.Squirtle;
+import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.shorts.model.abilities.Torrent.TORRENT;
+import static org.shorts.model.abilities.PinchTypeBoostAbility.TORRENT;
 import static org.shorts.model.items.Leftovers.LEFTOVERS;
 
 class TrainerTests {
