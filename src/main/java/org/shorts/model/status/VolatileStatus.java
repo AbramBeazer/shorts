@@ -1,8 +1,6 @@
-package org.shorts.model.status.volatilestatus;
+package org.shorts.model.status;
 
 import org.shorts.model.moves.Move;
-import org.shorts.model.status.AbstractStatus;
-import org.shorts.model.status.AbstractStatusType;
 
 public class VolatileStatus extends AbstractStatus {
 
@@ -32,6 +30,11 @@ public class VolatileStatus extends AbstractStatus {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof VolatileStatus && this.type.equals(((VolatileStatus) obj).type);
+    }
+
+    @Override
+    public int hashCode() {
+        return 151 * (type.ordinal() + 1) * turnsRemaining * (move == null ? 11 : move.hashCode());
     }
 
     public enum VolatileStatusType implements AbstractStatusType {
@@ -69,13 +72,13 @@ public class VolatileStatus extends AbstractStatus {
         CANT_ESCAPE,
         NO_RETREAT,
         OCTOLOCKED,
-        DISABLED,//move
+        DISABLED, //move
         EMBARGOED,
         HEAL_BLOCKED,
         IMPRISONED,
         TAUNTED,
         THROAT_CHOPPED,
-        TORMENTED,//move
+        TORMENTED, //move
         CONFUSED,
         INFATUATED,
         PUMPED,
@@ -95,8 +98,8 @@ public class VolatileStatus extends AbstractStatus {
         //FIXATED, -- only in Legends: Arceus
         BIDING,
         MUST_RECHARGE,
-        CHARGING_MOVE,//move
-        SEMI_INVULNERABLE,//move
+        CHARGING_MOVE, //move
+        SEMI_INVULNERABLE, //move
         FLINCH,
         BRACING,
         CENTER_OF_ATTENTION,

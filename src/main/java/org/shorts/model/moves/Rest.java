@@ -4,7 +4,7 @@ import org.shorts.battle.Battle;
 import org.shorts.model.abilities.StatusImmuneAbility;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
-import org.shorts.model.status.volatilestatus.VolatileStatus;
+import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
 
 import static org.shorts.battle.Terrain.ELECTRIC;

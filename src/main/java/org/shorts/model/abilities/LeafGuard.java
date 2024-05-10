@@ -8,7 +8,7 @@ import static org.shorts.model.status.Status.StatusType.PARALYZE;
 import static org.shorts.model.status.Status.StatusType.POISON;
 import static org.shorts.model.status.Status.StatusType.SLEEP;
 import static org.shorts.model.status.Status.StatusType.TOXIC_POISON;
-import static org.shorts.model.status.volatilestatus.VolatileStatus.VolatileStatusType.DROWSY;
+import static org.shorts.model.status.VolatileStatus.VolatileStatusType.DROWSY;
 
 public class LeafGuard extends StatusImmuneAbility implements IgnorableAbility {
 

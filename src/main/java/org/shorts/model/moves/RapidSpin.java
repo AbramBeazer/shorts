@@ -3,7 +3,7 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.status.volatilestatus.VolatileStatus;
+import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
 
 public class RapidSpin extends PhysicalMove {

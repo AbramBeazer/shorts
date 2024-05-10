@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.shorts.model.status.AbstractStatusType;
 import org.shorts.model.status.Status;
-import org.shorts.model.status.volatilestatus.VolatileStatus;
+import org.shorts.model.status.VolatileStatus;
 
 public class StatusImmuneAbility extends Ability implements IgnorableAbility {
 
