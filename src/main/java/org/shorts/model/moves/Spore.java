@@ -1,24 +1,37 @@
 package org.shorts.model.moves;
 
-import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
-public class Spore extends StatusMove {
+import static org.shorts.model.status.VolatileStatus.VolatileStatusType.SEMI_INVULNERABLE;
+import static org.shorts.model.status.VolatileStatus.VolatileStatusType.SUBSTITUTE;
+
+public class Spore extends StatusMove implements PowderSporeEffect {
 
     public Spore() {
         super("Spore", 0, Type.GRASS, 24, false);
     }
 
     @Override
-    public void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (defender.getTypes().contains(Type.GRASS)) {
+    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+        //TODO: Make sure that this method gets called after we know that the move hits. I know this move always hits, but in general, I want the hit check to happen first.
+        //TODO: Maybe the check for substitute and semi-invulnerable should be in the parent method.
+        if (defender.getVolatileStatuses()
+            .stream()
+            .anyMatch(vs -> vs.getType().equals(SUBSTITUTE) || vs.getType().equals(SEMI_INVULNERABLE))
+            || !this.asPowderSporeEffectData().canActivate(defender)) {
+
             System.out.println("It doesn't affect " + defender.getNickname());
         } else {
-            defender.setStatus(new Status(Status.StatusType.SLEEP, Main.RANDOM.nextInt(3) + 1));
+            super.trySecondaryEffect(attacker, defender, battle);
         }
+    }
+
+    @Override
+    public void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+        defender.setStatus(Status.createSleep());
     }
 
 }
