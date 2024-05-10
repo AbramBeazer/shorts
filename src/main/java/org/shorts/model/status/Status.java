@@ -1,10 +1,12 @@
 package org.shorts.model.status;
 
+import org.shorts.Main;
+
 public class Status extends AbstractStatus {
 
-    private StatusType type;
+    private final StatusType type;
 
-    public Status(StatusType type, int turnsRemaining) {
+    private Status(StatusType type, int turnsRemaining) {
         super(turnsRemaining);
         this.type = type;
     }
@@ -13,36 +15,32 @@ public class Status extends AbstractStatus {
         return type;
     }
 
+    //to be used in most cases
+    public static Status createSleep() {
+        return new Status(StatusType.SLEEP, Main.RANDOM.nextInt(3) + 1);
+    }
+
+    //to be used for Rest and other cases where the sleep lasts a set number of turns.
+    public static Status createSleepForTurns(int turnsRemaining) {
+        return new Status(StatusType.SLEEP, turnsRemaining);
+    }
+
+    public static final Status NONE = new Status(StatusType.NONE, -1);
+    public static final Status PARALYZE = new Status(StatusType.PARALYZE, -1);
+    public static final Status BURN = new Status(StatusType.BURN, -1);
+    public static final Status FREEZE = new Status(StatusType.FREEZE, -1);
+    public static final Status POISON = new Status(StatusType.POISON, -1);
+    public static final Status TOXIC_POISON = new Status(StatusType.TOXIC_POISON, -1);
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Status && this.type.equals(((Status) obj).type);
     }
 
-    public static Status newBurn() {
-        return new Status(StatusType.BURN, -1);
+    @Override
+    public int hashCode() {
+        return 151 * (type.ordinal() + 1) * Math.abs(turnsRemaining);
     }
-
-    public static Status newPoison() {
-        return new Status(StatusType.POISON, -1);
-    }
-
-    public static Status newToxic() {
-        return new Status(StatusType.TOXIC_POISON, -1);
-    }
-
-    public static Status newParalyze() {
-        return new Status(StatusType.PARALYZE, -1);
-    }
-
-    public static Status newSleep(int turnsRemaining) {
-        return new Status(StatusType.SLEEP, turnsRemaining);
-    }
-
-    public static Status newFreeze() {
-        return new Status(StatusType.FREEZE, -1);
-    }
-
-    public static final Status NONE = new Status(StatusType.NONE, -1);
 
     public enum StatusType implements AbstractStatusType {
         NONE,
@@ -54,4 +52,5 @@ public class Status extends AbstractStatus {
         TOXIC_POISON,
         FAINT
     }
+
 }
