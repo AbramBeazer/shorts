@@ -1,6 +1,8 @@
 package org.shorts.model.status;
 
+import org.shorts.battle.Battle;
 import org.shorts.model.moves.Move;
+import org.shorts.model.pokemon.Pokemon;
 
 public class VolatileStatus extends AbstractStatus {
 
@@ -25,6 +27,12 @@ public class VolatileStatus extends AbstractStatus {
 
     public Move getMove() {
         return move;
+    }
+
+    @Override
+    public boolean isStatusPossible(Pokemon target, Battle battle) {
+        //TODO: Implement
+        return false;
     }
 
     public static final VolatileStatus INFATUATED = new VolatileStatus(VolatileStatusType.INFATUATED, -1);

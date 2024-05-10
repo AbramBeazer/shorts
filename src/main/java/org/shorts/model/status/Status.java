@@ -43,6 +43,7 @@ public class Status extends AbstractStatus {
     public static final Status POISON = new Status(StatusType.POISON, -1);
     public static final Status TOXIC_POISON = new Status(StatusType.TOXIC_POISON, -1);
 
+    @Override
     public boolean isStatusPossible(Pokemon target, Battle battle) {
         final Trainer trainer =
             battle.getPlayerOne().getLead() == target ? battle.getPlayerOne() : battle.getPlayerTwo();
