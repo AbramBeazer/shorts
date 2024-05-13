@@ -96,7 +96,7 @@ public abstract class Move {
         return contact;
     }
 
-    public int getPriority() {
+    public int getPriority(Pokemon attacker, Pokemon defender, Battle battle) {
         return priority;
     }
 
@@ -191,7 +191,7 @@ public abstract class Move {
     protected int applyMultipliers(Pokemon user, Pokemon target, Battle battle, int baseDamage) {
         double typeMultiplier = this.getTypeMultiplier(target.getTypes());
 
-        user.beforeAttack(target, battle, this);
+        double userAbilityItemMultipliers = user.beforeAttack(target, battle, this);
 
         typeMultiplier *= target.beforeHit(user, battle, this);
 

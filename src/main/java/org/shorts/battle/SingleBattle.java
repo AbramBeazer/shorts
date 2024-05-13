@@ -55,27 +55,38 @@ public class SingleBattle extends Battle {
             moveTwo = playerTwo.getLead().getMoves()[choiceTwo - 1];
         }
 
-        //TODO: Should I have an "onCalcPriority" method in Pokémon, Ability, and HeldItem?
-        if (moveOne.getPriority() > moveTwo.getPriority()) {
+        int priorityOne = moveOne.getPriority(playerOne.getLead(), playerTwo.getLead(), this);
+        int priorityTwo = moveTwo.getPriority(playerTwo.getLead(), playerOne.getLead(), this);
+
+        //TODO: Should I have an "onCalcPriority" method in Pokémon, Ability, and HeldItem? -- I can override getPriority in individual moves, at least.
+        if (priorityOne > priorityTwo) {
             moveOne.doMove(playerOne, playerTwo, this);
             moveTwo.doMove(playerTwo, playerOne, this);
-        } else if (moveTwo.getPriority() > moveOne.getPriority()) {
+        } else if (priorityTwo > priorityOne) {
             moveTwo.doMove(playerTwo, playerOne, this);
             moveOne.doMove(playerOne, playerTwo, this);
-        } else if (moveOne.getPriority() == moveTwo.getPriority()) {
+        } else {
             int speedOne = playerOne.getLead().getSpeed();
             int speedTwo = playerTwo.getLead().getSpeed();
 
             if (speedOne > speedTwo) {
                 //playerOne goes first
+                moveOne.doMove(playerOne, playerTwo, this);
+                moveTwo.doMove(playerTwo, playerOne, this);
             } else if (speedTwo > speedOne) {
                 //playerTwo goes first
+                moveTwo.doMove(playerTwo, playerOne, this);
+                moveOne.doMove(playerOne, playerTwo, this);
             } else {
                 int rand = Main.RANDOM.nextInt(2);
                 if (rand == 0) {
                     //playerOne goes first
+                    moveOne.doMove(playerOne, playerTwo, this);
+                    moveTwo.doMove(playerTwo, playerOne, this);
                 } else {
                     //playerTwo goes first
+                    moveTwo.doMove(playerTwo, playerOne, this);
+                    moveOne.doMove(playerOne, playerTwo, this);
                 }
             }
         }
