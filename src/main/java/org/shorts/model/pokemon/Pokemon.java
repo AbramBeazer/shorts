@@ -1,6 +1,7 @@
 package org.shorts.model.pokemon;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.shorts.battle.Battle;
@@ -59,6 +60,11 @@ public class Pokemon {
         this.types = types;
         this.ability = ability;
         this.ability.onGainAbility(this);
+    }
+
+    public Pokemon(int currentHP, int maxHP) {
+        this.currentHP = currentHP;
+        this.maxHP = maxHP;
     }
 
     public void changeAttack(int stages) {
@@ -342,8 +348,12 @@ public class Pokemon {
         return moves;
     }
 
-    public void setMoves(Move[] moves) {
+    private void setMoves(Move[] moves) {
         this.moves = moves;
+    }
+
+    public void setMoves(List<Move> moves) {
+        setMoves(moves.toArray(new Move[moves.size()]));
     }
 
     public boolean isGrounded() {
@@ -407,9 +417,14 @@ public class Pokemon {
             move);
     }
 
-    public void beforeAttack(Pokemon opponent, Battle battle, Move move) {
-        ability.beforeAttack(this, opponent, battle, move);
-        heldItem.beforeAttack(this, opponent, battle, move);
+    public double beforeAttack(Pokemon opponent, Battle battle, Move move) {
+        final double abilityMultiplier = ability.beforeAttack(this, opponent, battle, move);
+        if (abilityMultiplier == 0) {
+            return 0;
+        } else {
+            return abilityMultiplier * heldItem.beforeAttack(this, opponent, battle, move);
+        }
+        //Again, I don't want to consume an item if the ability's going to nullify the effect anyway.
     }
 
     public void afterAttack(Pokemon opponent, Battle battle) {
