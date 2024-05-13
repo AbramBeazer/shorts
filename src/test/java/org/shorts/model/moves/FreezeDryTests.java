@@ -19,7 +19,6 @@ import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.abilities.PinchTypeBoostAbility.TORRENT;
-import static org.shorts.model.moves.FreezeDry.FREEZE_DRY;
 
 class FreezeDryTests {
 
@@ -38,13 +37,13 @@ class FreezeDryTests {
     @Test
     void testGetMultiplierOnWaterType() {
         Pokemon defender = new Squirtle(TORRENT);
-        assertThat(FREEZE_DRY.getTypeMultiplier(defender.getTypes())).isEqualTo(Type.SUPER_EFFECTIVE);
+        assertThat(new FreezeDry().getTypeMultiplier(defender.getTypes())).isEqualTo(Type.SUPER_EFFECTIVE);
     }
 
     @Test
     void testGetMultiplierQuadEffectiveOnWaterType() {
         Pokemon defender = new Gyarados(TORRENT);
-        assertThat(FREEZE_DRY.getTypeMultiplier(defender.getTypes())).isEqualTo(Type.QUAD_EFFECTIVE);
+        assertThat(new FreezeDry().getTypeMultiplier(defender.getTypes())).isEqualTo(Type.QUAD_EFFECTIVE);
     }
 
     @Test
@@ -52,7 +51,7 @@ class FreezeDryTests {
         Pokemon attacker = new Squirtle(TORRENT);
         Pokemon defender = new Bulbasaur(TORRENT);
         assertThat(defender.getStatus()).isNotEqualTo(Status.FREEZE);
-        FREEZE_DRY.applySecondaryEffect(attacker, defender, battle);
+        new FreezeDry().applySecondaryEffect(attacker, defender, battle);
         assertThat(defender.getStatus()).isEqualTo(Status.FREEZE);
     }
 }

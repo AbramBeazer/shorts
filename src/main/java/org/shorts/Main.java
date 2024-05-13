@@ -19,7 +19,7 @@ import static org.shorts.model.abilities.PinchTypeBoostAbility.OVERGROW;
 
 public class Main {
 
-    public static final Random RANDOM = new Random();
+    public static Random RANDOM = new Random();
 
     public static void main(String[] args) throws Exception {
         Pokemon bulbasaur = new Bulbasaur(OVERGROW);

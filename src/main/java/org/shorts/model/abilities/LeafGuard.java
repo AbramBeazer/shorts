@@ -1,6 +1,6 @@
 package org.shorts.model.abilities;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.shorts.model.status.Status.StatusType.BURN;
 import static org.shorts.model.status.Status.StatusType.FREEZE;
@@ -13,7 +13,7 @@ import static org.shorts.model.status.VolatileStatus.VolatileStatusType.DROWSY;
 public class LeafGuard extends StatusImmuneAbility implements IgnorableAbility {
 
     private LeafGuard() {
-        super("Leaf Guard", List.of(DROWSY, SLEEP, FREEZE, BURN, PARALYZE, POISON, TOXIC_POISON));
+        super("Leaf Guard", Set.of(DROWSY, SLEEP, FREEZE, BURN, PARALYZE, POISON, TOXIC_POISON));
     }
 
     public static final LeafGuard LEAF_GUARD = new LeafGuard();

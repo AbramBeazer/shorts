@@ -9,15 +9,21 @@ public class PinchTypeBoostAbility extends Ability {
 
     private final Type type;
 
-    private PinchTypeBoostAbility(String name, Type type) {
+    PinchTypeBoostAbility(String name, Type type) {
         super(name);
         this.type = type;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     @Override
-    public void beforeAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public double beforeAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
         if (self.getCurrentHP() <= self.getMaxHP() / 3 && move.getType().equals(this.type)) {
-            power = (int) (power * 1.5);
+            return 1.5;
+        } else {
+            return 1;
         }
     }
 
