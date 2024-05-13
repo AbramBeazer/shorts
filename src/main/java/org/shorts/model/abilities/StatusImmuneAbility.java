@@ -1,45 +1,66 @@
 package org.shorts.model.abilities;
 
-import java.util.List;
+import java.util.Set;
 
+import org.shorts.battle.Battle;
+import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.AbstractStatusType;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.VolatileStatus;
 
 public class StatusImmuneAbility extends Ability implements IgnorableAbility {
 
-    private final List<AbstractStatusType> immunities;
+    private final Set<AbstractStatusType> immunities;
 
-    protected StatusImmuneAbility(String name, List<AbstractStatusType> immunities) {
+    protected StatusImmuneAbility(String name, Set<AbstractStatusType> immunities) {
         super(name);
         this.immunities = immunities;
     }
 
     private StatusImmuneAbility(String name, AbstractStatusType immunity) {
-        this(name, List.of(immunity));
+        this(name, Set.of(immunity));
     }
 
-    public List<AbstractStatusType> getImmunities() {
+    public Set<AbstractStatusType> getImmunities() {
         return immunities;
     }
+
     //TODO: Figure out which methods need to be implemented.
+
+    @Override
+    public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
+        if (this.getImmunities().stream().anyMatch(type -> self.getStatus().getType().equals(type))) {
+            self.setStatus(Status.NONE);
+        }
+        //TODO: Investigate further how Own Tempo is supposed to work if it inherits confusion through Baton Pass. Bulbapedia said something odd about how from Gen 5–7, "it will not be cured of confusion until after a Pokémon takes its turn (uses a move, switches out, etc.)."
+        self.getVolatileStatuses().removeIf(vs -> immunities.contains(vs.getType()));
+    }
+
+    @Override
+    public void onGainAbility(Pokemon self) {
+        if (this.getImmunities().stream().anyMatch(type -> self.getStatus().getType().equals(type))) {
+            self.setStatus(Status.NONE);
+        }
+        //TODO: Investigate further how Own Tempo is supposed to work if it inherits confusion through Baton Pass. Bulbapedia said something odd about how from Gen 5–7, "it will not be cured of confusion until after a Pokémon takes its turn (uses a move, switches out, etc.)."
+        self.getVolatileStatuses().removeIf(vs -> immunities.contains(vs.getType()));
+    }
 
     public static final StatusImmuneAbility LIMBER = new StatusImmuneAbility("Limber", Status.StatusType.PARALYZE);
     public static final StatusImmuneAbility IMMUNITY = new StatusImmuneAbility(
         "Immunity",
-        List.of(Status.StatusType.POISON, Status.StatusType.TOXIC_POISON));
+        Set.of(Status.StatusType.POISON, Status.StatusType.TOXIC_POISON));
     public static final StatusImmuneAbility INSOMNIA = new StatusImmuneAbility(
         "Insomnia",
-        List.of(Status.StatusType.SLEEP, VolatileStatus.VolatileStatusType.DROWSY));
+        Set.of(Status.StatusType.SLEEP, VolatileStatus.VolatileStatusType.DROWSY));
 
     public static final StatusImmuneAbility VITAL_SPIRIT = new StatusImmuneAbility(
         "Vital Spirit",
-        List.of(Status.StatusType.SLEEP, VolatileStatus.VolatileStatusType.DROWSY));
+        Set.of(Status.StatusType.SLEEP, VolatileStatus.VolatileStatusType.DROWSY));
 
     //TODO: This should also affect allies in double battles.
     public static final StatusImmuneAbility SWEET_VEIL = new StatusImmuneAbility(
         "Sweet Veil",
-        List.of(Status.StatusType.SLEEP, VolatileStatus.VolatileStatusType.DROWSY));
+        Set.of(Status.StatusType.SLEEP, VolatileStatus.VolatileStatusType.DROWSY));
 
     public static final StatusImmuneAbility MAGMA_ARMOR = new StatusImmuneAbility(
         "Magma Armor",
