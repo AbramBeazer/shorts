@@ -1,6 +1,7 @@
 package org.shorts.model.status;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.abilities.StatusImmuneAbility;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 
@@ -31,18 +32,27 @@ public class VolatileStatus extends AbstractStatus {
 
     @Override
     public boolean isStatusPossible(Pokemon target, Battle battle) {
-        //TODO: Implement
+        if (!(target.getAbility() instanceof StatusImmuneAbility
+            && ((StatusImmuneAbility) target.getAbility()).getImmunities().contains(this.getType()))) {
+            switch (type) {
+                case CANT_ESCAPE:
+                    return !target.hasSubstitute();
+                case FLINCH:
+                    return !target.hasSubstitute();
+                case CONFUSED:
+                    return !target.hasSubstitute(); //TODO: Make sure that this blocks only Confuse Ray, but not self-inflicted confusion from Outrage or Thrash.
+                default:
+                    return true;
+            }
+        }
         return false;
     }
 
     public static final VolatileStatus INFATUATED = new VolatileStatus(VolatileStatusType.INFATUATED, -1);
     public static final VolatileStatus CURSED = new VolatileStatus(VolatileStatusType.CURSED, -1);
-    public static final VolatileStatus ABILITY_SUPPRESSED = new VolatileStatus(
-        VolatileStatusType.ABILITY_SUPPRESSED,
+    public static final VolatileStatus ABILITY_SUPPRESSED = new VolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED,
         -1);
-    public static final VolatileStatus ABILITY_IGNORED = new VolatileStatus(
-        VolatileStatusType.ABILITY_IGNORED,
-        -1);
+    public static final VolatileStatus ABILITY_IGNORED = new VolatileStatus(VolatileStatusType.ABILITY_IGNORED, -1);
 
     @Override
     public boolean equals(Object obj) {
@@ -60,7 +70,7 @@ public class VolatileStatus extends AbstractStatus {
         ABILITY_IGNORED,
         TYPE_CHANGE,
         MIMIC,
-        SUBSTITUTE,
+        SUBSTITUTE, //HP
         ILLUSION,
         BOUND,
         CURSED,
