@@ -90,6 +90,10 @@ public class Trainer {
         return this.team.stream().allMatch(p -> p.getCurrentHP() == 0);
     }
 
+    public boolean hasAvailableSwitch() {
+        return this.team.stream().anyMatch(p -> !p.hasFainted() && p != this.getLead());
+    }
+
     public void switchPokemon(int indexA, int indexB) {
         if (indexA != indexB) {
             Pokemon a = this.team.get(indexA);
