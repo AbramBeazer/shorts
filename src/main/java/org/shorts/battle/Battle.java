@@ -18,7 +18,7 @@ public abstract class Battle {
         this.playerTwo = player2;
     }
 
-    public abstract void run() throws IOException;
+    public abstract void run() throws Exception;
 
     public abstract void chooseLeads() throws IOException;
 

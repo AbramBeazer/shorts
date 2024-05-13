@@ -1,11 +1,18 @@
 package org.shorts.battle;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.shorts.Main;
+import org.shorts.model.moves.MeFirst;
 import org.shorts.model.moves.Move;
+import org.shorts.model.moves.StatusMove;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.VolatileStatus;
+
+import static org.shorts.model.items.AssaultVest.ASSAULT_VEST;
 
 public class SingleBattle extends Battle {
 
@@ -17,7 +24,7 @@ public class SingleBattle extends Battle {
     }
 
     @Override
-    public void run() throws IOException {
+    public void run() throws Exception {
         this.chooseLeads();
         while (!(playerOne.hasLost() || playerTwo.hasLost())) {
             takeTurns();
@@ -95,28 +102,45 @@ public class SingleBattle extends Battle {
     }
 
     private int pollPlayerInput(Trainer trainer) throws IOException {
-        Pokemon active = trainer.getLead();
+        Pokemon pokemon = trainer.getLead();
         int option = 1;
         System.out.println("~~~MOVES~~~");
-        for (Move move : active.getMoves()) {
+        List<Integer> invalidChoices = new ArrayList<>();
+        for (Move move : pokemon.getMoves()) {
+            boolean invalid = pokemon.getVolatileStatuses()
+                .stream()
+                .anyMatch(vs -> vs.getType() == VolatileStatus.VolatileStatusType.DISABLED && move.equals(vs.getMove()))
+                || (pokemon.getHeldItem() == ASSAULT_VEST && (move instanceof StatusMove
+                && !(move instanceof MeFirst)))
+                || (pokemon.getVolatileStatuses()
+                .stream()
+                .anyMatch(vs -> vs.getType() == VolatileStatus.VolatileStatusType.CHOICE_LOCKED
+                    && !move.equals(vs.getMove())))
+                || move.getCurrentPP() <= 0;
             System.out.println(
-                option + ") " + move.getName() + "\t(" + move.getCurrentPP() + "/" + move.getMaxPP() + ")");
+                option + ") " + move.getName() + "\t(" + move.getCurrentPP() + "/" + move.getMaxPP() + ")" + (invalid
+                    ? " DISABLED"
+                    : ""));
+            invalidChoices.add(option);
             option++;
         }
         System.out.println("\n~~~SWITCH POKÉMON~~~");
         for (int i = 1; i < trainer.getTeam().size(); i++) {
             Pokemon teammate = trainer.getTeam().get(i);
-            String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().name();
+            String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().getType().name();
             System.out.println(
                 (i + option) + ")" + "\t(" + teammate.getSpeciesName() + "\t(" + teammate.getCurrentHP() + "/"
                     + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
+
+            if (teammate.hasFainted()) {
+                invalidChoices.add(i + option);
+            }
         }
         int choice = 0;
         //Choice is invalid if that Pokémon has fainted or if the move has no PP.
         do {
             choice = System.in.read();
-        } while (choice <= 0 || choice > 10 || (choice <= 4 && active.getMoves()[choice - 1].getCurrentPP() <= 0)
-            || (choice > 4 && trainer.getTeam().get(choice - 1).hasFainted()));
+        } while (choice <= 0 || choice > 10 || invalidChoices.contains(choice));
         return choice;
     }
 }
