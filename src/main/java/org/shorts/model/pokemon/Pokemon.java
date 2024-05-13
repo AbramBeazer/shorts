@@ -363,6 +363,10 @@ public class Pokemon {
         this.getVolatileStatuses().remove(status);
     }
 
+    public boolean hasSubstitute() {
+        return volatileStatuses.stream().anyMatch(vs -> vs.getType() == VolatileStatus.VolatileStatusType.SUBSTITUTE);
+    }
+
     public boolean isAbilityIgnored() {
         return volatileStatuses.stream().anyMatch(vs -> vs.getType() == ABILITY_IGNORED);
     }
