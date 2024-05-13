@@ -5,6 +5,8 @@ import org.shorts.battle.Terrain;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
+import static org.shorts.model.status.VolatileStatus.VolatileStatusType.SEMI_INVULNERABLE;
+
 public class Earthquake extends PhysicalMove {
 
     private Earthquake() {
@@ -14,7 +16,9 @@ public class Earthquake extends PhysicalMove {
     @Override
     public int applyMultipliers(Pokemon attacker, Pokemon defender, Battle battle, int baseDamage) {
         int multiplier = super.applyMultipliers(attacker, defender, battle, baseDamage);
-        if (defender.isUsingDig()) {
+        if (defender.getVolatileStatuses()
+            .stream()
+            .anyMatch(vs -> vs.getType() == SEMI_INVULNERABLE && vs.getMove() instanceof Dig)) {
             multiplier *= 2;
         }
         if (battle.getTerrain().equals(Terrain.GRASSY)) {
