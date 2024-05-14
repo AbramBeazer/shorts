@@ -3,7 +3,7 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.status.VolatileStatus;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 public class RapidSpin extends PhysicalMove {
@@ -17,8 +17,7 @@ public class RapidSpin extends PhysicalMove {
         attacker.changeSpeed(1);
         Trainer trainer = battle.getPlayerOne().getLead() == attacker ? battle.getPlayerOne() : battle.getPlayerTwo();
         trainer.removeEntryHazards();
-        attacker.getVolatileStatuses()
-            .removeIf(vs -> vs.getType().equals(VolatileStatus.VolatileStatusType.SEEDED) || vs.getType().equals(
-                VolatileStatus.VolatileStatusType.BOUND));
+        attacker.removeVolatileStatus(VolatileStatusType.SEEDED);
+        attacker.removeVolatileStatus(VolatileStatusType.BOUND);
     }
 }
