@@ -6,7 +6,8 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.AbstractStatusType;
 import org.shorts.model.status.Status;
-import org.shorts.model.status.VolatileStatus;
+import org.shorts.model.status.StatusType;
+import org.shorts.model.status.VolatileStatusType;
 
 public class StatusImmuneAbility extends Ability implements IgnorableAbility {
 
@@ -29,55 +30,63 @@ public class StatusImmuneAbility extends Ability implements IgnorableAbility {
 
     @Override
     public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
-        if (this.getImmunities().stream().anyMatch(type -> self.getStatus().getType().equals(type))) {
+        if (this.getImmunities().contains(self.getStatus().getType())) {
             self.setStatus(Status.NONE);
         }
         //TODO: Investigate further how Own Tempo is supposed to work if it inherits confusion through Baton Pass. Bulbapedia said something odd about how from Gen 5–7, "it will not be cured of confusion until after a Pokémon takes its turn (uses a move, switches out, etc.)."
-        self.getVolatileStatuses().removeIf(vs -> immunities.contains(vs.getType()));
+        for (AbstractStatusType type : immunities) {
+            if (type instanceof VolatileStatusType) {
+                self.removeVolatileStatus((VolatileStatusType) type);
+            }
+        }
     }
 
     @Override
     public void onGainAbility(Pokemon self) {
-        if (this.getImmunities().stream().anyMatch(type -> self.getStatus().getType().equals(type))) {
+        if (this.getImmunities().contains(self.getStatus().getType())) {
             self.setStatus(Status.NONE);
         }
         //TODO: Investigate further how Own Tempo is supposed to work if it inherits confusion through Baton Pass. Bulbapedia said something odd about how from Gen 5–7, "it will not be cured of confusion until after a Pokémon takes its turn (uses a move, switches out, etc.)."
-        self.getVolatileStatuses().removeIf(vs -> immunities.contains(vs.getType()));
+        for (AbstractStatusType type : immunities) {
+            if (type instanceof VolatileStatusType) {
+                self.removeVolatileStatus((VolatileStatusType) type);
+            }
+        }
     }
 
-    public static final StatusImmuneAbility LIMBER = new StatusImmuneAbility("Limber", Status.StatusType.PARALYZE);
+    public static final StatusImmuneAbility LIMBER = new StatusImmuneAbility("Limber", StatusType.PARALYZE);
     public static final StatusImmuneAbility IMMUNITY = new StatusImmuneAbility(
         "Immunity",
-        Set.of(Status.StatusType.POISON, Status.StatusType.TOXIC_POISON));
+        Set.of(StatusType.POISON, StatusType.TOXIC_POISON));
     public static final StatusImmuneAbility INSOMNIA = new StatusImmuneAbility(
         "Insomnia",
-        Set.of(Status.StatusType.SLEEP, VolatileStatus.VolatileStatusType.DROWSY));
+        Set.of(StatusType.SLEEP, VolatileStatusType.DROWSY));
 
     public static final StatusImmuneAbility VITAL_SPIRIT = new StatusImmuneAbility(
         "Vital Spirit",
-        Set.of(Status.StatusType.SLEEP, VolatileStatus.VolatileStatusType.DROWSY));
+        Set.of(StatusType.SLEEP, VolatileStatusType.DROWSY));
 
     //TODO: This should also affect allies in double battles.
     public static final StatusImmuneAbility SWEET_VEIL = new StatusImmuneAbility(
         "Sweet Veil",
-        Set.of(Status.StatusType.SLEEP, VolatileStatus.VolatileStatusType.DROWSY));
+        Set.of(StatusType.SLEEP, VolatileStatusType.DROWSY));
 
     public static final StatusImmuneAbility MAGMA_ARMOR = new StatusImmuneAbility(
         "Magma Armor",
-        Status.StatusType.FREEZE);
+        StatusType.FREEZE);
     public static final StatusImmuneAbility WATER_VEIL = new StatusImmuneAbility(
         "Water Veil",
-        Status.StatusType.BURN);
+        StatusType.BURN);
 
     public static final StatusImmuneAbility OBLIVIOUS = new StatusImmuneAbility(
         "Oblivious",
-        VolatileStatus.VolatileStatusType.INFATUATED);
+        VolatileStatusType.INFATUATED);
 
     public static final StatusImmuneAbility OWN_TEMPO = new StatusImmuneAbility(
         "Own Tempo",
-        VolatileStatus.VolatileStatusType.CONFUSED);
+        VolatileStatusType.CONFUSED);
 
     public static final StatusImmuneAbility INNER_FOCUS = new StatusImmuneAbility(
         "Inner Focus",
-        VolatileStatus.VolatileStatusType.FLINCH);
+        VolatileStatusType.FLINCH);
 }

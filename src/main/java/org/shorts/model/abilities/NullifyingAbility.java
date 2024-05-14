@@ -4,6 +4,7 @@ import org.shorts.battle.Battle;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
+import org.shorts.model.status.VolatileStatusType;
 
 public class NullifyingAbility extends Ability {
 
@@ -25,6 +26,6 @@ public class NullifyingAbility extends Ability {
     @Override
     public void afterAttack(Pokemon self, Pokemon opponent, Battle battle) {
         super.afterAttack(self, opponent, battle);
-        opponent.removeVolatileStatus(VolatileStatus.ABILITY_IGNORED);
+        opponent.removeVolatileStatus(VolatileStatusType.ABILITY_IGNORED);
     }
 }

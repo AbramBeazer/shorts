@@ -5,6 +5,8 @@ import org.shorts.model.abilities.StatusImmuneAbility;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 
+import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
+
 public class VolatileStatus extends AbstractStatus {
 
     VolatileStatusType type;
@@ -36,11 +38,11 @@ public class VolatileStatus extends AbstractStatus {
             && ((StatusImmuneAbility) target.getAbility()).getImmunities().contains(this.getType()))) {
             switch (type) {
                 case CANT_ESCAPE:
-                    return !target.hasSubstitute();
+                    return !target.hasVolatileStatus(SUBSTITUTE);
                 case FLINCH:
-                    return !target.hasSubstitute();
+                    return !target.hasVolatileStatus(SUBSTITUTE);
                 case CONFUSED:
-                    return !target.hasSubstitute(); //TODO: Make sure that this blocks only Confuse Ray, but not self-inflicted confusion from Outrage or Thrash.
+                    return !target.hasVolatileStatus(SUBSTITUTE);//TODO: Make sure that this blocks only Confuse Ray, but not self-inflicted confusion from Outrage or Thrash.
                 default:
                     return true;
             }
@@ -50,9 +52,11 @@ public class VolatileStatus extends AbstractStatus {
 
     public static final VolatileStatus INFATUATED = new VolatileStatus(VolatileStatusType.INFATUATED, -1);
     public static final VolatileStatus CURSED = new VolatileStatus(VolatileStatusType.CURSED, -1);
-    public static final VolatileStatus ABILITY_SUPPRESSED = new VolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED,
+    public static final VolatileStatus ABILITY_SUPPRESSED = new VolatileStatus(
+        VolatileStatusType.ABILITY_SUPPRESSED,
         -1);
     public static final VolatileStatus ABILITY_IGNORED = new VolatileStatus(VolatileStatusType.ABILITY_IGNORED, -1);
+    public static final VolatileStatus MAGIC_COAT = new VolatileStatus(VolatileStatusType.MAGIC_COAT, -1);
 
     @Override
     public boolean equals(Object obj) {
@@ -64,75 +68,5 @@ public class VolatileStatus extends AbstractStatus {
         return 151 * (type.ordinal() + 1) * turnsRemaining * (move == null ? 11 : move.hashCode());
     }
 
-    public enum VolatileStatusType implements AbstractStatusType {
-        ABILITY_CHANGED, // TODO: Maybe I need to allow this one to take an ability as a member?
-        ABILITY_SUPPRESSED,
-        ABILITY_IGNORED,
-        TYPE_CHANGE,
-        MIMIC,
-        SUBSTITUTE, //HP
-        ILLUSION,
-        BOUND,
-        CURSED,
-        NIGHTMARE,
-        PERISH,
-        SEEDED,
-        SALT_CURE,
-        //SPLINTERS, -- only in Legends: Arceus
-        AUTOTOMIZED,
-        IDENTIFIED,
-        MINIMIZED,
-        TARRED,
-        GROUNDED,
-        MAGNET_LEVITATION,
-        TELEKINESIS,
-        AQUA_RING,
-        ROOTED,
-        LASER_FOCUS,
-        TAKE_AIM,
-        DROWSY,
-        CHARGED,
-        STOCKPILE_1,
-        STOCKPILE_2,
-        STOCKPILE_3,
-        DEFENSE_CURL,
-        //PRIMED, -- only in Legends: Arceus
-        CANT_ESCAPE,
-        NO_RETREAT,
-        OCTOLOCKED,
-        DISABLED, //move
-        EMBARGOED,
-        HEAL_BLOCKED,
-        IMPRISONED,
-        TAUNTED,
-        THROAT_CHOPPED,
-        TORMENTED, //move
-        CONFUSED,
-        INFATUATED,
-        PUMPED,
-        GUARD_SPLIT,
-        POWER_SPLIT,
-        SPEED_SWAP,
-        POWER_TRICK,
-        //POWER_BOOST, -- only in Legends: Arceus
-        //POWER_DROP, -- only in Legends: Arceus
-        //GUARD_BOOST, -- only in Legends: Arceus
-        //GUARD_DROP, -- only in Legends: Arceus
-        CHOICE_LOCKED,
-        ENCORED,
-        RAMPAGING,
-        ROLLING,
-        MAKING_AN_UPROAR,
-        //FIXATED, -- only in Legends: Arceus
-        BIDING,
-        MUST_RECHARGE,
-        CHARGING_MOVE, //move
-        SEMI_INVULNERABLE, //move
-        FLINCH,
-        BRACING,
-        CENTER_OF_ATTENTION,
-        MAGIC_COAT, // Applies to Magic Bounce -- Should I just make Magic Bounce bestow this condition?
-        PROTECTED;
-    }
 }
 

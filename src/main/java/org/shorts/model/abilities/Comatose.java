@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.shorts.model.status.AbstractStatusType;
 
-import static org.shorts.model.status.Status.StatusType.BURN;
-import static org.shorts.model.status.Status.StatusType.FREEZE;
-import static org.shorts.model.status.Status.StatusType.PARALYZE;
-import static org.shorts.model.status.Status.StatusType.POISON;
-import static org.shorts.model.status.Status.StatusType.SLEEP;
-import static org.shorts.model.status.Status.StatusType.TOXIC_POISON;
+import static org.shorts.model.status.StatusType.BURN;
+import static org.shorts.model.status.StatusType.FREEZE;
+import static org.shorts.model.status.StatusType.PARALYZE;
+import static org.shorts.model.status.StatusType.POISON;
+import static org.shorts.model.status.StatusType.SLEEP;
+import static org.shorts.model.status.StatusType.TOXIC_POISON;
 
 public class Comatose extends Ability {
 

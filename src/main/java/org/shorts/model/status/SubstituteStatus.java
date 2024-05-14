@@ -1,11 +1,13 @@
 package org.shorts.model.status;
 
+import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
+
 public class SubstituteStatus extends VolatileStatus {
 
     private int subHP;
 
     public SubstituteStatus(int subHP) {
-        super(VolatileStatusType.SUBSTITUTE, -1);
+        super(SUBSTITUTE, -1);
         this.subHP = subHP;
     }
 

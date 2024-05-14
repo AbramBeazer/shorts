@@ -2,13 +2,13 @@ package org.shorts.model.abilities;
 
 import java.util.Set;
 
-import static org.shorts.model.status.Status.StatusType.BURN;
-import static org.shorts.model.status.Status.StatusType.FREEZE;
-import static org.shorts.model.status.Status.StatusType.PARALYZE;
-import static org.shorts.model.status.Status.StatusType.POISON;
-import static org.shorts.model.status.Status.StatusType.SLEEP;
-import static org.shorts.model.status.Status.StatusType.TOXIC_POISON;
-import static org.shorts.model.status.VolatileStatus.VolatileStatusType.DROWSY;
+import static org.shorts.model.status.StatusType.BURN;
+import static org.shorts.model.status.StatusType.FREEZE;
+import static org.shorts.model.status.StatusType.PARALYZE;
+import static org.shorts.model.status.StatusType.POISON;
+import static org.shorts.model.status.StatusType.SLEEP;
+import static org.shorts.model.status.StatusType.TOXIC_POISON;
+import static org.shorts.model.status.VolatileStatusType.DROWSY;
 
 public class LeafGuard extends StatusImmuneAbility implements IgnorableAbility {
 

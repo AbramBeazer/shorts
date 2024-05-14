@@ -8,6 +8,7 @@ import org.shorts.model.abilities.StatusImmuneAbility;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
+import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
 import static org.shorts.model.types.Type.ELECTRIC;
 import static org.shorts.model.types.Type.FIRE;
 import static org.shorts.model.types.Type.ICE;
@@ -48,7 +49,7 @@ public class Status extends AbstractStatus {
         final Trainer trainer =
             battle.getPlayerOne().getLead() == target ? battle.getPlayerOne() : battle.getPlayerTwo();
         if (target.getStatus() != NONE || trainer.getSafeguardTurns() > 0 || (target.isGrounded()
-            && battle.getTerrain() == Terrain.MISTY) || (!target.isAbilityIgnored()
+            && battle.getTerrain() == Terrain.MISTY) || (!target.hasVolatileStatus(ABILITY_IGNORED)
             && target.getAbility() instanceof StatusImmuneAbility
             && ((StatusImmuneAbility) target.getAbility()).getImmunities().contains(this.getType()))) {
             return false;
@@ -78,17 +79,6 @@ public class Status extends AbstractStatus {
     @Override
     public int hashCode() {
         return 151 * (type.ordinal() + 1) * Math.abs(turnsRemaining);
-    }
-
-    public enum StatusType implements AbstractStatusType {
-        NONE,
-        SLEEP,
-        BURN,
-        FREEZE,
-        PARALYZE,
-        POISON,
-        TOXIC_POISON,
-        FAINT
     }
 
 }

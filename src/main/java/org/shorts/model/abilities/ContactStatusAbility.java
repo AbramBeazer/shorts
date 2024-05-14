@@ -9,6 +9,7 @@ import org.shorts.model.status.Status;
 import org.shorts.model.status.VolatileStatus;
 
 import static org.shorts.model.status.VolatileStatus.INFATUATED;
+import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
 public class ContactStatusAbility extends Ability {
 
@@ -26,19 +27,15 @@ public class ContactStatusAbility extends Ability {
 
     @Override
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
-        if (move.isContact()
-            && Main.RANDOM.nextInt(100) < 30
-            && self.getVolatileStatuses()
-            .stream()
-            .noneMatch(vs -> vs.getType() == VolatileStatus.VolatileStatusType.SUBSTITUTE)) {
+        if (move.isContact() && Main.RANDOM.nextInt(100) < 30 && !self.hasVolatileStatus(SUBSTITUTE)
+            && (status.isStatusPossible(opponent, battle))) {
             //TODO: Test this. I'm pretty sure there aren't any problems here. Status.isStatusPossible won't have to worry about nullified abilities since this Pokemon clearly doesn't have Mold Breaker, but rather Cute Charm or something.
-            if (status.isStatusPossible(opponent, battle)) {
-                if (status instanceof VolatileStatus) {
-                    opponent.addVolatileStatus((VolatileStatus) status);
-                } else {
-                    opponent.setStatus((Status) status);
-                }
+            if (status instanceof VolatileStatus) {
+                opponent.addVolatileStatus((VolatileStatus) status);
+            } else {
+                opponent.setStatus((Status) status);
             }
+
         }
     } //TODO: Not sure if this should be beforeHit or afterHit. It depends on if the effect should activate even if the attack causes this Pokémon to faint.
     //       I just don't want Static to paralyze an attacker and then give them a Guts boost.

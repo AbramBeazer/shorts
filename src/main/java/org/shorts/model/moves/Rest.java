@@ -4,7 +4,8 @@ import org.shorts.battle.Battle;
 import org.shorts.model.abilities.StatusImmuneAbility;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
-import org.shorts.model.status.VolatileStatus;
+import org.shorts.model.status.StatusType;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 import static org.shorts.battle.Terrain.ELECTRIC;
@@ -24,15 +25,13 @@ public class Rest extends StatusMove {
 
     @Override
     public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (attacker.getCurrentHP() < attacker.getMaxHP() && !attacker.getAbility().equals(COMATOSE) && !(
-            attacker.getAbility() instanceof StatusImmuneAbility
-                && ((StatusImmuneAbility) attacker.getAbility()).getImmunities().contains(Status.StatusType.SLEEP))
-            && defender.getVolatileStatuses()
-            .stream()
-            .noneMatch(vs -> vs.getType().equals(VolatileStatus.VolatileStatusType.MAKING_AN_UPROAR)) && !(
-            (battle.getWeather() == SUN || battle.getWeather() == EXTREME_SUN) && attacker.getAbility()
-                .equals(LEAF_GUARD)) && !(attacker.isGrounded() && (battle.getTerrain() == MISTY
-            || battle.getTerrain() == ELECTRIC))) {
+        if (attacker.getCurrentHP() < attacker.getMaxHP() && !attacker.getAbility().equals(COMATOSE)
+            && !(attacker.getAbility() instanceof StatusImmuneAbility
+            && ((StatusImmuneAbility) attacker.getAbility()).getImmunities().contains(StatusType.SLEEP))
+            && !defender.hasVolatileStatus(VolatileStatusType.MAKING_AN_UPROAR)
+            && !((battle.getWeather() == SUN || battle.getWeather() == EXTREME_SUN) && attacker.getAbility()
+            .equals(LEAF_GUARD))
+            && !(attacker.isGrounded() && (battle.getTerrain() == MISTY || battle.getTerrain() == ELECTRIC))) {
             super.trySecondaryEffect(attacker, defender, battle);
         }
     }

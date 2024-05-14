@@ -1,7 +1,8 @@
 package org.shorts.model.pokemon;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.shorts.battle.Battle;
@@ -14,14 +15,14 @@ import org.shorts.model.items.HeldItem;
 import org.shorts.model.moves.Move;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.VolatileStatus;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.Levitate.LEVITATE;
 import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
-import static org.shorts.model.status.VolatileStatus.VolatileStatusType.ABILITY_IGNORED;
-import static org.shorts.model.status.VolatileStatus.VolatileStatusType.ABILITY_SUPPRESSED;
-import static org.shorts.model.status.VolatileStatus.VolatileStatusType.GROUNDED;
+import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
+import static org.shorts.model.status.VolatileStatusType.GROUNDED;
 
 public class Pokemon {
 
@@ -50,7 +51,7 @@ public class Pokemon {
     private int speed;
     private int stageSpeed;
     private Status status = Status.NONE;
-    private final Set<VolatileStatus> volatileStatuses = new HashSet<>();
+    private final Map<VolatileStatusType, VolatileStatus> volatileStatuses = new HashMap<>();
     private HeldItem heldItem;
 
     protected Pokemon(String pokedexNo, String nickname, String speciesName, Set<Type> types, Ability ability) {
@@ -324,10 +325,6 @@ public class Pokemon {
         this.status = status;
     }
 
-    public Set<VolatileStatus> getVolatileStatuses() {
-        return volatileStatuses;
-    }
-
     public HeldItem getHeldItem() {
         return heldItem;
     }
@@ -357,37 +354,29 @@ public class Pokemon {
     }
 
     public boolean isGrounded() {
-        if (volatileStatuses.stream().anyMatch(vs -> vs.getType() == GROUNDED)) {
+        if (hasVolatileStatus(GROUNDED)) {
             return true;
         } else {
-            return !(this.types.contains(Type.FLYING) || (this.ability.equals(LEVITATE) && !isAbilityIgnored())
-                || this.getHeldItem().equals(AIR_BALLOON));
+            return !(this.types.contains(Type.FLYING) || this.getHeldItem().equals(AIR_BALLOON)
+                || (this.ability.equals(LEVITATE)
+                && !hasVolatileStatus(ABILITY_IGNORED))); //TODO: Should I be checking for suppression as well?
         }
     }
 
+    public VolatileStatus getVolatileStatus(VolatileStatusType type) {
+        return volatileStatuses.get(type);
+    }
+
+    public boolean hasVolatileStatus(VolatileStatusType type) {
+        return volatileStatuses.containsKey(type);
+    }
+
     public void addVolatileStatus(VolatileStatus status) {
-        this.getVolatileStatuses().add(status);
+        volatileStatuses.put(status.getType(), status);
     }
 
-    public void removeVolatileStatus(VolatileStatus status) {
-        this.getVolatileStatuses().remove(status);
-    }
-
-    public boolean hasSubstitute() {
-        return volatileStatuses.stream().anyMatch(vs -> vs.getType() == VolatileStatus.VolatileStatusType.SUBSTITUTE);
-    }
-
-    public boolean isAbilityIgnored() {
-        return volatileStatuses.stream().anyMatch(vs -> vs.getType() == ABILITY_IGNORED);
-    }
-
-    public boolean isAbilitySuppressed() {
-        return volatileStatuses.stream().anyMatch(vs -> vs.getType() == ABILITY_SUPPRESSED);
-    }
-
-    public boolean isAbilityIgnoredOrSuppressed() {
-        return volatileStatuses.stream()
-            .anyMatch(vs -> vs.getType() == ABILITY_IGNORED || vs.getType() == ABILITY_SUPPRESSED);
+    public void removeVolatileStatus(VolatileStatusType type) {
+        volatileStatuses.remove(type);
     }
 
     public boolean hasFainted() {
