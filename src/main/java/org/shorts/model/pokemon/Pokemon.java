@@ -12,6 +12,7 @@ import org.shorts.model.abilities.Ability;
 import org.shorts.model.abilities.IgnorableAbility;
 import org.shorts.model.abilities.NullifyingAbility;
 import org.shorts.model.items.HeldItem;
+import org.shorts.model.items.NoItem;
 import org.shorts.model.moves.Move;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.VolatileStatus;
@@ -52,7 +53,7 @@ public class Pokemon {
     private int stageSpeed;
     private Status status = Status.NONE;
     private final Map<VolatileStatusType, VolatileStatus> volatileStatuses = new HashMap<>();
-    private HeldItem heldItem;
+    private HeldItem heldItem = NoItem.NO_ITEM;
 
     protected Pokemon(String pokedexNo, String nickname, String speciesName, Set<Type> types, Ability ability) {
         this.pokedexNo = pokedexNo;

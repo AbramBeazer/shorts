@@ -167,7 +167,7 @@ public class Type {
 
     public static final Type GHOST = new Type(
         TypeId.GHOST,
-        "Rock",
+        "Ghost",
         List.of(TypeId.GHOST, TypeId.DARK),
         List.of(TypeId.POISON, TypeId.BUG),
         List.of(TypeId.NORMAL, TypeId.FIGHTING));

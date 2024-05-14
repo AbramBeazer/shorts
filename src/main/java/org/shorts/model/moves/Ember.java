@@ -3,6 +3,7 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
 public class Ember extends SpecialMove {
@@ -14,7 +15,7 @@ public class Ember extends SpecialMove {
     @Override
     public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
         //TODO: Does the thawing happen before the burn chance? Can they happen on the same turn?
-        if (defender.getStatus().getType().equals(Status.StatusType.FREEZE)) {
+        if (defender.getStatus().getType().equals(StatusType.FREEZE)) {
             System.out.println(defender.getNickname() + " was thawed out!");
             defender.setStatus(Status.NONE);
         }

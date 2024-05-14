@@ -94,16 +94,22 @@ class TypesTests {
     @Test
     void testTooManyAttackerTypes() {
         Set<Type> attackerTypes = Set.of(Type.NORMAL, Type.ICE, Type.DARK);
-        Set<Type> defenderTypes = Set.of(Type.FIRE);
-        var ex = assertThrows(Exception.class, () -> Type.getSTABMultiplier(Type.ICE, defenderTypes));
-        assertThat(ex.getMessage()).isEqualTo(TooManyTypesException.TOO_MANY_TYPES_ERROR_MESSAGE);
+
+        var ex = assertThrows(Exception.class, () -> Type.getSTABMultiplier(Type.ICE, attackerTypes));
+        assertThat(ex.getMessage()).contains(TooManyTypesException.TOO_MANY_TYPES_ERROR_MESSAGE);
+        for (Type type : attackerTypes) {
+            assertThat(ex.getMessage()).contains(type.toString());
+        }
     }
 
     @Test
     void testTooManyDefenderTypes() {
-        Set<Type> attackerTypes = Set.of(Type.NORMAL);
         Set<Type> defenderTypes = Set.of(Type.FIRE, Type.FIGHTING, Type.GHOST);
+
         var ex = assertThrows(Exception.class, () -> Type.getTypeMultiplier(Type.NORMAL, defenderTypes));
-        assertThat(ex.getMessage()).isEqualTo(TooManyTypesException.TOO_MANY_TYPES_ERROR_MESSAGE);
+        assertThat(ex.getMessage()).contains(TooManyTypesException.TOO_MANY_TYPES_ERROR_MESSAGE);
+        for (Type type : defenderTypes) {
+            assertThat(ex.getMessage()).contains(type.toString());
+        }
     }
 }

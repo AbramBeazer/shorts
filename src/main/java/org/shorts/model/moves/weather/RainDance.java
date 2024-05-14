@@ -6,6 +6,6 @@ import org.shorts.model.types.Type;
 public class RainDance extends WeatherMove {
 
     public RainDance() {
-        super("Rain Dance", Weather.RAIN, Type.WATER);
+        super("Rain Dance", Weather.RAIN, Type.WATER, 8);
     }
 }

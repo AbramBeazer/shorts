@@ -52,10 +52,10 @@ class PressureAppliesTests {
 
     @Test
     void testCurse() {
-        StatusMove move = new Curse();
-        assertThat(attacker.getTypes().contains(GHOST)).isFalse();
-        assertThat(move.pressureApplies(attacker)).isFalse();
+        Curse curse = new Curse();
+        assertThat(attacker.getTypes()).doesNotContain(GHOST);
+        assertThat(curse.pressureApplies(attacker)).isFalse();
         attacker.setTypes(Set.of(GHOST));
-        assertThat(move.pressureApplies(attacker)).isTrue();
+        assertThat(curse.pressureApplies(attacker)).isTrue();
     }
 }

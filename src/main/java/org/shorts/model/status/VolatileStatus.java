@@ -42,7 +42,7 @@ public class VolatileStatus extends AbstractStatus {
                 case FLINCH:
                     return !target.hasVolatileStatus(SUBSTITUTE);
                 case CONFUSED:
-                    return !target.hasVolatileStatus(SUBSTITUTE);//TODO: Make sure that this blocks only Confuse Ray, but not self-inflicted confusion from Outrage or Thrash.
+                    return !target.hasVolatileStatus(SUBSTITUTE); //TODO: Make sure that this blocks only Confuse Ray, but not self-inflicted confusion from Outrage or Thrash.
                 default:
                     return true;
             }

@@ -6,6 +6,6 @@ import org.shorts.model.types.Type;
 public class SunnyDay extends WeatherMove {
 
     public SunnyDay() {
-        super("Sunny Day", Weather.SUN, Type.FIRE);
+        super("Sunny Day", Weather.SUN, Type.FIRE, 8);
     }
 }

@@ -13,7 +13,7 @@ import org.shorts.model.pokemon.Scizor;
 import org.shorts.model.pokemon.Squirtle;
 
 import static org.shorts.model.abilities.AttackDoublingAbility.PURE_POWER;
-import static org.shorts.model.abilities.ContactStatusAbility.STATIC;
+import static org.shorts.model.abilities.ContactStatusAbility.STATIC_ABILITY;
 import static org.shorts.model.abilities.Intimidate.INTIMIDATE;
 import static org.shorts.model.abilities.PinchTypeBoostAbility.BLAZE;
 import static org.shorts.model.abilities.PinchTypeBoostAbility.OVERGROW;
@@ -31,7 +31,11 @@ class SingleBattleTests {
     void setup() {
         playerOne = new Trainer(
             "Red",
-            List.of(new Bulbasaur(OVERGROW), new Charmander(BLAZE), new Squirtle(TORRENT), new Pikachu(STATIC)));
+            List.of(
+                new Bulbasaur(OVERGROW),
+                new Charmander(BLAZE),
+                new Squirtle(TORRENT),
+                new Pikachu(STATIC_ABILITY)));
         playerTwo = new Trainer(
             "Green",
             List.of(new Axew(RIVALRY), new Gyarados(INTIMIDATE), new Medicham(PURE_POWER), new Scizor(SWARM)));

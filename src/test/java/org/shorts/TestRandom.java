@@ -8,4 +8,6 @@ public class TestRandom extends Random {
     public int nextInt(int bound) {
         return 0;
     }
+
+    public static final TestRandom TEST_RANDOM = new TestRandom();
 }
