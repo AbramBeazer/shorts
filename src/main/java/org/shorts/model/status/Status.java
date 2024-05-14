@@ -4,6 +4,7 @@ import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Terrain;
 import org.shorts.battle.Trainer;
+import org.shorts.battle.Weather;
 import org.shorts.model.abilities.StatusImmuneAbility;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
@@ -59,7 +60,8 @@ public class Status extends AbstractStatus {
             case POISON:
                 return !(target.getTypes().contains(Type.POISON) || target.getTypes().contains(STEEL));
             case FREEZE:
-                return !target.getTypes().contains(ICE);
+                return !target.getTypes().contains(ICE) && battle.getWeather() != Weather.SUN
+                    && battle.getWeather() != Weather.EXTREME_SUN;
             case SLEEP:
                 return !(target.isGrounded() && battle.getTerrain() == Terrain.ELECTRIC);
             case PARALYZE:
