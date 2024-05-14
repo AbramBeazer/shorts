@@ -20,7 +20,7 @@ public class ContactStatusAbility extends Ability {
         this.status = status;
     }
 
-    public static final ContactStatusAbility STATIC = new ContactStatusAbility("Static", Status.PARALYZE);
+    public static final ContactStatusAbility STATIC_ABILITY = new ContactStatusAbility("Static", Status.PARALYZE);
     public static final ContactStatusAbility FLAME_BODY = new ContactStatusAbility("Flame Body", Status.BURN);
     public static final ContactStatusAbility POISON_POINT = new ContactStatusAbility("Poison Point", Status.POISON);
     public static final ContactStatusAbility CUTE_CHARM = new ContactStatusAbility("Cute Charm", INFATUATED);
