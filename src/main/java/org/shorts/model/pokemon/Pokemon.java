@@ -350,7 +350,7 @@ public class Pokemon {
     }
 
     public void setMoves(List<Move> moves) {
-        setMoves(moves.toArray(new Move[moves.size()]));
+        setMoves(moves.toArray(new Move[0]));
     }
 
     public boolean isGrounded() {
@@ -358,8 +358,8 @@ public class Pokemon {
             return true;
         } else {
             return !(this.types.contains(Type.FLYING) || this.getHeldItem().equals(AIR_BALLOON)
-                || (this.ability.equals(LEVITATE)
-                && !hasVolatileStatus(ABILITY_IGNORED))); //TODO: Should I be checking for suppression as well?
+                || (this.ability.equals(LEVITATE) && !hasVolatileStatus(ABILITY_IGNORED)));
+            //TODO: Should I be checking for suppression as well?
         }
     }
 
@@ -376,7 +376,9 @@ public class Pokemon {
     }
 
     public void removeVolatileStatus(VolatileStatusType type) {
-        volatileStatuses.remove(type);
+        if (this.hasVolatileStatus(type)) {
+            volatileStatuses.remove(type);
+        }
     }
 
     public boolean hasFainted() {
