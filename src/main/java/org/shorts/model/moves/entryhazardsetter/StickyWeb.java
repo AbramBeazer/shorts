@@ -15,4 +15,9 @@ public class StickyWeb extends StatusMove implements EntryHazardSetter {
     protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
         //TODO:        Trainer opposingTrainer =
     }
+
+    @Override
+    protected boolean pressureApplies(Pokemon userMon) {
+        return false;
+    }
 }

@@ -9,7 +9,7 @@ import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 
 public class Earthquake extends PhysicalMove {
 
-    private Earthquake() {
+    public Earthquake() {
         super("Earthquake", 100, 100, Type.GROUND, 16, false, 0);
     }
 
@@ -26,5 +26,4 @@ public class Earthquake extends PhysicalMove {
         return multiplier;
     }
 
-    public static final Earthquake EARTHQUAKE = new Earthquake();
 }

@@ -9,8 +9,13 @@ import static org.shorts.model.types.Type.NORMAL;
 
 public class Curse extends StatusMove {
 
-    private Curse() {
+    public Curse() {
         super("Curse", 0, NORMAL, 16, true);
+    }
+
+    @Override
+    protected boolean pressureApplies(Pokemon userMon) {
+        return super.pressureApplies(userMon) && userMon.getTypes().contains(GHOST);
     }
 
     @Override
@@ -31,5 +36,4 @@ public class Curse extends StatusMove {
         }
     }
 
-    public static final Curse CURSE = new Curse();
 }

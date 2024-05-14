@@ -12,8 +12,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.Pressure.PRESSURE;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
-import static org.shorts.model.moves.Curse.CURSE;
-import static org.shorts.model.types.Type.GHOST;
+import static org.shorts.model.status.VolatileStatusType.MAGIC_COAT;
 import static org.shorts.model.types.Type.IMMUNE;
 
 public abstract class Move {
@@ -30,7 +29,6 @@ public abstract class Move {
 
     private final int priority;
     private final int secondaryEffectChance;
-    private final boolean targetSelf;
     private boolean disabled = false;
 
     protected Move(
@@ -44,28 +42,6 @@ public abstract class Move {
         this.contact = contact;
         this.secondaryEffectChance = secondaryEffectChance;
         this.priority = 0;
-        this.targetSelf = false;
-    }
-
-    protected Move(
-        String name,
-        double power,
-        double accuracy,
-        Type type,
-        int maxPP,
-        boolean contact,
-        int secondaryEffectChance,
-        boolean targetSelf) {
-        this.name = name;
-        this.power = power;
-        this.accuracy = accuracy;
-        this.type = type;
-        this.maxPP = maxPP;
-        this.currentPP = maxPP;
-        this.contact = contact;
-        this.secondaryEffectChance = secondaryEffectChance;
-        this.priority = 0;
-        this.targetSelf = targetSelf;
     }
 
     public String getName() {
@@ -104,10 +80,6 @@ public abstract class Move {
         return secondaryEffectChance;
     }
 
-    public boolean isTargetSelf() {
-        return targetSelf;
-    }
-
     public boolean isDisabled() {
         return disabled;
     }
@@ -142,7 +114,7 @@ public abstract class Move {
     }
 
     public void doMove(Trainer user, Trainer opponent, Battle battle) {
-        if (this instanceof StatusMove && opponent.getLead().getAbility().getName().equals("Magic Bounce")) {
+        if (this instanceof StatusMove && opponent.getLead().hasVolatileStatus(MAGIC_COAT)) {
             opponent = user;
         }
         Pokemon userMon = user.getLead();
@@ -150,7 +122,7 @@ public abstract class Move {
 
         this.decrementPP();
         if (userMon != opponentMon && opponentMon.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0
-            && (!this.isTargetSelf() || (this == CURSE && userMon.getTypes().contains(GHOST)))) {
+            && pressureApplies(userMon)) {
             this.decrementPP();
         }
 
@@ -223,9 +195,13 @@ public abstract class Move {
         return basePower;
     }
 
-    protected void decrementPP() {
+    private void decrementPP() {
         if (this.currentPP > 0) {
             this.currentPP--;
         }
+    }
+
+    protected boolean pressureApplies(Pokemon userMon) {
+        return true;
     }
 }

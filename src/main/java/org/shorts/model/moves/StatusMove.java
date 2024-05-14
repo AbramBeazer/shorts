@@ -8,9 +8,11 @@ import static org.shorts.model.abilities.Prankster.PRANKSTER;
 
 public abstract class StatusMove extends Move {
 
-    protected StatusMove(
-        String name, double accuracy, Type type, int maxPP, boolean targetSelf) {
-        super(name, 0, accuracy, type, maxPP, false, 100, targetSelf);
+    private final boolean onlyTargetSelf;
+
+    protected StatusMove(String name, double accuracy, Type type, int maxPP, boolean onlyTargetSelf) {
+        super(name, 0, accuracy, type, maxPP, false, 100);
+        this.onlyTargetSelf = onlyTargetSelf;
     }
 
     @Override
@@ -28,5 +30,10 @@ public abstract class StatusMove extends Move {
         } else {
             return super.getPriority(attacker, defender, battle);
         }
+    }
+
+    @Override
+    protected boolean pressureApplies(Pokemon userMon) {
+        return super.pressureApplies(userMon) && !onlyTargetSelf;
     }
 }
