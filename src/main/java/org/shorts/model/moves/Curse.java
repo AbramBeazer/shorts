@@ -15,7 +15,7 @@ public class Curse extends StatusMove {
 
     @Override
     protected boolean pressureApplies(Pokemon userMon) {
-        return super.pressureApplies(userMon) && userMon.getTypes().contains(GHOST);
+        return userMon.getTypes().contains(GHOST);
     }
 
     @Override
