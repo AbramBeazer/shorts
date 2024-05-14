@@ -2,6 +2,7 @@ package org.shorts.model.moves;
 
 import org.shorts.model.abilities.Ability;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.Overcoat.OVERCOAT;
@@ -21,7 +22,7 @@ public class PowderSporeEffectData {
     }
 
     public boolean canActivate(Pokemon target) {
-        return (target.getAbility().equals(OVERCOAT) && !target.isAbilityIgnored())
+        return (target.getAbility().equals(OVERCOAT) && !target.hasVolatileStatus(VolatileStatusType.ABILITY_IGNORED))
             && !target.getTypes().contains(Type.GRASS) && !target.getHeldItem().equals(SAFETY_GOGGLES);
     }
 }
