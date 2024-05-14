@@ -16,6 +16,8 @@ public class Dig extends PhysicalMove implements MultiTurnMove {
     }
 
     //TODO: If user is holding Power Herb, the item is consumed and Dig is executed in one turn.
-    //TODO: implement the semi-invulnerable turn (should only decrement PP on second turn)
-    //  Maybe before anything, we do a check for the semi-invulnerable condition
+
+    //TODO: implement the semi-invulnerable turn
+
+    //TODO: (should only decrement PP on second turn) -- maybe we check with multiTurnMove -- we need to encapsulate the decrementPP/pressureApplies stuff as a "usePP" method.
 }
