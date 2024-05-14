@@ -75,4 +75,6 @@ public abstract class Battle {
     public Trainer getPlayerTwo() {
         return playerTwo;
     }
+
+    public abstract void promptSwitch(Trainer trainer);
 }
