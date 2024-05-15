@@ -18,8 +18,7 @@ public class ChillyReception extends WeatherMove {
         super.applySecondaryEffect(attacker, defender, battle);
         final Trainer trainer =
             battle.getPlayerOne().getLead() == attacker ? battle.getPlayerOne() : battle.getPlayerTwo();
-        if (trainer.hasAvailableSwitch()) {
-            battle.promptSwitch(trainer);
-        }
+
+        battle.promptSwitch(trainer);
     }
 }

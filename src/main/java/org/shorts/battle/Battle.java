@@ -76,5 +76,5 @@ public abstract class Battle {
         return playerTwo;
     }
 
-    public abstract void promptSwitch(Trainer trainer);
+    public abstract void promptSwitch(Trainer trainer) throws IOException;
 }
