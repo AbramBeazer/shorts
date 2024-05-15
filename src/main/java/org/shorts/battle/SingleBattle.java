@@ -156,17 +156,29 @@ public class SingleBattle extends Battle {
 
         printTeam(trainer);
 
-        int choice = 0;
+        int choice;
+        boolean choiceValid;
         //Choice is invalid if that Pokémon has fainted or if the move has no PP.
         do {
             choice = System.in.read();
-        } while (choice <= 0 || choice > 9 || trainer.getTeam().get(choice - 4).hasFainted() || invalidMoves.contains(
-            pokemon.getMoves()[choice - 1]));
+            if (choice <= 0 || choice > 9) {
+                choiceValid = false;
+            } else if (choice <= 4 && invalidMoves.contains(
+                pokemon.getMoves()[choice - 1])) {
+                choiceValid = false;
+            } else if (choice > 4 && (trainer.getTeam().get(choice - 4).hasFainted()
+                || trainer.getLead().isTrapped(this))) {
+                choiceValid = false;
+            } else {
+                choiceValid = true;
+            }
+
+        } while (!choiceValid);
         return choice;
     }
 
     @Override
-    public void promptSwitch(Trainer trainer) {
+    public void promptSwitchCausedByUserMove(Trainer trainer) {
         try {
             if (trainer.hasAvailableSwitch()) {
                 printTeam(trainer);
