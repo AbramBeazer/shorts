@@ -3,10 +3,11 @@ package org.shorts.model.moves.weather;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
 import org.shorts.battle.Weather;
+import org.shorts.model.moves.switchself.SwitchSelfMove;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class ChillyReception extends WeatherMove {
+public class ChillyReception extends WeatherMove implements SwitchSelfMove {
 
     public ChillyReception() {
         super("Chilly Reception", Weather.SNOW, Type.ICE, 16);
@@ -19,6 +20,6 @@ public class ChillyReception extends WeatherMove {
         final Trainer trainer =
             battle.getPlayerOne().getLead() == attacker ? battle.getPlayerOne() : battle.getPlayerTwo();
 
-        battle.promptSwitch(trainer);
+        battle.promptSwitchCausedByUserMove(trainer);//TODO: Remove this
     }
 }
