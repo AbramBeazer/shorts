@@ -27,7 +27,6 @@ public abstract class Move {
 
     private final boolean contact;
 
-    private final int priority;
     private final int secondaryEffectChance;
     private boolean disabled = false;
 
@@ -41,7 +40,6 @@ public abstract class Move {
         this.currentPP = maxPP;
         this.contact = contact;
         this.secondaryEffectChance = secondaryEffectChance;
-        this.priority = 0;
     }
 
     public String getName() {
@@ -73,7 +71,7 @@ public abstract class Move {
     }
 
     public int getPriority(Pokemon attacker, Pokemon defender, Battle battle) {
-        return priority;
+        return 0;
     }
 
     public int getSecondaryEffectChance() {
@@ -105,12 +103,12 @@ public abstract class Move {
         Move other = (Move) Objects.requireNonNull(o);
         return this.name.equals(other.name) && this.power == other.power && this.accuracy == other.accuracy
             && this.type.equals(other.type) && this.maxPP == other.maxPP && this.contact == other.contact
-            && this.priority == other.priority && this.secondaryEffectChance == other.secondaryEffectChance;
+            && this.secondaryEffectChance == other.secondaryEffectChance;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, power, accuracy, type, maxPP, contact, priority, secondaryEffectChance);
+        return Objects.hash(name, power, accuracy, type, maxPP, contact, secondaryEffectChance);
     }
 
     public void doMove(Trainer user, Trainer opponent, Battle battle) {
