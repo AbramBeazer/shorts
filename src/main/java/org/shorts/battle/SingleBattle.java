@@ -166,19 +166,24 @@ public class SingleBattle extends Battle {
     }
 
     @Override
-    public void promptSwitch(Trainer trainer) throws IOException {
-        if (trainer.hasAvailableSwitch()) {
-            printTeam(trainer);
-            int choice = 0;
-            //Choice is invalid if that Pokémon has fainted or is already in battle
-            do {
-                choice = System.in.read();
-            } while (choice <= 4 || choice > 9 || trainer.getTeam().get(choice - 4).hasFainted());
-            trainer.switchPokemon(0, choice - 4);
+    public void promptSwitch(Trainer trainer) {
+        try {
+            if (trainer.hasAvailableSwitch()) {
+                printTeam(trainer);
+                int choice = 0;
+                //Choice is invalid if that Pokémon has fainted or is already in battle
+                do {
+                    choice = System.in.read();
+                } while (choice <= 4 || choice > 9 || trainer.getTeam().get(choice - 4).hasFainted());
+                trainer.switchPokemon(0, choice - 4);
 
-            //TODO: Is this the right place to do this? At the beginning of a turn, if both trainers switch, the abilities don't trigger until both new Pokemon are in.
-            //      This is probably fine if only one switch happens, but what if the attacker uses U-Turn and activates the opponent's Eject Button? Which switch happens first?
-            trainer.getLead().afterEntry(getPlayerOne() == trainer ? playerTwo.getLead() : playerOne.getLead(), this);
+                //TODO: Is this the right place to do this? At the beginning of a turn, if both trainers switch, the abilities don't trigger until both new Pokemon are in.
+                //      This is probably fine if only one switch happens, but what if the attacker uses U-Turn and activates the opponent's Eject Button? Which switch happens first?
+                trainer.getLead()
+                    .afterEntry(getPlayerOne() == trainer ? playerTwo.getLead() : playerOne.getLead(), this);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -150,7 +150,7 @@ public abstract class Move {
         }
     }
 
-    private int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
+    protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
         double movePower = calculateMovePower(user, target, battle);
         double attack = this instanceof PhysicalMove ? user.getAttack() : user.getSpecialAttack();
         double defense = this instanceof PhysicalMove ? user.getDefense() : user.getSpecialDefense();
