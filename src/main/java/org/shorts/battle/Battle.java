@@ -2,6 +2,8 @@ package org.shorts.battle;
 
 import java.io.IOException;
 
+import org.shorts.model.pokemon.Pokemon;
+
 public abstract class Battle {
 
     protected final Trainer playerOne;
@@ -76,5 +78,29 @@ public abstract class Battle {
         return playerTwo;
     }
 
-    public abstract void promptSwitch(Trainer trainer);
+    public abstract void promptSwitchCausedByUserMove(Trainer trainer);
+
+    public Trainer getOpposingTrainer(Trainer trainer) {
+        if (this.playerOne == trainer) {
+            return playerTwo;
+        } else {
+            return playerOne;
+        }
+    }
+
+    public Trainer getOpposingTrainer(Pokemon pokemon) {
+        if (this.playerOne.getLead() == pokemon) {
+            return playerTwo;
+        } else {
+            return playerOne;
+        }
+    }
+
+    public Pokemon getOpposingLead(Pokemon pokemon) {
+        if (this.playerOne.getLead() == pokemon) {
+            return playerTwo.getLead();
+        } else {
+            return playerOne.getLead();
+        }
+    }
 }

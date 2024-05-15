@@ -57,6 +57,7 @@ public class VolatileStatus extends AbstractStatus {
         -1);
     public static final VolatileStatus ABILITY_IGNORED = new VolatileStatus(VolatileStatusType.ABILITY_IGNORED, -1);
     public static final VolatileStatus MAGIC_COAT = new VolatileStatus(VolatileStatusType.MAGIC_COAT, -1);
+    public static final VolatileStatus CANT_ESCAPE = new VolatileStatus(VolatileStatusType.CANT_ESCAPE, -1);
 
     @Override
     public boolean equals(Object obj) {

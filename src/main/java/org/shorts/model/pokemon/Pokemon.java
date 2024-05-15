@@ -21,9 +21,17 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.Levitate.LEVITATE;
+import static org.shorts.model.abilities.trapping.ArenaTrap.ARENA_TRAP;
+import static org.shorts.model.abilities.trapping.MagnetPull.MAGNET_PULL;
+import static org.shorts.model.abilities.trapping.ShadowTag.SHADOW_TAG;
 import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
+import static org.shorts.model.items.ShedShell.SHED_SHELL;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
+import static org.shorts.model.status.VolatileStatusType.CANT_ESCAPE;
 import static org.shorts.model.status.VolatileStatusType.GROUNDED;
+import static org.shorts.model.status.VolatileStatusType.MAGNET_LEVITATION;
+import static org.shorts.model.status.VolatileStatusType.NO_RETREAT;
+import static org.shorts.model.status.VolatileStatusType.OCTOLOCKED;
 
 public class Pokemon {
 
@@ -357,10 +365,27 @@ public class Pokemon {
     public boolean isGrounded() {
         if (hasVolatileStatus(GROUNDED)) {
             return true;
+        } else if (hasVolatileStatus(MAGNET_LEVITATION)) {
+            return false;
         } else {
             return !(this.types.contains(Type.FLYING) || this.getHeldItem().equals(AIR_BALLOON)
                 || (this.ability.equals(LEVITATE) && !hasVolatileStatus(ABILITY_IGNORED)));
             //TODO: Should I be checking for suppression as well?
+        }
+    }
+
+    public boolean isTrapped(Battle battle) {
+        Pokemon opponent = battle.getOpposingLead(this);
+        if (getHeldItem() == SHED_SHELL || getTypes().contains(Type.GHOST)) {
+            return false;
+        } else if (opponent.getAbility() == MAGNET_PULL && this.getTypes().contains(Type.STEEL)) {
+            return true;
+        } else if (opponent.getAbility() == ARENA_TRAP && this.isGrounded()) {
+            return true;
+        } else if (opponent.getAbility() == SHADOW_TAG && this.getAbility() != SHADOW_TAG) {
+            return true;
+        } else {
+            return hasVolatileStatus(CANT_ESCAPE) || hasVolatileStatus(NO_RETREAT) || hasVolatileStatus(OCTOLOCKED);
         }
     }
 
