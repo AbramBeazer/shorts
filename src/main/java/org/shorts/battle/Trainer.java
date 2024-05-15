@@ -3,6 +3,7 @@ package org.shorts.battle;
 import java.util.List;
 import java.util.Objects;
 
+import org.shorts.Main;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.TooManyTypesException;
@@ -99,6 +100,18 @@ public class Trainer {
             Pokemon a = this.team.get(indexA);
             this.team.set(indexA, team.get(indexB));
             this.team.set(indexB, a);
+        }
+    }
+
+    public void forceRandomSwitch(Pokemon pokemon) {
+        //Why pass in a Pokemon instead of just 0? I'm thinking ahead to if I ever implement Double or Triple battles.
+        if (hasAvailableSwitch()) {
+            int knownIndex = team.indexOf(pokemon);
+            int switchIndex = Main.RANDOM.nextInt(6);
+            while (switchIndex % team.size() == knownIndex || team.get(switchIndex % team.size()).hasFainted()) {
+                switchIndex++;
+            }
+            switchPokemon(knownIndex, switchIndex % team.size());
         }
     }
 
