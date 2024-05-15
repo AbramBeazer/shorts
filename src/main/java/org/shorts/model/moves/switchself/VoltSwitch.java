@@ -1,7 +1,8 @@
-package org.shorts.model.moves;
+package org.shorts.model.moves.switchself;
 
 import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
+import org.shorts.model.moves.SpecialMove;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 

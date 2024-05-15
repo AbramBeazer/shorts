@@ -1,5 +1,6 @@
-package org.shorts.model.moves;
+package org.shorts.model.moves.switchself;
 
+import org.shorts.model.moves.PhysicalMove;
 import org.shorts.model.types.Type;
 
 public class UTurn extends PhysicalMove {
