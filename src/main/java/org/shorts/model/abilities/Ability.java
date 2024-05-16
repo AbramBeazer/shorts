@@ -76,6 +76,9 @@ public abstract class Ability {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
         if (obj instanceof Ability) {
             Ability ability = (Ability) obj;
             return name.equals(ability.name);

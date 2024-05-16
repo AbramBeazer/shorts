@@ -8,6 +8,6 @@ import static org.shorts.model.types.Type.GROUND;
 public class Groudon extends Pokemon {
 
     public Groudon() {
-        super("383", null, "GROUDON", Set.of(GROUND), DROUGHT);
+        super("383", null, "Groudon", Set.of(GROUND), DROUGHT);
     }
 }

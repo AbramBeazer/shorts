@@ -68,6 +68,9 @@ public abstract class HeldItem {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
         if (obj instanceof HeldItem) {
             HeldItem item = (HeldItem) obj;
             return name.equals(item.name);

@@ -5,33 +5,40 @@ import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummySingleBattle;
 import org.shorts.model.items.DriveItem;
+import org.shorts.model.items.GriseousOrb;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.MegaStone;
+import org.shorts.model.items.MemoryItem;
 import org.shorts.model.items.PlateItem;
 import org.shorts.model.items.PrimalOrb;
+import org.shorts.model.items.RustedShield;
+import org.shorts.model.items.RustedSword;
 import org.shorts.model.items.ZCrystal;
 import org.shorts.model.pokemon.Arceus;
 import org.shorts.model.pokemon.Genesect;
 import org.shorts.model.pokemon.Giratina;
 import org.shorts.model.pokemon.Groudon;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.pokemon.Scizor;
+import org.shorts.model.pokemon.Silvally;
 import org.shorts.model.pokemon.Tyranitar;
+import org.shorts.model.pokemon.Zacian;
+import org.shorts.model.pokemon.Zamazenta;
 import org.shorts.model.status.SubstituteStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.shorts.model.abilities.PinchTypeBoostAbility.SWARM;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
 import static org.shorts.model.abilities.StickyHold.STICKY_HOLD;
 import static org.shorts.model.abilities.weather.WeatherAbility.SAND_STREAM;
+import static org.shorts.model.items.DriveItem.CHILL_DRIVE;
 import static org.shorts.model.items.GriseousOrb.GRISEOUS_ORB;
 import static org.shorts.model.items.Leftovers.LEFTOVERS;
 import static org.shorts.model.items.MegaStone.TYRANITARITE;
+import static org.shorts.model.items.MemoryItem.GHOST_MEMORY;
 import static org.shorts.model.items.NoItem.NO_ITEM;
-import static org.shorts.model.items.PlateItem.DRACO_PLATE;
-import static org.shorts.model.items.PlateItem.PIXIE_PLATE;
-import static org.shorts.model.items.PlateItem.STONE_PLATE;
+import static org.shorts.model.items.PlateItem.SPLASH_PLATE;
 import static org.shorts.model.items.PrimalOrb.RED_ORB;
+import static org.shorts.model.items.RustedShield.RUSTED_SHIELD;
+import static org.shorts.model.items.RustedSword.RUSTED_SWORD;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 
 class KnockOffTests {
@@ -44,127 +51,110 @@ class KnockOffTests {
         knockOff = new KnockOff();
     }
 
-    @Test
-    void testFocusBandShouldActivateBeforeBeingLost() {
-        assertThat(false).isTrue();
-
-    }
-
-    @Test
-    void testFocusSashShouldActivateBeforeBeingLost() {
-        assertThat(false).isTrue();
-
-    }
-
-    @Test
-    void testColburBerryShouldActivateBeforeBeingLostButDamageShouldBeBoosted() {
-        assertThat(false).isTrue();
-
-    }
-
-    @Test
-    void testDoesNotWorkOnGiratinaWithGriseousOrb() {
-        Giratina target = new Giratina(PRESSURE);
+    void testPersonalItemCannotBeKnockedOffButOtherItemsCan(Pokemon target, HeldItem keepItem) {
         target.setHeldItem(LEFTOVERS);
         Pokemon attacker = getDummyPokemon();
         assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
         knockOff.trySecondaryEffect(attacker, target, battle);
         assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
 
-        final HeldItem keepItem = GRISEOUS_ORB;
         target.setHeldItem(keepItem);
         assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
         knockOff.trySecondaryEffect(attacker, target, battle);
         assertThat(target.getHeldItem()).isEqualTo(keepItem);
     }
 
-    @Test
-    void testGiratinaCannotKnockOffGriseousOrb() {
+    void testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(Pokemon attacker, HeldItem keepItem) {
         Pokemon target = getDummyPokemon();
-        Giratina attacker = new Giratina(PRESSURE);
+        target.setHeldItem(keepItem);
 
-        final HeldItem item = GRISEOUS_ORB;
+        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
+        knockOff.trySecondaryEffect(attacker, target, battle);
+        assertThat(target.getHeldItem()).isEqualTo(keepItem);
+    }
+
+    void testOthersCanKnockOffPokemonSpecificItems(HeldItem item) {
+        Pokemon attacker = getDummyPokemon();
+        Pokemon target = getDummyPokemon();
+
         target.setHeldItem(item);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(item);
-    }
-
-    @Test
-    void testDoesNotWorkOnArceusWithPlate() {
-        Arceus target = new Arceus();
-        target.setHeldItem(LEFTOVERS);
-        Pokemon attacker = getDummyPokemon();
         assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
         knockOff.trySecondaryEffect(attacker, target, battle);
         assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
-
-        PlateItem keepItem = STONE_PLATE;
-        target.setHeldItem(keepItem);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(keepItem);
     }
 
     @Test
-    void testArceusCannotKnockOffPlate() {
-        Pokemon target = getDummyPokemon();
-        Arceus attacker = new Arceus();
-
-        final PlateItem plate = PIXIE_PLATE;
-        target.setHeldItem(plate);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(plate);
+    void testGiratinaAndGriseousOrb() {
+        final Giratina mon = new Giratina(PRESSURE);
+        final GriseousOrb item = GRISEOUS_ORB;
+        testPersonalItemCannotBeKnockedOffButOtherItemsCan(mon, item);
+        testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(mon, item);
+        testOthersCanKnockOffPokemonSpecificItems(item);
     }
 
     @Test
-    void testDoesNotWorkOnGenesectWithDrive() {
-        Genesect target = new Genesect();
-        target.setHeldItem(LEFTOVERS);
-        Pokemon attacker = getDummyPokemon();
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
-
-        DriveItem keepItem = DriveItem.SHOCK_DRIVE;
-        target.setHeldItem(keepItem);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(keepItem);
+    void testArceusAndPlate() {
+        final Arceus mon = new Arceus();
+        final PlateItem item = SPLASH_PLATE;
+        testPersonalItemCannotBeKnockedOffButOtherItemsCan(mon, item);
+        testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(mon, item);
+        testOthersCanKnockOffPokemonSpecificItems(item);
     }
 
     @Test
-    void testGenesectCannotKnockOffDrive() {
-        Pokemon target = getDummyPokemon();
-        Genesect attacker = new Genesect();
-
-        final DriveItem drive = DriveItem.SHOCK_DRIVE;
-        target.setHeldItem(drive);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(drive);
+    void testGenesectAndDrive() {
+        final Genesect mon = new Genesect();
+        final DriveItem item = CHILL_DRIVE;
+        testPersonalItemCannotBeKnockedOffButOtherItemsCan(mon, item);
+        testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(mon, item);
+        testOthersCanKnockOffPokemonSpecificItems(item);
     }
 
     @Test
-    void testOthersCanKnockOffPokemonSpecificItems() {
-        Pokemon attacker = getDummyPokemon();
-        Pokemon target = getDummyPokemon();
+    void testSilvallyAndMemory() {
+        final Silvally mon = new Silvally();
+        final MemoryItem item = GHOST_MEMORY;
+        testPersonalItemCannotBeKnockedOffButOtherItemsCan(mon, item);
+        testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(mon, item);
+        testOthersCanKnockOffPokemonSpecificItems(item);
+    }
 
-        target.setHeldItem(GRISEOUS_ORB);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
+    @Test
+    void testZacianAndRustedSword() {
+        final Zacian mon = new Zacian();
+        final RustedSword item = RUSTED_SWORD;
+        testPersonalItemCannotBeKnockedOffButOtherItemsCan(mon, item);
+        testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(mon, item);
+        testOthersCanKnockOffPokemonSpecificItems(item);
+    }
 
-        target.setHeldItem(DRACO_PLATE);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
+    @Test
+    void testZamazentaAndRustedShield() {
+        final Zamazenta mon = new Zamazenta();
+        final RustedShield item = RUSTED_SHIELD;
+        testPersonalItemCannotBeKnockedOffButOtherItemsCan(mon, item);
+        testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(mon, item);
+        testOthersCanKnockOffPokemonSpecificItems(item);
+    }
 
-        target.setHeldItem(DriveItem.CHILL_DRIVE);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
+    @Test
+    void testMegaStone() {
+        final Tyranitar mon = new Tyranitar(SAND_STREAM);
+        final MegaStone item = TYRANITARITE;
+
+        testPersonalItemCannotBeKnockedOffButOtherItemsCan(mon, item);
+        testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(mon, item);
+        testOthersCanKnockOffPokemonSpecificItems(item);
+    }
+
+    @Test
+    void testPrimalOrb() {
+        final Groudon mon = new Groudon();
+        final PrimalOrb item = RED_ORB;
+
+        testPersonalItemCannotBeKnockedOffButOtherItemsCan(mon, item);
+        testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(mon, item);
+        testOthersCanKnockOffPokemonSpecificItems(item);
     }
 
     @Test
@@ -180,71 +170,7 @@ class KnockOffTests {
     }
 
     @Test
-    void testDoesNotWorkOnCorrectMegaStone() {
-        Pokemon attacker = getDummyPokemon();
-        Pokemon target = new Tyranitar(SAND_STREAM);
-
-        final MegaStone correctMegaStone = TYRANITARITE;
-        target.setHeldItem(correctMegaStone);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(correctMegaStone);
-    }
-
-    @Test
-    void testWorksOnIncorrectMegaStone() {
-        Pokemon attacker = getDummyPokemon();
-        Pokemon target = new Scizor(SWARM);
-
-        target.setHeldItem(TYRANITARITE);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
-    }
-
-    @Test
-    void testDoesNotWorkOnCorrectPrimalOrb() {
-        Pokemon attacker = getDummyPokemon();
-        Pokemon target = new Groudon();
-
-        final PrimalOrb orb = RED_ORB;
-        target.setHeldItem(orb);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(orb);
-    }
-
-    @Test
-    void testWorksOnIncorrectPrimalOrb() {
-        Pokemon attacker = getDummyPokemon();
-        Pokemon target = new Groudon();
-
-        target.setHeldItem(RED_ORB);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
-        knockOff.trySecondaryEffect(attacker, target, battle);
-        assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
-    }
-
-    @Test
-    void testDoesNotWorkOnSilvallyWithMemory() {
-        assertThat(false).isTrue();
-
-    }
-
-    @Test
-    void testDoesNotWorkOnZacianWithRustedSword() {
-        assertThat(false).isTrue();
-
-    }
-
-    @Test
-    void testDoesNotWorkOnZamazentaWithRustedShield() {
-        assertThat(false).isTrue();
-
-    }
-
-    @Test
-    void testDoesNotWorkOnBoosterEnergy() {
+    void testDoesNotWorkOnProtoSynthesisOrQuarkDrivePokemonWithBoosterEnergy() {
         assertThat(false).isTrue();
 
     }
@@ -274,8 +200,7 @@ class KnockOffTests {
         final Pokemon defender = getDummyPokemon();
 
         defender.setAbility(STICKY_HOLD);
-        final HeldItem item = LEFTOVERS;
-        defender.setHeldItem(item);
+        defender.setHeldItem(LEFTOVERS);
 
         assertThat(knockOff.calculateMovePower(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
         defender.setCurrentHP(0);
@@ -298,7 +223,47 @@ class KnockOffTests {
 
     @Test
     void testNoSecondaryEffectIfUserHasFainted() {
-        assertThat(false).isTrue();
+        final Pokemon attacker = getDummyPokemon();
+        final Pokemon defender = getDummyPokemon();
+
+        final HeldItem item = LEFTOVERS;
+        defender.setHeldItem(item);
+        assertThat(knockOff.calculateMovePower(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        attacker.setCurrentHP(0);
+        knockOff.trySecondaryEffect(attacker, defender, battle);
+        assertThat(defender.getHeldItem()).isEqualTo(item);
     }
 
+    @Test
+    void testNoBoostIfTargetHasNoItem() {
+        final Pokemon attacker = getDummyPokemon();
+        final Pokemon defender = getDummyPokemon();
+
+        assertThat(defender.getHeldItem()).isEqualTo(NO_ITEM);
+        assertThat(knockOff.calculateMovePower(attacker, defender, battle)).isEqualTo(1);
+    }
+
+    @Test
+    void testFocusBandShouldActivateBeforeBeingLost() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testFocusSashShouldActivateBeforeBeingLost() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testColburBerryShouldActivateBeforeBeingLostButDamageShouldBeBoosted() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testRegularBerry() {
+        assertThat(false).isTrue();
+        //TODO: What do I do here? Would a Sitrus Berry activate or would it be knocked off?
+    }
 }

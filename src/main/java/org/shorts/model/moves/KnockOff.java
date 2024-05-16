@@ -3,6 +3,7 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.model.items.DriveItem;
 import org.shorts.model.items.MegaStone;
+import org.shorts.model.items.MemoryItem;
 import org.shorts.model.items.PlateItem;
 import org.shorts.model.items.PrimalOrb;
 import org.shorts.model.items.ZCrystal;
@@ -10,11 +11,16 @@ import org.shorts.model.pokemon.Arceus;
 import org.shorts.model.pokemon.Genesect;
 import org.shorts.model.pokemon.Giratina;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.pokemon.Silvally;
+import org.shorts.model.pokemon.Zacian;
+import org.shorts.model.pokemon.Zamazenta;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.StickyHold.STICKY_HOLD;
 import static org.shorts.model.items.GriseousOrb.GRISEOUS_ORB;
 import static org.shorts.model.items.NoItem.NO_ITEM;
+import static org.shorts.model.items.RustedShield.RUSTED_SHIELD;
+import static org.shorts.model.items.RustedSword.RUSTED_SWORD;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
@@ -54,13 +60,24 @@ public class KnockOff extends PhysicalMove {
     }
 
     private boolean bonusDamageApplies(Pokemon user, Pokemon target) {
-        if ((target instanceof Giratina || user instanceof Giratina) && target.getHeldItem() == GRISEOUS_ORB) {
+        if (target.getHeldItem() == NO_ITEM) {
+            return false;
+        } else if ((target instanceof Giratina || user instanceof Giratina) && target.getHeldItem() == GRISEOUS_ORB) {
             return false;
         } else if ((target instanceof Arceus || user instanceof Arceus)
             && target.getHeldItem() instanceof PlateItem) {
             return false;
         } else if ((target instanceof Genesect || user instanceof Genesect)
             && target.getHeldItem() instanceof DriveItem) {
+            return false;
+        } else if ((target instanceof Silvally || user instanceof Silvally)
+            && target.getHeldItem() instanceof MemoryItem) {
+            return false;
+        } else if ((target instanceof Zacian || user instanceof Zacian)
+            && target.getHeldItem() == RUSTED_SWORD) {
+            return false;
+        } else if ((target instanceof Zamazenta || user instanceof Zamazenta)
+            && target.getHeldItem() == RUSTED_SHIELD) {
             return false;
         } else if (target.getHeldItem() instanceof MegaStone) {
             MegaStone megaStone = (MegaStone) target.getHeldItem();
