@@ -14,4 +14,7 @@ public class MegaStone extends HeldItem {
     public boolean isCorrectPokemon(Pokemon pokemon) {
         return pokemon.getSpeciesName().equals(species);
     }
+
+    public static final MegaStone TYRANITARITE = new MegaStone("Tyranitarite", "Tyranitar");
+    //TODO: Do I implement these? There's no Mega Evolution in Gen 9.
 }
