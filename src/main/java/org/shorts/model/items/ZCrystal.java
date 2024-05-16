@@ -1,25 +1,22 @@
 package org.shorts.model.items;
 
-import org.shorts.model.moves.Move;
 import org.shorts.model.types.Type;
 
 public class ZCrystal extends HeldItem {
 
     private Type type;
-    private Move zMove;
 
-    private ZCrystal(String name, Type type, Move zMove) {
+    private ZCrystal(String name, Type type) {
         super(name);
         this.type = type;
-        this.zMove = zMove;
     }
 
     public Type getType() {
         return type;
     }
 
-    public Move getZMove() {
-        return zMove;
-    }
+    public static final ZCrystal BUGINIUM_Z = new ZCrystal("Buginium Z", Type.BUG);
     //TODO: Implement
+    // No Z-Moves in Gen 9
+
 }

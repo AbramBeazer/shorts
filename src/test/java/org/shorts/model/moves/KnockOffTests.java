@@ -7,6 +7,7 @@ import org.shorts.battle.DummySingleBattle;
 import org.shorts.model.items.DriveItem;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.PlateItem;
+import org.shorts.model.items.ZCrystal;
 import org.shorts.model.pokemon.Arceus;
 import org.shorts.model.pokemon.Genesect;
 import org.shorts.model.pokemon.Giratina;
@@ -159,7 +160,14 @@ class KnockOffTests {
 
     @Test
     void testDoesNotWorkOnZCrystal() {
+        Pokemon target = getDummyPokemon();
+        Pokemon attacker = getDummyPokemon();
 
+        final ZCrystal zCrystal = ZCrystal.BUGINIUM_Z;
+        target.setHeldItem(zCrystal);
+        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
+        knockOff.trySecondaryEffect(attacker, target, battle);
+        assertThat(target.getHeldItem()).isEqualTo(zCrystal);
     }
 
     @Test
