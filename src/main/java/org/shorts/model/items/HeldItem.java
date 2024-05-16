@@ -1,5 +1,7 @@
 package org.shorts.model.items;
 
+import java.util.Objects;
+
 import org.shorts.battle.Battle;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
@@ -62,5 +64,19 @@ public abstract class HeldItem {
 
     public void beforeSwitchOut(Pokemon self, Pokemon opponent, Battle battle) {
 
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof HeldItem) {
+            HeldItem item = (HeldItem) obj;
+            return name.equals(item.name);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

@@ -1,5 +1,7 @@
 package org.shorts.model.abilities;
 
+import java.util.Objects;
+
 import org.shorts.battle.Battle;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
@@ -72,4 +74,17 @@ public abstract class Ability {
 
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Ability) {
+            Ability ability = (Ability) obj;
+            return name.equals(ability.name);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
 }
