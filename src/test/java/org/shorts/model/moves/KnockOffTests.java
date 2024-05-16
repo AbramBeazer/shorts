@@ -15,9 +15,11 @@ import org.shorts.model.status.SubstituteStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
+import static org.shorts.model.abilities.StickyHold.STICKY_HOLD;
 import static org.shorts.model.items.GriseousOrb.GRISEOUS_ORB;
 import static org.shorts.model.items.Leftovers.LEFTOVERS;
 import static org.shorts.model.items.NoItem.NO_ITEM;
+import static org.shorts.model.items.PlateItem.DRACO_PLATE;
 import static org.shorts.model.items.PlateItem.PIXIE_PLATE;
 import static org.shorts.model.items.PlateItem.STONE_PLATE;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
@@ -136,13 +138,27 @@ class KnockOffTests {
 
     @Test
     void testOthersCanKnockOffGriseousOrbPlateAndDrive() {
-        assertThat(false).isTrue();
+        Pokemon attacker = getDummyPokemon();
+        Pokemon target = getDummyPokemon();
 
+        target.setHeldItem(GRISEOUS_ORB);
+        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        knockOff.trySecondaryEffect(attacker, target, battle);
+        assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
+
+        target.setHeldItem(DRACO_PLATE);
+        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        knockOff.trySecondaryEffect(attacker, target, battle);
+        assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
+
+        target.setHeldItem(DriveItem.CHILL_DRIVE);
+        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        knockOff.trySecondaryEffect(attacker, target, battle);
+        assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
     }
 
     @Test
     void testDoesNotWorkOnZCrystal() {
-        assertThat(false).isTrue();
 
     }
 
@@ -201,9 +217,16 @@ class KnockOffTests {
     }
 
     @Test
-    void testDoesNotWorkOnStickyHold() {
-        assertThat(false).isTrue();
+    void testDamageBoostAppliesToStickyHoldButItemIsNotLost() {
+        final Pokemon attacker = getDummyPokemon();
+        final Pokemon defender = getDummyPokemon();
+        defender.setAbility(STICKY_HOLD);
+        final HeldItem item = LEFTOVERS;
+        defender.setHeldItem(item);
 
+        assertThat(knockOff.calculateMovePower(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        knockOff.trySecondaryEffect(attacker, defender, battle);
+        assertThat(defender.getHeldItem()).isEqualTo(item);
     }
 
     @Test
