@@ -147,7 +147,7 @@ class KnockOffTests {
     }
 
     @Test
-    void testOthersCanKnockOffGriseousOrbPlateAndDrive() {
+    void testOthersCanKnockOffPokemonSpecificItems() {
         Pokemon attacker = getDummyPokemon();
         Pokemon target = getDummyPokemon();
 
