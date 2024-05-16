@@ -187,7 +187,7 @@ public abstract class Move {
         return Type.getSTABMultiplier(this.getType(), attackerTypes);
     }
 
-    private double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
+    protected double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
         double basePower = this.getPower();
         basePower *= user.onMovePowerCalc(target, battle, this);
         //TODO: Handle weather multipliers, terrain multipliers, mud sport, etc.
