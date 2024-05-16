@@ -269,6 +269,21 @@ class KnockOffTests {
     }
 
     @Test
+    void testLoseItemWhenStickyHoldPokemonFaints() {
+        final Pokemon attacker = getDummyPokemon();
+        final Pokemon defender = getDummyPokemon();
+
+        defender.setAbility(STICKY_HOLD);
+        final HeldItem item = LEFTOVERS;
+        defender.setHeldItem(item);
+
+        assertThat(knockOff.calculateMovePower(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        defender.setCurrentHP(0);
+        knockOff.trySecondaryEffect(attacker, defender, battle);
+        assertThat(defender.getHeldItem()).isEqualTo(NO_ITEM);
+    }
+
+    @Test
     void testDamageBoostAppliesToSubstituteButItemIsNotLost() {
         final Pokemon attacker = getDummyPokemon();
         final Pokemon defender = getDummyPokemon();
@@ -279,6 +294,11 @@ class KnockOffTests {
         assertThat(knockOff.calculateMovePower(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
         knockOff.trySecondaryEffect(attacker, defender, battle);
         assertThat(defender.getHeldItem()).isEqualTo(item);
+    }
+
+    @Test
+    void testNoSecondaryEffectIfUserHasFainted() {
+        assertThat(false).isTrue();
     }
 
 }

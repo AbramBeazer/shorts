@@ -10,12 +10,13 @@ import org.shorts.model.pokemon.Arceus;
 import org.shorts.model.pokemon.Genesect;
 import org.shorts.model.pokemon.Giratina;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.StickyHold.STICKY_HOLD;
 import static org.shorts.model.items.GriseousOrb.GRISEOUS_ORB;
 import static org.shorts.model.items.NoItem.NO_ITEM;
+import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
+import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
 public class KnockOff extends PhysicalMove {
@@ -28,19 +29,21 @@ public class KnockOff extends PhysicalMove {
 
     @Override
     protected double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
-        if (itemCanBeKnockedOff(user, target)) {
+        if (bonusDamageApplies(user, target)) {
             return MULTIPLIER;
         } else {
             return 1;
         }
     }
 
+    //TODO: Test "If the user faints due to the target's Ability (Rough Skin or Iron Barbs) or held Rocky Helmet, it cannot remove the target's held item. However, Knock Off will still remove the target's held item if the user faints due to its own held Life Orb."
+    //      I need to verify when Life Orb damage happens. Does it happen after Rough Skin/Iron Barbs/Rocky Helmet damage?
     @Override
     public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (!attacker.hasFainted() && itemCanBeKnockedOff(attacker, defender)
-            && !defender.hasVolatileStatus(SUBSTITUTE)) {
-            //TODO: Test "If the user faints due to the target's Ability (Rough Skin or Iron Barbs) or held Rocky Helmet, it cannot remove the target's held item. However, Knock Off will still remove the target's held item if the user faints due to its own held Life Orb."
-            //      I need to verify when Life Orb damage happens. Does it happen after Rough Skin/Iron Barbs/Rocky Helmet damage?
+        if (!attacker.hasFainted() && bonusDamageApplies(attacker, defender) && !defender.hasVolatileStatus(SUBSTITUTE)
+            && (defender.getAbility() != STICKY_HOLD || defender.hasFainted() || defender.hasVolatileStatus(
+            ABILITY_IGNORED) || defender.hasVolatileStatus(ABILITY_SUPPRESSED))) {
+
             super.trySecondaryEffect(attacker, defender, battle);
         }
     }
@@ -50,22 +53,21 @@ public class KnockOff extends PhysicalMove {
         defender.setHeldItem(NO_ITEM);
     }
 
-    private boolean itemCanBeKnockedOff(Pokemon user, Pokemon target) {
-        if (target.getAbility() == STICKY_HOLD && !target.hasVolatileStatus(VolatileStatusType.ABILITY_IGNORED)) {
+    private boolean bonusDamageApplies(Pokemon user, Pokemon target) {
+        if ((target instanceof Giratina || user instanceof Giratina) && target.getHeldItem() == GRISEOUS_ORB) {
             return false;
-        } else if ((target instanceof Giratina || user instanceof Giratina) && target.getHeldItem() == GRISEOUS_ORB) {
-            return false;
-        } else if ((target instanceof Arceus || user instanceof Arceus) && target.getHeldItem() instanceof PlateItem) {
+        } else if ((target instanceof Arceus || user instanceof Arceus)
+            && target.getHeldItem() instanceof PlateItem) {
             return false;
         } else if ((target instanceof Genesect || user instanceof Genesect)
             && target.getHeldItem() instanceof DriveItem) {
             return false;
-        } else if (target.getHeldItem() instanceof MegaStone && ((MegaStone) target.getHeldItem()).isCorrectPokemon(
-            target)) {
-            return false;
-        } else if (target.getHeldItem() instanceof PrimalOrb && ((PrimalOrb) target.getHeldItem()).isCorrectPokemon(
-            target)) {
-            return false;
+        } else if (target.getHeldItem() instanceof MegaStone) {
+            MegaStone megaStone = (MegaStone) target.getHeldItem();
+            return !(megaStone.isCorrectPokemon(target) || megaStone.isCorrectPokemon(user));
+        } else if (target.getHeldItem() instanceof PrimalOrb) {
+            PrimalOrb primalOrb = (PrimalOrb) target.getHeldItem();
+            return !(primalOrb.isCorrectPokemon(target) || primalOrb.isCorrectPokemon(user));
         } else {
             return !(target.getHeldItem() instanceof ZCrystal); //Z-Crystal can't be knocked off. Otherwise, return true for everything else.
         }
