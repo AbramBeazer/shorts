@@ -10,6 +10,6 @@ import static org.shorts.model.types.Type.ROCK;
 public class Tyranitar extends Pokemon {
 
     public Tyranitar(Ability ability) {
-        super("248", null, "TYRANITAR", Set.of(ROCK, DARK), ability);
+        super("248", null, "Tyranitar", Set.of(ROCK, DARK), ability);
     }
 }

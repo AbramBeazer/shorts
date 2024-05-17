@@ -72,9 +72,10 @@ public class Pokemon {
         this.ability.onGainAbility(this);
     }
 
-    public Pokemon(int currentHP, int maxHP) {
+    public Pokemon(int currentHP, int maxHP, Ability ability) {
         this.currentHP = currentHP;
         this.maxHP = maxHP;
+        this.ability = ability;
     }
 
     public void changeAttack(int stages) {

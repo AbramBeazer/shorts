@@ -15,6 +15,7 @@ import org.shorts.model.moves.XScissor;
 import org.shorts.model.pokemon.Pokemon;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.model.abilities.DummyAbility.DUMMY_ABILITY;
 
 class PinchTypeBoostAbilityTests {
 
@@ -25,8 +26,8 @@ class PinchTypeBoostAbilityTests {
 
     @BeforeEach
     void setup() {
-        attacker = new Pokemon(99, 99);
-        defender = new Pokemon(99, 99);
+        attacker = new Pokemon(99, 99, DUMMY_ABILITY);
+        defender = new Pokemon(99, 99, DUMMY_ABILITY);
         battle = new SingleBattle(new Trainer("Red", List.of(attacker)), new Trainer("Green", List.of(defender)));
     }
 
