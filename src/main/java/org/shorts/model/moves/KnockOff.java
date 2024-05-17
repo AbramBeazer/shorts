@@ -16,7 +16,10 @@ import org.shorts.model.pokemon.Zacian;
 import org.shorts.model.pokemon.Zamazenta;
 import org.shorts.model.types.Type;
 
+import static org.shorts.model.abilities.Protosynthesis.PROTOSYNTHESIS;
+import static org.shorts.model.abilities.QuarkDrive.QUARK_DRIVE;
 import static org.shorts.model.abilities.StickyHold.STICKY_HOLD;
+import static org.shorts.model.items.BoosterEnergy.BOOSTER_ENERGY;
 import static org.shorts.model.items.GriseousOrb.GRISEOUS_ORB;
 import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.items.RustedShield.RUSTED_SHIELD;
@@ -85,6 +88,10 @@ public class KnockOff extends PhysicalMove {
         } else if (target.getHeldItem() instanceof PrimalOrb) {
             PrimalOrb primalOrb = (PrimalOrb) target.getHeldItem();
             return !(primalOrb.isCorrectPokemon(target) || primalOrb.isCorrectPokemon(user));
+        } else if (target.getHeldItem() == BOOSTER_ENERGY && (user.getAbility() == PROTOSYNTHESIS
+            || target.getAbility() == PROTOSYNTHESIS || user.getAbility() == QUARK_DRIVE
+            || target.getAbility() == QUARK_DRIVE)) {
+            return false;
         } else {
             return !(target.getHeldItem() instanceof ZCrystal); //Z-Crystal can't be knocked off. Otherwise, return true for everything else.
         }
