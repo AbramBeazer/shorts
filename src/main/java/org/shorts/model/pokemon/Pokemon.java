@@ -66,7 +66,7 @@ public class Pokemon {
 
     public Pokemon(int currentHP, int maxHP, Ability ability) {
         this.currentHP = currentHP;
-        this.maxHP = maxHP;
+        setMaxHP(maxHP);
         this.ability = ability;
     }
 
@@ -177,15 +177,11 @@ public class Pokemon {
     }
 
     public int getAttack() {
-        double multiplier = (2 + this.stageAttack) * 0.5;
+        double multiplier = 1;
         if (this.getStatus() == Status.BURN && !this.getAbility().equals(GUTS)) {
             multiplier *= 0.5;
         }
-        if (this.stageAttack >= 0) {
-            return (int) (this.attack * multiplier);
-        } else {
-            return (int) (this.attack / multiplier);
-        }
+        return (int) (this.attack * getStageMultiplier(attack) * multiplier);
     }
 
     public void setAttack(int attack) {
@@ -193,12 +189,8 @@ public class Pokemon {
     }
 
     public int getDefense() {
-        double multiplier = (2 + this.stageDefense) * 0.5;
-        if (this.stageDefense >= 0) {
-            return (int) (this.defense * multiplier);
-        } else {
-            return (int) (this.defense / multiplier);
-        }
+        double multiplier = 1;
+        return (int) (this.defense * getStageMultiplier(stageDefense) * multiplier);
     }
 
     public void setDefense(int defense) {
@@ -206,12 +198,8 @@ public class Pokemon {
     }
 
     public int getSpecialAttack() {
-        double multiplier = (2 + this.stageSpecialAttack) * 0.5;
-        if (this.stageSpecialAttack >= 0) {
-            return (int) (this.specialAttack * multiplier);
-        } else {
-            return (int) (this.specialAttack / multiplier);
-        }
+        double multiplier = 1;
+        return (int) (this.specialAttack * getStageMultiplier(stageSpecialAttack) * multiplier);
     }
 
     public void setSpecialAttack(int specialAttack) {
@@ -219,12 +207,8 @@ public class Pokemon {
     }
 
     public int getSpecialDefense() {
-        double multiplier = (2 + this.stageSpecialDefense) * 0.5;
-        if (this.stageSpecialDefense >= 0) {
-            return (int) (this.specialDefense * multiplier);
-        } else {
-            return (int) (this.specialDefense / multiplier);
-        }
+        double multiplier = 1;
+        return (int) (this.specialDefense * getStageMultiplier(stageSpecialDefense) * multiplier);
     }
 
     public void setSpecialDefense(int specialDefense) {
@@ -232,19 +216,24 @@ public class Pokemon {
     }
 
     public int getSpeed() {
-        double multiplier = (2 + this.stageSpeed) * 0.5;
+        double multiplier = 1;
         if (this.getStatus() == Status.PARALYZE) {
             multiplier *= 0.5;
         }
-        if (this.stageSpeed >= 0) {
-            return (int) (this.speed * multiplier);
-        } else {
-            return (int) (this.speed / multiplier);
-        }
+        //Verify in which order these calculations should take place.
+        return (int) (this.speed * getStageMultiplier(stageSpeed) * multiplier);
     }
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    private double getStageMultiplier(int stage) {
+        if (stage >= 0) {
+            return 1 + (0.5 * stage);
+        } else {
+            return 2d / (2 + stage);
+        }
     }
 
     public int getLevel() {
