@@ -152,9 +152,10 @@ public abstract class Move {
 
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
         double movePower = calculateMovePower(user, target, battle);
-        double attack = this instanceof PhysicalMove ? user.getAttack() : user.getSpecialAttack();
-        double defense = this instanceof PhysicalMove ? user.getDefense() : user.getSpecialDefense();
+        double attack = this instanceof PhysicalMove ? user.calculateAttack() : user.calculateSpecialAttack();
+        double defense = this instanceof PhysicalMove ? target.calculateDefense() : target.calculateSpecialDefense();
         //TODO: Deal with weird edge cases like Foul Play, Psyshock, and Beat Up.
+        //  Maybe I'll have a "getAttackingStat" or "getDefendingStat" method in Phys/Spec Move that I override in edge case classes.
 
         int baseDamage = (int) ((0.4 * user.getLevel() + 2) * movePower * (attack / defense) * 0.02) + 2;
         return applyMultipliers(user, target, battle, baseDamage);
@@ -204,4 +205,8 @@ public abstract class Move {
     protected boolean pressureApplies(Pokemon userMon) {
         return true;
     }
+
+    protected abstract int getAttackingStat(Pokemon attacker, Pokemon defender);
+
+    protected abstract int getDefendingStat(Pokemon attacker, Pokemon defender);
 }

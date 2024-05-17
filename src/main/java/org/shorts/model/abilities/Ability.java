@@ -74,6 +74,26 @@ public abstract class Ability {
 
     }
 
+    public double onCalculateAttack(Pokemon self) {
+        return 1;
+    }
+
+    public double onCalculateDefense(Pokemon self) {
+        return 1;
+    }
+
+    public double onCalculateSpecialAttack(Pokemon self) {
+        return 1;
+    }
+
+    public double onCalculateSpecialDefense(Pokemon self) {
+        return 1;
+    }
+
+    public double onCalculateSpeed(Pokemon self) {
+        return 1;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

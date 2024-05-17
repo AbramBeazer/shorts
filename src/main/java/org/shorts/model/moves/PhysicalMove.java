@@ -19,4 +19,14 @@ public abstract class PhysicalMove extends Move {
         String name, double power, double accuracy, Type type, int maxPP, boolean contact, int secondaryEffectChance) {
         super(name, power, accuracy, type, maxPP, contact, secondaryEffectChance);
     }
+
+    @Override
+    protected int getAttackingStat(Pokemon user, Pokemon target) {
+        return user.calculateAttack();
+    }
+
+    @Override
+    protected int getDefendingStat(Pokemon user, Pokemon target) {
+        return user.calculateDefense();
+    }
 }

@@ -176,11 +176,12 @@ public class Pokemon {
         this.maxHP = maxHP;
     }
 
-    public int getAttack() {
+    public int calculateAttack() {
         double multiplier = 1;
         if (this.getStatus() == Status.BURN && !this.getAbility().equals(GUTS)) {
             multiplier *= 0.5;
         }
+        multiplier *= ability.onCalculateAttack(this) * heldItem.onCalculateAttack(this);
         return (int) (this.attack * getStageMultiplier(attack) * multiplier);
     }
 
@@ -188,8 +189,8 @@ public class Pokemon {
         this.attack = attack;
     }
 
-    public int getDefense() {
-        double multiplier = 1;
+    public int calculateDefense() {
+        double multiplier = ability.onCalculateDefense(this) * heldItem.onCalculateDefense(this);
         return (int) (this.defense * getStageMultiplier(stageDefense) * multiplier);
     }
 
@@ -197,8 +198,8 @@ public class Pokemon {
         this.defense = defense;
     }
 
-    public int getSpecialAttack() {
-        double multiplier = 1;
+    public int calculateSpecialAttack() {
+        double multiplier = ability.onCalculateSpecialAttack(this) * heldItem.onCalculateSpecialAttack(this);
         return (int) (this.specialAttack * getStageMultiplier(stageSpecialAttack) * multiplier);
     }
 
@@ -206,8 +207,8 @@ public class Pokemon {
         this.specialAttack = specialAttack;
     }
 
-    public int getSpecialDefense() {
-        double multiplier = 1;
+    public int calculateSpecialDefense() {
+        double multiplier = ability.onCalculateSpecialDefense(this) * heldItem.onCalculateSpecialDefense(this);
         return (int) (this.specialDefense * getStageMultiplier(stageSpecialDefense) * multiplier);
     }
 
@@ -215,8 +216,8 @@ public class Pokemon {
         this.specialDefense = specialDefense;
     }
 
-    public int getSpeed() {
-        double multiplier = 1;
+    public int calculateSpeed() {
+        double multiplier = ability.onCalculateSpeed(this) * heldItem.onCalculateSpeed(this);
         if (this.getStatus() == Status.PARALYZE) {
             multiplier *= 0.5;
         }
