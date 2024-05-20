@@ -19,11 +19,11 @@ public class Facade extends PhysicalMove {
     }
 
     @Override
-    protected double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
+    protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
         if (user.getStatus() == Status.BURN || user.getStatus() == Status.PARALYZE || user.getStatus() == Status.POISON
             || user.getStatus() == Status.TOXIC_POISON) {
-            return MULTIPLIER * super.calculateMovePower(user, target, battle);
+            return MULTIPLIER * super.getPowerMultipliers(user, target, battle);
         }
-        return super.calculateMovePower(user, target, battle);
+        return super.getPowerMultipliers(user, target, battle);
     }
 }
