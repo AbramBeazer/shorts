@@ -1,7 +1,6 @@
 package org.shorts.model.moves.recoil;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.shorts.model.moves.PhysicalMove;
 import org.shorts.model.pokemon.Pokemon;
@@ -16,10 +15,7 @@ public class Struggle extends PhysicalMove implements RecoilAttack {
 
     @Override
     protected double getTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
-        Set<Type> modifiedDefenderTypes = defenderTypes.stream()
-            .filter(type -> !type.equals(Type.GHOST))
-            .collect(Collectors.toSet());
-        return super.getTypeMultiplier(modifiedDefenderTypes);
+        return 1;
     }
 
     @Override

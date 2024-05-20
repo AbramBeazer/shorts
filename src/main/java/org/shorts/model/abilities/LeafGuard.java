@@ -20,7 +20,7 @@ public class LeafGuard extends StatusImmuneAbility implements IgnorableAbility {
 
     //TODO: Implement this
     //    @Override public void whateverMethodTheParentClassOverrides(Pokemon self, Pokemon opponent, Battle battle) {
-    //        if(battle.getWeather() == Weather.SUN || Weather.EXTREME_SUN) {
+    //        if((battle.getWeather() == Weather.SUN || battle.getWeather()== Weather.EXTREME_SUN) && !battle.isWeatherSuppressed()) {
     //            super.whateverMethodTheParentClassOverrides(self, opponent, battle);
     //        }
     //    }
