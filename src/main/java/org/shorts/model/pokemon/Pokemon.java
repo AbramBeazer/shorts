@@ -40,11 +40,14 @@ public class Pokemon {
     private PokedexEntry pokedexEntry;
     private String originalTrainer;
     private String nickname;
+    @Deprecated
     private String speciesName;
     private Set<Type> types;
     private Ability ability;
     private Nature nature;
-    //    private int[] EVs = { 0, 0, 0, 0, 0, 0 };
+    @SuppressWarnings("checkstyle:MemberName")
+    private int[] EVs;
+    @SuppressWarnings("checkstyle:MemberName")
     private int[] IVs = { 31, 31, 31, 31, 31, 31 };
 
     private Move[] moves = new Move[4];
@@ -86,11 +89,12 @@ public class Pokemon {
         this.ability = ability;
     }
 
-    public Pokemon(PokedexEntry pokedexEntry, int level, int[] EVs) {
+    public Pokemon(PokedexEntry pokedexEntry, int level, int[] effortValues) {
         this.pokedexEntry = pokedexEntry;
         this.speciesName = pokedexEntry.getSpeciesName();
         this.types = pokedexEntry.getTypes();
         this.happiness = Byte.MAX_VALUE;
+        this.EVs = effortValues;
 
         this.ability = pokedexEntry.getAbilities().stream().findFirst().orElse(null);
         this.level = Math.max(1, Math.min(100, level));
@@ -99,25 +103,25 @@ public class Pokemon {
             this.maxHP = 1;
         } else {
             this.maxHP =
-                (((2 * pokedexEntry.getBaseHP() + IVs[HP.ordinal()] + (EVs[HP.ordinal()] / 4)) * level) / 100) + level
-                    + 10;
+                (((2 * pokedexEntry.getBaseHP() + IVs[HP.ordinal()] + (EVs[HP.ordinal()] / 4)) * level) / 100)
+                    + level + 10;
         }
 
         this.attack =
-            ((((2 * pokedexEntry.getBaseAtk() + IVs[ATK.ordinal()] + (EVs[ATK.ordinal()] / 4) * level) / 100) + 5)
-                * nature.getMultiplier(ATK)) / 100;
+            ((((2 * pokedexEntry.getBaseAtk() + IVs[ATK.ordinal()] + (EVs[ATK.ordinal()] / 4) * level) / 100)
+                + 5) * nature.getMultiplier(ATK)) / 100;
         this.defense =
-            ((((2 * pokedexEntry.getBaseDef() + IVs[DEF.ordinal()] + (EVs[DEF.ordinal()] / 4) * level) / 100) + 5)
-                * nature.getMultiplier(DEF)) / 100;
+            ((((2 * pokedexEntry.getBaseDef() + IVs[DEF.ordinal()] + (EVs[DEF.ordinal()] / 4) * level) / 100)
+                + 5) * nature.getMultiplier(DEF)) / 100;
         this.specialAttack =
-            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPATK.ordinal()] + (EVs[SPATK.ordinal()] / 4) * level) / 100) + 5)
-                * nature.getMultiplier(SPATK)) / 100;
+            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPATK.ordinal()] + (EVs[SPATK.ordinal()] / 4) * level)
+                / 100) + 5) * nature.getMultiplier(SPATK)) / 100;
         this.specialDefense =
-            ((((2 * pokedexEntry.getBaseDef() + IVs[SPDEF.ordinal()] + (EVs[SPDEF.ordinal()] / 4) * level) / 100) + 5)
-                * nature.getMultiplier(SPDEF)) / 100;
+            ((((2 * pokedexEntry.getBaseDef() + IVs[SPDEF.ordinal()] + (EVs[SPDEF.ordinal()] / 4) * level)
+                / 100) + 5) * nature.getMultiplier(SPDEF)) / 100;
         this.speed =
-            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPEED.ordinal()] + (EVs[SPEED.ordinal()] / 4) * level) / 100) + 5)
-                * nature.getMultiplier(SPEED)) / 100;
+            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPEED.ordinal()] + (EVs[SPEED.ordinal()] / 4) * level)
+                / 100) + 5) * nature.getMultiplier(SPEED)) / 100;
     }
 
     public void changeAttack(int stages) {
@@ -204,11 +208,7 @@ public class Pokemon {
     }
 
     public String getSpeciesName() {
-        return speciesName;
-    }
-
-    public void setSpeciesName(String speciesName) {
-        this.speciesName = speciesName;
+        return pokedexEntry != null ? pokedexEntry.getSpeciesName() : speciesName;
     }
 
     public Ability getAbility() {
@@ -491,7 +491,8 @@ public class Pokemon {
     }
 
     public double onMovePowerCalc(Pokemon opponent, Battle battle, Move move) {
-        return ability.onMovePowerCalc(this, opponent, battle, move) * heldItem.onMovePowerCalc(this,
+        return ability.onMovePowerCalc(this, opponent, battle, move) * heldItem.onMovePowerCalc(
+            this,
             opponent,
             battle,
             move);
