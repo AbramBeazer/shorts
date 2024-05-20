@@ -29,7 +29,9 @@ import static org.shorts.model.StatEnum.SPEED;
 import static org.shorts.model.abilities.Levitate.LEVITATE;
 import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
+import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
 import static org.shorts.model.status.VolatileStatusType.GROUNDED;
+import static org.shorts.model.status.VolatileStatusType.ROOTED;
 
 public class Pokemon {
 
@@ -446,12 +448,13 @@ public class Pokemon {
     }
 
     public boolean isGrounded() {
-        if (hasVolatileStatus(GROUNDED)) {
+        //This override Grounded status type is caused by Iron Ball, Ingrain, SmackDown, Thousand Arrows, and Gravity.
+        if (hasVolatileStatus(GROUNDED) || hasVolatileStatus(ROOTED)) {
             return true;
         } else {
             return !(this.types.contains(Type.FLYING) || this.getHeldItem().equals(AIR_BALLOON) || (
-                this.ability.equals(LEVITATE) && !hasVolatileStatus(ABILITY_IGNORED)));
-            //TODO: Should I be checking for suppression as well?
+                this.ability.equals(LEVITATE) && !hasVolatileStatus(ABILITY_IGNORED) && !hasVolatileStatus(
+                    ABILITY_SUPPRESSED)));
         }
     }
 
