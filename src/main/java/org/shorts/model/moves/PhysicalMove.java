@@ -2,8 +2,10 @@ package org.shorts.model.moves;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
+import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
 
 public abstract class PhysicalMove extends Move {
@@ -28,5 +30,14 @@ public abstract class PhysicalMove extends Move {
     @Override
     protected int getDefendingStat(Pokemon user, Pokemon target) {
         return user.calculateDefense();
+    }
+
+    @Override
+    protected double getBurnMultiplier(Pokemon user) {
+        if (user.getStatus() == Status.BURN && !user.getAbility().equals(GUTS)) {
+            return 0.5;
+        } else {
+            return 1;
+        }
     }
 }

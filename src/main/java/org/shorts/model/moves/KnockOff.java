@@ -34,7 +34,7 @@ public class KnockOff extends PhysicalMove {
     }
 
     @Override
-    protected double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
+    protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
         if (bonusDamageApplies(user, target)) {
             return MULTIPLIER;
         } else {

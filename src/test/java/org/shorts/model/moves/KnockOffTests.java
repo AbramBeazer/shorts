@@ -54,12 +54,12 @@ class KnockOffTests {
     void testPersonalItemCannotBeKnockedOffButOtherItemsCan(Pokemon target, HeldItem keepItem) {
         target.setHeldItem(LEFTOVERS);
         Pokemon attacker = getDummyPokemon();
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        assertThat(knockOff.getPowerMultipliers(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
         knockOff.trySecondaryEffect(attacker, target, battle);
         assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
 
         target.setHeldItem(keepItem);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
+        assertThat(knockOff.getPowerMultipliers(attacker, target, battle)).isEqualTo(1);
         knockOff.trySecondaryEffect(attacker, target, battle);
         assertThat(target.getHeldItem()).isEqualTo(keepItem);
     }
@@ -68,7 +68,7 @@ class KnockOffTests {
         Pokemon target = getDummyPokemon();
         target.setHeldItem(keepItem);
 
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
+        assertThat(knockOff.getPowerMultipliers(attacker, target, battle)).isEqualTo(1);
         knockOff.trySecondaryEffect(attacker, target, battle);
         assertThat(target.getHeldItem()).isEqualTo(keepItem);
     }
@@ -78,7 +78,7 @@ class KnockOffTests {
         Pokemon target = getDummyPokemon();
 
         target.setHeldItem(item);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        assertThat(knockOff.getPowerMultipliers(attacker, target, battle)).isEqualTo(KnockOff.MULTIPLIER);
         knockOff.trySecondaryEffect(attacker, target, battle);
         assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
     }
@@ -164,7 +164,7 @@ class KnockOffTests {
 
         final ZCrystal zCrystal = ZCrystal.BUGINIUM_Z;
         target.setHeldItem(zCrystal);
-        assertThat(knockOff.calculateMovePower(attacker, target, battle)).isEqualTo(1);
+        assertThat(knockOff.getPowerMultipliers(attacker, target, battle)).isEqualTo(1);
         knockOff.trySecondaryEffect(attacker, target, battle);
         assertThat(target.getHeldItem()).isEqualTo(zCrystal);
     }
@@ -189,7 +189,7 @@ class KnockOffTests {
         final HeldItem item = LEFTOVERS;
         defender.setHeldItem(item);
 
-        assertThat(knockOff.calculateMovePower(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        assertThat(knockOff.getPowerMultipliers(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
         knockOff.trySecondaryEffect(attacker, defender, battle);
         assertThat(defender.getHeldItem()).isEqualTo(item);
     }
@@ -202,7 +202,7 @@ class KnockOffTests {
         defender.setAbility(STICKY_HOLD);
         defender.setHeldItem(LEFTOVERS);
 
-        assertThat(knockOff.calculateMovePower(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        assertThat(knockOff.getPowerMultipliers(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
         defender.setCurrentHP(0);
         knockOff.trySecondaryEffect(attacker, defender, battle);
         assertThat(defender.getHeldItem()).isEqualTo(NO_ITEM);
@@ -216,7 +216,7 @@ class KnockOffTests {
         final HeldItem item = LEFTOVERS;
         defender.setHeldItem(item);
 
-        assertThat(knockOff.calculateMovePower(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        assertThat(knockOff.getPowerMultipliers(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
         knockOff.trySecondaryEffect(attacker, defender, battle);
         assertThat(defender.getHeldItem()).isEqualTo(item);
     }
@@ -228,7 +228,7 @@ class KnockOffTests {
 
         final HeldItem item = LEFTOVERS;
         defender.setHeldItem(item);
-        assertThat(knockOff.calculateMovePower(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        assertThat(knockOff.getPowerMultipliers(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
         attacker.setCurrentHP(0);
         knockOff.trySecondaryEffect(attacker, defender, battle);
         assertThat(defender.getHeldItem()).isEqualTo(item);
@@ -240,7 +240,7 @@ class KnockOffTests {
         final Pokemon defender = getDummyPokemon();
 
         assertThat(defender.getHeldItem()).isEqualTo(NO_ITEM);
-        assertThat(knockOff.calculateMovePower(attacker, defender, battle)).isEqualTo(1);
+        assertThat(knockOff.getPowerMultipliers(attacker, defender, battle)).isEqualTo(1);
     }
 
     @Test

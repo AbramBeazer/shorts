@@ -26,7 +26,6 @@ import static org.shorts.model.StatEnum.HP;
 import static org.shorts.model.StatEnum.SPATK;
 import static org.shorts.model.StatEnum.SPDEF;
 import static org.shorts.model.StatEnum.SPEED;
-import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.Levitate.LEVITATE;
 import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
@@ -207,8 +206,14 @@ public class Pokemon {
         this.nickname = nickname;
     }
 
+    @Deprecated
     public String getSpeciesName() {
         return pokedexEntry != null ? pokedexEntry.getSpeciesName() : speciesName;
+    }
+
+    @Deprecated
+    public void setSpeciesName(String speciesName) {
+        this.speciesName = speciesName;
     }
 
     public Ability getAbility() {
@@ -252,9 +257,6 @@ public class Pokemon {
 
     public int calculateAttack() {
         double multiplier = 1;
-        if (this.getStatus() == Status.BURN && !this.getAbility().equals(GUTS)) {
-            multiplier *= 0.5;
-        }
         multiplier *= ability.onCalculateAttack(this) * heldItem.onCalculateAttack(this);
         return (int) (this.attack * getStageMultiplier(attack) * multiplier);
     }
@@ -490,8 +492,8 @@ public class Pokemon {
         heldItem.afterEntry(this, opponent, battle);
     }
 
-    public double onMovePowerCalc(Pokemon opponent, Battle battle, Move move) {
-        return ability.onMovePowerCalc(this, opponent, battle, move) * heldItem.onMovePowerCalc(
+    public double getMovePowerMultipliers(Pokemon opponent, Battle battle, Move move) {
+        return ability.getMovePowerMultipliers(this, opponent, battle, move) * heldItem.getMovePowerMultipliers(
             this,
             opponent,
             battle,

@@ -14,7 +14,7 @@ public class Rivalry extends Ability {
     public static final Rivalry RIVALRY = new Rivalry();
 
     @Override
-    public double onMovePowerCalc(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
         if (self.getSex() == Sex.NONE || opponent.getSex() == Sex.NONE) {
             return 1;
         } else {

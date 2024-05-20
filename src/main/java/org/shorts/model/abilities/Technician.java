@@ -16,7 +16,7 @@ public class Technician extends Ability {
     public static final Technician TECHNICIAN = new Technician();
 
     @Override
-    public double onMovePowerCalc(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
         return move.getPower() <= BASE_POWER_THRESHOLD ? MULTIPLIER : 1;
     }
 }

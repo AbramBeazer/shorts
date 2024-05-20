@@ -3,17 +3,21 @@ package org.shorts.model.moves;
 import java.util.Objects;
 import java.util.Set;
 
-import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
+import org.shorts.battle.Weather;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.TooManyTypesException;
 import org.shorts.model.types.Type;
 
+import static org.shorts.Main.RANDOM;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
 import static org.shorts.model.status.VolatileStatusType.MAGIC_COAT;
+import static org.shorts.model.types.Type.FIRE;
 import static org.shorts.model.types.Type.IMMUNE;
+import static org.shorts.model.types.Type.WATER;
 
 public abstract class Move {
 
@@ -86,7 +90,7 @@ public abstract class Move {
 
     public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
         final int chance = getSecondaryEffectChance() * (attacker.getAbility().equals(SERENE_GRACE) ? 2 : 1);
-        if (Main.RANDOM.nextInt(100) < chance) {
+        if (RANDOM.nextInt(100) < chance) {
             applySecondaryEffect(attacker, defender, battle);
         }
     }
@@ -151,7 +155,9 @@ public abstract class Move {
     }
 
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
+        boolean isCritical = rollForCrit(user, target, battle);
         double movePower = calculateMovePower(user, target, battle);
+        //TODO: Critical hits should ignore attack drops and defense buffs.
         double attack = this instanceof PhysicalMove ? user.calculateAttack() : user.calculateSpecialAttack();
         double defense = this instanceof PhysicalMove ? target.calculateDefense() : target.calculateSpecialDefense();
         //TODO: Deal with weird edge cases like Foul Play, Psyshock, and Beat Up.
@@ -189,11 +195,64 @@ public abstract class Move {
     }
 
     protected double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
-        double basePower = this.getPower();
-        basePower *= user.onMovePowerCalc(target, battle, this);
+        double basePower = this.getPower() * this.getPowerMultipliers(user, target, battle);
+        basePower *= user.getMovePowerMultipliers(target, battle, this);
         //TODO: Handle weather multipliers, terrain multipliers, mud sport, etc.
         //TODO: Investigate what, if anything, I need to do on the target's side of things.
         return basePower;
+    }
+
+    protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
+        return 1;
+    }
+
+    private double getRandomMultiplier() {
+        return (RANDOM.nextInt(16) + 85) / 100d;
+    }
+
+    private double getNumTargetsMultiplier() {
+        return 1;
+    }
+
+    protected double getWeatherMultiplier(Battle battle) {
+        if (!battle.isWeatherSuppressed()) {
+            if (battle.getWeather() == Weather.RAIN || battle.getWeather() == Weather.EXTREME_RAIN) {
+                if (type == WATER) {
+                    return 1.5;
+                } else {
+                    return type == FIRE ? 0.5 : 1;
+                }
+            } else if (battle.getWeather() == Weather.SUN || battle.getWeather() == Weather.EXTREME_SUN) {
+                if (type == FIRE) {
+                    return 1.5;
+                } else {
+                    return type == WATER ? 0.5 : 1;
+                }
+            }
+        }
+        return 1;
+    }
+
+    private double getGlaiveRushMultiplier(Pokemon target) {
+        return target.hasVolatileStatus(VolatileStatusType.USED_GLAIVE_RUSH) ? 2 : 1;
+    }
+
+    protected boolean rollForCrit(Pokemon user, Pokemon target, Battle battle) {
+        //TODO: implement
+        return false;
+    }
+
+    private double getCriticalMultiplier(boolean isCritical) {
+        return isCritical ? 1.5 : 1;
+    }
+
+    protected double getBurnMultiplier(Pokemon user) {
+        return 1;
+    }
+
+    private double getOtherMultiplier(Pokemon user, Pokemon target) {
+        return 1;
+        //TODO: Implement
     }
 
     private void decrementPP() {

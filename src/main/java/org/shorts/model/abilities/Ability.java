@@ -25,7 +25,7 @@ public abstract class Ability {
     public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
     }
 
-    public double onMovePowerCalc(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
         return 1;
     }
 
