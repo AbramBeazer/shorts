@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.Nature;
+import org.shorts.model.PokedexEntry;
 import org.shorts.model.Sex;
 import org.shorts.model.abilities.Ability;
 import org.shorts.model.abilities.IgnorableAbility;
@@ -19,6 +20,12 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
+import static org.shorts.model.StatEnum.ATK;
+import static org.shorts.model.StatEnum.DEF;
+import static org.shorts.model.StatEnum.HP;
+import static org.shorts.model.StatEnum.SPATK;
+import static org.shorts.model.StatEnum.SPDEF;
+import static org.shorts.model.StatEnum.SPEED;
 import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.Levitate.LEVITATE;
 import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
@@ -27,14 +34,19 @@ import static org.shorts.model.status.VolatileStatusType.GROUNDED;
 
 public class Pokemon {
 
+    @Deprecated
     private String pokedexNo;
 
+    private PokedexEntry pokedexEntry;
     private String originalTrainer;
     private String nickname;
     private String speciesName;
     private Set<Type> types;
     private Ability ability;
     private Nature nature;
+    //    private int[] EVs = { 0, 0, 0, 0, 0, 0 };
+    private int[] IVs = { 31, 31, 31, 31, 31, 31 };
+
     private Move[] moves = new Move[4];
 
     private Sex sex;
@@ -51,9 +63,13 @@ public class Pokemon {
     private int stageSpecialDefense = 0;
     private int speed;
     private int stageSpeed = 0;
+
+    private int stageAccuracy = 0;
+    private int stageEvasion = 0;
     private Status status = Status.NONE;
     private final Map<VolatileStatusType, VolatileStatus> volatileStatuses = new HashMap<>();
     private HeldItem heldItem = NoItem.NO_ITEM;
+    private byte happiness;
 
     protected Pokemon(String pokedexNo, String nickname, String speciesName, Set<Type> types, Ability ability) {
         this.pokedexNo = pokedexNo;
@@ -68,6 +84,40 @@ public class Pokemon {
         this.currentHP = currentHP;
         setMaxHP(maxHP);
         this.ability = ability;
+    }
+
+    public Pokemon(PokedexEntry pokedexEntry, int level, int[] EVs) {
+        this.pokedexEntry = pokedexEntry;
+        this.speciesName = pokedexEntry.getSpeciesName();
+        this.types = pokedexEntry.getTypes();
+        this.happiness = Byte.MAX_VALUE;
+
+        this.ability = pokedexEntry.getAbilities().stream().findFirst().orElse(null);
+        this.level = Math.max(1, Math.min(100, level));
+
+        if (speciesName.equals("Shedinja")) {
+            this.maxHP = 1;
+        } else {
+            this.maxHP =
+                (((2 * pokedexEntry.getBaseHP() + IVs[HP.ordinal()] + (EVs[HP.ordinal()] / 4)) * level) / 100) + level
+                    + 10;
+        }
+
+        this.attack =
+            ((((2 * pokedexEntry.getBaseAtk() + IVs[ATK.ordinal()] + (EVs[ATK.ordinal()] / 4) * level) / 100) + 5)
+                * nature.getMultiplier(ATK)) / 100;
+        this.defense =
+            ((((2 * pokedexEntry.getBaseDef() + IVs[DEF.ordinal()] + (EVs[DEF.ordinal()] / 4) * level) / 100) + 5)
+                * nature.getMultiplier(DEF)) / 100;
+        this.specialAttack =
+            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPATK.ordinal()] + (EVs[SPATK.ordinal()] / 4) * level) / 100) + 5)
+                * nature.getMultiplier(SPATK)) / 100;
+        this.specialDefense =
+            ((((2 * pokedexEntry.getBaseDef() + IVs[SPDEF.ordinal()] + (EVs[SPDEF.ordinal()] / 4) * level) / 100) + 5)
+                * nature.getMultiplier(SPDEF)) / 100;
+        this.speed =
+            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPEED.ordinal()] + (EVs[SPEED.ordinal()] / 4) * level) / 100) + 5)
+                * nature.getMultiplier(SPEED)) / 100;
     }
 
     public void changeAttack(int stages) {
@@ -105,12 +155,36 @@ public class Pokemon {
         }
     }
 
+    public void changeAccuracy(int stages) {
+        this.stageAccuracy += stages;
+        if (this.stageAccuracy > 6) {
+            this.stageAccuracy = 6;
+        }
+    }
+
+    public void changeEvasion(int stages) {
+        this.stageEvasion += stages;
+        if (this.stageEvasion > 6) {
+            this.stageEvasion = 6;
+        }
+    }
+
+    @Deprecated
     public String getPokedexNo() {
         return pokedexNo;
     }
 
+    @Deprecated
     public void setPokedexNo(String pokedexNo) {
         this.pokedexNo = pokedexNo;
+    }
+
+    public PokedexEntry getPokedexEntry() {
+        return pokedexEntry;
+    }
+
+    public void setPokedexEntry(PokedexEntry pokedexEntry) {
+        this.pokedexEntry = pokedexEntry;
     }
 
     public String getOriginalTrainer() {
@@ -309,6 +383,22 @@ public class Pokemon {
         this.stageSpeed = stageSpeed;
     }
 
+    public int getStageAccuracy() {
+        return stageAccuracy;
+    }
+
+    public void setStageAccuracy(int stageAccuracy) {
+        this.stageAccuracy = stageAccuracy;
+    }
+
+    public int getStageEvasion() {
+        return stageEvasion;
+    }
+
+    public void setStageEvasion(int stageEvasion) {
+        this.stageEvasion = stageEvasion;
+    }
+
     public Status getStatus() {
         return status;
     }
@@ -345,12 +435,20 @@ public class Pokemon {
         setMoves(moves.toArray(new Move[0]));
     }
 
+    public byte getHappiness() {
+        return happiness;
+    }
+
+    public void setHappiness(byte happiness) {
+        this.happiness = happiness;
+    }
+
     public boolean isGrounded() {
         if (hasVolatileStatus(GROUNDED)) {
             return true;
         } else {
-            return !(this.types.contains(Type.FLYING) || this.getHeldItem().equals(AIR_BALLOON)
-                || (this.ability.equals(LEVITATE) && !hasVolatileStatus(ABILITY_IGNORED)));
+            return !(this.types.contains(Type.FLYING) || this.getHeldItem().equals(AIR_BALLOON) || (
+                this.ability.equals(LEVITATE) && !hasVolatileStatus(ABILITY_IGNORED)));
             //TODO: Should I be checking for suppression as well?
         }
     }
@@ -393,8 +491,7 @@ public class Pokemon {
     }
 
     public double onMovePowerCalc(Pokemon opponent, Battle battle, Move move) {
-        return ability.onMovePowerCalc(this, opponent, battle, move) * heldItem.onMovePowerCalc(
-            this,
+        return ability.onMovePowerCalc(this, opponent, battle, move) * heldItem.onMovePowerCalc(this,
             opponent,
             battle,
             move);
