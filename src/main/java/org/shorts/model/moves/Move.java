@@ -2,6 +2,7 @@ package org.shorts.model.moves;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
@@ -14,11 +15,13 @@ import org.shorts.model.types.Type;
 import static org.shorts.Main.RANDOM;
 import static org.shorts.MathUtils.roundHalfDown;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
+import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
+import static org.shorts.model.items.IronBall.IRON_BALL;
+import static org.shorts.model.items.RingTarget.RING_TARGET;
 import static org.shorts.model.status.VolatileStatusType.MAGIC_COAT;
-import static org.shorts.model.types.Type.FIRE;
-import static org.shorts.model.types.Type.IMMUNE;
-import static org.shorts.model.types.Type.WATER;
+import static org.shorts.model.status.VolatileStatusType.TARRED;
+import static org.shorts.model.types.Type.*;
 
 public abstract class Move {
 
@@ -37,7 +40,7 @@ public abstract class Move {
     private boolean disabled = false;
 
     protected Move(
-        String name, double power, double accuracy, Type type, int maxPP, boolean contact, int secondaryEffectChance) {
+            String name, double power, double accuracy, Type type, int maxPP, boolean contact, int secondaryEffectChance) {
         this.name = name;
         this.power = power;
         this.accuracy = accuracy;
@@ -109,8 +112,8 @@ public abstract class Move {
         }
         Move other = (Move) Objects.requireNonNull(o);
         return this.name.equals(other.name) && this.power == other.power && this.accuracy == other.accuracy
-            && this.type.equals(other.type) && this.maxPP == other.maxPP && this.contact == other.contact
-            && this.priority == other.priority && this.secondaryEffectChance == other.secondaryEffectChance;
+                && this.type.equals(other.type) && this.maxPP == other.maxPP && this.contact == other.contact
+                && this.priority == other.priority && this.secondaryEffectChance == other.secondaryEffectChance;
     }
 
     @Override
@@ -127,7 +130,7 @@ public abstract class Move {
 
         this.decrementPP();
         if (userMon != opponentMon && opponentMon.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0
-            && pressureApplies(userMon)) {
+                && pressureApplies(userMon)) {
             this.decrementPP();
         }
 
@@ -194,8 +197,21 @@ public abstract class Move {
 
     private double applyTypeSpecialCases(Pokemon user, Pokemon target, Battle battle) {
         double baseMultiplier = getTypeMultiplier(target.getTypes());
-        // TODO: Implement
-        return baseMultiplier;
+        if (!target.isGrounded() && target.getTypes().contains(FLYING) && (target.getHeldItem() == IRON_BALL)) {
+            return 1;
+        } else if (target.isGrounded() && target.getTypes().contains(FLYING) && this.type == GROUND && (target.getHeldItem() != IRON_BALL)) {
+            return getTypeMultiplier(target.getTypes().stream().filter(t -> t != FLYING).collect(Collectors.toSet()));
+        } else if (baseMultiplier == IMMUNE && (target.getHeldItem() == RING_TARGET || target.hasVolatileStatus(VolatileStatusType.IDENTIFIED))) {
+            return getTypeMultiplier(target.getTypes().stream().filter(t -> !t.getImmunities().contains(this.type.getId())).collect(Collectors.toSet()));
+        } else if (user.getAbility() == SCRAPPY && (this.type == NORMAL || this.type == FIGHTING) && target.getTypes().contains(GHOST)) {
+            return getTypeMultiplier(target.getTypes().stream().filter(t -> t != GHOST).collect(Collectors.toSet()));
+        } else if (battle.getWeather() == Weather.EXTREME_WIND && !battle.isWeatherSuppressed()) {
+            return getTypeMultiplier(target.getTypes().stream().filter(t -> t != FLYING).collect(Collectors.toSet()));
+        } else if (target.hasVolatileStatus(TARRED) && this.type == FIRE) {
+            return 2 * baseMultiplier;
+        } else {
+            return baseMultiplier;
+        }
     }
 
     protected double getTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
