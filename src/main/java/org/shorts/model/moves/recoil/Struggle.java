@@ -28,5 +28,6 @@ public class Struggle extends PhysicalMove implements RecoilAttack {
         return 0.25;
     }
 
+    //TODO: Should STAB apply to Struggle?
     public static final Struggle STRUGGLE = new Struggle();
 }
