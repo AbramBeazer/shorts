@@ -12,6 +12,7 @@ import org.shorts.model.types.TooManyTypesException;
 import org.shorts.model.types.Type;
 
 import static org.shorts.Main.RANDOM;
+import static org.shorts.MathUtils.roundHalfDown;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
 import static org.shorts.model.status.VolatileStatusType.MAGIC_COAT;
@@ -155,20 +156,19 @@ public abstract class Move {
     }
 
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
-        boolean isCritical = rollForCrit(user, target, battle);
         double movePower = calculateMovePower(user, target, battle);
         //TODO: Critical hits should ignore attack drops and defense buffs.
         double attack = this instanceof PhysicalMove ? user.calculateAttack() : user.calculateSpecialAttack();
         double defense = this instanceof PhysicalMove ? target.calculateDefense() : target.calculateSpecialDefense();
-        //TODO: Deal with weird edge cases like Foul Play, Psyshock, and Beat Up.
-        //  Maybe I'll have a "getAttackingStat" or "getDefendingStat" method in Phys/Spec Move that I override in edge case classes.
+        //TODO: Deal with multi-hit moves and the weirdness that is Beat Up.
 
-        int baseDamage = (int) ((0.4 * user.getLevel() + 2) * movePower * (attack / defense) * 0.02) + 2;
+        double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attack / defense) * 0.02) + 2;
         return applyMultipliers(user, target, battle, baseDamage);
     }
 
-    protected int applyMultipliers(Pokemon user, Pokemon target, Battle battle, int baseDamage) {
-        double typeMultiplier = this.getTypeMultiplier(target.getTypes());
+    protected int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
+        boolean isCritical = rollForCrit(user, target, battle);
+        double typeMultiplier = this.applyTypeSpecialCases(user, target, battle);
 
         double userAbilityItemMultipliers = user.beforeAttack(target, battle, this);
 
@@ -181,11 +181,25 @@ public abstract class Move {
 
         double stabMultiplier = getSTABMultiplier(user.getTypes());
 
-        //If the target isn't immune to the attack,
-        return baseDamage <= 0 ? 1 : (int) (baseDamage * typeMultiplier * stabMultiplier);
+        baseDamage = roundHalfDown(baseDamage * getNumTargetsMultiplier());
+        baseDamage = roundHalfDown(baseDamage * getWeatherMultiplier(battle));
+        baseDamage = roundHalfDown(baseDamage * getGlaiveRushMultiplier(target));
+        baseDamage = roundHalfDown(baseDamage * getCriticalMultiplier(isCritical));
+        baseDamage = roundHalfDown(baseDamage * getRandomMultiplier());
+        baseDamage = roundHalfDown(baseDamage * stabMultiplier);
+        baseDamage = roundHalfDown(baseDamage * typeMultiplier);
+        baseDamage = roundHalfDown(baseDamage * getOtherMultiplier(user, target, battle));
+        return (int) baseDamage;
+    }
+
+    private double applyTypeSpecialCases(Pokemon user, Pokemon target, Battle battle) {
+        double baseMultiplier = getTypeMultiplier(target.getTypes());
+        // TODO: Implement
+        return baseMultiplier;
     }
 
     protected double getTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
+        //TODO: Deal with Terrastalization and stuff.
         return Type.getTypeMultiplier(this.getType(), defenderTypes);
     }
 
@@ -250,7 +264,7 @@ public abstract class Move {
         return 1;
     }
 
-    private double getOtherMultiplier(Pokemon user, Pokemon target) {
+    private double getOtherMultiplier(Pokemon user, Pokemon target, Battle battle) {
         return 1;
         //TODO: Implement
     }
