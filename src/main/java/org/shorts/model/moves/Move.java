@@ -169,7 +169,7 @@ public abstract class Move {
         return applyMultipliers(user, target, battle, baseDamage);
     }
 
-    protected int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
+    private int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
         boolean isCritical = rollForCrit(user, target, battle);
         double typeMultiplier = this.getTypeMultiplier(user, target, battle);
 
@@ -280,7 +280,7 @@ public abstract class Move {
         return 1;
     }
 
-    private double getOtherMultiplier(Pokemon user, Pokemon target, Battle battle) {
+    protected double getOtherMultiplier(Pokemon user, Pokemon target, Battle battle) {
         return 1;
         //TODO: Implement
     }

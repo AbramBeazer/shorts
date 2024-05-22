@@ -14,8 +14,8 @@ public class Earthquake extends PhysicalMove {
     }
 
     @Override
-    public int applyMultipliers(Pokemon attacker, Pokemon defender, Battle battle, int baseDamage) {
-        int multiplier = super.applyMultipliers(attacker, defender, battle, baseDamage);
+    public double getOtherMultiplier(Pokemon attacker, Pokemon defender, Battle battle) {
+        double multiplier = super.getOtherMultiplier(attacker, defender, battle);
         if (defender.hasVolatileStatus(SEMI_INVULNERABLE) && defender.getVolatileStatus(SEMI_INVULNERABLE)
             .getMove() instanceof Dig) {
             multiplier *= 2;
