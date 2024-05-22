@@ -196,22 +196,23 @@ public abstract class Move {
     }
 
     protected double getTypeMultiplier(Pokemon user, Pokemon target, Battle battle) {
-        double baseMultiplier = getBaseTypeMultiplier(target.getTypes());
+        double multiplier = getBaseTypeMultiplier(target.getTypes());
         if (!target.isGrounded() && target.getTypes().contains(FLYING) && (target.getHeldItem() == IRON_BALL)) {
-            return 1;
+            multiplier = 1;
         } else if (target.isGrounded() && target.getTypes().contains(FLYING) && this.type == GROUND && (target.getHeldItem() != IRON_BALL)) {
-            return getBaseTypeMultiplier(target.getTypes().stream().filter(t -> t != FLYING).collect(Collectors.toSet()));
-        } else if (baseMultiplier == IMMUNE && (target.getHeldItem() == RING_TARGET || target.hasVolatileStatus(VolatileStatusType.IDENTIFIED))) {
-            return getBaseTypeMultiplier(target.getTypes().stream().filter(t -> !t.getImmunities().contains(this.type.getId())).collect(Collectors.toSet()));
+            multiplier = getBaseTypeMultiplier(target.getTypes().stream().filter(t -> t != FLYING).collect(Collectors.toSet()));
+        } else if (multiplier == IMMUNE && (target.getHeldItem() == RING_TARGET || target.hasVolatileStatus(VolatileStatusType.IDENTIFIED))) {
+            multiplier = getBaseTypeMultiplier(target.getTypes().stream().filter(t -> !t.getImmunities().contains(this.type.getId())).collect(Collectors.toSet()));
         } else if (user.getAbility() == SCRAPPY && (this.type == NORMAL || this.type == FIGHTING) && target.getTypes().contains(GHOST)) {
-            return getBaseTypeMultiplier(target.getTypes().stream().filter(t -> t != GHOST).collect(Collectors.toSet()));
+            multiplier = getBaseTypeMultiplier(target.getTypes().stream().filter(t -> t != GHOST).collect(Collectors.toSet()));
         } else if (battle.getWeather() == Weather.EXTREME_WIND && !battle.isWeatherSuppressed()) {
-            return getBaseTypeMultiplier(target.getTypes().stream().filter(t -> t != FLYING).collect(Collectors.toSet()));
-        } else if (target.hasVolatileStatus(TARRED) && this.type == FIRE) {
-            return 2 * baseMultiplier;
-        } else {
-            return baseMultiplier;
+            multiplier = getBaseTypeMultiplier(target.getTypes().stream().filter(t -> t != FLYING).collect(Collectors.toSet()));
         }
+        //TODO: Take a closer look at how Ring Target and Foresight work. Do they affect Levitate, or just the type chart itself?
+        if (target.hasVolatileStatus(TARRED) && this.type == FIRE) {
+            multiplier *= 2;
+        }
+        return multiplier;
     }
 
     protected double getBaseTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
