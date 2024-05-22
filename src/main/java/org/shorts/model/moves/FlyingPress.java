@@ -14,8 +14,8 @@ public class FlyingPress extends PhysicalMove {
     }
 
     @Override
-    public double getTypeMultiplier(Set<Type> defenderTypes) {
-        return super.getTypeMultiplier(defenderTypes) * Type.getTypeMultiplier(FLYING, defenderTypes);
+    public double getBaseTypeMultiplier(Set<Type> defenderTypes) {
+        return super.getBaseTypeMultiplier(defenderTypes) * Type.getTypeMultiplier(FLYING, defenderTypes);
     }
 
     public static final FlyingPress FLYING_PRESS = new FlyingPress(FIGHTING);

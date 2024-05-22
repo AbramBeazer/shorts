@@ -171,7 +171,7 @@ public abstract class Move {
 
     protected int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
         boolean isCritical = rollForCrit(user, target, battle);
-        double typeMultiplier = this.applyTypeSpecialCases(user, target, battle);
+        double typeMultiplier = this.getTypeMultiplier(user, target, battle);
 
         double userAbilityItemMultipliers = user.beforeAttack(target, battle, this);
 
@@ -195,18 +195,18 @@ public abstract class Move {
         return (int) baseDamage;
     }
 
-    private double applyTypeSpecialCases(Pokemon user, Pokemon target, Battle battle) {
-        double baseMultiplier = getTypeMultiplier(target.getTypes());
+    protected double getTypeMultiplier(Pokemon user, Pokemon target, Battle battle) {
+        double baseMultiplier = getBaseTypeMultiplier(target.getTypes());
         if (!target.isGrounded() && target.getTypes().contains(FLYING) && (target.getHeldItem() == IRON_BALL)) {
             return 1;
         } else if (target.isGrounded() && target.getTypes().contains(FLYING) && this.type == GROUND && (target.getHeldItem() != IRON_BALL)) {
-            return getTypeMultiplier(target.getTypes().stream().filter(t -> t != FLYING).collect(Collectors.toSet()));
+            return getBaseTypeMultiplier(target.getTypes().stream().filter(t -> t != FLYING).collect(Collectors.toSet()));
         } else if (baseMultiplier == IMMUNE && (target.getHeldItem() == RING_TARGET || target.hasVolatileStatus(VolatileStatusType.IDENTIFIED))) {
-            return getTypeMultiplier(target.getTypes().stream().filter(t -> !t.getImmunities().contains(this.type.getId())).collect(Collectors.toSet()));
+            return getBaseTypeMultiplier(target.getTypes().stream().filter(t -> !t.getImmunities().contains(this.type.getId())).collect(Collectors.toSet()));
         } else if (user.getAbility() == SCRAPPY && (this.type == NORMAL || this.type == FIGHTING) && target.getTypes().contains(GHOST)) {
-            return getTypeMultiplier(target.getTypes().stream().filter(t -> t != GHOST).collect(Collectors.toSet()));
+            return getBaseTypeMultiplier(target.getTypes().stream().filter(t -> t != GHOST).collect(Collectors.toSet()));
         } else if (battle.getWeather() == Weather.EXTREME_WIND && !battle.isWeatherSuppressed()) {
-            return getTypeMultiplier(target.getTypes().stream().filter(t -> t != FLYING).collect(Collectors.toSet()));
+            return getBaseTypeMultiplier(target.getTypes().stream().filter(t -> t != FLYING).collect(Collectors.toSet()));
         } else if (target.hasVolatileStatus(TARRED) && this.type == FIRE) {
             return 2 * baseMultiplier;
         } else {
@@ -214,7 +214,7 @@ public abstract class Move {
         }
     }
 
-    protected double getTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
+    protected double getBaseTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
         //TODO: Deal with Terrastalization and stuff.
         return Type.getTypeMultiplier(this.getType(), defenderTypes);
     }

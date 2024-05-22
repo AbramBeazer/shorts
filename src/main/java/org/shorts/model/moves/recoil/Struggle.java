@@ -14,7 +14,7 @@ public class Struggle extends PhysicalMove implements RecoilAttack {
     }
 
     @Override
-    protected double getTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
+    protected double getBaseTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
         return 1;
     }
 
