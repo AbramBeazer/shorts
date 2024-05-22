@@ -7,10 +7,18 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 
-public class Earthquake extends PhysicalMove {
+public class Magnitude extends PhysicalMove {
 
-    public Earthquake() {
-        super("Earthquake", 100, 100, Type.GROUND, 16, false, 0);
+    //TODO: Verify contact, PP, etc.
+    public Magnitude(){
+        super("Magnitude", 0, 100, Type.GROUND, 24, false,0);
+    }
+
+    @Override
+    public double getPower() {
+
+        //TODO: Implement
+        return 0;
     }
 
     @Override
@@ -26,5 +34,4 @@ public class Earthquake extends PhysicalMove {
         }
         return multiplier;
     }
-
 }
