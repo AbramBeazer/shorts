@@ -24,6 +24,7 @@ import static org.shorts.model.abilities.IceScales.ICE_SCALES;
 import static org.shorts.model.abilities.Infiltrator.INFILTRATOR;
 import static org.shorts.model.abilities.Neuroforce.NEUROFORCE;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
+import static org.shorts.model.abilities.PunkRock.PUNK_ROCK;
 import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
 import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
