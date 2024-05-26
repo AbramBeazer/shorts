@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
 import org.shorts.battle.Weather;
+import org.shorts.model.abilities.FullHealthHalfDamageAbility;
+import org.shorts.model.abilities.SuperEffectiveReducingAbility;
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
 import org.shorts.model.pokemon.Pokemon;
@@ -17,12 +19,18 @@ import org.shorts.model.types.Type;
 import static org.shorts.Main.RANDOM;
 import static org.shorts.MathUtils.roundHalfDown;
 import static org.shorts.MathUtils.roundHalfUp;
+import static org.shorts.model.abilities.Fluffy.FLUFFY;
 import static org.shorts.model.abilities.Infiltrator.INFILTRATOR;
+import static org.shorts.model.abilities.Neuroforce.NEUROFORCE;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
 import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
 import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
+import static org.shorts.model.abilities.Sniper.SNIPER;
+import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
+import static org.shorts.model.items.ExpertBelt.EXPERT_BELT;
 import static org.shorts.model.items.IronBall.IRON_BALL;
+import static org.shorts.model.items.LifeOrb.LIFE_ORB;
 import static org.shorts.model.items.RingTarget.RING_TARGET;
 import static org.shorts.model.status.VolatileStatusType.*;
 import static org.shorts.model.types.Type.*;
@@ -316,7 +324,7 @@ public abstract class Move {
             base = roundHalfUp(base * 5461d / 4096d);
         }
 
-        if (target.getCurrentHP() == target.getMaxHP() && (target.getAbility() == MULTISCALE || target.getAbility() == SHADOW_SHIELD)) {
+        if (target.getCurrentHP() == target.getMaxHP() && target.getAbility() instanceof FullHealthHalfDamageAbility) {
             base = roundHalfUp(base * 0.5);
         }
 
@@ -334,7 +342,7 @@ public abstract class Move {
 
         //Friend guard would go here, in double/triple battles.
 
-        if (typeMultiplier > NEUTRAL && (target.getAbility() instanceof SuperEffectiveReducingAbility)) {
+        if (typeMultiplier > NEUTRAL && target.getAbility() instanceof SuperEffectiveReducingAbility) {
             base = roundHalfUp(base * 0.75);
         }
         if (typeMultiplier > NEUTRAL && user.getAbility() == NEUROFORCE) {
@@ -363,9 +371,9 @@ public abstract class Move {
         if (user.getHeldItem() == LIFE_ORB && !(user.getAbility() == SHEER_FORCE && this.getSecondaryEffectChance() > 0)) {
             base = roundHalfUp(base * 5324d / 4096d);
         }
-        if(user.getHeldItem() instanceof MetronomeItem){
+        if (user.getHeldItem() instanceof MetronomeItem) {
             MetronomeItem metronome = (MetronomeItem) user.getHeldItem();
-            double metronomeMultiplier = 1 + (metronome.getPreviousUses() * 819d/4096d);
+            double metronomeMultiplier = 1 + (metronome.getPreviousUses() * 819d / 4096d);
             base = roundHalfUp(base * metronomeMultiplier);
         }
         return base / 4096d;
