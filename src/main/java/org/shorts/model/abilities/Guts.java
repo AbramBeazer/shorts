@@ -1,21 +1,22 @@
 package org.shorts.model.abilities;
 
-import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 
 public class Guts extends Ability {
+
+    static final double GUTS_MULTIPLIER = 1.5;
 
     private Guts() {
         super("Guts");
     }
 
     @Override
-    public void afterStatus(Pokemon self, Pokemon opponent, Battle battle) {
-        if (self.getStatus() == Status.NONE) {
-            self.setAttack(self.getAttack() / 2);
+    public double onCalculateAttack(Pokemon self) {
+        if (self.getStatus() == Status.NONE || self.getStatus() == Status.FREEZE) {
+            return 1;
         } else {
-            self.setAttack(self.getAttack() * 2);
+            return GUTS_MULTIPLIER;
         }
     }
 

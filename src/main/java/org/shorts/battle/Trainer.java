@@ -24,6 +24,9 @@ public class Trainer {
 
     private boolean stickyWeb = false;
     private int safeguardTurns = 0;
+    private int reflectTurns = 0;
+    private int lightScreenTurns = 0;
+    private int auroraVeilTurns = 0;
 
     public Trainer(String name, List<Pokemon> team) {
         this.name = Objects.requireNonNull(name, "Come on, tell the professor your name!");
@@ -73,6 +76,30 @@ public class Trainer {
 
     public void setSafeguardTurns(int safeguardTurns) {
         this.safeguardTurns = safeguardTurns;
+    }
+
+    public int getReflectTurns() {
+        return reflectTurns;
+    }
+
+    public void setReflectTurns(int reflectTurns) {
+        this.reflectTurns = reflectTurns;
+    }
+
+    public int getLightScreenTurns() {
+        return lightScreenTurns;
+    }
+
+    public void setLightScreenTurns(int lightScreenTurns) {
+        this.lightScreenTurns = lightScreenTurns;
+    }
+
+    public int getAuroraVeilTurns() {
+        return auroraVeilTurns;
+    }
+
+    public void setAuroraVeilTurns(int auroraVeilTurns) {
+        this.auroraVeilTurns = auroraVeilTurns;
     }
 
     public String getName() {

@@ -14,16 +14,10 @@ public class Earthquake extends PhysicalMove {
     }
 
     @Override
-    public int applyMultipliers(Pokemon attacker, Pokemon defender, Battle battle, int baseDamage) {
-        int multiplier = super.applyMultipliers(attacker, defender, battle, baseDamage);
-        if (defender.hasVolatileStatus(SEMI_INVULNERABLE) && defender.getVolatileStatus(SEMI_INVULNERABLE)
-            .getMove() instanceof Dig) {
-            multiplier *= 2;
-        }
-        if (battle.getTerrain().equals(Terrain.GRASSY)) {
-            multiplier *= 0.5;
-        }
-        return multiplier;
+    protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
+        final double multiplier = battle.getTerrain() == Terrain.GRASSY && target.isGrounded() && !target.hasVolatileStatus(SEMI_INVULNERABLE) ? 2 : 1;
+        //TODO: Does terrain affect a mon with an Iron Ball or Thousand Arrows?
+        return multiplier * super.getPowerMultipliers(user, target, battle);
     }
 
 }

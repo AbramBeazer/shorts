@@ -5,7 +5,7 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
 public class Dig extends PhysicalMove implements MultiTurnMove {
-
+    //TODO: Verify that contact is correct
     public Dig() {
         super("Dig", 80, 100, Type.GROUND, 16, false, 100);
     }

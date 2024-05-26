@@ -1,6 +1,5 @@
 package org.shorts.model.abilities;
 
-import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 
 public class AttackDoublingAbility extends Ability {
@@ -10,14 +9,11 @@ public class AttackDoublingAbility extends Ability {
     }
 
     public static final AttackDoublingAbility PURE_POWER = new AttackDoublingAbility("Pure Power");
+    public static final AttackDoublingAbility HUGE_POWER = new AttackDoublingAbility("Huge Power");
 
     @Override
-    public void onGainAbility(Pokemon self) {
-        self.setAttack(self.getAttack() * 2);
+    public double onCalculateAttack(Pokemon self) {
+        return 2;
     }
 
-    @Override
-    public void onLoseAbility(Pokemon self, Pokemon opponent, Battle battle) {
-        self.setAttack(self.getAttack() / 2);
-    }
 }

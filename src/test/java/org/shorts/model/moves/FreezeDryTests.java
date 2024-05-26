@@ -41,14 +41,14 @@ class FreezeDryTests {
     void testGetMultiplierOnWaterType() {
         Pokemon defender = squirtle;
         assertThat(defender.getTypes()).isEqualTo(Set.of(WATER));
-        assertThat(new FreezeDry().getTypeMultiplier(defender.getTypes())).isEqualTo(Type.SUPER_EFFECTIVE);
+        assertThat(new FreezeDry().getBaseTypeMultiplier(defender.getTypes())).isEqualTo(Type.SUPER_EFFECTIVE);
     }
 
     @Test
     void testGetMultiplierQuadEffectiveOnWaterType() {
         Pokemon defender = gyarados;
         assertThat(defender.getTypes()).isEqualTo(Set.of(WATER, FLYING));
-        assertThat(new FreezeDry().getTypeMultiplier(defender.getTypes())).isEqualTo(Type.QUAD_EFFECTIVE);
+        assertThat(new FreezeDry().getBaseTypeMultiplier(defender.getTypes())).isEqualTo(Type.QUAD_EFFECTIVE);
     }
 
     @Test

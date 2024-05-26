@@ -26,6 +26,7 @@ public enum VolatileStatusType implements AbstractStatusType {
     ROOTED,
     LASER_FOCUS,
     TAKE_AIM,
+    USED_GLAIVE_RUSH,
     DROWSY,
     CHARGED,
     STOCKPILE_1,

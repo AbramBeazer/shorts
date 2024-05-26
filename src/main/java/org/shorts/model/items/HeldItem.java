@@ -25,7 +25,7 @@ public abstract class HeldItem {
     public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
     }
 
-    public double onMovePowerCalc(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
         return 1;
     }
 
@@ -64,6 +64,26 @@ public abstract class HeldItem {
 
     public void beforeSwitchOut(Pokemon self, Pokemon opponent, Battle battle) {
 
+    }
+
+    public double onCalculateAttack(Pokemon self) {
+        return 1;
+    }
+
+    public double onCalculateDefense(Pokemon self) {
+        return 1;
+    }
+
+    public double onCalculateSpecialAttack(Pokemon self) {
+        return 1;
+    }
+
+    public double onCalculateSpecialDefense(Pokemon self) {
+        return 1;
+    }
+
+    public double onCalculateSpeed(Pokemon self) {
+        return 1;
     }
 
     @Override
