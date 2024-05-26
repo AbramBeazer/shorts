@@ -11,6 +11,7 @@ import org.shorts.model.abilities.FullHealthHalfDamageAbility;
 import org.shorts.model.abilities.SuperEffectiveReducingAbility;
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
+import org.shorts.model.moves.trapping.binding.Whirlpool;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.TooManyTypesException;
