@@ -102,6 +102,12 @@ public abstract class Move {
     protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
     }
 
+    protected boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
+        if (accuracy <= 0) return true;
+        //TODO: Apply accuracy and evasion.
+        return RANDOM.nextInt(100) < accuracy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {
