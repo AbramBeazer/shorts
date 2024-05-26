@@ -39,6 +39,7 @@ import static org.shorts.model.items.PlateItem.SPLASH_PLATE;
 import static org.shorts.model.items.PrimalOrb.RED_ORB;
 import static org.shorts.model.items.RustedShield.RUSTED_SHIELD;
 import static org.shorts.model.items.RustedSword.RUSTED_SWORD;
+import static org.shorts.model.items.berries.typeresist.TypeResistBerry.COLBUR_BERRY;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 
 class KnockOffTests {
@@ -257,8 +258,16 @@ class KnockOffTests {
 
     @Test
     void testColburBerryShouldActivateBeforeBeingLostButDamageShouldBeBoosted() {
-        assertThat(false).isTrue();
+        final Pokemon attacker = getDummyPokemon();
+        final Pokemon defender = getDummyPokemon();
 
+        defender.setHeldItem(LEFTOVERS);
+        final int damageWithLefties = knockOff.calculateDamage(attacker, defender, battle);
+        defender.setHeldItem(COLBUR_BERRY);
+        assertThat(knockOff.getPowerMultipliers(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
+        final int damageWithBerry = knockOff.calculateDamage(attacker, defender, battle);
+        assertThat(defender.getHeldItem()).isEqualTo(NO_ITEM);
+        assertThat(damageWithBerry).isEqualTo(damageWithLefties * 0.5);
     }
 
     @Test
