@@ -302,7 +302,8 @@ public abstract class Move {
     }
 
     private double getOtherMultiplier(Pokemon user, Pokemon target, Battle battle, boolean critical, double typeMultiplier) {
-        double base = 4096;
+        final double divisor = 4096d;
+        double base = divisor;
         if (this instanceof HitsMinimize && target.hasVolatileStatus(MINIMIZED)) {
             base = roundHalfUp(base * 2);
         }
@@ -322,8 +323,8 @@ public abstract class Move {
             }
         }
 
-        if ((this instanceof CollisionCourse || this instanceof ElectroDrift) && typeMultiplier > NEUTRAL) {
-            base = roundHalfUp(base * 5461d / 4096d);
+        if (this instanceof ExtraSuperEffectiveDamageAttack && typeMultiplier > NEUTRAL) {
+            base = roundHalfUp(base * 5461d / divisor);
         }
 
         if (target.getCurrentHP() == target.getMaxHP() && target.getAbility() instanceof FullHealthHalfDamageAbility) {
@@ -368,17 +369,17 @@ public abstract class Move {
             }
         }
         if (user.getHeldItem() == EXPERT_BELT && typeMultiplier > NEUTRAL) {
-            base = roundHalfUp(base * 4915d / 4096d);
+            base = roundHalfUp(base * 4915d / divisor);
         }
         if (user.getHeldItem() == LIFE_ORB && !(user.getAbility() == SHEER_FORCE && this.getSecondaryEffectChance() > 0)) {
-            base = roundHalfUp(base * 5324d / 4096d);
+            base = roundHalfUp(base * 5324d / divisor);
         }
         if (user.getHeldItem() instanceof MetronomeItem) {
             MetronomeItem metronome = (MetronomeItem) user.getHeldItem();
-            double metronomeMultiplier = 1 + (metronome.getPreviousUses() * 819d / 4096d);
+            double metronomeMultiplier = 1 + (metronome.getPreviousUses() * 819d / divisor);
             base = roundHalfUp(base * metronomeMultiplier);
         }
-        return base / 4096d;
+        return base / divisor;
     }
 
 
