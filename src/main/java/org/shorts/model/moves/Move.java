@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
 import org.shorts.battle.Weather;
+import org.shorts.model.items.MetronomeItem;
+import org.shorts.model.items.berries.typeresist.TypeResistBerry;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.TooManyTypesException;
@@ -15,9 +17,11 @@ import org.shorts.model.types.Type;
 import static org.shorts.Main.RANDOM;
 import static org.shorts.MathUtils.roundHalfDown;
 import static org.shorts.MathUtils.roundHalfUp;
+import static org.shorts.model.abilities.Infiltrator.INFILTRATOR;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
 import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
+import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
 import static org.shorts.model.items.IronBall.IRON_BALL;
 import static org.shorts.model.items.RingTarget.RING_TARGET;
 import static org.shorts.model.status.VolatileStatusType.*;
@@ -197,7 +201,7 @@ public abstract class Move {
         baseDamage = roundHalfDown(baseDamage * getRandomMultiplier());
         baseDamage = roundHalfDown(baseDamage * stabMultiplier);
         baseDamage = roundHalfDown(baseDamage * typeMultiplier);
-        baseDamage = roundHalfDown(baseDamage * getOtherMultiplier(user, target, battle));
+        baseDamage = roundHalfDown(baseDamage * getOtherMultiplier(user, target, battle, isCritical, typeMultiplier));
         return (int) baseDamage;
     }
 
@@ -287,7 +291,7 @@ public abstract class Move {
         return 1;
     }
 
-    protected double getOtherMultiplier(Pokemon user, Pokemon target, Battle battle) {
+    private double getOtherMultiplier(Pokemon user, Pokemon target, Battle battle, boolean critical, double typeMultiplier) {
         double base = 4096;
         if (this instanceof HitsMinimize && target.hasVolatileStatus(MINIMIZED)) {
             base = roundHalfUp(base * 2);
@@ -298,10 +302,75 @@ public abstract class Move {
         if ((this instanceof Surf || this instanceof Whirlpool) && (target.hasVolatileStatus(SEMI_INVULNERABLE) && target.getVolatileStatus(SEMI_INVULNERABLE).getMove() instanceof Dive)) {
             base = roundHalfUp(base * 2);
         }
-        Trainer opposingTrainer =
-        if(
-        )
+
+        if (!critical && user.getAbility() != INFILTRATOR) {
+            Trainer opposingTrainer = battle.getOpposingTrainer(user);
+            if (this instanceof PhysicalMove && (opposingTrainer.getReflectTurns() > 0 || opposingTrainer.getAuroraVeilTurns() > 0)) {
+                base = roundHalfUp(base * 0.5);
+            } else if (this instanceof SpecialMove && (opposingTrainer.getLightScreenTurns() > 0 || opposingTrainer.getAuroraVeilTurns() > 0)) {
+                base = roundHalfUp(base * 0.5);
+            }
+        }
+
+        if ((this instanceof CollisionCourse || this instanceof ElectroDrift) && typeMultiplier > NEUTRAL) {
+            base = roundHalfUp(base * 5461d / 4096d);
+        }
+
+        if (target.getCurrentHP() == target.getMaxHP() && (target.getAbility() == MULTISCALE || target.getAbility() == SHADOW_SHIELD)) {
+            base = roundHalfUp(base * 0.5);
+        }
+
+        if (target.getAbility() == FLUFFY && this.isContact()) {
+            base = roundHalfUp(base * 0.5);
+        }
+
+        if (target.getAbility() == PUNK_ROCK && this instanceof SoundEffect) {
+            base = roundHalfUp(base * 0.5);
+        }
+
+        if (target.getAbility() == ICE_SCALES && this instanceof SpecialMove) {
+            base = roundHalfUp(base * 0.5);
+        }
+
+        //Friend guard would go here, in double/triple battles.
+
+        if (typeMultiplier > NEUTRAL && (target.getAbility() instanceof SuperEffectiveReducingAbility)) {
+            base = roundHalfUp(base * 0.75);
+        }
+        if (typeMultiplier > NEUTRAL && user.getAbility() == NEUROFORCE) {
+            base = roundHalfUp(base * 1.25);
+        }
+        if (critical && user.getAbility() == SNIPER) {
+            base = roundHalfUp(base * 1.5);
+        }
+        if (typeMultiplier < NEUTRAL && user.getAbility() == TINTED_LENS) {
+            base = roundHalfUp(base * 2);
+        }
+        if (type == FIRE && target.getAbility() == FLUFFY) {
+            base = roundHalfUp(base * 2);
+        }
+        if (target.getHeldItem() instanceof TypeResistBerry) {
+            TypeResistBerry berry = (TypeResistBerry) target.getHeldItem();
+            if (berry.getType() == this.type) {
+                if (this.type == NORMAL || typeMultiplier > NEUTRAL) {
+                    base = roundHalfUp(base * 0.5);
+                }
+            }
+        }
+        if (user.getHeldItem() == EXPERT_BELT && typeMultiplier > NEUTRAL) {
+            base = roundHalfUp(base * 4915d / 4096d);
+        }
+        if (user.getHeldItem() == LIFE_ORB && !(user.getAbility() == SHEER_FORCE && this.getSecondaryEffectChance() > 0)) {
+            base = roundHalfUp(base * 5324d / 4096d);
+        }
+        if(user.getHeldItem() instanceof MetronomeItem){
+            MetronomeItem metronome = (MetronomeItem) user.getHeldItem();
+            double metronomeMultiplier = 1 + (metronome.getPreviousUses() * 819d/4096d);
+            base = roundHalfUp(base * metronomeMultiplier);
+        }
+        return base / 4096d;
     }
+
 
     private void decrementPP() {
         if (this.currentPP > 0) {

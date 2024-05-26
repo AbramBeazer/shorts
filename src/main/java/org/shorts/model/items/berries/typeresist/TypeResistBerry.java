@@ -4,11 +4,15 @@ import org.shorts.model.items.berries.Berry;
 import org.shorts.model.types.Type;
 
 public class TypeResistBerry extends Berry {
-    private Type type;
+    private final Type type;
 
     public TypeResistBerry(String name, Type type) {
         super(name);
         this.type = type;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     public static final TypeResistBerry OCCA_BERRY = new TypeResistBerry("Occa Berry", Type.FIRE);

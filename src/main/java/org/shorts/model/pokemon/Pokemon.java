@@ -52,6 +52,7 @@ public class Pokemon {
     private int[] IVs = { 31, 31, 31, 31, 31, 31 };
 
     private Move[] moves = new Move[4];
+    private Move lastMoveUsed;
 
     private Sex sex;
     private int level;
@@ -437,6 +438,14 @@ public class Pokemon {
 
     public void setMoves(List<Move> moves) {
         setMoves(moves.toArray(new Move[0]));
+    }
+
+    public Move getLastMoveUsed() {
+        return lastMoveUsed;
+    }
+
+    public void setLastMoveUsed(Move lastMoveUsed) {
+        this.lastMoveUsed = lastMoveUsed;
     }
 
     public byte getHappiness() {
