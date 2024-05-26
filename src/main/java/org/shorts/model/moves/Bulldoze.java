@@ -7,10 +7,14 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 
-public class Earthquake extends PhysicalMove {
+public class Bulldoze extends PhysicalMove {
+    public Bulldoze(){
+        super("Bulldoze", 60, 100, Type.GROUND, 32, false, 100);
+    }
 
-    public Earthquake() {
-        super("Earthquake", 100, 100, Type.GROUND, 16, false, 0);
+    @Override
+    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+        defender.changeSpeed(-1);
     }
 
     @Override
@@ -19,5 +23,6 @@ public class Earthquake extends PhysicalMove {
         //TODO: Does terrain affect a mon with an Iron Ball or Thousand Arrows?
         return multiplier * super.getPowerMultipliers(user, target, battle);
     }
+
 
 }

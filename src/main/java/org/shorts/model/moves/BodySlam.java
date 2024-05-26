@@ -5,6 +5,7 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.Status.PARALYZE;
+import static org.shorts.model.status.VolatileStatusType.MINIMIZED;
 
 public class BodySlam extends PhysicalMove implements HitsMinimize {
     public BodySlam() {
@@ -26,13 +27,6 @@ public class BodySlam extends PhysicalMove implements HitsMinimize {
 
     @Override
     public boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
-        return HitsMinimize.super.targetIsMinimized(target) || super.rollToHit(user, target, battle);
+        return target.hasVolatileStatus(MINIMIZED) || super.rollToHit(user, target, battle);
     }
-
-    @Override
-    public double getOtherMultiplier(Pokemon user, Pokemon target, Battle battle) {
-        return HitsMinimize.super.targetIsMinimized(target) ? 2 : 1;
-    }
-
-
 }

@@ -4,8 +4,10 @@ import java.util.Set;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
+import static org.shorts.model.status.VolatileStatusType.MINIMIZED;
 import static org.shorts.model.types.Type.FIGHTING;
 import static org.shorts.model.types.Type.FLYING;
 
@@ -22,13 +24,6 @@ public class FlyingPress extends PhysicalMove implements HitsMinimize {
 
     @Override
     public boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
-        return HitsMinimize.super.targetIsMinimized(target) || super.rollToHit(user, target, battle);
+        return target.hasVolatileStatus(MINIMIZED) || super.rollToHit(user, target, battle);
     }
-
-    @Override
-    public double getOtherMultiplier(Pokemon user, Pokemon target, Battle battle) {
-        return HitsMinimize.super.targetIsMinimized(target) ? 2 : 1;
-    }
-
-
 }

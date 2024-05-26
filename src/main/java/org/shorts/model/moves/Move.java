@@ -14,13 +14,13 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.Main.RANDOM;
 import static org.shorts.MathUtils.roundHalfDown;
+import static org.shorts.MathUtils.roundHalfUp;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
 import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
 import static org.shorts.model.items.IronBall.IRON_BALL;
 import static org.shorts.model.items.RingTarget.RING_TARGET;
-import static org.shorts.model.status.VolatileStatusType.MAGIC_COAT;
-import static org.shorts.model.status.VolatileStatusType.TARRED;
+import static org.shorts.model.status.VolatileStatusType.*;
 import static org.shorts.model.types.Type.*;
 
 public abstract class Move {
@@ -231,7 +231,7 @@ public abstract class Move {
         return Type.getSTABMultiplier(this.getType(), attackerTypes);
     }
 
-    protected double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
+    private double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
         double basePower = this.getPower() * this.getPowerMultipliers(user, target, battle);
         basePower *= user.getMovePowerMultipliers(target, battle, this);
         //TODO: Handle weather multipliers, terrain multipliers, mud sport, etc.
@@ -288,8 +288,19 @@ public abstract class Move {
     }
 
     protected double getOtherMultiplier(Pokemon user, Pokemon target, Battle battle) {
-        return 1;
-        //TODO: Implement
+        double base = 4096;
+        if (this instanceof HitsMinimize && target.hasVolatileStatus(MINIMIZED)) {
+            base = roundHalfUp(base * 2);
+        }
+        if ((this instanceof Earthquake || this instanceof Magnitude) && (target.hasVolatileStatus(SEMI_INVULNERABLE) && target.getVolatileStatus(SEMI_INVULNERABLE).getMove() instanceof Dig)) {
+            base = roundHalfUp(base * 2);
+        }
+        if ((this instanceof Surf || this instanceof Whirlpool) && (target.hasVolatileStatus(SEMI_INVULNERABLE) && target.getVolatileStatus(SEMI_INVULNERABLE).getMove() instanceof Dive)) {
+            base = roundHalfUp(base * 2);
+        }
+        Trainer opposingTrainer =
+        if(
+        )
     }
 
     private void decrementPP() {
