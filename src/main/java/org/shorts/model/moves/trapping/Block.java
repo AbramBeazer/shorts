@@ -1,25 +1,12 @@
 package org.shorts.model.moves.trapping;
 
-import org.shorts.battle.Battle;
-import org.shorts.model.moves.StatusMove;
-import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.moves.Range;
 import org.shorts.model.types.Type;
 
-public class Block extends StatusMove implements TrappingMove {
+public class Block extends TrappingMove {
 
     public Block() {
-        super("Block", -1, Type.NORMAL, 8, false);
+        super("Block", 0, -1, Type.NORMAL, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 8, false, 100);
     }
 
-    @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (TrappingMove.super.targetIsNotGhost(defender)) {
-            super.trySecondaryEffect(attacker, defender, battle);
-        }
-    }
-
-    @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        TrappingMove.super.applyCantEscapeStatus(defender);
-    }
 }

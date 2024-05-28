@@ -1,16 +1,36 @@
 package org.shorts.model.moves.trapping;
 
+import org.shorts.battle.Battle;
+import org.shorts.model.moves.Move;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
 
-public interface TrappingMove {
+public abstract class TrappingMove extends Move {
 
-    default boolean targetIsNotGhost(Pokemon target) {
-        return !target.getTypes().contains(Type.GHOST);
+    protected TrappingMove(
+        String name,
+        double power,
+        double accuracy,
+        Type type,
+        Category category,
+        Range range,
+        int maxPP,
+        boolean contact,
+        int secondaryEffectChance) {
+        super(name, power, accuracy, type, category, range, maxPP, contact, secondaryEffectChance);
     }
 
-    default void applyCantEscapeStatus(Pokemon pokemon) {
-        pokemon.addVolatileStatus(VolatileStatus.CANT_ESCAPE);
+    @Override
+    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+        if (!defender.getTypes().contains(Type.GHOST)) {
+            super.trySecondaryEffect(attacker, defender, battle);
+        }
+    }
+
+    @Override
+    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+        defender.addVolatileStatus(VolatileStatus.CANT_ESCAPE);
     }
 }
