@@ -13,9 +13,7 @@ public class ThousandWaves extends TrappingMove {
 
     @Override
     public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (!defender.getTypes().contains(Type.GHOST)) {
-            applySecondaryEffect(attacker, defender, battle);
-        }
+        applySecondaryEffect(attacker, defender, battle);
     }
 
     //Not in Gen 9

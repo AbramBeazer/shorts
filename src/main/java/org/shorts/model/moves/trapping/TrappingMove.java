@@ -7,6 +7,8 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
 
+import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
+
 public abstract class TrappingMove extends Move {
 
     protected TrappingMove(
@@ -24,13 +26,13 @@ public abstract class TrappingMove extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (!defender.getTypes().contains(Type.GHOST)) {
+        if (!defender.hasVolatileStatus(SUBSTITUTE)) {
             super.trySecondaryEffect(attacker, defender, battle);
         }
     }
 
     @Override
     protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        defender.addVolatileStatus(VolatileStatus.CANT_ESCAPE);
+        defender.addVolatileStatus(VolatileStatus.CANT_ESCAPE_INDEFINITE);
     }
 }
