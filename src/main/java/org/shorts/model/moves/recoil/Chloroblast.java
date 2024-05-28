@@ -4,6 +4,8 @@ import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
+import static org.shorts.model.abilities.MagicGuard.MAGIC_GUARD;
+
 public class Chloroblast extends RecoilAttack {
 
     public Chloroblast() {
@@ -12,6 +14,8 @@ public class Chloroblast extends RecoilAttack {
 
     @Override
     public void inflictRecoil(Pokemon user, int damageDealt) {
-        user.takeDamage((int) Math.ceil(user.getMaxHP() * this.recoilPercentage));
+        if (user.getAbility() != MAGIC_GUARD) {
+            user.takeDamage((int) Math.ceil(user.getMaxHP() * this.recoilPercentage));
+        }
     }
 }

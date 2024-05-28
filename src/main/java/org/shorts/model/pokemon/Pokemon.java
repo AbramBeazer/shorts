@@ -33,8 +33,8 @@ import static org.shorts.model.abilities.trapping.ShadowTag.SHADOW_TAG;
 import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
 import static org.shorts.model.items.ShedShell.SHED_SHELL;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
-import static org.shorts.model.status.VolatileStatusType.CANT_ESCAPE;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
+import static org.shorts.model.status.VolatileStatusType.CANT_ESCAPE;
 import static org.shorts.model.status.VolatileStatusType.GROUNDED;
 import static org.shorts.model.status.VolatileStatusType.MAGNET_LEVITATION;
 import static org.shorts.model.status.VolatileStatusType.NO_RETREAT;
@@ -57,7 +57,7 @@ public class Pokemon {
     @SuppressWarnings("checkstyle:MemberName")
     private int[] EVs;
     @SuppressWarnings("checkstyle:MemberName")
-    private int[] IVs = {31, 31, 31, 31, 31, 31};
+    private int[] IVs = { 31, 31, 31, 31, 31, 31 };
 
     private Move[] moves = new Move[4];
     private Move lastMoveUsed;
@@ -113,25 +113,25 @@ public class Pokemon {
             this.maxHP = 1;
         } else {
             this.maxHP =
-                    (((2 * pokedexEntry.getBaseHP() + IVs[HP.ordinal()] + (EVs[HP.ordinal()] / 4)) * level) / 100)
-                            + level + 10;
+                (((2 * pokedexEntry.getBaseHP() + IVs[HP.ordinal()] + (EVs[HP.ordinal()] / 4)) * level) / 100)
+                    + level + 10;
         }
 
         this.attack =
-                ((((2 * pokedexEntry.getBaseAtk() + IVs[ATK.ordinal()] + (EVs[ATK.ordinal()] / 4) * level) / 100)
-                        + 5) * nature.getMultiplier(ATK)) / 100;
+            ((((2 * pokedexEntry.getBaseAtk() + IVs[ATK.ordinal()] + (EVs[ATK.ordinal()] / 4) * level) / 100)
+                + 5) * nature.getMultiplier(ATK)) / 100;
         this.defense =
-                ((((2 * pokedexEntry.getBaseDef() + IVs[DEF.ordinal()] + (EVs[DEF.ordinal()] / 4) * level) / 100)
-                        + 5) * nature.getMultiplier(DEF)) / 100;
+            ((((2 * pokedexEntry.getBaseDef() + IVs[DEF.ordinal()] + (EVs[DEF.ordinal()] / 4) * level) / 100)
+                + 5) * nature.getMultiplier(DEF)) / 100;
         this.specialAttack =
-                ((((2 * pokedexEntry.getBaseAtk() + IVs[SPATK.ordinal()] + (EVs[SPATK.ordinal()] / 4) * level)
-                        / 100) + 5) * nature.getMultiplier(SPATK)) / 100;
+            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPATK.ordinal()] + (EVs[SPATK.ordinal()] / 4) * level)
+                / 100) + 5) * nature.getMultiplier(SPATK)) / 100;
         this.specialDefense =
-                ((((2 * pokedexEntry.getBaseDef() + IVs[SPDEF.ordinal()] + (EVs[SPDEF.ordinal()] / 4) * level)
-                        / 100) + 5) * nature.getMultiplier(SPDEF)) / 100;
+            ((((2 * pokedexEntry.getBaseDef() + IVs[SPDEF.ordinal()] + (EVs[SPDEF.ordinal()] / 4) * level)
+                / 100) + 5) * nature.getMultiplier(SPDEF)) / 100;
         this.speed =
-                ((((2 * pokedexEntry.getBaseAtk() + IVs[SPEED.ordinal()] + (EVs[SPEED.ordinal()] / 4) * level)
-                        / 100) + 5) * nature.getMultiplier(SPEED)) / 100;
+            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPEED.ordinal()] + (EVs[SPEED.ordinal()] / 4) * level)
+                / 100) + 5) * nature.getMultiplier(SPEED)) / 100;
     }
 
     public void changeAttack(int stages) {
@@ -472,8 +472,8 @@ public class Pokemon {
             return false;
         } else {
             return !(this.types.contains(Type.FLYING) || this.getHeldItem().equals(AIR_BALLOON) || (
-                    this.ability.equals(LEVITATE) && !hasVolatileStatus(ABILITY_IGNORED) && !hasVolatileStatus(
-                            ABILITY_SUPPRESSED)));
+                this.ability.equals(LEVITATE) && !hasVolatileStatus(ABILITY_IGNORED) && !hasVolatileStatus(
+                    ABILITY_SUPPRESSED)));
         }
     }
 
@@ -531,10 +531,10 @@ public class Pokemon {
 
     public double getMovePowerMultipliers(Pokemon opponent, Battle battle, Move move) {
         return ability.getMovePowerMultipliers(this, opponent, battle, move) * heldItem.getMovePowerMultipliers(
-                this,
-                opponent,
-                battle,
-                move);
+            this,
+            opponent,
+            battle,
+            move);
     }
 
     public double beforeAttack(Pokemon opponent, Battle battle, Move move) {
@@ -547,9 +547,9 @@ public class Pokemon {
         //Again, I don't want to consume an item if the ability's going to nullify the effect anyway.
     }
 
-    public void afterAttack(Pokemon opponent, Battle battle) {
-        ability.afterAttack(this, opponent, battle);
-        heldItem.afterAttack(this, opponent, battle);
+    public void afterAttack(Pokemon opponent, Battle battle, Move move) {
+        ability.afterAttack(this, opponent, battle, move);
+        heldItem.afterAttack(this, opponent, battle, move);
     }
 
     public void afterDrop(Pokemon opponent, Battle battle) {

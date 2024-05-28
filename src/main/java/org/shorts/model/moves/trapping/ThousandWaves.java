@@ -23,4 +23,5 @@ public class ThousandWaves extends Move implements TrappingMove {
         TrappingMove.super.applyCantEscapeStatus(defender);
     }
 
+    //TODO: This shouldn't cause Sheer Force to activate.
 }

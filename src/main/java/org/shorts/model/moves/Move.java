@@ -33,6 +33,7 @@ import static org.shorts.model.abilities.Ripen.RIPEN;
 import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
 import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
+import static org.shorts.model.abilities.SkillLink.SKILL_LINK;
 import static org.shorts.model.abilities.Sniper.SNIPER;
 import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
 import static org.shorts.model.items.ExpertBelt.EXPERT_BELT;
@@ -154,6 +155,10 @@ public abstract class Move {
         return secondaryEffectChance;
     }
 
+    public int getNumHits(boolean skillLink) {
+        return 1;
+    }
+
     public boolean isDisabled() {
         return disabled;
     }
@@ -218,23 +223,39 @@ public abstract class Move {
             this.trySecondaryEffect(user, target, battle);
         } else {
             int previousTargetHP = target.getCurrentHP();
-            int damage = calculateDamage(user, target, battle);
-            target.takeDamage(damage);
-            target.afterHit(user, battle, previousTargetHP, this);
+
+            int hitNum = 0;
+            final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK);
+            while (hitNum < maxHits && !user.hasFainted() && !target.hasFainted()) {
+                int damage = calculateDamage(user, target, battle);
+                target.takeDamage(damage);
+
+                if (!user.hasFainted()) {
+                    this.inflictRecoil(user, damage);
+                }
+
+                target.afterHit(user, battle, previousTargetHP, this);
+            }
+
+            this.trySecondaryEffect(user, target, battle);
+
+            if (!user.hasFainted()) {
+                user.afterAttack(target, battle, this);
+            }
+
+            //if(userMon.getCurrentHP() == 0) {
+            //  //TODO: Handle fainting and subsequent switch-in.
+            //}
 
             //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
-
             if (target.getCurrentHP() == 0) {
+                //Or should I have this call in Pokemon.takeDamage()?
                 target.afterFaint(user, battle);
                 user.afterKO(target, battle);
                 //TODO: Handle fainting and subsequent switch-in.
 
             }
 
-            //TODO: Handle recoil damage
-            //if(userMon.getCurrentHP() == 0) {
-            //  //TODO: Handle fainting and subsequent switch-in.
-            //}
         }
     }
 
@@ -458,8 +479,7 @@ public abstract class Move {
         if (user.getHeldItem() == EXPERT_BELT && typeMultiplier > NEUTRAL) {
             base = roundHalfUp(base * 4915d / divisor);
         }
-        if (user.getHeldItem() == LIFE_ORB && !(user.getAbility() == SHEER_FORCE
-            && this.getSecondaryEffectChance() > 0)) {
+        if (user.getHeldItem() == LIFE_ORB) {
             base = roundHalfUp(base * 5324d / divisor);
         }
         if (user.getHeldItem() instanceof MetronomeItem) {
@@ -498,5 +518,8 @@ public abstract class Move {
         } else {
             return 0;
         }
+    }
+
+    protected void inflictRecoil(Pokemon user, int damageDealt) {
     }
 }
