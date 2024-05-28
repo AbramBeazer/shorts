@@ -29,6 +29,7 @@ import static org.shorts.model.abilities.Neuroforce.NEUROFORCE;
 import static org.shorts.model.abilities.Prankster.PRANKSTER;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
 import static org.shorts.model.abilities.PunkRock.PUNK_ROCK;
+import static org.shorts.model.abilities.Ripen.RIPEN;
 import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
 import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
@@ -203,7 +204,8 @@ public abstract class Move {
         }
 
         this.decrementPP();
-        if (target != user && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(user,
+        if (target != user && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(
+            user,
             target)) {
             this.decrementPP();
         }
@@ -447,7 +449,8 @@ public abstract class Move {
         if (target.getHeldItem() instanceof TypeResistBerry) {
             TypeResistBerry berry = (TypeResistBerry) target.getHeldItem();
             if (berry.getType() == this.type && (this.type == NORMAL || typeMultiplier > NEUTRAL)) {
-                base = roundHalfUp(base * 0.5);
+                double multiplier = target.getAbility() == RIPEN ? 0.25 : 0.5;
+                base = roundHalfUp(base * multiplier);
             }
             //TODO: Output berry-eating message
             target.setHeldItem(NO_ITEM);

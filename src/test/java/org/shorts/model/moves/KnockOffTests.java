@@ -2,8 +2,11 @@ package org.shorts.model.moves;
 
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.shorts.Main;
+import org.shorts.TestRandom;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummySingleBattle;
 import org.shorts.model.items.DriveItem;
@@ -49,6 +52,11 @@ class KnockOffTests {
 
     private KnockOff knockOff;
     private final Battle battle = new DummySingleBattle();
+
+    @BeforeAll
+    static void beforeAll() {
+        Main.RANDOM = new TestRandom();
+    }
 
     @BeforeEach
     void setUp() {
@@ -272,7 +280,7 @@ class KnockOffTests {
         assertThat(knockOff.getPowerMultipliers(attacker, defender, battle)).isEqualTo(KnockOff.MULTIPLIER);
         final int damageWithBerry = knockOff.calculateDamage(attacker, defender, battle);
         assertThat(defender.getHeldItem()).isEqualTo(NO_ITEM);
-        assertThat(damageWithBerry).isEqualTo(damageWithLefties * 0.5);
+        assertThat(damageWithLefties).isEqualTo(damageWithBerry * 2);
     }
 
     @Test
