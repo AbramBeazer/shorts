@@ -1,5 +1,5 @@
 package org.shorts.model.moves.switchself;
 
-public class FlipTurn extends SwitchSelfMove {
-
-}
+//public class FlipTurn extends Move implements SwitchSelfMove {
+//
+//}

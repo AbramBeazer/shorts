@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GroundednessTests {
+
     @Test
     void testIronBallOnFlyingTypeWithNoOtherGrounding() {
         assertThat(false).isEqualTo(true);
@@ -21,7 +22,7 @@ class GroundednessTests {
     }
 
     @Test
-    void testHazardsApplyOnHolderOfIronBall(){
+    void testHazardsApplyOnHolderOfIronBall() {
         assertThat(false).isEqualTo(true);
     }
 }

@@ -60,33 +60,33 @@ public class SingleBattle extends Battle {
 
         //TODO: Should I have an "onCalcPriority" method in Pokémon, Ability, and HeldItem? -- I can override getPriority in individual moves, at least.
         if (priorityOne > priorityTwo) {
-            moveOne.doMove(playerOne, playerTwo, this);
-            moveTwo.doMove(playerTwo, playerOne, this);
+            moveOne.doMove(playerOne.getLead(), playerTwo.getLead(), this);
+            moveTwo.doMove(playerTwo.getLead(), playerOne.getLead(), this);
         } else if (priorityTwo > priorityOne) {
-            moveTwo.doMove(playerTwo, playerOne, this);
-            moveOne.doMove(playerOne, playerTwo, this);
+            moveTwo.doMove(playerTwo.getLead(), playerOne.getLead(), this);
+            moveOne.doMove(playerOne.getLead(), playerTwo.getLead(), this);
         } else {
             int speedOne = playerOne.getLead().calculateSpeed();
             int speedTwo = playerTwo.getLead().calculateSpeed();
 
             if (speedOne > speedTwo) {
-                //playerOne goes first
-                moveOne.doMove(playerOne, playerTwo, this);
-                moveTwo.doMove(playerTwo, playerOne, this);
+                //playerOne.getLead() goes first
+                moveOne.doMove(playerOne.getLead(), playerTwo.getLead(), this);
+                moveTwo.doMove(playerTwo.getLead(), playerOne.getLead(), this);
             } else if (speedTwo > speedOne) {
-                //playerTwo goes first
-                moveTwo.doMove(playerTwo, playerOne, this);
-                moveOne.doMove(playerOne, playerTwo, this);
+                //playerTwo.getLead() goes first
+                moveTwo.doMove(playerTwo.getLead(), playerOne.getLead(), this);
+                moveOne.doMove(playerOne.getLead(), playerTwo.getLead(), this);
             } else {
                 int rand = Main.RANDOM.nextInt(2);
                 if (rand == 0) {
-                    //playerOne goes first
-                    moveOne.doMove(playerOne, playerTwo, this);
-                    moveTwo.doMove(playerTwo, playerOne, this);
+                    //playerOne.getLead() goes first
+                    moveOne.doMove(playerOne.getLead(), playerTwo.getLead(), this);
+                    moveTwo.doMove(playerTwo.getLead(), playerOne.getLead(), this);
                 } else {
-                    //playerTwo goes first
-                    moveTwo.doMove(playerTwo, playerOne, this);
-                    moveOne.doMove(playerOne, playerTwo, this);
+                    //playerTwo.getLead() goes first
+                    moveTwo.doMove(playerTwo.getLead(), playerOne.getLead(), this);
+                    moveOne.doMove(playerOne.getLead(), playerTwo.getLead(), this);
                 }
             }
         }
@@ -124,7 +124,8 @@ public class SingleBattle extends Battle {
                 invalidMoves.add(move);
             }
 
-            if ((pokemon.getHeldItem() == ASSAULT_VEST && (move instanceof StatusMove && !(move instanceof MeFirst)))
+            if ((pokemon.getHeldItem() == ASSAULT_VEST && (move.getCategory() == Move.Category.STATUS
+                && !(move instanceof MeFirst)))
                 || (pokemon.hasVolatileStatus(CHOICE_LOCKED) && !pokemon.getVolatileStatus(CHOICE_LOCKED)
                 .getMove()
                 .equals(move)) || move.getCurrentPP() <= 0) {

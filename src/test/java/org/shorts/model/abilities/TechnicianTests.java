@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
 import org.shorts.battle.SingleBattle;
 import org.shorts.battle.Trainer;
+import org.shorts.model.moves.Bulldoze;
 import org.shorts.model.moves.BulletPunch;
 import org.shorts.model.moves.Earthquake;
-import org.shorts.model.moves.GrassyGlide;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Tackle;
 import org.shorts.model.pokemon.Pokemon;
@@ -27,8 +27,9 @@ class TechnicianTests {
 
     @BeforeEach
     void setUp() {
-        battle = new SingleBattle(new Trainer("Red", List.of(hasTechnician)), new Trainer("Green", List.of(
-            hasOtherAbility)));
+        battle = new SingleBattle(
+            new Trainer("Red", List.of(hasTechnician)),
+            new Trainer("Green", List.of(hasOtherAbility)));
     }
 
     @Test
@@ -36,8 +37,10 @@ class TechnicianTests {
         Move weakMove = new BulletPunch();
         assertThat(weakMove.getPower()).isLessThanOrEqualTo(Technician.BASE_POWER_THRESHOLD);
         assertThat(hasTechnician.getAbility()
-            .getMovePowerMultipliers(hasTechnician, hasOtherAbility, battle, weakMove)).isEqualTo(
-            Technician.MULTIPLIER);
+            .getMovePowerMultipliers(hasTechnician,
+                hasOtherAbility,
+                battle,
+                weakMove)).isEqualTo(Technician.MULTIPLIER);
         assertThat(hasOtherAbility.getAbility()
             .getMovePowerMultipliers(hasOtherAbility, hasTechnician, battle, weakMove)).isEqualTo(1);
     }
@@ -46,19 +49,13 @@ class TechnicianTests {
     void testOnlyActivatesFor60PowerOrLower() {
         Move weakMove = new Tackle();
         assertThat(weakMove.getPower()).isLessThan(Technician.BASE_POWER_THRESHOLD);
-        assertThat(TECHNICIAN.getMovePowerMultipliers(
-            hasTechnician,
-            hasOtherAbility,
-            battle,
-            weakMove)).isEqualTo(Technician.MULTIPLIER);
+        assertThat(TECHNICIAN.getMovePowerMultipliers(hasTechnician, hasOtherAbility, battle, weakMove)).isEqualTo(
+            Technician.MULTIPLIER);
 
-        Move power60 = new GrassyGlide();
+        Move power60 = new Bulldoze();
         assertThat(power60.getPower()).isEqualTo(Technician.BASE_POWER_THRESHOLD);
-        assertThat(TECHNICIAN.getMovePowerMultipliers(
-            hasTechnician,
-            hasOtherAbility,
-            battle,
-            power60)).isEqualTo(Technician.MULTIPLIER);
+        assertThat(TECHNICIAN.getMovePowerMultipliers(hasTechnician, hasOtherAbility, battle, power60)).isEqualTo(
+            Technician.MULTIPLIER);
 
         Move tooStrong = new Earthquake();
         assertThat(tooStrong.getPower()).isGreaterThan(Technician.BASE_POWER_THRESHOLD);

@@ -13,8 +13,12 @@ public class Curse extends Move {
     }
 
     @Override
-    protected boolean pressureApplies(Pokemon userMon, Pokemon targetMon) {
-        return userMon.getTypes().contains(GHOST);
+    public Range getRange(Pokemon user) {
+        if (user.getTypes().contains(GHOST)) {
+            return Range.SINGLE_RANDOM_OPPONENT;
+        } else {
+            return Range.SELF;
+        }
     }
 
     @Override

@@ -1,5 +1,7 @@
 package org.shorts.model.moves;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
@@ -24,6 +26,7 @@ import org.shorts.model.pokemon.Tyranitar;
 import org.shorts.model.pokemon.Zacian;
 import org.shorts.model.pokemon.Zamazenta;
 import org.shorts.model.status.SubstituteStatus;
+import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
@@ -259,7 +262,9 @@ class KnockOffTests {
     @Test
     void testColburBerryShouldActivateBeforeBeingLostButDamageShouldBeBoosted() {
         final Pokemon attacker = getDummyPokemon();
+        attacker.setTypes(Set.of(Type.NORMAL));
         final Pokemon defender = getDummyPokemon();
+        defender.setTypes(Set.of(Type.PSYCHIC));
 
         defender.setHeldItem(LEFTOVERS);
         final int damageWithLefties = knockOff.calculateDamage(attacker, defender, battle);

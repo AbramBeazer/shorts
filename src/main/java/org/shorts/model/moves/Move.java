@@ -37,6 +37,7 @@ import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
 import static org.shorts.model.items.ExpertBelt.EXPERT_BELT;
 import static org.shorts.model.items.IronBall.IRON_BALL;
 import static org.shorts.model.items.LifeOrb.LIFE_ORB;
+import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.items.RingTarget.RING_TARGET;
 import static org.shorts.model.status.VolatileStatusType.MAGIC_COAT;
 import static org.shorts.model.status.VolatileStatusType.MINIMIZED;
@@ -116,7 +117,7 @@ public abstract class Move {
         return category;
     }
 
-    public Range getRange() {
+    public Range getRange(Pokemon user) {
         return range;
     }
 
@@ -197,6 +198,9 @@ public abstract class Move {
     }
 
     public void doMove(Pokemon user, Pokemon target, Battle battle) {
+        if (getRange(user) == Range.SELF) {
+            target = user;
+        }
 
         this.decrementPP();
         if (target != user && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(user,
@@ -445,6 +449,8 @@ public abstract class Move {
             if (berry.getType() == this.type && (this.type == NORMAL || typeMultiplier > NEUTRAL)) {
                 base = roundHalfUp(base * 0.5);
             }
+            //TODO: Output berry-eating message
+            target.setHeldItem(NO_ITEM);
         }
         if (user.getHeldItem() == EXPERT_BELT && typeMultiplier > NEUTRAL) {
             base = roundHalfUp(base * 4915d / divisor);
