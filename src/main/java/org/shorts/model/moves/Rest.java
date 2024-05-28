@@ -15,12 +15,12 @@ import static org.shorts.battle.Weather.SUN;
 import static org.shorts.model.abilities.Comatose.COMATOSE;
 import static org.shorts.model.abilities.LeafGuard.LEAF_GUARD;
 
-public class Rest extends StatusMove {
+public class Rest extends Move {
 
     private static final int TURNS_OF_SLEEP = 3; // This is 3 including the turn that Rest is used, so the user will be asleep for the next two turns after Rest is used.
 
     public Rest() {
-        super("Rest", -1, Type.PSYCHIC, 5, true);
+        super("Rest", 0, -1, Type.PSYCHIC, Category.STATUS, Range.SELF, 5, true, 100);
     }
 
     @Override

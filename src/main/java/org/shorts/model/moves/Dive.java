@@ -4,10 +4,11 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class Dive extends PhysicalMove implements MultiTurnMove {
-//TODO: Verify that power, contact, and PP are correct.
+public class Dive extends Move implements MultiTurnMove {
+
+    //TODO: Verify that power, contact, and PP are correct.
     public Dive() {
-        super("Dive", 80, 100, Type.WATER, 16, false, 100);
+        super("Dive", 80, 100, Type.WATER, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, false, 100);
     }
 
     @Override

@@ -7,12 +7,12 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
-public class SubstituteMove extends StatusMove {
+public class SubstituteMove extends Move {
 
     private int subHP;
 
     public SubstituteMove() {
-        super("Substitute", -1, Type.NORMAL, 16, true);
+        super("Substitute", 0, -1, Type.NORMAL, Category.STATUS, Range.SELF, 16, true, 100);
     }
 
     @Override

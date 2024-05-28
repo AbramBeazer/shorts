@@ -8,10 +8,10 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
-public class FreezeDry extends SpecialMove {
+public class FreezeDry extends Move {
 
     public FreezeDry() {
-        super("Freeze-Dry", 70, 100, Type.ICE, 32, false, 10);
+        super("Freeze-Dry", 70, 100, Type.ICE, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 32, false, 10);
     }
 
     @Override

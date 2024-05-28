@@ -4,10 +4,11 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class Dig extends PhysicalMove implements MultiTurnMove {
+public class Dig extends Move implements MultiTurnMove {
+
     //TODO: Verify that contact is correct
     public Dig() {
-        super("Dig", 80, 100, Type.GROUND, 16, false, 100);
+        super("Dig", 80, 100, Type.GROUND, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, false, 100);
     }
 
     @Override

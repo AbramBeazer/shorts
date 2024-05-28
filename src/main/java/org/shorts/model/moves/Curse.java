@@ -5,17 +5,20 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
 
 import static org.shorts.model.types.Type.GHOST;
-import static org.shorts.model.types.Type.NORMAL;
 
-public class Curse extends StatusMove {
+public class Curse extends Move {
 
     public Curse() {
-        super("Curse", 0, NORMAL, 16, true);
+        super("Curse", 0, -1, GHOST, Category.STATUS, Range.VARIES, 16, true, 100);
     }
 
     @Override
-    protected boolean pressureApplies(Pokemon userMon) {
-        return userMon.getTypes().contains(GHOST);
+    public Range getRange(Pokemon user) {
+        if (user.getTypes().contains(GHOST)) {
+            return Range.SINGLE_RANDOM_OPPONENT;
+        } else {
+            return Range.SELF;
+        }
     }
 
     @Override

@@ -1,15 +1,16 @@
 package org.shorts.model.moves.trapping;
 
 import org.shorts.battle.Battle;
-import org.shorts.model.moves.PhysicalMove;
+import org.shorts.model.moves.Move;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class ThousandWaves extends PhysicalMove implements TrappingMove {
+public class ThousandWaves extends Move implements TrappingMove {
 
     //Not in Gen 9
     public ThousandWaves() {
-        super("Thousand Waves", 90, 100, Type.GROUND, 16, false, 100);
+        super("Thousand Waves", 90, 100, Type.GROUND, Category.PHYSICAL, Range.ALL_ADJACENT_OPPONENTS, 16, false, 100);
     }
 
     @Override

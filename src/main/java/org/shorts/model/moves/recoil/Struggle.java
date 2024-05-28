@@ -2,15 +2,21 @@ package org.shorts.model.moves.recoil;
 
 import java.util.Set;
 
-import org.shorts.model.moves.PhysicalMove;
+import org.shorts.MathUtils;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.TooManyTypesException;
 import org.shorts.model.types.Type;
 
-public class Struggle extends PhysicalMove implements RecoilAttack {
+public class Struggle extends RecoilAttack {
 
     private Struggle() {
-        super("Struggle", 50, -1, Type.NORMAL, 1, true, 100);
+        super("Struggle", 50, -1, Type.NORMAL, Category.PHYSICAL, Range.SINGLE_RANDOM_OPPONENT, 1, true, 0, 0.25);
+    }
+
+    @Override
+    protected double getSTABMultiplier(Set<Type> attackerTypes) throws TooManyTypesException {
+        return 1;
     }
 
     @Override
@@ -20,14 +26,8 @@ public class Struggle extends PhysicalMove implements RecoilAttack {
 
     @Override
     public void inflictRecoil(Pokemon user, int damageDealt) {
-        RecoilAttack.super.inflictRecoil(user, user.getMaxHP());
+        user.takeDamage((int) MathUtils.roundHalfUp(user.getMaxHP() * this.recoilPercentage));
     }
 
-    @Override
-    public double getRecoilPercentage() {
-        return 0.25;
-    }
-
-    //TODO: Should STAB apply to Struggle?
     public static final Struggle STRUGGLE = new Struggle();
 }

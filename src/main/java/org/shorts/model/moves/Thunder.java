@@ -5,10 +5,10 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
-public class Thunder extends SpecialMove {
+public class Thunder extends Move {
 
     public Thunder() {
-        super("Thunder", 120, 70, Type.ELECTRIC, 16, false, 30);
+        super("Thunder", 110, 70, Type.ELECTRIC, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 30);
     }
 
     @Override

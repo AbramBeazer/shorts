@@ -4,10 +4,10 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class CloseCombat extends PhysicalMove {
+public class CloseCombat extends Move {
 
     public CloseCombat() {
-        super("Close Combat", 120, 100, Type.FIGHTING, 8, true, 100);
+        super("Close Combat", 120, 100, Type.FIGHTING, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 8, true, 100);
     }
 
     @Override

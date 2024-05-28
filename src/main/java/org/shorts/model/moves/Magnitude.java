@@ -7,11 +7,10 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 
-public class Magnitude extends PhysicalMove {
+public class Magnitude extends Move {
 
-    //TODO: Verify contact, PP, etc.
-    public Magnitude(){
-        super("Magnitude", 0, 100, Type.GROUND, 24, false,0);
+    public Magnitude() {
+        super("Magnitude", 0, 100, Type.GROUND, Category.PHYSICAL, Range.ALL_ADJACENT, 48, false, 0);
     }
 
     @Override
@@ -23,7 +22,10 @@ public class Magnitude extends PhysicalMove {
 
     @Override
     protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
-        final double multiplier = battle.getTerrain() == Terrain.GRASSY && target.isGrounded() && !target.hasVolatileStatus(SEMI_INVULNERABLE) ? 2 : 1;
+        final double multiplier =
+            battle.getTerrain() == Terrain.GRASSY && target.isGrounded() && !target.hasVolatileStatus(SEMI_INVULNERABLE)
+                ? 2
+                : 1;
         //TODO: Does terrain affect a mon with an Iron Ball or Thousand Arrows?
         return multiplier * super.getPowerMultipliers(user, target, battle);
     }
