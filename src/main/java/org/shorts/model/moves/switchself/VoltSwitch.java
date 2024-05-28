@@ -2,11 +2,11 @@ package org.shorts.model.moves.switchself;
 
 import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
-import org.shorts.model.moves.SpecialMove;
+import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class VoltSwitch extends SpecialMove {
+public class VoltSwitch extends Move {
 
     public VoltSwitch() {
         super("Volt Switch", 70, 100, Type.ELECTRIC, 32, false, 100);

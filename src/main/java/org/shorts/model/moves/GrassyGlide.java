@@ -5,10 +5,10 @@ import org.shorts.battle.Terrain;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class GrassyGlide extends PhysicalMove {
+public class GrassyGlide extends Move {
 
     public GrassyGlide() {
-        super("Grassy Glide", 60, 100, Type.GRASS, 32, true, 0);
+        super("Grassy Glide", 55, 100, Type.GRASS, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 32, true, 0);
     }
 
     @Override

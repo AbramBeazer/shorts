@@ -4,10 +4,10 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class BulletPunch extends PhysicalMove {
+public class BulletPunch extends Move {
 
     public BulletPunch() {
-        super("Bullet Punch", 40, 100, Type.STEEL, 48, true, 0);
+        super("Bullet Punch", 40, 100, Type.STEEL, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 48, true, 0);
     }
 
     @Override

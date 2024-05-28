@@ -6,9 +6,10 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-public class Minimize extends StatusMove {
+public class Minimize extends Move {
+
     public Minimize() {
-        super("Minimize", -1, Type.NORMAL, 16, true);
+        super("Minimize", 0, -1, Type.NORMAL, Category.STATUS, Range.SELF, 16, true, 100);
     }
 
     @Override

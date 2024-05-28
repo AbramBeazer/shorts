@@ -5,10 +5,10 @@ import org.shorts.battle.Weather;
 
 import static org.shorts.model.types.Type.WATER;
 
-public class HydroSteam extends SpecialMove {
+public class HydroSteam extends Move {
 
     public HydroSteam() {
-        super("Hydro Steam", 80, 100, WATER, 24, false, 0);
+        super("Hydro Steam", 80, 100, WATER, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 24, false, 0);
     }
 
     @Override

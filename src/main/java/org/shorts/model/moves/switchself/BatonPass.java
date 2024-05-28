@@ -1,14 +1,16 @@
 package org.shorts.model.moves.switchself;
 
 import org.shorts.battle.Battle;
-import org.shorts.model.moves.StatusMove;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class BatonPass extends StatusMove implements SwitchSelfMove {
+import static org.shorts.model.moves.Move.Category.STATUS;
+
+public class BatonPass extends SwitchSelfMove {
 
     public BatonPass() {
-        super("Baton Pass", -1, Type.NORMAL, 64, true);
+        super("Baton Pass", 0, -1, Type.NORMAL, STATUS, Range.SELF, 64, true, 100);
     }
 
     //TODO: Implement these

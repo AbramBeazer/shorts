@@ -6,10 +6,10 @@ import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class Scald extends SpecialMove {
+public class Scald extends Move {
 
     public Scald() {
-        super("Scald", 80, 100, Type.WATER, 24, false, 30);
+        super("Scald", 80, 100, Type.WATER, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 24, false, 30);
     }
 
     @Override

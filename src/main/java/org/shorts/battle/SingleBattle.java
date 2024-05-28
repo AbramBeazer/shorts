@@ -7,7 +7,6 @@ import java.util.Set;
 import org.shorts.Main;
 import org.shorts.model.moves.MeFirst;
 import org.shorts.model.moves.Move;
-import org.shorts.model.moves.StatusMove;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 

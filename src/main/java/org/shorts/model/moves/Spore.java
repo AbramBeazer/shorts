@@ -8,10 +8,10 @@ import org.shorts.model.types.Type;
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
-public class Spore extends StatusMove implements PowderSporeEffect {
+public class Spore extends Move implements PowderSporeEffect {
 
     public Spore() {
-        super("Spore", 0, Type.GRASS, 24, false);
+        super("Spore", 0, -1, Type.GRASS, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 24, false, 100);
     }
 
     @Override

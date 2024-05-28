@@ -1,11 +1,11 @@
 package org.shorts.model.moves.trapping;
 
 import org.shorts.battle.Battle;
-import org.shorts.model.moves.PhysicalMove;
+import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class ThousandWaves extends PhysicalMove implements TrappingMove {
+public class ThousandWaves extends Move implements TrappingMove {
 
     //Not in Gen 9
     public ThousandWaves() {

@@ -1,14 +1,15 @@
 package org.shorts.model.moves.fixeddamage;
 
 import org.shorts.battle.Battle;
-import org.shorts.model.moves.SpecialMove;
+import org.shorts.model.moves.Move;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class NightShade extends SpecialMove {
+public class NightShade extends Move {
 
     public NightShade() {
-        super("Night Shade", 0, 100, Type.GHOST, 24, false, 0);
+        super("Night Shade", 0, 100, Type.GHOST, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 24, false, 0);
     }
 
     @Override

@@ -235,8 +235,9 @@ public abstract class Move {
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
         double movePower = calculateMovePower(user, target, battle);
         //TODO: Critical hits should ignore attack drops and defense buffs.
-        double attack = this instanceof PhysicalMove ? user.calculateAttack() : user.calculateSpecialAttack();
-        double defense = this instanceof PhysicalMove ? target.calculateDefense() : target.calculateSpecialDefense();
+        double attack = this.category == Category.PHYSICAL ? user.calculateAttack() : user.calculateSpecialAttack();
+        double defense =
+            this.category == Category.PHYSICAL ? target.calculateDefense() : target.calculateSpecialDefense();
         //TODO: Deal with multi-hit moves and the weirdness that is Beat Up.
 
         double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attack / defense) * 0.02) + 2;
@@ -393,10 +394,10 @@ public abstract class Move {
 
         if (!critical && user.getAbility() != INFILTRATOR) {
             Trainer opposingTrainer = battle.getOpposingTrainer(user);
-            if (this instanceof PhysicalMove && (opposingTrainer.getReflectTurns() > 0
+            if (this.category == Category.PHYSICAL && (opposingTrainer.getReflectTurns() > 0
                 || opposingTrainer.getAuroraVeilTurns() > 0)) {
                 base = roundHalfUp(base * 0.5);
-            } else if (this instanceof SpecialMove && (opposingTrainer.getLightScreenTurns() > 0
+            } else if (this.category == Category.SPECIAL && (opposingTrainer.getLightScreenTurns() > 0
                 || opposingTrainer.getAuroraVeilTurns() > 0)) {
                 base = roundHalfUp(base * 0.5);
             }
@@ -418,7 +419,7 @@ public abstract class Move {
             base = roundHalfUp(base * 0.5);
         }
 
-        if (target.getAbility() == ICE_SCALES && this instanceof SpecialMove) {
+        if (target.getAbility() == ICE_SCALES && this.category == Category.SPECIAL) {
             base = roundHalfUp(base * 0.5);
         }
 

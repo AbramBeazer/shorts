@@ -7,11 +7,11 @@ import org.shorts.model.types.Type;
 import static org.shorts.model.status.Status.PARALYZE;
 import static org.shorts.model.status.VolatileStatusType.MINIMIZED;
 
-public class BodySlam extends PhysicalMove implements HitsMinimize {
-    public BodySlam() {
-        super("Body Slam", 85, 100, Type.NORMAL, 24, true, 30);
-    }
+public class BodySlam extends Move implements HitsMinimize {
 
+    public BodySlam() {
+        super("Body Slam", 85, 100, Type.NORMAL, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 30);
+    }
 
     @Override
     public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
