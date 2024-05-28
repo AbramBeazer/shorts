@@ -1,26 +1,34 @@
 package org.shorts.model.moves;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummySingleBattle;
 import org.shorts.battle.Weather;
-import org.shorts.model.abilities.Scrappy;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
-
-import javax.swing.*;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 import static org.shorts.model.items.IronBall.IRON_BALL;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 import static org.shorts.model.status.VolatileStatusType.TARRED;
-import static org.shorts.model.types.Type.*;
+import static org.shorts.model.types.Type.FLYING;
+import static org.shorts.model.types.Type.GHOST;
+import static org.shorts.model.types.Type.GRASS;
+import static org.shorts.model.types.Type.IMMUNE;
+import static org.shorts.model.types.Type.NEUTRAL;
+import static org.shorts.model.types.Type.NORMAL;
+import static org.shorts.model.types.Type.NOT_VERY_EFFECTIVE;
+import static org.shorts.model.types.Type.OCTO_EFFECTIVE;
+import static org.shorts.model.types.Type.STEEL;
+import static org.shorts.model.types.Type.SUPER_EFFECTIVE;
 
 class TestTypeMultiplierSpecialCases {
+
     private Pokemon user;
     private Pokemon target;
     private Battle battle;
@@ -130,7 +138,6 @@ class TestTypeMultiplierSpecialCases {
         assertThat(electric.getTypeMultiplier(user, target, battle)).isEqualTo(NEUTRAL);
     }
 
-
     @Test
     void testScrappy() {
         final Move normal = new Tackle();
@@ -166,7 +173,8 @@ class TestTypeMultiplierSpecialCases {
         final Move fire = new Ember();
         target.setTypes(Set.of(NORMAL));
         target.addVolatileStatus(new VolatileStatus(TARRED, -1));
-        assertThat(fire.getTypeMultiplier(user, target, battle)).isEqualTo(2 * Type.getTypeMultiplier(move.getType(), target.getTypes()));
+        assertThat(fire.getTypeMultiplier(user, target, battle)).isEqualTo(
+            2 * Type.getTypeMultiplier(fire.getType(), target.getTypes()));
     }
 
     @Test
@@ -194,6 +202,5 @@ class TestTypeMultiplierSpecialCases {
         target.setTypes(Set.of(GRASS, STEEL));
         assertThat(fire.getTypeMultiplier(user, target, battle)).isEqualTo(OCTO_EFFECTIVE);
     }
-
 
 }

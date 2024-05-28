@@ -17,7 +17,7 @@ public class StickyWeb extends StatusMove implements EntryHazardSetter {
     }
 
     @Override
-    protected boolean pressureApplies(Pokemon userMon) {
+    protected boolean pressureApplies(Pokemon userMon, Pokemon targetMon) {
         return false;
     }
 }

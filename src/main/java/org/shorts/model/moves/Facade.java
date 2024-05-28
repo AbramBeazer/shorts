@@ -5,12 +5,12 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
-public class Facade extends PhysicalMove {
+public class Facade extends Move {
 
     static final double MULTIPLIER = 2;
 
     public Facade() {
-        super("Facade", 70, 100, Type.NORMAL, 32, true, 0);
+        super("Facade", 70, 100, Type.NORMAL, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 32, true, 0);
     }
 
     @Override

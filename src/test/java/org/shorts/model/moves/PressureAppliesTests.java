@@ -9,11 +9,13 @@ import org.shorts.model.pokemon.Groudon;
 import org.shorts.model.pokemon.Pokemon;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 import static org.shorts.model.types.Type.GHOST;
 
 class PressureAppliesTests {
 
     private Pokemon attacker = new Groudon();
+    private Pokemon defender = getDummyPokemon();
 
     //    @BeforeEach
     //    void setup() {
@@ -23,7 +25,7 @@ class PressureAppliesTests {
     @Test
     void testReturnsTrueForPhysicalAttack() {
         PhysicalMove move = new Earthquake();
-        assertThat(move.pressureApplies(attacker)).isTrue();
+        assertThat(move.pressureApplies(attacker, defender)).isTrue();
     }
 
     @Test
