@@ -85,7 +85,8 @@ public enum VolatileStatusType implements AbstractStatusType {
                 case DROWSY:
                     return battle.getCorrespondingTrainer(target).getSafeguardTurns() == 0;
                 case CANT_ESCAPE:
-                    return !target.hasVolatileStatus(SUBSTITUTE);
+                    return !target.hasVolatileStatus(SUBSTITUTE) && !target.hasVolatileStatus(NO_RETREAT)
+                        && !target.hasVolatileStatus(OCTOLOCKED);
                 case OCTOLOCKED:
                     return !target.hasVolatileStatus(SUBSTITUTE);
                 case FLINCH:

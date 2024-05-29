@@ -7,9 +7,6 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.CANT_ESCAPE;
-import static org.shorts.model.status.VolatileStatusType.NO_RETREAT;
-import static org.shorts.model.status.VolatileStatusType.OCTOLOCKED;
-import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
 public class JawLock extends TrappingMove {
 
@@ -19,10 +16,7 @@ public class JawLock extends TrappingMove {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (!user.hasVolatileStatus(CANT_ESCAPE) && !user.hasVolatileStatus(NO_RETREAT)
-            && !user.hasVolatileStatus(OCTOLOCKED) &&
-            !target.hasVolatileStatus(CANT_ESCAPE) && !target.hasVolatileStatus(NO_RETREAT)
-            && !target.hasVolatileStatus(OCTOLOCKED) && !target.hasVolatileStatus(SUBSTITUTE)) {
+        if (CANT_ESCAPE.isStatusPossible(user, battle) && CANT_ESCAPE.isStatusPossible(target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }
