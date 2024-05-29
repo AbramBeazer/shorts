@@ -1,7 +1,6 @@
 package org.shorts.model.moves;
 
 import org.shorts.battle.Battle;
-import org.shorts.battle.Trainer;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
@@ -15,8 +14,7 @@ public class RapidSpin extends Move {
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         user.changeSpeed(1);
-        Trainer trainer = battle.getPlayerOne().getLead() == user ? battle.getPlayerOne() : battle.getPlayerTwo();
-        trainer.removeEntryHazards();
+        battle.getCorrespondingTrainer(user).removeEntryHazards();
         user.removeVolatileStatus(VolatileStatusType.SEEDED);
         user.removeVolatileStatus(VolatileStatusType.BOUND);
     }
