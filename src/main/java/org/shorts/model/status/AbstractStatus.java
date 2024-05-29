@@ -1,8 +1,5 @@
 package org.shorts.model.status;
 
-import org.shorts.battle.Battle;
-import org.shorts.model.pokemon.Pokemon;
-
 public abstract class AbstractStatus {
 
     int turnsRemaining;
@@ -21,5 +18,5 @@ public abstract class AbstractStatus {
         }
     }
 
-    public abstract boolean isStatusPossible(Pokemon target, Battle battle);
+    public abstract AbstractStatusType getType();
 }

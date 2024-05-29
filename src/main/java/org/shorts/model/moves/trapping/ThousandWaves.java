@@ -12,8 +12,8 @@ public class ThousandWaves extends TrappingMove {
     }
 
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        applySecondaryEffect(attacker, defender, battle);
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        applySecondaryEffect(user, target, battle);
     }
 
     //Not in Gen 9

@@ -4,6 +4,7 @@ import org.shorts.battle.Battle;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
 public class FlareBlitz extends RecoilAttack {
@@ -13,14 +14,14 @@ public class FlareBlitz extends RecoilAttack {
     }
 
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (Status.BURN.isStatusPossible(defender, battle)) {
-            super.trySecondaryEffect(attacker, defender, battle);
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (StatusType.BURN.isStatusPossible(target, battle)) {
+            super.trySecondaryEffect(user, target, battle);
         }
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        defender.setStatus(Status.BURN);
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        target.setStatus(Status.BURN);
     }
 }

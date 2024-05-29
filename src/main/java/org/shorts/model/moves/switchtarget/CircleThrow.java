@@ -14,9 +14,9 @@ public class CircleThrow extends SwitchTargetMove {
     }
 
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (!defender.hasVolatileStatus(SUBSTITUTE)) {
-            super.trySecondaryEffect(attacker, defender, battle);
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (!target.hasVolatileStatus(SUBSTITUTE)) {
+            super.trySecondaryEffect(user, target, battle);
         }
     }
 }

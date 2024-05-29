@@ -14,6 +14,7 @@ import org.shorts.model.pokemon.Gyarados;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.Squirtle;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -65,7 +66,7 @@ class FreezeDryTests {
         Pokemon attacker = squirtle;
         Pokemon defender = bulbasaur;
         assertThat(defender.getStatus()).isNotEqualTo(Status.FREEZE);
-        assertThat(Status.FREEZE.isStatusPossible(defender, battle)).isTrue();
+        assertThat(StatusType.FREEZE.isStatusPossible(defender, battle)).isTrue();
         new FreezeDry().trySecondaryEffect(attacker, defender, battle);
         assertThat(defender.getStatus()).isEqualTo(Status.FREEZE);
     }

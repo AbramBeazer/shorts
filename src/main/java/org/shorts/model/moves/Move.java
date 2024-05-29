@@ -163,17 +163,17 @@ public abstract class Move {
         return disabled;
     }
 
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (category == Category.STATUS || (attacker.getAbility() != SHEER_FORCE && secondaryEffectChance > 0)) {
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (category == Category.STATUS || (user.getAbility() != SHEER_FORCE && secondaryEffectChance > 0)) {
 
-            final int chance = getSecondaryEffectChance() * (attacker.getAbility().equals(SERENE_GRACE) ? 2 : 1);
+            final int chance = getSecondaryEffectChance() * (user.getAbility().equals(SERENE_GRACE) ? 2 : 1);
             if (RANDOM.nextInt(100) < chance) {
-                applySecondaryEffect(attacker, defender, battle);
+                applySecondaryEffect(user, target, battle);
             }
         }
     }
 
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
     }
 
     protected boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {

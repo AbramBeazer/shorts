@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
 public class FreezeDry extends Move {
@@ -24,15 +25,15 @@ public class FreezeDry extends Move {
     }
 
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (Status.FREEZE.isStatusPossible(defender, battle)) {
-            super.trySecondaryEffect(attacker, defender, battle);
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (StatusType.FREEZE.isStatusPossible(target, battle)) {
+            super.trySecondaryEffect(user, target, battle);
         }
     }
 
     @Override
-    public void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        defender.setStatus(Status.FREEZE);
+    public void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        target.setStatus(Status.FREEZE);
     }
 
 }

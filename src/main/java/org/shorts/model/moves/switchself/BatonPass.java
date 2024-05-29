@@ -16,12 +16,12 @@ public class BatonPass extends Move implements SwitchSelfMove {
 
     //TODO: Implement these
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        super.trySecondaryEffect(attacker, defender, battle);
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        super.trySecondaryEffect(user, target, battle);
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
 
     }
 }

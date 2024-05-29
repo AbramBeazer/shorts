@@ -15,7 +15,7 @@ public class Ingrain extends Move {
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        attacker.addVolatileStatus(new VolatileStatus(VolatileStatusType.ROOTED, -1));
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        user.addVolatileStatus(new VolatileStatus(VolatileStatusType.ROOTED, -1));
     }
 }

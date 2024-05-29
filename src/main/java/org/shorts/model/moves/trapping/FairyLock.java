@@ -13,7 +13,7 @@ public class FairyLock extends Move {
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         //TODO: Is this blocked by Substitute?
         //TODO: Does this stack? Can you keep spamming it? Does it mean just the turn in which FairyLock is used, or the turn afterward?
         battle.setFairyLockTurns(2);

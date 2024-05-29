@@ -13,8 +13,8 @@ public class Minimize extends Move {
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        attacker.changeEvasion(1);
-        attacker.addVolatileStatus(new VolatileStatus(VolatileStatusType.MINIMIZED, -1));
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        user.changeEvasion(1);
+        user.addVolatileStatus(new VolatileStatus(VolatileStatusType.MINIMIZED, -1));
     }
 }

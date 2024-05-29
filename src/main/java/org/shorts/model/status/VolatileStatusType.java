@@ -1,5 +1,9 @@
 package org.shorts.model.status;
 
+import org.shorts.battle.Battle;
+import org.shorts.model.abilities.StatusImmuneAbility;
+import org.shorts.model.pokemon.Pokemon;
+
 public enum VolatileStatusType implements AbstractStatusType {
     ABILITY_CHANGED, // TODO: Maybe I need to allow this one to take an ability as a member?
     ABILITY_SUPPRESSED,
@@ -70,5 +74,29 @@ public enum VolatileStatusType implements AbstractStatusType {
     CENTER_OF_ATTENTION,
     MAGIC_COAT, // Applies to Magic Bounce -- Should I just make Magic Bounce bestow this condition?
     PROTECTED;
+
+    @Override
+    public boolean isStatusPossible(Pokemon target, Battle battle) {
+        //TODO: Should the volatile status be applied if the target already has it?
+        if (!(target.getAbility() instanceof StatusImmuneAbility
+            && ((StatusImmuneAbility) target.getAbility()).getImmunities().contains(this))
+            && !target.hasVolatileStatus(this)) {
+            switch (this) {
+                case DROWSY:
+                    return battle.getCorrespondingTrainer(target).getSafeguardTurns() == 0;
+                case CANT_ESCAPE:
+                    return !target.hasVolatileStatus(SUBSTITUTE);
+                case OCTOLOCKED:
+                    return !target.hasVolatileStatus(SUBSTITUTE);
+                case FLINCH:
+                    return !target.hasVolatileStatus(SUBSTITUTE);
+                case CONFUSED:
+                    return !target.hasVolatileStatus(SUBSTITUTE); //TODO: Make sure that this blocks only Confuse Ray, but not self-inflicted confusion from Outrage or Thrash.
+                default:
+                    return true;
+            }
+        }
+        return false;
+    }
 
 }

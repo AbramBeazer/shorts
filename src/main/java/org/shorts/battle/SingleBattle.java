@@ -205,8 +205,10 @@ public class SingleBattle extends Battle {
             Pokemon teammate = trainer.getTeam().get(i);
 
             String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().getType().name();
-            System.out.println((i + 4) + ")" + "\t(" + teammate.getSpeciesName() + "\t(" + teammate.getCurrentHP() + "/"
-                + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
+            System.out.println(
+                (i + 4) + ")" + "\t(" + teammate.getPokedexEntry().getSpeciesName() + "\t(" + teammate.getCurrentHP()
+                    + "/"
+                    + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
         }
     }
 }

@@ -23,21 +23,21 @@ public abstract class WeatherMove extends Move {
     }
 
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         final Weather currentWeather = battle.getWeather();
         if (EXTREME_WIND == currentWeather || EXTREME_RAIN == currentWeather || EXTREME_SUN == currentWeather
             || weather == currentWeather) {
             System.out.println("...but it failed!");
         } else {
-            super.trySecondaryEffect(attacker, defender, battle);
+            super.trySecondaryEffect(user, target, battle);
         }
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         battle.setWeather(weather, DEFAULT_WEATHER_DURATION);
-        if (attacker.getHeldItem() instanceof WeatherExtendingItem) {
-            WeatherExtendingItem weatherExtendingItem = (WeatherExtendingItem) attacker.getHeldItem();
+        if (user.getHeldItem() instanceof WeatherExtendingItem) {
+            WeatherExtendingItem weatherExtendingItem = (WeatherExtendingItem) user.getHeldItem();
             weatherExtendingItem.extendWeather(battle);
         }
     }

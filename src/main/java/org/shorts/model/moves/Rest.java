@@ -24,21 +24,21 @@ public class Rest extends Move {
     }
 
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (attacker.getCurrentHP() < attacker.getMaxHP() && !attacker.getAbility().equals(COMATOSE)
-            && !(attacker.getAbility() instanceof StatusImmuneAbility
-            && ((StatusImmuneAbility) attacker.getAbility()).getImmunities().contains(StatusType.SLEEP))
-            && !defender.hasVolatileStatus(VolatileStatusType.MAKING_AN_UPROAR)
-            && !((battle.getWeather() == SUN || battle.getWeather() == EXTREME_SUN) && attacker.getAbility()
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (user.getCurrentHP() < user.getMaxHP() && !user.getAbility().equals(COMATOSE)
+            && !(user.getAbility() instanceof StatusImmuneAbility
+            && ((StatusImmuneAbility) user.getAbility()).getImmunities().contains(StatusType.SLEEP))
+            && !target.hasVolatileStatus(VolatileStatusType.MAKING_AN_UPROAR)
+            && !((battle.getWeather() == SUN || battle.getWeather() == EXTREME_SUN) && user.getAbility()
             .equals(LEAF_GUARD))
-            && !(attacker.isGrounded() && (battle.getTerrain() == MISTY || battle.getTerrain() == ELECTRIC))) {
-            super.trySecondaryEffect(attacker, defender, battle);
+            && !(user.isGrounded() && (battle.getTerrain() == MISTY || battle.getTerrain() == ELECTRIC))) {
+            super.trySecondaryEffect(user, target, battle);
         }
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        attacker.setStatus(Status.createSleepForTurns(TURNS_OF_SLEEP));
-        attacker.setCurrentHP(attacker.getMaxHP());
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        user.setStatus(Status.createSleepForTurns(TURNS_OF_SLEEP));
+        user.setCurrentHP(user.getMaxHP());
     }
 }

@@ -1,11 +1,6 @@
 package org.shorts.model.status;
 
-import org.shorts.battle.Battle;
-import org.shorts.model.abilities.StatusImmuneAbility;
 import org.shorts.model.moves.Move;
-import org.shorts.model.pokemon.Pokemon;
-
-import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
 public class VolatileStatus extends AbstractStatus {
 
@@ -24,30 +19,13 @@ public class VolatileStatus extends AbstractStatus {
         this.move = move;
     }
 
+    @Override
     public VolatileStatusType getType() {
         return type;
     }
 
     public Move getMove() {
         return move;
-    }
-
-    @Override
-    public boolean isStatusPossible(Pokemon target, Battle battle) {
-        if (!(target.getAbility() instanceof StatusImmuneAbility
-            && ((StatusImmuneAbility) target.getAbility()).getImmunities().contains(this.getType()))) {
-            switch (type) {
-                case CANT_ESCAPE:
-                    return !target.hasVolatileStatus(SUBSTITUTE);
-                case FLINCH:
-                    return !target.hasVolatileStatus(SUBSTITUTE);
-                case CONFUSED:
-                    return !target.hasVolatileStatus(SUBSTITUTE); //TODO: Make sure that this blocks only Confuse Ray, but not self-inflicted confusion from Outrage or Thrash.
-                default:
-                    return true;
-            }
-        }
-        return false;
     }
 
     public static final VolatileStatus INFATUATED = new VolatileStatus(VolatileStatusType.INFATUATED, -1);

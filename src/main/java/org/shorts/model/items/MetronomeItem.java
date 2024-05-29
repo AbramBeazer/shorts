@@ -5,6 +5,7 @@ import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 
 public class MetronomeItem extends HeldItem {
+
     private Move move;
     private int previousUses = 0;
 
@@ -15,7 +16,7 @@ public class MetronomeItem extends HeldItem {
     }
 
     @Override
-    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
         if (move != null) {
             if (!this.move.equals(self.getLastMoveUsed())) {
                 this.previousUses = 0;

@@ -15,6 +15,6 @@ public class PrimalOrb extends HeldItem {
     public static final PrimalOrb BLUE_ORB = new PrimalOrb("Blue Orb", "Kyogre");
 
     public boolean isCorrectPokemon(Pokemon pokemon) {
-        return pokemon.getSpeciesName().equals(species);
+        return pokemon.getPokedexEntry().getSpeciesName().equals(species);
     }
 }

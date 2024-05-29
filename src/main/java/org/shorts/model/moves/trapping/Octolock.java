@@ -8,7 +8,6 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.OCTOLOCKED;
-import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
 public class Octolock extends Move {
 
@@ -17,14 +16,14 @@ public class Octolock extends Move {
     }
 
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (!defender.hasVolatileStatus(SUBSTITUTE)) {
-            super.trySecondaryEffect(attacker, defender, battle);
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (OCTOLOCKED.isStatusPossible(target, battle)) {
+            super.trySecondaryEffect(user, target, battle);
         }
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        defender.addVolatileStatus(new VolatileStatus(OCTOLOCKED, -1));
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        target.addVolatileStatus(new VolatileStatus(OCTOLOCKED, -1));
     }
 }

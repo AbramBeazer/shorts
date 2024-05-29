@@ -14,8 +14,8 @@ public class Bulldoze extends Move {
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        defender.changeSpeed(-1);
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        target.changeSpeed(-1);
     }
 
     @Override

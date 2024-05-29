@@ -17,21 +17,21 @@ public class NoRetreat extends Move {
     }
 
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (!attacker.hasVolatileStatus(NO_RETREAT)) {
-            super.trySecondaryEffect(attacker, defender, battle);
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (NO_RETREAT.isStatusPossible(user, battle)) {
+            super.trySecondaryEffect(user, target, battle);
         }
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        attacker.changeAttack(1);
-        attacker.changeDefense(1);
-        attacker.changeSpecialAttack(1);
-        attacker.changeSpecialDefense(1);
-        attacker.changeSpeed(1);
-        if (!attacker.hasVolatileStatus(CANT_ESCAPE)) {
-            attacker.addVolatileStatus(new VolatileStatus(NO_RETREAT, -1));
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        user.changeAttack(1);
+        user.changeDefense(1);
+        user.changeSpecialAttack(1);
+        user.changeSpecialDefense(1);
+        user.changeSpeed(1);
+        if (!user.hasVolatileStatus(CANT_ESCAPE)) {
+            user.addVolatileStatus(new VolatileStatus(NO_RETREAT, -1));
         }
     }
 }

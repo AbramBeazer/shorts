@@ -25,7 +25,7 @@ public class EffectSpore extends Ability implements PowderSporeEffect {
             } else {
                 status = Status.PARALYZE;
             }
-            if (status.isStatusPossible(opponent, battle)) {
+            if (status.getType().isStatusPossible(opponent, battle)) {
                 opponent.setStatus(status);
             }
         }

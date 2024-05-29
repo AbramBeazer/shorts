@@ -30,14 +30,14 @@ public abstract class SwitchTargetMove extends Move {
     }
 
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (!attacker.hasFainted() && defender.getAbility() != SUCTION_CUPS && !defender.hasVolatileStatus(ROOTED)) {
-            super.trySecondaryEffect(attacker, defender, battle);
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (!user.hasFainted() && target.getAbility() != SUCTION_CUPS && !target.hasVolatileStatus(ROOTED)) {
+            super.trySecondaryEffect(user, target, battle);
         }
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        battle.getOpposingTrainer(attacker).forceRandomSwitch(defender);
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        battle.getOpposingTrainer(user).forceRandomSwitch(target);
     }
 }

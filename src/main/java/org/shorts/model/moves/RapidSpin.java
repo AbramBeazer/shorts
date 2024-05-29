@@ -13,11 +13,11 @@ public class RapidSpin extends Move {
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        attacker.changeSpeed(1);
-        Trainer trainer = battle.getPlayerOne().getLead() == attacker ? battle.getPlayerOne() : battle.getPlayerTwo();
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        user.changeSpeed(1);
+        Trainer trainer = battle.getPlayerOne().getLead() == user ? battle.getPlayerOne() : battle.getPlayerTwo();
         trainer.removeEntryHazards();
-        attacker.removeVolatileStatus(VolatileStatusType.SEEDED);
-        attacker.removeVolatileStatus(VolatileStatusType.BOUND);
+        user.removeVolatileStatus(VolatileStatusType.SEEDED);
+        user.removeVolatileStatus(VolatileStatusType.BOUND);
     }
 }

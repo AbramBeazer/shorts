@@ -15,10 +15,10 @@ public class ChillyReception extends WeatherMove implements SwitchSelfMove {
 
     //NOTE: This does not override trySecondaryEffect because it should still create SNOW even if the user can't switch.
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        super.applySecondaryEffect(attacker, defender, battle);
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        super.applySecondaryEffect(user, target, battle);
         final Trainer trainer =
-            battle.getPlayerOne().getLead() == attacker ? battle.getPlayerOne() : battle.getPlayerTwo();
+            battle.getPlayerOne().getLead() == user ? battle.getPlayerOne() : battle.getPlayerTwo();
 
         battle.promptSwitchCausedByUserMove(trainer);//TODO: Remove this
     }

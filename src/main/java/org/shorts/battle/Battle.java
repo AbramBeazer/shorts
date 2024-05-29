@@ -105,6 +105,14 @@ public abstract class Battle {
 
     public abstract void promptSwitchCausedByUserMove(Trainer trainer);
 
+    public Trainer getCorrespondingTrainer(Pokemon pokemon) {
+        if (this.playerOne.getLead() == pokemon) {
+            return playerOne;
+        } else {
+            return playerTwo;
+        }
+    }
+
     public Trainer getOpposingTrainer(Trainer trainer) {
         if (this.playerOne == trainer) {
             return playerTwo;

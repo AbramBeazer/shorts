@@ -17,14 +17,14 @@ public class Whirlpool extends Move {
     }
 
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (!defender.getTypes().contains(GHOST)) {
-            super.trySecondaryEffect(attacker, defender, battle);
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (!target.getTypes().contains(GHOST)) {
+            super.trySecondaryEffect(user, target, battle);
         }
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        defender.addVolatileStatus(new BoundStatus(RANDOM.nextInt(1) + 4, this, 0.125));
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        target.addVolatileStatus(new BoundStatus(RANDOM.nextInt(1) + 4, this, 0.125));
     }
 }

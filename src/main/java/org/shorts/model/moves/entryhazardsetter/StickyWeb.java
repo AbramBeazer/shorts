@@ -13,7 +13,7 @@ public class StickyWeb extends Move implements EntryHazardSetter {
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         //TODO:        Trainer opposingTrainer =
     }
 

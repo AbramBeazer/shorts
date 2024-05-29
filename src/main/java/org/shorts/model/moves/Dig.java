@@ -12,7 +12,7 @@ public class Dig extends Move implements MultiTurnMove {
     }
 
     @Override
-    public void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+    public void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         //TODO: Implement
     }
 

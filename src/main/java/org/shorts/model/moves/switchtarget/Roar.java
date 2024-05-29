@@ -15,10 +15,10 @@ public class Roar extends SwitchTargetMove {
     }
 
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         //TODO: Should fail if target is protected by Crafty Shield.
-        if (defender.getAbility() != SOUNDPROOF && !defender.hasVolatileStatus(SEMI_INVULNERABLE)) {
-            super.trySecondaryEffect(attacker, defender, battle);
+        if (target.getAbility() != SOUNDPROOF && !target.hasVolatileStatus(SEMI_INVULNERABLE)) {
+            super.trySecondaryEffect(user, target, battle);
         }
     }
 }

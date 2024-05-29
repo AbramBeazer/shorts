@@ -18,18 +18,18 @@ public class JawLock extends TrappingMove {
     }
 
     @Override
-    public void trySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (!attacker.hasVolatileStatus(CANT_ESCAPE) && !attacker.hasVolatileStatus(NO_RETREAT)
-            && !attacker.hasVolatileStatus(OCTOLOCKED) &&
-            !defender.hasVolatileStatus(CANT_ESCAPE) && !defender.hasVolatileStatus(NO_RETREAT)
-            && !defender.hasVolatileStatus(OCTOLOCKED) && !defender.hasVolatileStatus(SUBSTITUTE)) {
-            super.trySecondaryEffect(attacker, defender, battle);
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (!user.hasVolatileStatus(CANT_ESCAPE) && !user.hasVolatileStatus(NO_RETREAT)
+            && !user.hasVolatileStatus(OCTOLOCKED) &&
+            !target.hasVolatileStatus(CANT_ESCAPE) && !target.hasVolatileStatus(NO_RETREAT)
+            && !target.hasVolatileStatus(OCTOLOCKED) && !target.hasVolatileStatus(SUBSTITUTE)) {
+            super.trySecondaryEffect(user, target, battle);
         }
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        super.applySecondaryEffect(attacker, defender, battle);
-        attacker.addVolatileStatus(VolatileStatus.CANT_ESCAPE_INDEFINITE);
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        super.applySecondaryEffect(user, target, battle);
+        user.addVolatileStatus(VolatileStatus.CANT_ESCAPE_INDEFINITE);
     }
 }

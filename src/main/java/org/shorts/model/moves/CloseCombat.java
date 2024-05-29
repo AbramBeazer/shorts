@@ -11,10 +11,10 @@ public class CloseCombat extends Move {
     }
 
     @Override
-    public void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        attacker.changeDefense(-1);
-        attacker.changeSpecialDefense(-1);
-        attacker.afterDrop(defender, battle);
+    public void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        user.changeDefense(-1);
+        user.changeSpecialDefense(-1);
+        user.afterDrop(target, battle);
     }
 
 }
