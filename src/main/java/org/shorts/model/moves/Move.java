@@ -39,6 +39,7 @@ import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
 import static org.shorts.model.items.ExpertBelt.EXPERT_BELT;
 import static org.shorts.model.items.IronBall.IRON_BALL;
 import static org.shorts.model.items.LifeOrb.LIFE_ORB;
+import static org.shorts.model.items.LoadedDice.LOADED_DICE;
 import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.items.RingTarget.RING_TARGET;
 import static org.shorts.model.status.VolatileStatusType.MAGIC_COAT;
@@ -155,7 +156,7 @@ public abstract class Move {
         return secondaryEffectChance;
     }
 
-    public int getNumHits(boolean skillLink) {
+    public int getNumHits(boolean skillLink, boolean loadedDice) {
         return 1;
     }
 
@@ -209,8 +210,7 @@ public abstract class Move {
         }
 
         this.decrementPP();
-        if (target != user && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(
-            user,
+        if (target != user && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(user,
             target)) {
             this.decrementPP();
         }
@@ -243,7 +243,7 @@ public abstract class Move {
                 final int previousTargetHP = target.getCurrentHP();
 
                 int hitNum = 0;
-                final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK);
+                final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK, user.getHeldItem() == LOADED_DICE);
                 while (hitNum < maxHits && !user.hasFainted() && !target.hasFainted()) {
                     int damage = calculateDamage(user, target, battle);
                     target.takeDamage(damage);

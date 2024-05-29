@@ -1,4 +1,4 @@
-package org.shorts.model.moves.multihit;
+package org.shorts.model.moves.multihit.outliers;
 
 import org.shorts.Main;
 import org.shorts.battle.Battle;

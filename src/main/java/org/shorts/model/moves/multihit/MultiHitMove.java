@@ -19,18 +19,22 @@ public abstract class MultiHitMove extends Move {
         Range range,
         int maxPP,
         boolean contact,
-        int secondaryEffectChance, int minHits, int maxHits) {
+        int secondaryEffectChance,
+        int minHits,
+        int maxHits) {
         super(name, power, accuracy, type, category, range, maxPP, contact, secondaryEffectChance);
         this.minHits = minHits;
         this.maxHits = maxHits;
     }
 
     @Override
-    public int getNumHits(boolean skillLink) {
-        if (skillLink) {
+    public int getNumHits(boolean skillLink, boolean loadedDice) {
+        if (minHits == maxHits) {
             return maxHits;
-        } else if (minHits == maxHits) {
+        } else if (skillLink) {
             return maxHits;
+        } else if (loadedDice) {
+            return Main.RANDOM.nextInt(2) + 4;
         } else {
             final int randNum = Main.RANDOM.nextInt(20);
             if (randNum < 7) {

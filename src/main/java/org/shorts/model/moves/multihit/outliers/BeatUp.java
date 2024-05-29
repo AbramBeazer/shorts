@@ -1,9 +1,11 @@
-package org.shorts.model.moves;
+package org.shorts.model.moves.multihit.outliers;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.Move;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
