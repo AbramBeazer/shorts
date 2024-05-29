@@ -19,33 +19,33 @@ public class BeatUp extends Move {
 
     @Override
     protected void executeMove(Pokemon user, Pokemon target, Battle battle) {
-        final int previousTargetHP = target.getCurrentHP();
+        if (rollToHit(user, target, battle)) {
+            final int previousTargetHP = target.getCurrentHP();
 
-        viableAttackers = battle.getCorrespondingTrainer(user).getTeam()
-            .stream()
-            .filter(p -> !p.hasFainted() && p.getStatus() == Status.NONE)
-            .collect(
-                Collectors.toList());
+            viableAttackers = battle.getCorrespondingTrainer(user).getTeam()
+                .stream()
+                .filter(p -> !p.hasFainted() && p.getStatus() == Status.NONE)
+                .collect(
+                    Collectors.toList());
 
-        while (currentAttackerIndex < viableAttackers.size() && !user.hasFainted() && !target.hasFainted()) {
-            int damage = calculateDamage(user, target, battle);
-            target.takeDamage(damage);
+            while (currentAttackerIndex < viableAttackers.size() && !user.hasFainted() && !target.hasFainted()) {
+                int damage = calculateDamage(user, target, battle);
+                target.takeDamage(damage);
+
+                if (!user.hasFainted()) {
+                    this.inflictRecoil(user, damage);
+                }
+
+                target.afterHit(user, battle, previousTargetHP, this);
+                currentAttackerIndex++;
+            }
+            viableAttackers.clear();
+            currentAttackerIndex = 0;
 
             if (!user.hasFainted()) {
-                this.inflictRecoil(user, damage);
+                user.afterAttack(target, battle, this);
             }
-
-            target.afterHit(user, battle, previousTargetHP, this);
         }
-        viableAttackers.clear();
-        currentAttackerIndex = 0;
-
-        this.trySecondaryEffect(user, target, battle);
-
-        if (!user.hasFainted()) {
-            user.afterAttack(target, battle, this);
-        }
-
     }
 
     @Override

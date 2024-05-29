@@ -236,28 +236,34 @@ public abstract class Move {
     }
 
     protected void executeMove(Pokemon user, Pokemon target, Battle battle) {
-        if (this.category == Category.STATUS) {
-            this.trySecondaryEffect(user, target, battle);
-        } else {
-            final int previousTargetHP = target.getCurrentHP();
+        if (rollToHit(user, target, battle)) {
+            if (this.category == Category.STATUS) {
+                this.trySecondaryEffect(user, target, battle);
+            } else {
+                final int previousTargetHP = target.getCurrentHP();
 
-            int hitNum = 0;
-            final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK);
-            while (hitNum < maxHits && !user.hasFainted() && !target.hasFainted()) {
-                int damage = calculateDamage(user, target, battle);
-                target.takeDamage(damage);
+                int hitNum = 0;
+                final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK);
+                while (hitNum < maxHits && !user.hasFainted() && !target.hasFainted()) {
+                    int damage = calculateDamage(user, target, battle);
+                    target.takeDamage(damage);
 
-                if (!user.hasFainted()) {
-                    this.inflictRecoil(user, damage);
+                    if (!user.hasFainted()) {
+                        this.inflictRecoil(user, damage);
+                    }
+
+                    target.afterHit(user, battle, previousTargetHP, this);
+                    hitNum++;
+                }
+                if (hitNum > 1) {
+                    System.out.println("Hit " + hitNum + " times!");
                 }
 
-                target.afterHit(user, battle, previousTargetHP, this);
-            }
+                this.trySecondaryEffect(user, target, battle);
 
-            this.trySecondaryEffect(user, target, battle);
-
-            if (!user.hasFainted()) {
-                user.afterAttack(target, battle, this);
+                if (!user.hasFainted()) {
+                    user.afterAttack(target, battle, this);
+                }
             }
         }
     }
