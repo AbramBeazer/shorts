@@ -22,7 +22,6 @@ public class BeatUp extends Move {
     @Override
     protected void executeMove(Pokemon user, Pokemon target, Battle battle) {
         if (rollToHit(user, target, battle)) {
-            final int previousTargetHP = target.getCurrentHP();
 
             viableAttackers = battle.getCorrespondingTrainer(user).getTeam()
                 .stream()
@@ -31,6 +30,8 @@ public class BeatUp extends Move {
                     Collectors.toList());
 
             while (currentAttackerIndex < viableAttackers.size() && !user.hasFainted() && !target.hasFainted()) {
+                final int previousTargetHP = target.getCurrentHP();
+
                 int damage = calculateDamage(user, target, battle);
                 target.takeDamage(damage);
 
@@ -51,17 +52,9 @@ public class BeatUp extends Move {
     }
 
     @Override
-    protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
-
-        double movePower = calculateMovePower(user, target, battle);
-        //TODO: Critical hits should ignore attack drops and defense buffs.
-        double attack = user.calculateAttack();
-
+    protected int getDefendingStat(Pokemon user, Pokemon target) {
         //TODO: is this right? Are we still using the target's base DEF even though we use the attacker's calculated attack?
-        double defense = target.getPokedexEntry().getBaseDef();
-
-        double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attack / defense) * 0.02) + 2;
-        return applyMultipliers(user, target, battle, baseDamage);
+        return target.getPokedexEntry().getBaseDef();
     }
 
     @Override

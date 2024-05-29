@@ -210,7 +210,8 @@ public abstract class Move {
         }
 
         this.decrementPP();
-        if (target != user && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(user,
+        if (target != user && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(
+            user,
             target)) {
             this.decrementPP();
         }
@@ -240,11 +241,12 @@ public abstract class Move {
             if (this.category == Category.STATUS) {
                 this.trySecondaryEffect(user, target, battle);
             } else {
-                final int previousTargetHP = target.getCurrentHP();
 
                 int hitNum = 0;
                 final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK, user.getHeldItem() == LOADED_DICE);
                 while (hitNum < maxHits && !user.hasFainted() && !target.hasFainted()) {
+                    final int previousTargetHP = target.getCurrentHP();
+
                     int damage = calculateDamage(user, target, battle);
                     target.takeDamage(damage);
 
@@ -271,16 +273,15 @@ public abstract class Move {
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
         double movePower = calculateMovePower(user, target, battle);
         //TODO: Critical hits should ignore attack drops and defense buffs.
-        double attack = this.category == Category.PHYSICAL ? user.calculateAttack() : user.calculateSpecialAttack();
-        double defense =
-            this.category == Category.PHYSICAL ? target.calculateDefense() : target.calculateSpecialDefense();
+        double attack = getAttackingStat(user, target);
+        double defense = getDefendingStat(user, target);
         //TODO: Deal with multi-hit moves and the weirdness that is Beat Up.
 
         double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attack / defense) * 0.02) + 2;
         return applyMultipliers(user, target, battle, baseDamage);
     }
 
-    protected int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
+    private int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
         boolean isCritical = rollForCrit(user, target, battle);
         double typeMultiplier = this.getTypeMultiplier(user, target, battle);
 
