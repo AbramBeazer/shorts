@@ -5,7 +5,7 @@ import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.types.Type;
 
-public class MultiHitMove extends Move {
+public abstract class MultiHitMove extends Move {
 
     private final int minHits;
     private final int maxHits;
@@ -32,7 +32,16 @@ public class MultiHitMove extends Move {
         } else if (minHits == maxHits) {
             return maxHits;
         } else {
-            return Main.RANDOM.nextInt((maxHits + 1) - minHits) + minHits;
+            final int randNum = Main.RANDOM.nextInt(20);
+            if (randNum < 7) {
+                return 2;
+            } else if (randNum < 14) {
+                return 3;
+            } else if (randNum < 17) {
+                return 4;
+            } else {
+                return 5;
+            }
         }
     }
 }
