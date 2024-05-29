@@ -48,7 +48,7 @@ class PressureAppliesTests {
     @Test
     void testReturnsFalseForStatusMoveThatOnlyTargetsSelf() {
         Move move = new Rest();
-        move.doMove(attacker, defender, battle);
+        move.determineTargetAndExecuteMove(attacker, defender, battle);
         assertThat(move.getCurrentPP()).isEqualTo(move.getMaxPP() - 1);
     }
 
@@ -62,12 +62,12 @@ class PressureAppliesTests {
     void testCurse() {
         Curse curse = new Curse();
         assertThat(attacker.getTypes()).doesNotContain(GHOST);
-        curse.doMove(attacker, defender, battle);
+        curse.determineTargetAndExecuteMove(attacker, defender, battle);
         assertThat(curse.getCurrentPP()).isEqualTo(curse.getMaxPP() - 1);
 
         curse = new Curse();
         attacker.setTypes(Set.of(GHOST));
-        curse.doMove(attacker, defender, battle);
+        curse.determineTargetAndExecuteMove(attacker, defender, battle);
         assertThat(curse.getCurrentPP()).isEqualTo(curse.getMaxPP() - 2);
     }
 }

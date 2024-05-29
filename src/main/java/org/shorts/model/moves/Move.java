@@ -203,7 +203,7 @@ public abstract class Move {
         return Objects.hash(name, power, accuracy, type, maxPP, contact, secondaryEffectChance);
     }
 
-    public void doMove(Pokemon user, Pokemon target, Battle battle) {
+    public void determineTargetAndExecuteMove(Pokemon user, Pokemon target, Battle battle) {
         if (getRange(user) == Range.SELF) {
             target = user;
         }
@@ -219,10 +219,27 @@ public abstract class Move {
             target = user;
         }
 
+        executeMove(user, target, battle);
+
+        //if(userMon.getCurrentHP() == 0) {
+        //  //TODO: Handle fainting and subsequent switch-in.
+        //}
+
+        //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
+        if (target.getCurrentHP() == 0) {
+            //Or should I have this call in Pokemon.takeDamage()?
+            target.afterFaint(user, battle);
+            user.afterKO(target, battle);
+            //TODO: Handle fainting and subsequent switch-in.
+
+        }
+    }
+
+    protected void executeMove(Pokemon user, Pokemon target, Battle battle) {
         if (this.category == Category.STATUS) {
             this.trySecondaryEffect(user, target, battle);
         } else {
-            int previousTargetHP = target.getCurrentHP();
+            final int previousTargetHP = target.getCurrentHP();
 
             int hitNum = 0;
             final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK);
@@ -242,20 +259,6 @@ public abstract class Move {
             if (!user.hasFainted()) {
                 user.afterAttack(target, battle, this);
             }
-
-            //if(userMon.getCurrentHP() == 0) {
-            //  //TODO: Handle fainting and subsequent switch-in.
-            //}
-
-            //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
-            if (target.getCurrentHP() == 0) {
-                //Or should I have this call in Pokemon.takeDamage()?
-                target.afterFaint(user, battle);
-                user.afterKO(target, battle);
-                //TODO: Handle fainting and subsequent switch-in.
-
-            }
-
         }
     }
 
@@ -271,10 +274,11 @@ public abstract class Move {
         return applyMultipliers(user, target, battle, baseDamage);
     }
 
-    private int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
+    protected int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
         boolean isCritical = rollForCrit(user, target, battle);
         double typeMultiplier = this.getTypeMultiplier(user, target, battle);
 
+        //TODO: Wait, what am I doing with this again? Is this for gems or what?
         double userAbilityItemMultipliers = user.beforeAttack(target, battle, this);
 
         typeMultiplier *= target.beforeHit(user, battle, this);
@@ -344,7 +348,7 @@ public abstract class Move {
         return Type.getSTABMultiplier(this.getType(), attackerTypes);
     }
 
-    private double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
+    protected double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
         double basePower = this.getPower() * this.getPowerMultipliers(user, target, battle);
         basePower *= user.getMovePowerMultipliers(target, battle, this);
         //TODO: Handle weather multipliers, terrain multipliers, mud sport, etc.

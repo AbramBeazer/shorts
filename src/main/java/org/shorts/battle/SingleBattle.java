@@ -60,33 +60,33 @@ public class SingleBattle extends Battle {
 
         //TODO: Should I have an "onCalcPriority" method in Pokémon, Ability, and HeldItem? -- I can override getPriority in individual moves, at least.
         if (priorityOne > priorityTwo) {
-            moveOne.doMove(playerOne.getLead(), playerTwo.getLead(), this);
-            moveTwo.doMove(playerTwo.getLead(), playerOne.getLead(), this);
+            moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
+            moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
         } else if (priorityTwo > priorityOne) {
-            moveTwo.doMove(playerTwo.getLead(), playerOne.getLead(), this);
-            moveOne.doMove(playerOne.getLead(), playerTwo.getLead(), this);
+            moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
+            moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
         } else {
             int speedOne = playerOne.getLead().calculateSpeed();
             int speedTwo = playerTwo.getLead().calculateSpeed();
 
             if (speedOne > speedTwo) {
                 //playerOne.getLead() goes first
-                moveOne.doMove(playerOne.getLead(), playerTwo.getLead(), this);
-                moveTwo.doMove(playerTwo.getLead(), playerOne.getLead(), this);
+                moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
+                moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
             } else if (speedTwo > speedOne) {
                 //playerTwo.getLead() goes first
-                moveTwo.doMove(playerTwo.getLead(), playerOne.getLead(), this);
-                moveOne.doMove(playerOne.getLead(), playerTwo.getLead(), this);
+                moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
+                moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
             } else {
                 int rand = Main.RANDOM.nextInt(2);
                 if (rand == 0) {
                     //playerOne.getLead() goes first
-                    moveOne.doMove(playerOne.getLead(), playerTwo.getLead(), this);
-                    moveTwo.doMove(playerTwo.getLead(), playerOne.getLead(), this);
+                    moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
+                    moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
                 } else {
                     //playerTwo.getLead() goes first
-                    moveTwo.doMove(playerTwo.getLead(), playerOne.getLead(), this);
-                    moveOne.doMove(playerOne.getLead(), playerTwo.getLead(), this);
+                    moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
+                    moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
                 }
             }
         }
