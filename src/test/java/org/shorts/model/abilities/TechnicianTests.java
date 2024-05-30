@@ -8,10 +8,10 @@ import org.shorts.battle.Battle;
 import org.shorts.battle.SingleBattle;
 import org.shorts.battle.Trainer;
 import org.shorts.model.moves.Bulldoze;
-import org.shorts.model.moves.BulletPunch;
 import org.shorts.model.moves.Earthquake;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Tackle;
+import org.shorts.model.moves.priority.BulletPunch;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.Scizor;
 
@@ -37,7 +37,8 @@ class TechnicianTests {
         Move weakMove = new BulletPunch();
         assertThat(weakMove.getPower()).isLessThanOrEqualTo(Technician.BASE_POWER_THRESHOLD);
         assertThat(hasTechnician.getAbility()
-            .getMovePowerMultipliers(hasTechnician,
+            .getMovePowerMultipliers(
+                hasTechnician,
                 hasOtherAbility,
                 battle,
                 weakMove)).isEqualTo(Technician.MULTIPLIER);

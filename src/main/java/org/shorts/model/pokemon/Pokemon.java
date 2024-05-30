@@ -15,6 +15,7 @@ import org.shorts.model.abilities.NullifyingAbility;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.NoItem;
 import org.shorts.model.moves.Move;
+import org.shorts.model.status.HelpingHandStatus;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
@@ -36,6 +37,7 @@ import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
 import static org.shorts.model.status.VolatileStatusType.CANT_ESCAPE;
 import static org.shorts.model.status.VolatileStatusType.GROUNDED;
+import static org.shorts.model.status.VolatileStatusType.HELPING_HAND;
 import static org.shorts.model.status.VolatileStatusType.MAGNET_LEVITATION;
 import static org.shorts.model.status.VolatileStatusType.NO_RETREAT;
 import static org.shorts.model.status.VolatileStatusType.OCTOLOCKED;
@@ -113,25 +115,25 @@ public class Pokemon {
             this.maxHP = 1;
         } else {
             this.maxHP =
-                (((2 * pokedexEntry.getBaseHP() + IVs[HP.ordinal()] + (EVs[HP.ordinal()] / 4)) * level) / 100)
-                    + level + 10;
+                (((2 * pokedexEntry.getBaseHP() + IVs[HP.ordinal()] + (EVs[HP.ordinal()] / 4)) * level) / 100) + level
+                    + 10;
         }
 
         this.attack =
-            ((((2 * pokedexEntry.getBaseAtk() + IVs[ATK.ordinal()] + (EVs[ATK.ordinal()] / 4) * level) / 100)
-                + 5) * nature.getMultiplier(ATK)) / 100;
+            ((((2 * pokedexEntry.getBaseAtk() + IVs[ATK.ordinal()] + (EVs[ATK.ordinal()] / 4) * level) / 100) + 5)
+                * nature.getMultiplier(ATK)) / 100;
         this.defense =
-            ((((2 * pokedexEntry.getBaseDef() + IVs[DEF.ordinal()] + (EVs[DEF.ordinal()] / 4) * level) / 100)
-                + 5) * nature.getMultiplier(DEF)) / 100;
+            ((((2 * pokedexEntry.getBaseDef() + IVs[DEF.ordinal()] + (EVs[DEF.ordinal()] / 4) * level) / 100) + 5)
+                * nature.getMultiplier(DEF)) / 100;
         this.specialAttack =
-            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPATK.ordinal()] + (EVs[SPATK.ordinal()] / 4) * level)
-                / 100) + 5) * nature.getMultiplier(SPATK)) / 100;
+            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPATK.ordinal()] + (EVs[SPATK.ordinal()] / 4) * level) / 100) + 5)
+                * nature.getMultiplier(SPATK)) / 100;
         this.specialDefense =
-            ((((2 * pokedexEntry.getBaseDef() + IVs[SPDEF.ordinal()] + (EVs[SPDEF.ordinal()] / 4) * level)
-                / 100) + 5) * nature.getMultiplier(SPDEF)) / 100;
+            ((((2 * pokedexEntry.getBaseDef() + IVs[SPDEF.ordinal()] + (EVs[SPDEF.ordinal()] / 4) * level) / 100) + 5)
+                * nature.getMultiplier(SPDEF)) / 100;
         this.speed =
-            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPEED.ordinal()] + (EVs[SPEED.ordinal()] / 4) * level)
-                / 100) + 5) * nature.getMultiplier(SPEED)) / 100;
+            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPEED.ordinal()] + (EVs[SPEED.ordinal()] / 4) * level) / 100) + 5)
+                * nature.getMultiplier(SPEED)) / 100;
     }
 
     public void changeAttack(int stages) {
@@ -530,11 +532,16 @@ public class Pokemon {
     }
 
     public double getMovePowerMultipliers(Pokemon opponent, Battle battle, Move move) {
-        return ability.getMovePowerMultipliers(this, opponent, battle, move) * heldItem.getMovePowerMultipliers(
-            this,
+        final double helpingHand;
+        if (this.hasVolatileStatus(HELPING_HAND)) {
+            helpingHand = ((HelpingHandStatus) this.getVolatileStatus(HELPING_HAND)).getLevels() * 1.5;
+        } else {
+            helpingHand = 1;
+        }
+        return ability.getMovePowerMultipliers(this, opponent, battle, move) * heldItem.getMovePowerMultipliers(this,
             opponent,
             battle,
-            move);
+            move) * helpingHand;
     }
 
     public double beforeAttack(Pokemon opponent, Battle battle, Move move) {
