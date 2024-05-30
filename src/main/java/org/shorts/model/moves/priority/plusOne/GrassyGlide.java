@@ -1,7 +1,9 @@
-package org.shorts.model.moves;
+package org.shorts.model.moves.priority.plusOne;
 
 import org.shorts.battle.Battle;
 import org.shorts.battle.Terrain;
+import org.shorts.model.moves.Move;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 

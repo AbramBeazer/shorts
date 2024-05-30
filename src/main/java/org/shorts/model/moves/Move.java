@@ -22,6 +22,7 @@ import static org.shorts.Main.RANDOM;
 import static org.shorts.MathUtils.roundHalfDown;
 import static org.shorts.MathUtils.roundHalfUp;
 import static org.shorts.model.abilities.Fluffy.FLUFFY;
+import static org.shorts.model.abilities.GaleWings.GALE_WINGS;
 import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.IceScales.ICE_SCALES;
 import static org.shorts.model.abilities.Infiltrator.INFILTRATOR;
@@ -36,6 +37,7 @@ import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
 import static org.shorts.model.abilities.SkillLink.SKILL_LINK;
 import static org.shorts.model.abilities.Sniper.SNIPER;
 import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
+import static org.shorts.model.abilities.Triage.TRIAGE;
 import static org.shorts.model.items.ExpertBelt.EXPERT_BELT;
 import static org.shorts.model.items.IronBall.IRON_BALL;
 import static org.shorts.model.items.LifeOrb.LIFE_ORB;
@@ -137,16 +139,16 @@ public abstract class Move {
     }
 
     public int getPriority(Pokemon attacker, Pokemon defender, Battle battle) {
-        // TODO:
-        //  Dark-type Pokémon are now immune to opposing Pokémon's moves that gain priority due to Prankster, including moves called by moves that call other moves
-        //  (such as Assist and Nature Power) and excluding moves that are repeated as a result of Prankster-affected Instruct
-        //  or moves that occur earlier than their usual order due to Prankster-affected After You. Ally Dark-type Pokémon are still affected by the user's status moves.
-        //  Dark-type Pokémon can still bounce moves back with Magic Bounce or Magic Coat; moves that have increased priority due to Prankster which are reflected
-        //  by Magic Bounce or Magic Coat can affect Dark-type Pokémon, unless the Pokémon that bounced the move with Magic Coat also has Prankster.
-        //  Moves that target all Pokémon (except Perish Song and Rototiller, which cannot affect Dark-type opponents if boosted by Prankster) and moves that set traps are successful regardless of the presence of Dark-type Pokémon.
+        return 0;
+    }
 
-        if (category == Category.STATUS && attacker.getAbility() == PRANKSTER) {
+    public int getAbilityPriorityBonus(Pokemon user) {
+        if (user.getAbility() == PRANKSTER && this.category == Category.STATUS) {
             return 1;
+        } else if (user.getAbility() == GALE_WINGS && user.isAtFullHP() && this.type == FLYING) {
+            return 1;
+        } else if (user.getAbility() == TRIAGE && this instanceof HealingMove) {
+            return 3;
         } else {
             return 0;
         }

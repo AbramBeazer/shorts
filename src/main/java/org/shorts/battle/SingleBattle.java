@@ -56,7 +56,17 @@ public class SingleBattle extends Battle {
         }
 
         int priorityOne = moveOne.getPriority(playerOne.getLead(), playerTwo.getLead(), this);
+        int abilityPriorityBonusOne = moveOne.getAbilityPriorityBonus(playerOne.getLead());
         int priorityTwo = moveTwo.getPriority(playerTwo.getLead(), playerOne.getLead(), this);
+        int abilityPriorityBonusTwo = moveTwo.getAbilityPriorityBonus(playerTwo.getLead());
+
+        // TODO:
+        //  Dark-type Pokémon are now immune to opposing Pokémon's moves that gain priority due to Prankster, including moves called by moves that call other moves
+        //  (such as Assist and Nature Power) and excluding moves that are repeated as a result of Prankster-affected Instruct
+        //  or moves that occur earlier than their usual order due to Prankster-affected After You. Ally Dark-type Pokémon are still affected by the user's status moves.
+        //  Dark-type Pokémon can still bounce moves back with Magic Bounce or Magic Coat; moves that have increased priority due to Prankster which are reflected
+        //  by Magic Bounce or Magic Coat can affect Dark-type Pokémon, unless the Pokémon that bounced the move with Magic Coat also has Prankster.
+        //  Moves that target all Pokémon (except Perish Song and Rototiller, which cannot affect Dark-type opponents if boosted by Prankster) and moves that set traps are successful regardless of the presence of Dark-type Pokémon.
 
         //TODO: Should I have an "onCalcPriority" method in Pokémon, Ability, and HeldItem? -- I can override getPriority in individual moves, at least.
         if (priorityOne > priorityTwo) {
@@ -125,10 +135,8 @@ public class SingleBattle extends Battle {
             }
 
             if ((pokemon.getHeldItem() == ASSAULT_VEST && (move.getCategory() == Move.Category.STATUS
-                && !(move instanceof MeFirst)))
-                || (pokemon.hasVolatileStatus(CHOICE_LOCKED) && !pokemon.getVolatileStatus(CHOICE_LOCKED)
-                .getMove()
-                .equals(move)) || move.getCurrentPP() <= 0) {
+                && !(move instanceof MeFirst))) || (pokemon.hasVolatileStatus(CHOICE_LOCKED)
+                && !pokemon.getVolatileStatus(CHOICE_LOCKED).getMove().equals(move)) || move.getCurrentPP() <= 0) {
                 invalidMoves.add(move);
             }
         }
@@ -163,11 +171,10 @@ public class SingleBattle extends Battle {
             choice = System.in.read();
             if (choice <= 0 || choice > 9) {
                 choiceValid = false;
-            } else if (choice <= 4 && invalidMoves.contains(
-                pokemon.getMoves()[choice - 1])) {
+            } else if (choice <= 4 && invalidMoves.contains(pokemon.getMoves()[choice - 1])) {
                 choiceValid = false;
-            } else if (choice > 4 && (trainer.getTeam().get(choice - 4).hasFainted()
-                || trainer.getLead().isTrapped(this))) {
+            } else if (choice > 4 && (trainer.getTeam().get(choice - 4).hasFainted() || trainer.getLead()
+                .isTrapped(this))) {
                 choiceValid = false;
             } else {
                 choiceValid = true;
@@ -207,8 +214,7 @@ public class SingleBattle extends Battle {
             String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().getType().name();
             System.out.println(
                 (i + 4) + ")" + "\t(" + teammate.getPokedexEntry().getSpeciesName() + "\t(" + teammate.getCurrentHP()
-                    + "/"
-                    + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
+                    + "/" + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
         }
     }
 }

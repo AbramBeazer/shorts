@@ -512,6 +512,10 @@ public class Pokemon {
         }
     }
 
+    public boolean isAtFullHP() {
+        return currentHP == maxHP;
+    }
+
     public boolean hasFainted() {
         return currentHP == 0;
     }
@@ -538,7 +542,8 @@ public class Pokemon {
         } else {
             helpingHand = 1;
         }
-        return ability.getMovePowerMultipliers(this, opponent, battle, move) * heldItem.getMovePowerMultipliers(this,
+        return ability.getMovePowerMultipliers(this, opponent, battle, move) * heldItem.getMovePowerMultipliers(
+            this,
             opponent,
             battle,
             move) * helpingHand;

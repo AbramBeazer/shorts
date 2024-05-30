@@ -11,7 +11,7 @@ import org.shorts.model.moves.Bulldoze;
 import org.shorts.model.moves.Earthquake;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Tackle;
-import org.shorts.model.moves.priority.BulletPunch;
+import org.shorts.model.moves.priority.plusOne.BulletPunch;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.Scizor;
 
