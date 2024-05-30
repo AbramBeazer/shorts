@@ -85,6 +85,7 @@ public class Pokemon {
     private final Map<VolatileStatusType, VolatileStatus> volatileStatuses = new HashMap<>();
     private HeldItem heldItem = NoItem.NO_ITEM;
     private byte happiness;
+    private int turnsInBattle;
 
     protected Pokemon(String pokedexNo, String nickname, String speciesName, Set<Type> types, Ability ability) {
         this.pokedexNo = pokedexNo;
@@ -466,6 +467,14 @@ public class Pokemon {
         this.happiness = happiness;
     }
 
+    public int getTurnsInBattle() {
+        return turnsInBattle;
+    }
+
+    public void setTurnsInBattle(int turnsInBattle) {
+        this.turnsInBattle = turnsInBattle;
+    }
+
     public boolean isGrounded() {
         //This override Grounded status type is caused by Iron Ball, Ingrain, SmackDown, Thousand Arrows, and Gravity.
         if (hasVolatileStatus(GROUNDED) || hasVolatileStatus(ROOTED)) {
@@ -531,6 +540,7 @@ public class Pokemon {
     //    }
 
     public void afterEntry(Pokemon opponent, Battle battle) {
+        setTurnsInBattle(0);
         ability.afterEntry(this, opponent, battle);
         heldItem.afterEntry(this, opponent, battle);
     }
