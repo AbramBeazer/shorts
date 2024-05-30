@@ -2,16 +2,16 @@ package org.shorts.model.moves.multihit.outliers;
 
 import org.shorts.Main;
 import org.shorts.battle.Battle;
-import org.shorts.model.moves.BoostedBySharpness;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
+import org.shorts.model.moves.SlicingMove;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.SkillLink.SKILL_LINK;
 import static org.shorts.model.items.LoadedDice.LOADED_DICE;
 
-public class PopulationBomb extends Move implements BoostedBySharpness {
+public class PopulationBomb extends Move implements SlicingMove {
 
     private static final int MAX_HITS = 10;
 
