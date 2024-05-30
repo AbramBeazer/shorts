@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.Nature;
-import org.shorts.model.PokedexEntry;
 import org.shorts.model.Sex;
 import org.shorts.model.abilities.Ability;
 import org.shorts.model.abilities.IgnorableAbility;

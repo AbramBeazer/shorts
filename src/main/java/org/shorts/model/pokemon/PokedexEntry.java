@@ -1,4 +1,4 @@
-package org.shorts.model;
+package org.shorts.model.pokemon;
 
 import java.util.Set;
 
