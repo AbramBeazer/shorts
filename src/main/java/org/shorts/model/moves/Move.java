@@ -276,7 +276,7 @@ public abstract class Move {
         double movePower = calculateMovePower(user, target, battle);
         //TODO: Critical hits should ignore attack drops and defense buffs.
         double attack = getAttackingStat(user, target);
-        double defense = getDefendingStat(user, target);
+        double defense = getDefendingStat(user, target, battle);
         //TODO: Deal with multi-hit moves and the weirdness that is Beat Up.
 
         double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attack / defense) * 0.02) + 2;
@@ -523,11 +523,11 @@ public abstract class Move {
         }
     }
 
-    protected int getDefendingStat(Pokemon attacker, Pokemon defender) {
+    protected int getDefendingStat(Pokemon attacker, Pokemon defender, Battle battle) {
         if (category == Category.PHYSICAL) {
             return defender.calculateDefense();
         } else if (category == Category.SPECIAL) {
-            return defender.calculateSpecialDefense();
+            return defender.calculateSpecialDefense(battle);
         } else {
             return 0;
         }

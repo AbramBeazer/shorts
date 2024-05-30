@@ -23,11 +23,11 @@ public class BeatUp extends Move {
     protected void executeMove(Pokemon user, Pokemon target, Battle battle) {
         if (rollToHit(user, target, battle)) {
 
-            viableAttackers = battle.getCorrespondingTrainer(user).getTeam()
+            viableAttackers = battle.getCorrespondingTrainer(user)
+                .getTeam()
                 .stream()
                 .filter(p -> !p.hasFainted() && p.getStatus() == Status.NONE)
-                .collect(
-                    Collectors.toList());
+                .collect(Collectors.toList());
 
             while (currentAttackerIndex < viableAttackers.size() && !user.hasFainted() && !target.hasFainted()) {
                 final int previousTargetHP = target.getCurrentHP();
@@ -52,7 +52,7 @@ public class BeatUp extends Move {
     }
 
     @Override
-    protected int getDefendingStat(Pokemon user, Pokemon target) {
+    protected int getDefendingStat(Pokemon user, Pokemon target, Battle battle) {
         //TODO: is this right? Are we still using the target's base DEF even though we use the attacker's calculated attack?
         return target.getPokedexEntry().getBaseDef();
     }

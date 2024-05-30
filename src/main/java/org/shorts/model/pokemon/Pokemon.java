@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.shorts.battle.Battle;
+import org.shorts.battle.Weather;
 import org.shorts.model.Nature;
 import org.shorts.model.PokedexEntry;
 import org.shorts.model.Sex;
@@ -297,8 +298,11 @@ public class Pokemon {
         this.specialAttack = specialAttack;
     }
 
-    public int calculateSpecialDefense() {
+    public int calculateSpecialDefense(Battle battle) {
         double multiplier = ability.onCalculateSpecialDefense(this) * heldItem.onCalculateSpecialDefense(this);
+        if (types.contains(Type.ROCK) && !battle.isWeatherSuppressed() && battle.getWeather() == Weather.SAND) {
+            multiplier *= 1.5;
+        }
         return (int) (this.specialDefense * getStageMultiplier(stageSpecialDefense) * multiplier);
     }
 
