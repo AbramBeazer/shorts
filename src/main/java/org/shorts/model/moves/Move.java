@@ -13,6 +13,7 @@ import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
 import org.shorts.model.moves.trapping.binding.Whirlpool;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.PumpedStatus;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.TooManyTypesException;
@@ -21,11 +22,13 @@ import org.shorts.model.types.Type;
 import static org.shorts.Main.RANDOM;
 import static org.shorts.MathUtils.roundHalfDown;
 import static org.shorts.MathUtils.roundHalfUp;
+import static org.shorts.model.abilities.BattleArmor.BATTLE_ARMOR;
 import static org.shorts.model.abilities.Fluffy.FLUFFY;
 import static org.shorts.model.abilities.GaleWings.GALE_WINGS;
 import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.IceScales.ICE_SCALES;
 import static org.shorts.model.abilities.Infiltrator.INFILTRATOR;
+import static org.shorts.model.abilities.Merciless.MERCILESS;
 import static org.shorts.model.abilities.Neuroforce.NEUROFORCE;
 import static org.shorts.model.abilities.Prankster.PRANKSTER;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
@@ -34,18 +37,28 @@ import static org.shorts.model.abilities.Ripen.RIPEN;
 import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
 import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
+import static org.shorts.model.abilities.ShellArmor.SHELL_ARMOR;
 import static org.shorts.model.abilities.SkillLink.SKILL_LINK;
 import static org.shorts.model.abilities.Sniper.SNIPER;
+import static org.shorts.model.abilities.SuperLuck.SUPER_LUCK;
 import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
 import static org.shorts.model.abilities.Triage.TRIAGE;
 import static org.shorts.model.items.ExpertBelt.EXPERT_BELT;
 import static org.shorts.model.items.IronBall.IRON_BALL;
+import static org.shorts.model.items.Leek.LEEK;
 import static org.shorts.model.items.LifeOrb.LIFE_ORB;
 import static org.shorts.model.items.LoadedDice.LOADED_DICE;
+import static org.shorts.model.items.LuckyPunch.LUCKY_PUNCH;
 import static org.shorts.model.items.NoItem.NO_ITEM;
+import static org.shorts.model.items.RazorClaw.RAZOR_CLAW;
 import static org.shorts.model.items.RingTarget.RING_TARGET;
+import static org.shorts.model.items.ScopeLens.SCOPE_LENS;
+import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
+import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
+import static org.shorts.model.status.VolatileStatusType.LASER_FOCUS;
 import static org.shorts.model.status.VolatileStatusType.MAGIC_COAT;
 import static org.shorts.model.status.VolatileStatusType.MINIMIZED;
+import static org.shorts.model.status.VolatileStatusType.PUMPED;
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 import static org.shorts.model.status.VolatileStatusType.TARRED;
 import static org.shorts.model.types.Type.FIGHTING;
@@ -399,9 +412,47 @@ public abstract class Move {
         return target.hasVolatileStatus(VolatileStatusType.USED_GLAIVE_RUSH) ? 2 : 1;
     }
 
-    protected boolean rollForCrit(Pokemon user, Pokemon target, Battle battle) {
-        //TODO: implement
-        return false;
+    private boolean rollForCrit(Pokemon user, Pokemon target, Battle battle) {
+        if (((target.getAbility() == BATTLE_ARMOR || target.getAbility() == SHELL_ARMOR) && !target.hasVolatileStatus(
+            ABILITY_SUPPRESSED) && !target.hasVolatileStatus(ABILITY_IGNORED))
+            || battle.getCorrespondingTrainer(target).getLuckyChantTurns() > 0) {
+            return false;
+        } else if (user.getAbility() == MERCILESS && (target.getStatus() == Status.POISON
+            || target.getStatus() == Status.TOXIC_POISON)) {
+            return true;
+        } else if (user.hasVolatileStatus(LASER_FOCUS) || this instanceof AlwaysCritMove) {
+            return true;
+        } else {
+            int stage = 0;
+            if (this instanceof HighCritChanceMove) {
+                stage++;
+            }
+            if (user.getAbility() == SUPER_LUCK) {
+                stage++;
+            }
+            if (user.getHeldItem() == RAZOR_CLAW || user.getHeldItem() == SCOPE_LENS) {
+                stage++;
+            } else if ((user.getHeldItem() == LUCKY_PUNCH && user.getPokedexEntry().getSpeciesName().equals("Chansey"))
+                || (
+                user.getHeldItem() == LEEK && Set.of("Farfetch'd", "Farfetch'd-G", "Sirfetch'd")
+                    .contains(user.getPokedexEntry().getSpeciesName()))) {
+                stage += 2;
+            }
+            if (user.hasVolatileStatus(PUMPED)) {
+                stage += ((PumpedStatus) user.getVolatileStatus(PUMPED)).getLevels();
+            }
+
+            final int rand = RANDOM.nextInt(24);
+            if (stage <= 0) {
+                return rand < 1;
+            } else if (stage == 1) {
+                return rand < 3;
+            } else if (stage == 2) {
+                return rand < 12;
+            } else {
+                return true;
+            }
+        }
     }
 
     private double getCriticalMultiplier(boolean isCritical) {

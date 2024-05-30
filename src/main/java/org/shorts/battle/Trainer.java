@@ -27,6 +27,7 @@ public class Trainer {
     private int reflectTurns = 0;
     private int lightScreenTurns = 0;
     private int auroraVeilTurns = 0;
+    private int luckyChantTurns = 0;
 
     public Trainer(String name, List<Pokemon> team) {
         this.name = Objects.requireNonNull(name, "Come on, tell the professor your name!");
@@ -100,6 +101,14 @@ public class Trainer {
 
     public void setAuroraVeilTurns(int auroraVeilTurns) {
         this.auroraVeilTurns = auroraVeilTurns;
+    }
+
+    public int getLuckyChantTurns() {
+        return luckyChantTurns;
+    }
+
+    public void setLuckyChantTurns(int luckyChantTurns) {
+        this.luckyChantTurns = luckyChantTurns;
     }
 
     public String getName() {
