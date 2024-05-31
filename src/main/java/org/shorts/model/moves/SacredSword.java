@@ -17,7 +17,12 @@ public class SacredSword extends Move implements SlicingMove {
     }
 
     @Override
-    protected boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
-        return super.rollToHit(user, target, battle);
+    protected double getAccuracyEvasionStageModifier(Pokemon user, Pokemon target) {
+        int combinedStage = Math.max(-6, Math.min(user.getStageAccuracy(), 6));
+        if (combinedStage < 0) {
+            return 3d / Math.abs(combinedStage - 3);
+        } else {
+            return (combinedStage + 3) / 3d;
+        }
     }
 }
