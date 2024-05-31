@@ -6,35 +6,29 @@ import org.shorts.model.types.Type;
 
 public class FuryCutter extends Move implements SlicingMove {
 
-    private int consecutiveHits = 0;
-    //TODO: Add some way to set consecutive hits to 0 if another move is selected or if this Pokemon switches out.
+    private boolean lastAttemptHit = false;
+    private int multipler = 1;
+    private static final double BASE_POWER = 40;
+    private static final double MAX_MULTIPLIER = 4;
 
     public FuryCutter() {
-        super("Fury Cutter", 40, 95, Type.BUG, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 32, true, 0);
+        super("Fury Cutter", BASE_POWER, 95, Type.BUG, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 32, true, 0);
     }
 
     @Override
-    public double getPower() {
-        final double power = super.getPower() * Math.pow(2, consecutiveHits);
-        consecutiveHits++;
-        return power;
+    protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
+        return getPower() * multipler;
     }
 
     @Override
     protected boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
         final boolean hits = super.rollToHit(user, target, battle);
         if (!hits) {
-            consecutiveHits = 0;
+            multipler = 1;
+        } else if (this.equals(user.getLastMoveUsed()) && lastAttemptHit && multipler < MAX_MULTIPLIER) {
+            multipler *= 2;
         }
+        lastAttemptHit = hits;
         return hits;
     }
-
-    public int getConsecutiveHits() {
-        return consecutiveHits;
-    }
-
-    public void setConsecutiveHits(int consecutiveHits) {
-        this.consecutiveHits = consecutiveHits;
-    }
-
 }

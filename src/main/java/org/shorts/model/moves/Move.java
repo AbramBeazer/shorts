@@ -134,7 +134,7 @@ public abstract class Move {
     public double getPower() {
         return this.power;
     }
-
+    
     public double getAccuracy() {
         return this.accuracy;
     }
@@ -305,7 +305,7 @@ public abstract class Move {
         }
 
         executeMove(user, target, battle);
-
+        user.setLastMoveUsed(this);
         //if(userMon.getCurrentHP() == 0) {
         //  //TODO: Handle fainting and subsequent switch-in.
         //}

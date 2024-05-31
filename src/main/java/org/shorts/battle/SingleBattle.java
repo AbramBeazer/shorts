@@ -43,7 +43,7 @@ public class SingleBattle extends Battle {
     public void takeTurns() throws Exception {
         playerOne.getLead().setMovedThisTurn(false);
         playerTwo.getLead().setMovedThisTurn(false);
-        
+
         //take player input
         int choiceOne = pollPlayerInput(playerOne);
         int choiceTwo = pollPlayerInput(playerTwo);
@@ -108,15 +108,18 @@ public class SingleBattle extends Battle {
 
     private void handleSwitches(int choiceOne, int choiceTwo) {
         if (choiceOne > 4) {
+            playerOne.getLead().setLastMoveUsed(null);
             playerOne.switchPokemon(0, choiceOne);
             playerOne.applyEntryHazards();
         }
 
         if (choiceTwo > 4) {
+            playerTwo.getLead().setLastMoveUsed(null);
             playerTwo.switchPokemon(0, choiceTwo);
             playerTwo.applyEntryHazards();
         }
 
+        //TODO: Neutralizing Gas should stop this from happening, right?
         if (choiceOne > 4) {
             playerOne.getLead().getAbility().afterEntry(playerOne.getLead(), playerTwo.getLead(), this);
         }
