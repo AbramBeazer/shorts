@@ -3,12 +3,12 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
-import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 import static org.shorts.Main.RANDOM;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
 import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
+import static org.shorts.model.status.VolatileStatusType.FLINCH;
 
 public class TripleArrows extends Move implements HighCritChanceMove {
 
@@ -25,8 +25,9 @@ public class TripleArrows extends Move implements HighCritChanceMove {
             if (RANDOM.nextInt(100) < DEFENSE_DROP_CHANCE * (user.getAbility().equals(SERENE_GRACE) ? 2 : 1)) {
                 target.changeDefense(-1);
             }
-            if (RANDOM.nextInt(100) < FLINCH_CHANCE * (user.getAbility().equals(SERENE_GRACE) ? 2 : 1)) {
-                target.addVolatileStatus(new VolatileStatus(VolatileStatusType.FLINCH, 1));
+            if (RANDOM.nextInt(100) < FLINCH_CHANCE * (user.getAbility().equals(SERENE_GRACE) ? 2 : 1)
+                && FLINCH.isStatusPossible(target, battle)) {
+                target.addVolatileStatus(new VolatileStatus(FLINCH, 1));
             }
         }
     }
