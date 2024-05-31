@@ -17,7 +17,7 @@ public class FuryCutter extends Move implements SlicingMove {
 
     @Override
     protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
-        return getPower() * multipler;
+        return super.getPowerMultipliers(user, target, battle) * multipler;
     }
 
     @Override

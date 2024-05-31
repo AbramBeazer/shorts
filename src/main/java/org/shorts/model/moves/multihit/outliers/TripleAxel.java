@@ -55,6 +55,6 @@ public class TripleAxel extends Move {
 
     @Override
     protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
-        return super.getPower() * hitNum;
+        return super.getPowerMultipliers(user, target, battle) * hitNum;
     }
 }
