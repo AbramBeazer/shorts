@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.Main;
-import org.shorts.TestRandom;
+import org.shorts.MockRandomReturnZero;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummySingleBattle;
 import org.shorts.model.items.DriveItem;
@@ -55,7 +55,7 @@ class KnockOffTests {
 
     @BeforeAll
     static void beforeAll() {
-        Main.RANDOM = new TestRandom();
+        Main.RANDOM = new MockRandomReturnZero();
     }
 
     @BeforeEach

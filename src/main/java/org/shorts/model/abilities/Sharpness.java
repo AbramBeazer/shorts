@@ -7,7 +7,7 @@ import org.shorts.model.pokemon.Pokemon;
 
 public class Sharpness extends Ability {
 
-    protected static final double SHARPNESS_BOOST = 1.5;
+    public static final double SHARPNESS_BOOST = 1.5;
 
     private Sharpness() {
         super("Sharpness");

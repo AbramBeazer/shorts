@@ -23,7 +23,7 @@ public class FuryCutter extends Move implements SlicingMove {
     @Override
     protected boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
         final boolean hits = super.rollToHit(user, target, battle);
-        if (!hits) {
+        if (!hits || !this.equals(user.getLastMoveUsed())) {
             multipler = 1;
         } else if (this.equals(user.getLastMoveUsed()) && lastAttemptHit && multipler < MAX_MULTIPLIER) {
             multipler *= 2;
