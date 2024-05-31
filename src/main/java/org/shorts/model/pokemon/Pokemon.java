@@ -64,7 +64,7 @@ public class Pokemon {
 
     private Move[] moves = new Move[4];
     private Move lastMoveUsed;
-
+    private boolean movedThisTurn;
     private Sex sex;
     private int level;
     private int maxHP;
@@ -285,6 +285,11 @@ public class Pokemon {
         return (int) (this.defense * getStageMultiplier(stageDefense) * multiplier);
     }
 
+    public int calculateDefenseIgnoreStage() {
+        double multiplier = ability.onCalculateDefense(this) * heldItem.onCalculateDefense(this);
+        return (int) (this.defense * multiplier);
+    }
+
     public void setDefense(int defense) {
         this.defense = defense;
     }
@@ -461,6 +466,14 @@ public class Pokemon {
 
     public void setLastMoveUsed(Move lastMoveUsed) {
         this.lastMoveUsed = lastMoveUsed;
+    }
+
+    public boolean hasMovedThisTurn() {
+        return movedThisTurn;
+    }
+
+    public void setMovedThisTurn(boolean movedThisTurn) {
+        this.movedThisTurn = movedThisTurn;
     }
 
     public byte getHappiness() {

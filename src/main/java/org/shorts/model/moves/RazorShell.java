@@ -4,14 +4,14 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class StoneAxe extends Move implements SlicingMove {
+public class RazorShell extends Move implements SlicingMove {
 
-    public StoneAxe() {
-        super("Stone Axe", 65, 90, Type.ROCK, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 100);
+    public RazorShell() {
+        super("Razor Shell", 75, 95, Type.WATER, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, true, 50);
     }
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        battle.getOpposingTrainer(user).addRocks();
+        target.changeDefense(-1);
     }
 }

@@ -74,7 +74,8 @@ public enum VolatileStatusType implements AbstractStatusType {
     CENTER_OF_ATTENTION,
     MAGIC_COAT, // Applies to Magic Bounce -- Should I just make Magic Bounce bestow this condition?
     PROTECTED,
-    HELPING_HAND;
+    HELPING_HAND,
+    MICLE_BERRY_EFFECT;
 
     @Override
     public boolean isStatusPossible(Pokemon target, Battle battle) {

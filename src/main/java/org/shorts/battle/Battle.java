@@ -15,6 +15,7 @@ public abstract class Battle {
     protected int terrainTurns = -1;
     protected Terrain terrain = Terrain.NONE;
     protected int fairyLockTurns;
+    protected int gravityTurns;
 
     public Battle(Trainer player1, Trainer player2) {
         this.playerOne = player1;
@@ -69,6 +70,14 @@ public abstract class Battle {
         this.fairyLockTurns = fairyLockTurns;
     }
 
+    public int getGravityTurns() {
+        return gravityTurns;
+    }
+
+    public void setGravityTurns(int gravityTurns) {
+        this.gravityTurns = gravityTurns;
+    }
+
     public void countDownWeather() {
         if (weatherTurns > 0) {
             weatherTurns--;
@@ -91,7 +100,13 @@ public abstract class Battle {
 
     public void countDownFairyLock() {
         if (fairyLockTurns > 0) {
-            weatherTurns--;
+            fairyLockTurns--;
+        }
+    }
+
+    public void countDownGravity() {
+        if (gravityTurns > 0) {
+            gravityTurns--;
         }
     }
 
@@ -105,35 +120,13 @@ public abstract class Battle {
 
     public abstract void promptSwitchCausedByUserMove(Trainer trainer);
 
-    public Trainer getCorrespondingTrainer(Pokemon pokemon) {
-        if (this.playerOne.getLead() == pokemon) {
-            return playerOne;
-        } else {
-            return playerTwo;
-        }
-    }
+    public abstract Trainer getCorrespondingTrainer(Pokemon pokemon);
 
-    public Trainer getOpposingTrainer(Trainer trainer) {
-        if (this.playerOne == trainer) {
-            return playerTwo;
-        } else {
-            return playerOne;
-        }
-    }
+    public abstract Trainer getOpposingTrainer(Trainer trainer);
 
-    public Trainer getOpposingTrainer(Pokemon pokemon) {
-        if (this.playerOne.getLead() == pokemon) {
-            return playerTwo;
-        } else {
-            return playerOne;
-        }
-    }
+    public abstract Trainer getOpposingTrainer(Pokemon pokemon);
 
-    public Pokemon getOpposingLead(Pokemon pokemon) {
-        if (this.playerOne.getLead() == pokemon) {
-            return playerTwo.getLead();
-        } else {
-            return playerOne.getLead();
-        }
-    }
+    public abstract Pokemon getOpposingLead(Pokemon pokemon);
+
+    public abstract int getNumberOfActivePokemonWithVictoryStar(Trainer trainer);
 }

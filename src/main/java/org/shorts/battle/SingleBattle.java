@@ -10,6 +10,7 @@ import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 
+import static org.shorts.model.abilities.VictoryStar.VICTORY_STAR;
 import static org.shorts.model.items.AssaultVest.ASSAULT_VEST;
 import static org.shorts.model.status.VolatileStatusType.CHOICE_LOCKED;
 import static org.shorts.model.status.VolatileStatusType.DISABLED;
@@ -40,6 +41,9 @@ public class SingleBattle extends Battle {
 
     @Override
     public void takeTurns() throws Exception {
+        playerOne.getLead().setMovedThisTurn(false);
+        playerTwo.getLead().setMovedThisTurn(false);
+        
         //take player input
         int choiceOne = pollPlayerInput(playerOne);
         int choiceTwo = pollPlayerInput(playerTwo);
@@ -215,6 +219,51 @@ public class SingleBattle extends Battle {
             System.out.println(
                 (i + 4) + ")" + "\t(" + teammate.getPokedexEntry().getSpeciesName() + "\t(" + teammate.getCurrentHP()
                     + "/" + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
+        }
+    }
+
+    @Override
+    public Trainer getCorrespondingTrainer(Pokemon pokemon) {
+        if (this.playerOne.getLead() == pokemon) {
+            return playerOne;
+        } else {
+            return playerTwo;
+        }
+    }
+
+    @Override
+    public Trainer getOpposingTrainer(Trainer trainer) {
+        if (this.playerOne == trainer) {
+            return playerTwo;
+        } else {
+            return playerOne;
+        }
+    }
+
+    @Override
+    public Trainer getOpposingTrainer(Pokemon pokemon) {
+        if (this.playerOne.getLead() == pokemon) {
+            return playerTwo;
+        } else {
+            return playerOne;
+        }
+    }
+
+    @Override
+    public Pokemon getOpposingLead(Pokemon pokemon) {
+        if (this.playerOne.getLead() == pokemon) {
+            return playerTwo.getLead();
+        } else {
+            return playerOne.getLead();
+        }
+    }
+
+    @Override
+    public int getNumberOfActivePokemonWithVictoryStar(Trainer trainer) {
+        if (trainer.getLead().getAbility() == VICTORY_STAR) {
+            return 1;
+        } else {
+            return 0;
         }
     }
 }

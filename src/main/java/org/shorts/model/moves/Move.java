@@ -23,9 +23,11 @@ import static org.shorts.Main.RANDOM;
 import static org.shorts.MathUtils.roundHalfDown;
 import static org.shorts.MathUtils.roundHalfUp;
 import static org.shorts.model.abilities.BattleArmor.BATTLE_ARMOR;
+import static org.shorts.model.abilities.CompoundEyes.COMPOUND_EYES;
 import static org.shorts.model.abilities.Fluffy.FLUFFY;
 import static org.shorts.model.abilities.GaleWings.GALE_WINGS;
 import static org.shorts.model.abilities.Guts.GUTS;
+import static org.shorts.model.abilities.Hustle.HUSTLE;
 import static org.shorts.model.abilities.IceScales.ICE_SCALES;
 import static org.shorts.model.abilities.Infiltrator.INFILTRATOR;
 import static org.shorts.model.abilities.Merciless.MERCILESS;
@@ -34,17 +36,22 @@ import static org.shorts.model.abilities.Prankster.PRANKSTER;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
 import static org.shorts.model.abilities.PunkRock.PUNK_ROCK;
 import static org.shorts.model.abilities.Ripen.RIPEN;
+import static org.shorts.model.abilities.SandVeil.SAND_VEIL;
 import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
 import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
 import static org.shorts.model.abilities.ShellArmor.SHELL_ARMOR;
 import static org.shorts.model.abilities.SkillLink.SKILL_LINK;
 import static org.shorts.model.abilities.Sniper.SNIPER;
+import static org.shorts.model.abilities.SnowCloak.SNOW_CLOAK;
 import static org.shorts.model.abilities.SuperLuck.SUPER_LUCK;
+import static org.shorts.model.abilities.TangledFeet.TANGLED_FEET;
 import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
 import static org.shorts.model.abilities.Triage.TRIAGE;
+import static org.shorts.model.items.BrightPowder.BRIGHT_POWDER;
 import static org.shorts.model.items.ExpertBelt.EXPERT_BELT;
 import static org.shorts.model.items.IronBall.IRON_BALL;
+import static org.shorts.model.items.LaxIncense.LAX_INCENSE;
 import static org.shorts.model.items.Leek.LEEK;
 import static org.shorts.model.items.LifeOrb.LIFE_ORB;
 import static org.shorts.model.items.LoadedDice.LOADED_DICE;
@@ -53,10 +60,15 @@ import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.items.RazorClaw.RAZOR_CLAW;
 import static org.shorts.model.items.RingTarget.RING_TARGET;
 import static org.shorts.model.items.ScopeLens.SCOPE_LENS;
+import static org.shorts.model.items.WideLens.WIDE_LENS;
+import static org.shorts.model.items.ZoomLens.ZOOM_LENS;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
+import static org.shorts.model.status.VolatileStatusType.CONFUSED;
+import static org.shorts.model.status.VolatileStatusType.IDENTIFIED;
 import static org.shorts.model.status.VolatileStatusType.LASER_FOCUS;
 import static org.shorts.model.status.VolatileStatusType.MAGIC_COAT;
+import static org.shorts.model.status.VolatileStatusType.MICLE_BERRY_EFFECT;
 import static org.shorts.model.status.VolatileStatusType.MINIMIZED;
 import static org.shorts.model.status.VolatileStatusType.PUMPED;
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
@@ -196,8 +208,64 @@ public abstract class Move {
         if (accuracy <= 0) {
             return true;
         }
-        //TODO: Apply accuracy and evasion.
-        return RANDOM.nextInt(100) < accuracy;
+        //TODO: Implement semi-invulnerable
+        int threshold =
+            (int) roundHalfDown(
+                getModifiedAccuracy(user, target, battle) * getAccuracyEvasionStageModifier(user, target)
+                    * (user.hasVolatileStatus(MICLE_BERRY_EFFECT) ? 1.2 : 1));
+        return RANDOM.nextInt(100) < threshold;
+    }
+
+    private double getModifiedAccuracy(Pokemon user, Pokemon target, Battle battle) {
+        final double divisor = 4096d;
+        double mod = divisor;
+        if (battle.getGravityTurns() > 0) {
+            mod = roundHalfUp(mod * (6840 / divisor));
+        }
+        if (target.getAbility() == TANGLED_FEET && !target.hasVolatileStatus(ABILITY_IGNORED)
+            && !target.hasVolatileStatus(ABILITY_SUPPRESSED) && target.hasVolatileStatus(CONFUSED)) {
+            mod = roundHalfUp(mod * 0.5);
+        }
+        if (target.getAbility() == HUSTLE && this.category == Category.PHYSICAL) {
+            mod = roundHalfUp(mod * (3277 / divisor));
+        }
+        if (!battle.isWeatherSuppressed() && !target.hasVolatileStatus(ABILITY_SUPPRESSED) && !target.hasVolatileStatus(
+            ABILITY_IGNORED) && ((target.getAbility() == SAND_VEIL && battle.getWeather() == Weather.SAND)
+            || (target.getAbility() == SNOW_CLOAK && (battle.getWeather() == Weather.HAIL
+            || battle.getWeather() == Weather.SNOW)))) {
+            mod = roundHalfUp(mod * (3277 / divisor));
+        }
+        int countVictoryStarBoosts = battle.getNumberOfActivePokemonWithVictoryStar(battle.getCorrespondingTrainer(user));
+        if (countVictoryStarBoosts > 0) {
+            mod = roundHalfUp(mod * Math.pow(4506 / divisor, countVictoryStarBoosts));
+        }
+        if (user.getAbility() == COMPOUND_EYES) {
+            mod = roundHalfUp(mod * (5325 / divisor));
+        }
+        if (target.getHeldItem() == BRIGHT_POWDER || target.getHeldItem() == LAX_INCENSE) {
+            mod = roundHalfUp(mod * (3686 / divisor));
+        }
+        if (user.getHeldItem() == WIDE_LENS) {
+            mod = roundHalfUp(mod * (4505 / divisor));
+        }
+        if (user.getHeldItem() == ZOOM_LENS && target.hasMovedThisTurn()) {
+            mod = roundHalfUp(mod * (4915 / divisor));
+        }
+
+        return roundHalfDown((this.accuracy * mod) / divisor);
+    }
+
+    protected double getAccuracyEvasionStageModifier(Pokemon user, Pokemon target) {
+        int evasionStage = target.getStageEvasion();
+        if (evasionStage > 0 && target.hasVolatileStatus(IDENTIFIED)) {
+            evasionStage = 0;
+        }
+        int combinedStage = Math.max(-6, Math.min(user.getStageAccuracy() - evasionStage, 6));
+        if (combinedStage < 0) {
+            return 3d / Math.abs(combinedStage - 3);
+        } else {
+            return (combinedStage + 3) / 3d;
+        }
     }
 
     @Override
@@ -220,6 +288,7 @@ public abstract class Move {
     }
 
     public void determineTargetAndExecuteMove(Pokemon user, Pokemon target, Battle battle) {
+        user.setMovedThisTurn(true);
         if (getRange(user) == Range.SELF) {
             target = user;
         }

@@ -39,12 +39,15 @@ public class Trainer {
         }
     }
 
-    public boolean isRocks() {
+    public boolean hasRocks() {
         return rocks;
     }
 
-    public void setRocks(boolean rocks) {
-        this.rocks = rocks;
+    public void addRocks() {
+        if (!rocks) {
+            rocks = true;
+            //TODO: Output stealth-rock-laying message
+        }
     }
 
     public int getSpikes() {
@@ -63,12 +66,15 @@ public class Trainer {
         this.toxicSpikes = toxicSpikes;
     }
 
-    public boolean isStickyWeb() {
+    public boolean hasStickyWeb() {
         return stickyWeb;
     }
 
-    public void setStickyWeb(boolean stickyWeb) {
-        this.stickyWeb = stickyWeb;
+    public void addStickyWeb() {
+        if (!stickyWeb) {
+            this.stickyWeb = true;
+            //TODO: Output sticky web message
+        }
     }
 
     public int getSafeguardTurns() {
@@ -214,12 +220,14 @@ public class Trainer {
     public void addSpikes() {
         if (spikes < 3) {
             spikes++;
+            //TODO: Output spike-laying message
         }
     }
 
     public void addToxicSpikes() {
         if (toxicSpikes < 2) {
             toxicSpikes++;
+            //TODO: Output toxic-spike-laying message
         }
     }
 
