@@ -273,7 +273,7 @@ public class Pokemon {
     public int calculateAttack() {
         double multiplier = 1;
         multiplier *= ability.onCalculateAttack(this) * heldItem.onCalculateAttack(this);
-        return (int) (this.attack * getStageMultiplier(attack) * multiplier);
+        return (int) (this.attack * getStageMultiplier(stageAttack) * multiplier);
     }
 
     public void setAttack(int attack) {

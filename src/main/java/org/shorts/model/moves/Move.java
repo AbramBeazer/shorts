@@ -134,7 +134,7 @@ public abstract class Move {
     public double getPower() {
         return this.power;
     }
-    
+
     public double getAccuracy() {
         return this.accuracy;
     }
@@ -209,10 +209,9 @@ public abstract class Move {
             return true;
         }
         //TODO: Implement semi-invulnerable
-        int threshold =
-            (int) roundHalfDown(
-                getModifiedAccuracy(user, target, battle) * getAccuracyEvasionStageModifier(user, target)
-                    * (user.hasVolatileStatus(MICLE_BERRY_EFFECT) ? 1.2 : 1));
+        int threshold = (int) roundHalfDown(
+            getModifiedAccuracy(user, target, battle) * getAccuracyEvasionStageModifier(user, target)
+                * (user.hasVolatileStatus(MICLE_BERRY_EFFECT) ? 1.2 : 1));
         return RANDOM.nextInt(100) < threshold;
     }
 
@@ -230,9 +229,9 @@ public abstract class Move {
             mod = roundHalfUp(mod * (3277 / divisor));
         }
         if (!battle.isWeatherSuppressed() && !target.hasVolatileStatus(ABILITY_SUPPRESSED) && !target.hasVolatileStatus(
-            ABILITY_IGNORED) && ((target.getAbility() == SAND_VEIL && battle.getWeather() == Weather.SAND)
-            || (target.getAbility() == SNOW_CLOAK && (battle.getWeather() == Weather.HAIL
-            || battle.getWeather() == Weather.SNOW)))) {
+            ABILITY_IGNORED) && ((target.getAbility() == SAND_VEIL && battle.getWeather() == Weather.SAND) || (
+            target.getAbility() == SNOW_CLOAK && (battle.getWeather() == Weather.HAIL
+                || battle.getWeather() == Weather.SNOW)))) {
             mod = roundHalfUp(mod * (3277 / divisor));
         }
         int countVictoryStarBoosts = battle.getNumberOfActivePokemonWithVictoryStar(battle.getCorrespondingTrainer(user));
@@ -294,8 +293,7 @@ public abstract class Move {
         }
 
         this.decrementPP();
-        if (target != user && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(
-            user,
+        if (target != user && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(user,
             target)) {
             this.decrementPP();
         }
@@ -357,11 +355,11 @@ public abstract class Move {
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
         double movePower = calculateMovePower(user, target, battle);
         //TODO: Critical hits should ignore attack drops and defense buffs.
-        double attack = getAttackingStat(user, target);
-        double defense = getDefendingStat(user, target, battle);
+        double attackingStat = getAttackingStat(user, target);
+        double defendingStat = getDefendingStat(user, target, battle);
         //TODO: Deal with multi-hit moves and the weirdness that is Beat Up.
 
-        double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attack / defense) * 0.02) + 2;
+        double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attackingStat / defendingStat) * 0.02) + 2;
         return applyMultipliers(user, target, battle, baseDamage);
     }
 
@@ -502,9 +500,8 @@ public abstract class Move {
             if (user.getHeldItem() == RAZOR_CLAW || user.getHeldItem() == SCOPE_LENS) {
                 stage++;
             } else if ((user.getHeldItem() == LUCKY_PUNCH && user.getPokedexEntry().getSpeciesName().equals("Chansey"))
-                || (
-                user.getHeldItem() == LEEK && Set.of("Farfetch'd", "Farfetch'd-G", "Sirfetch'd")
-                    .contains(user.getPokedexEntry().getSpeciesName()))) {
+                || (user.getHeldItem() == LEEK && Set.of("Farfetch'd", "Farfetch'd-G", "Sirfetch'd")
+                .contains(user.getPokedexEntry().getSpeciesName()))) {
                 stage += 2;
             }
             if (user.hasVolatileStatus(PUMPED)) {
