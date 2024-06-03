@@ -293,7 +293,8 @@ public abstract class Move {
         }
 
         this.decrementPP();
-        if (target != user && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(user,
+        if (target != user && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(
+            user,
             target)) {
             this.decrementPP();
         }
@@ -370,8 +371,6 @@ public abstract class Move {
         //TODO: Wait, what am I doing with this again? Is this for gems or what?
         double userAbilityItemMultipliers = user.beforeAttack(target, battle, this);
 
-        typeMultiplier *= target.beforeHit(user, battle, this);
-
         if (typeMultiplier == IMMUNE) {
             //TODO: LOGGER.info("It didn't affect {}", target.getLead().getNickname());
             return 0;
@@ -394,6 +393,8 @@ public abstract class Move {
 
     protected double getTypeMultiplier(Pokemon user, Pokemon target, Battle battle) {
         double multiplier = getBaseTypeMultiplier(target.getTypes());
+        multiplier *= target.beforeHit(user, battle, this);
+
         if (!target.isGrounded() && target.getTypes().contains(FLYING) && (target.getHeldItem() == IRON_BALL)) {
             multiplier = 1;
         } else if (target.isGrounded() && target.getTypes().contains(FLYING) && this.type == GROUND && (
