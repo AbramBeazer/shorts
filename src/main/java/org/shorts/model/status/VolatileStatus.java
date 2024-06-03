@@ -2,6 +2,8 @@ package org.shorts.model.status;
 
 import org.shorts.model.moves.Move;
 
+import static org.shorts.Main.RANDOM;
+
 public class VolatileStatus extends AbstractStatus {
 
     VolatileStatusType type;
@@ -35,6 +37,10 @@ public class VolatileStatus extends AbstractStatus {
         -1);
     public static final VolatileStatus ABILITY_IGNORED = new VolatileStatus(VolatileStatusType.ABILITY_IGNORED, -1);
     public static final VolatileStatus CANT_ESCAPE_INDEFINITE = new VolatileStatus(VolatileStatusType.CANT_ESCAPE, -1);
+
+    public static VolatileStatus createConfusion() {
+        return new VolatileStatus(VolatileStatusType.CONFUSED, RANDOM.nextInt(2) + 2);
+    }
 
     @Override
     public boolean equals(Object obj) {
