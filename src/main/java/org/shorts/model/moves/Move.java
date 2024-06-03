@@ -81,6 +81,7 @@ import static org.shorts.model.types.Type.GROUND;
 import static org.shorts.model.types.Type.IMMUNE;
 import static org.shorts.model.types.Type.NEUTRAL;
 import static org.shorts.model.types.Type.NORMAL;
+import static org.shorts.model.types.Type.SUPER_EFFECTIVE;
 import static org.shorts.model.types.Type.WATER;
 
 public abstract class Move {
@@ -415,7 +416,8 @@ public abstract class Move {
                 .stream()
                 .filter(t -> t != GHOST)
                 .collect(Collectors.toSet()));
-        } else if (battle.getWeather() == Weather.EXTREME_WIND && !battle.isWeatherSuppressed()) {
+        } else if (battle.getWeather() == Weather.EXTREME_WIND && !battle.isWeatherSuppressed()
+            && getBaseTypeMultiplier(Set.of(FLYING)) >= SUPER_EFFECTIVE) {
             multiplier = getBaseTypeMultiplier(target.getTypes()
                 .stream()
                 .filter(t -> t != FLYING)
