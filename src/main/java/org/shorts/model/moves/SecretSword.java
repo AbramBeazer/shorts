@@ -11,7 +11,7 @@ public class SecretSword extends Move implements SlicingMove {
     }
 
     @Override
-    protected int getDefendingStat(Pokemon attacker, Pokemon defender, Battle battle) {
+    protected double getDefendingStat(Pokemon attacker, Pokemon defender, Battle battle) {
         return defender.calculateDefense();
     }
 }

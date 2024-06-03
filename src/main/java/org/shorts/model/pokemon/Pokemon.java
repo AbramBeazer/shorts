@@ -271,58 +271,58 @@ public class Pokemon {
         this.maxHP = maxHP;
     }
 
-    public int calculateAttack() {
+    public double calculateAttack() {
         double multiplier = 1;
         multiplier *= ability.onCalculateAttack(this) * heldItem.onCalculateAttack(this);
-        return (int) (this.attack * getStageMultiplier(stageAttack) * multiplier);
+        return this.attack * getStageMultiplier(stageAttack) * multiplier;
     }
 
     public void setAttack(int attack) {
         this.attack = attack;
     }
 
-    public int calculateDefense() {
+    public double calculateDefense() {
         double multiplier = ability.onCalculateDefense(this) * heldItem.onCalculateDefense(this);
-        return (int) (this.defense * getStageMultiplier(stageDefense) * multiplier);
+        return this.defense * getStageMultiplier(stageDefense) * multiplier;
     }
 
-    public int calculateDefenseIgnoreStage() {
+    public double calculateDefenseIgnoreStage() {
         double multiplier = ability.onCalculateDefense(this) * heldItem.onCalculateDefense(this);
-        return (int) (this.defense * multiplier);
+        return this.defense * multiplier;
     }
 
     public void setDefense(int defense) {
         this.defense = defense;
     }
 
-    public int calculateSpecialAttack() {
+    public double calculateSpecialAttack() {
         double multiplier = ability.onCalculateSpecialAttack(this) * heldItem.onCalculateSpecialAttack(this);
-        return (int) (this.specialAttack * getStageMultiplier(stageSpecialAttack) * multiplier);
+        return this.specialAttack * getStageMultiplier(stageSpecialAttack) * multiplier;
     }
 
     public void setSpecialAttack(int specialAttack) {
         this.specialAttack = specialAttack;
     }
 
-    public int calculateSpecialDefense(Battle battle) {
+    public double calculateSpecialDefense(Battle battle) {
         double multiplier = ability.onCalculateSpecialDefense(this) * heldItem.onCalculateSpecialDefense(this);
         if (types.contains(Type.ROCK) && !battle.isWeatherSuppressed() && battle.getWeather() == Weather.SAND) {
             multiplier *= 1.5;
         }
-        return (int) (this.specialDefense * getStageMultiplier(stageSpecialDefense) * multiplier);
+        return this.specialDefense * getStageMultiplier(stageSpecialDefense) * multiplier;
     }
 
     public void setSpecialDefense(int specialDefense) {
         this.specialDefense = specialDefense;
     }
 
-    public int calculateSpeed() {
+    public double calculateSpeed() {
         double multiplier = ability.onCalculateSpeed(this) * heldItem.onCalculateSpeed(this);
         if (this.getStatus() == Status.PARALYZE) {
             multiplier *= 0.5;
         }
         //Verify in which order these calculations should take place.
-        return (int) (this.speed * getStageMultiplier(stageSpeed) * multiplier);
+        return this.speed * getStageMultiplier(stageSpeed) * multiplier;
     }
 
     public void setSpeed(int speed) {

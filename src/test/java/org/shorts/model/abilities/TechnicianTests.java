@@ -35,7 +35,10 @@ class TechnicianTests {
     @Test
     void testFiftyPercentPowerBoostForTechnician() {
         Move weakMove = new BulletPunch();
-        assertThat(weakMove.getPower()).isLessThanOrEqualTo(Technician.BASE_POWER_THRESHOLD);
+        assertThat(weakMove.getPower(
+            hasTechnician,
+            hasOtherAbility,
+            battle)).isLessThanOrEqualTo(Technician.BASE_POWER_THRESHOLD);
         assertThat(hasTechnician.getAbility()
             .getMovePowerMultipliers(
                 hasTechnician,
@@ -49,17 +52,26 @@ class TechnicianTests {
     @Test
     void testOnlyActivatesFor60PowerOrLower() {
         Move weakMove = new Tackle();
-        assertThat(weakMove.getPower()).isLessThan(Technician.BASE_POWER_THRESHOLD);
+        assertThat(weakMove.getPower(
+            hasTechnician,
+            hasOtherAbility,
+            battle)).isLessThan(Technician.BASE_POWER_THRESHOLD);
         assertThat(TECHNICIAN.getMovePowerMultipliers(hasTechnician, hasOtherAbility, battle, weakMove)).isEqualTo(
             Technician.MULTIPLIER);
 
         Move power60 = new Bulldoze();
-        assertThat(power60.getPower()).isEqualTo(Technician.BASE_POWER_THRESHOLD);
+        assertThat(power60.getPower(
+            hasTechnician,
+            hasOtherAbility,
+            battle)).isEqualTo(Technician.BASE_POWER_THRESHOLD);
         assertThat(TECHNICIAN.getMovePowerMultipliers(hasTechnician, hasOtherAbility, battle, power60)).isEqualTo(
             Technician.MULTIPLIER);
 
         Move tooStrong = new Earthquake();
-        assertThat(tooStrong.getPower()).isGreaterThan(Technician.BASE_POWER_THRESHOLD);
+        assertThat(tooStrong.getPower(
+            hasTechnician,
+            hasOtherAbility,
+            battle)).isGreaterThan(Technician.BASE_POWER_THRESHOLD);
         assertThat(TECHNICIAN.getMovePowerMultipliers(hasTechnician, hasOtherAbility, battle, tooStrong)).isEqualTo(1);
     }
 

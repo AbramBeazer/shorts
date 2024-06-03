@@ -52,13 +52,13 @@ public class BeatUp extends Move {
     }
 
     @Override
-    protected int getDefendingStat(Pokemon user, Pokemon target, Battle battle) {
+    protected double getDefendingStat(Pokemon user, Pokemon target, Battle battle) {
         //TODO: is this right? Are we still using the target's base DEF even though we use the attacker's calculated attack?
         return target.getPokedexEntry().getBaseDef();
     }
 
     @Override
-    public double getPower() {
+    public double getPower(Pokemon user, Pokemon target, Battle battle) {
         return 5 + (viableAttackers.get(currentAttackerIndex).getPokedexEntry().getBaseAtk() / 10d);
     }
 }

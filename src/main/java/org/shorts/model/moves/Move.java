@@ -133,7 +133,7 @@ public abstract class Move {
         return this.name;
     }
 
-    public double getPower() {
+    public double getPower(Pokemon user, Pokemon target, Battle battle) {
         return this.power;
     }
 
@@ -443,7 +443,7 @@ public abstract class Move {
     }
 
     protected double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
-        double basePower = this.getPower() * this.getPowerMultipliers(user, target, battle);
+        double basePower = this.getPower(user, target, battle) * this.getPowerMultipliers(user, target, battle);
         basePower *= user.getMovePowerMultipliers(target, battle, this);
         //TODO: Handle weather multipliers, terrain multipliers, mud sport, etc.
         //TODO: Investigate what, if anything, I need to do on the target's side of things.
@@ -635,7 +635,7 @@ public abstract class Move {
         return userMon != targetMon;
     }
 
-    protected int getAttackingStat(Pokemon attacker, Pokemon defender) {
+    protected double getAttackingStat(Pokemon attacker, Pokemon defender) {
         if (category == Category.PHYSICAL) {
             return attacker.calculateAttack();
         } else if (category == Category.SPECIAL) {
@@ -645,7 +645,7 @@ public abstract class Move {
         }
     }
 
-    protected int getDefendingStat(Pokemon attacker, Pokemon defender, Battle battle) {
+    protected double getDefendingStat(Pokemon attacker, Pokemon defender, Battle battle) {
         if (category == Category.PHYSICAL) {
             return defender.calculateDefense();
         } else if (category == Category.SPECIAL) {

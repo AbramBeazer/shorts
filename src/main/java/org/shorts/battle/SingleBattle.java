@@ -80,8 +80,8 @@ public class SingleBattle extends Battle {
             moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
             moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
         } else {
-            int speedOne = playerOne.getLead().calculateSpeed();
-            int speedTwo = playerTwo.getLead().calculateSpeed();
+            double speedOne = playerOne.getLead().calculateSpeed();
+            double speedTwo = playerTwo.getLead().calculateSpeed();
 
             if (speedOne > speedTwo) {
                 //playerOne.getLead() goes first

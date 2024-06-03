@@ -99,6 +99,7 @@ class FuryCutterTests {
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(2);
 
         assertThat(furyCutter.calculateMovePower(user, target, battle)).isEqualTo(
-            furyCutter.getPower() * furyCutter.getPowerMultipliers(user, target, battle) * Sharpness.SHARPNESS_BOOST);
+            furyCutter.getPower(user, target, battle) * furyCutter.getPowerMultipliers(user, target, battle)
+                * Sharpness.SHARPNESS_BOOST);
     }
 }
