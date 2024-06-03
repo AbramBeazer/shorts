@@ -1,11 +1,8 @@
 package org.shorts.model.moves;
 
 import org.shorts.battle.Battle;
-import org.shorts.model.abilities.IgnorableAbility;
-import org.shorts.model.abilities.StatPreservingAbility;
-import org.shorts.model.abilities.StatPreservingIgnorableAbility;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 public class AcidSpray extends Move implements BallBombMove {
@@ -16,10 +13,7 @@ public class AcidSpray extends Move implements BallBombMove {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if(){
-            //TODO: Output message about ability blocking stat drop.
-        }
-        else{
+        if (target.isDropPossible(StatEnum.SPDEF)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }
