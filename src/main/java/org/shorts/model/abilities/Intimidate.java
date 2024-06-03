@@ -1,6 +1,7 @@
 package org.shorts.model.abilities;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 
 import static org.shorts.model.abilities.Rattled.RATTLED;
@@ -16,7 +17,7 @@ public class Intimidate extends Ability {
 
     @Override
     public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
-        if (!(opponent.getAbility() instanceof StatPreservingAbility) && !opponent.getAbility().equals(OWN_TEMPO)) {
+        if (opponent.isDropPossible(StatEnum.ATK) && !opponent.getAbility().equals(OWN_TEMPO)) {
             opponent.changeAttack(-1);
             opponent.afterDrop(self, battle);
             if (opponent.getAbility() == RATTLED) {

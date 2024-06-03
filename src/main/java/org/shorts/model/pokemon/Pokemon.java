@@ -10,6 +10,7 @@ import org.shorts.battle.Weather;
 import org.shorts.model.Nature;
 import org.shorts.model.PokedexEntry;
 import org.shorts.model.Sex;
+import org.shorts.model.StatEnum;
 import org.shorts.model.abilities.Ability;
 import org.shorts.model.abilities.IgnorableAbility;
 import org.shorts.model.abilities.NullifyingAbility;
@@ -589,6 +590,12 @@ public class Pokemon {
     public void afterAttack(Pokemon opponent, Battle battle, Move move) {
         ability.afterAttack(this, opponent, battle, move);
         heldItem.afterAttack(this, opponent, battle, move);
+    }
+
+    public boolean isDropPossible(StatEnum stat) {
+        return ability.isDropPossible(
+            this.hasVolatileStatus(ABILITY_IGNORED), this.hasVolatileStatus(ABILITY_SUPPRESSED), stat) &&
+            heldItem.isDropPossible(stat);
     }
 
     public void afterDrop(Pokemon opponent, Battle battle) {
