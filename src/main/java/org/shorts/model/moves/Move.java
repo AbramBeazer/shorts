@@ -9,6 +9,7 @@ import org.shorts.battle.Trainer;
 import org.shorts.battle.Weather;
 import org.shorts.model.abilities.FullHealthHalfDamageAbility;
 import org.shorts.model.abilities.SuperEffectiveReducingAbility;
+import org.shorts.model.abilities.statpreserving.PreserveAccuracyIgnoreEvasionAbility;
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
 import org.shorts.model.moves.trapping.binding.Whirlpool;
@@ -257,7 +258,8 @@ public abstract class Move {
 
     protected double getAccuracyEvasionStageModifier(Pokemon user, Pokemon target) {
         int evasionStage = target.getStageEvasion();
-        if (evasionStage > 0 && target.hasVolatileStatus(IDENTIFIED)) {
+        if (evasionStage > 0 && (target.hasVolatileStatus(IDENTIFIED)
+            || user.getAbility() instanceof PreserveAccuracyIgnoreEvasionAbility)) {
             evasionStage = 0;
         }
         int combinedStage = Math.max(-6, Math.min(user.getStageAccuracy() - evasionStage, 6));

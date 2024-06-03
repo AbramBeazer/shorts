@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.shorts.Main;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.TooManyTypesException;
@@ -187,7 +188,7 @@ public class Trainer {
                         pokemon.setStatus(toxicSpikes == 2 ? Status.TOXIC_POISON : Status.POISON);
                     }
                 }
-                if (stickyWeb) {
+                if (stickyWeb && pokemon.isDropPossible(StatEnum.SPEED)) {
                     pokemon.changeSpeed(-1);
                 }
             }

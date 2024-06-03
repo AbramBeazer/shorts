@@ -1,6 +1,7 @@
 package org.shorts.model.moves.priority.plusOne;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
@@ -15,6 +16,13 @@ public class BabyDollEyes extends Move {
     @Override
     public int getPriority(Pokemon attacker, Pokemon defender, Battle battle) {
         return 1 + super.getPriority(attacker, defender, battle);
+    }
+
+    @Override
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (target.isDropPossible(StatEnum.ATK)) {
+            super.trySecondaryEffect(user, target, battle);
+        }
     }
 
     @Override

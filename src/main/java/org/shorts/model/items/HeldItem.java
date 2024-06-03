@@ -3,6 +3,7 @@ package org.shorts.model.items;
 import java.util.Objects;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 
@@ -34,6 +35,10 @@ public abstract class HeldItem {
     }
 
     public void afterAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    }
+
+    public boolean isDropPossible(StatEnum stat) {
+        return true;
     }
 
     public void afterDrop(Pokemon self, Pokemon opponent, Battle battle) {

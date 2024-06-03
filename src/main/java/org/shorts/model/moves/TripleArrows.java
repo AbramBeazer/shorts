@@ -1,6 +1,7 @@
 package org.shorts.model.moves;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
@@ -22,7 +23,8 @@ public class TripleArrows extends Move implements HighCritChanceMove {
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         if (user.getAbility() != SHEER_FORCE) {
-            if (RANDOM.nextInt(100) < DEFENSE_DROP_CHANCE * (user.getAbility().equals(SERENE_GRACE) ? 2 : 1)) {
+            if (target.isDropPossible(StatEnum.DEF) && RANDOM.nextInt(100) < DEFENSE_DROP_CHANCE * (user.getAbility()
+                .equals(SERENE_GRACE) ? 2 : 1)) {
                 target.changeDefense(-1);
             }
             if (RANDOM.nextInt(100) < FLINCH_CHANCE * (user.getAbility().equals(SERENE_GRACE) ? 2 : 1)
