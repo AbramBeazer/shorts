@@ -8,7 +8,10 @@ import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.SubstituteStatus;
 import org.shorts.model.types.Type;
+
+import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
 public class BeatUp extends Move {
 
@@ -33,13 +36,25 @@ public class BeatUp extends Move {
                 final int previousTargetHP = target.getCurrentHP();
 
                 int damage = calculateDamage(user, target, battle);
-                target.takeDamage(damage);
+                if (target.hasVolatileStatus(SUBSTITUTE)) {
+                    ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
+                } else {
+                    target.takeDamage(damage);
+                }
 
                 if (!user.hasFainted()) {
                     this.inflictRecoil(user, damage);
                 }
 
-                target.afterHit(user, battle, previousTargetHP, this);
+                if (!target.hasVolatileStatus(SUBSTITUTE)) {
+                    target.afterHit(user, battle, previousTargetHP, this);
+                }
+
+                if (target.hasVolatileStatus(SUBSTITUTE)
+                    && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
+                    target.removeVolatileStatus(SUBSTITUTE);
+                }
+
                 currentAttackerIndex++;
             }
             viableAttackers.clear();

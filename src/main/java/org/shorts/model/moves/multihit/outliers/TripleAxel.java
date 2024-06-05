@@ -4,10 +4,12 @@ import org.shorts.battle.Battle;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.SubstituteStatus;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.SkillLink.SKILL_LINK;
 import static org.shorts.model.items.LoadedDice.LOADED_DICE;
+import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
 public class TripleAxel extends Move {
 
@@ -30,14 +32,22 @@ public class TripleAxel extends Move {
 
                 hitNum++;
                 int damage = calculateDamage(user, target, battle);
-                target.takeDamage(damage);
-
+                if (target.hasVolatileStatus(SUBSTITUTE)) { //TODO: Handle moves and abilities that ignore substitute.
+                    ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
+                } else {
+                    target.takeDamage(damage);
+                }
                 if (!user.hasFainted()) {
                     this.inflictRecoil(user, damage);
                 }
 
-                target.afterHit(user, battle, previousTargetHP, this);
-
+                if (!target.hasVolatileStatus(SUBSTITUTE)) {
+                    target.afterHit(user, battle, previousTargetHP, this);
+                }
+                if (target.hasVolatileStatus(SUBSTITUTE)
+                    && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
+                    target.removeVolatileStatus(SUBSTITUTE);
+                }
                 if (!skipRollToHit && !rollToHit(user, target, battle)) {
                     break;
                 }
