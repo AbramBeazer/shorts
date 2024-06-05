@@ -569,7 +569,10 @@ public class Pokemon {
 
     public void afterEntry(Pokemon opponent, Battle battle) {
         setTurnsInBattle(0);
-        ability.afterEntry(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterEntry(this, opponent, battle);
+        }
         heldItem.afterEntry(this, opponent, battle);
     }
 
@@ -580,7 +583,13 @@ public class Pokemon {
         } else {
             helpingHand = 1;
         }
-        return ability.getMovePowerMultipliers(this, opponent, battle, move) * heldItem.getMovePowerMultipliers(
+        final double abilityMultiplier = (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) ? ability.getMovePowerMultipliers(
+            this,
+            opponent,
+            battle,
+            move) : 1;
+        return abilityMultiplier * heldItem.getMovePowerMultipliers(
             this,
             opponent,
             battle,
@@ -588,7 +597,9 @@ public class Pokemon {
     }
 
     public double beforeAttack(Pokemon opponent, Battle battle, Move move) {
-        final double abilityMultiplier = ability.beforeAttack(this, opponent, battle, move);
+        final double abilityMultiplier = (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility)
+            ? ability.beforeAttack(this, opponent, battle, move) : 1;
         if (abilityMultiplier == 0) {
             return 0;
         } else {
@@ -598,24 +609,37 @@ public class Pokemon {
     }
 
     public void afterAttack(Pokemon opponent, Battle battle, Move move) {
-        ability.afterAttack(this, opponent, battle, move);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterAttack(this, opponent, battle, move);
+        }
         heldItem.afterAttack(this, opponent, battle, move);
     }
 
     public boolean isDropPossible(StatEnum stat) {
-        return ability.isDropPossible(
-            this.hasVolatileStatus(ABILITY_IGNORED), this.hasVolatileStatus(ABILITY_SUPPRESSED), stat) &&
-            heldItem.isDropPossible(stat);
+        if (!(this.getAbility() instanceof IgnorableAbility && this.hasVolatileStatus(ABILITY_IGNORED))
+            && (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility)) {
+            return ability.isDropPossible(stat) &&
+                heldItem.isDropPossible(stat);
+        } else {
+            return heldItem.isDropPossible(stat);
+        }
     }
 
     public void afterDrop(Pokemon opponent, Battle battle) {
-        ability.afterDrop(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterDrop(this, opponent, battle);
+        }
         heldItem.afterDrop(this, opponent, battle);
     }
 
     public double beforeHit(Pokemon opponent, Battle battle, Move move) {
         double abilityMultiplier = 1;
-        if (!(ability instanceof IgnorableAbility && opponent.getAbility() instanceof NullifyingAbility)) {
+        if (!(ability instanceof IgnorableAbility && opponent.getAbility() instanceof NullifyingAbility) && (
+            !this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+                || this.getAbility() instanceof UnsuppressableAbility)) {
             abilityMultiplier *= ability.beforeHit(this, opponent, battle, move);
         }
         if (abilityMultiplier == 0) {
@@ -628,33 +652,51 @@ public class Pokemon {
     }
 
     public void afterHit(Pokemon opponent, Battle battle, int previousHP, Move move) {
-        ability.afterHit(this, opponent, battle, previousHP, move);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterHit(this, opponent, battle, previousHP, move);
+        }
         heldItem.afterHit(this, opponent, battle, previousHP, move);
     }
 
     public void afterStatus(Pokemon opponent, Battle battle) {
         //TODO: HeldItem is first here because Rawst Berry will activate before Water Veil. Is this how it works for all abilities/items?
         heldItem.afterStatus(this, opponent, battle);
-        ability.afterStatus(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterStatus(this, opponent, battle);
+        }
     }
 
     public void beforeTurn(Pokemon opponent, Battle battle) {
-        ability.beforeTurn(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.beforeTurn(this, opponent, battle);
+        }
         heldItem.beforeTurn(this, opponent, battle);
     }
 
     public void afterTurn(Pokemon opponent, Battle battle) {
-        ability.afterTurn(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterTurn(this, opponent, battle);
+        }
         heldItem.afterTurn(this, opponent, battle);
     }
 
     public void afterFaint(Pokemon opponent, Battle battle) {
-        ability.afterFaint(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterFaint(this, opponent, battle);
+        }
         heldItem.afterFaint(this, opponent, battle);
     }
 
     public void afterKO(Pokemon opponent, Battle battle) {
-        ability.afterKO(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterKO(this, opponent, battle);
+        }
         heldItem.afterKO(this, opponent, battle);
     }
 

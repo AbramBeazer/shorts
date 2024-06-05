@@ -9,15 +9,6 @@ public class StatPreservingIgnorableAbility extends StatPreservingAbility implem
         super(name, stat);
     }
 
-    @Override
-    public boolean isDropPossible(boolean ignored, boolean suppressed, StatEnum stat) {
-        if (ignored) {
-            return true;
-        } else {
-            return super.isDropPossible(ignored, suppressed, stat);
-        }
-    }
-
     public static final StatPreservingIgnorableAbility CLEAR_BODY = new StatPreservingIgnorableAbility(
         "Clear Body",
         null);

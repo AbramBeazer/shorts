@@ -261,7 +261,8 @@ public abstract class Move {
     protected double getAccuracyEvasionStageModifier(Pokemon user, Pokemon target) {
         int evasionStage = target.getStageEvasion();
         if (evasionStage > 0 && (target.hasVolatileStatus(IDENTIFIED)
-            || user.getAbility() instanceof PreserveAccuracyIgnoreEvasionAbility)) {
+            || (user.getAbility() instanceof PreserveAccuracyIgnoreEvasionAbility && !user.hasVolatileStatus(
+            ABILITY_SUPPRESSED)))) {
             evasionStage = 0;
         }
         int combinedStage = Math.max(-6, Math.min(user.getStageAccuracy() - evasionStage, 6));

@@ -12,4 +12,5 @@ public class PreserveAccuracyIgnoreEvasionAbility extends StatPreservingIgnorabl
         "Keen Eye");
     public static final PreserveAccuracyIgnoreEvasionAbility ILLUMINATE = new PreserveAccuracyIgnoreEvasionAbility(
         "Illuminate");
+
 }

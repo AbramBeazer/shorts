@@ -13,10 +13,8 @@ public class StatPreservingAbility extends Ability {
     }
 
     @Override
-    public boolean isDropPossible(boolean ignored, boolean suppressed, StatEnum stat) {
-        if (suppressed) {
-            return true;
-        } else if (this.stat == null) {
+    public boolean isDropPossible(StatEnum stat) {
+        if (this.stat == null) {
             return false;
         } else {
             return this.stat != stat;

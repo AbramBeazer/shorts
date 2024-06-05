@@ -37,7 +37,7 @@ public abstract class Ability {
     public void afterAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
     }
 
-    public boolean isDropPossible(boolean ignored, boolean suppressed, StatEnum stat) {
+    public boolean isDropPossible(StatEnum stat) {
         return true;
     }
 
