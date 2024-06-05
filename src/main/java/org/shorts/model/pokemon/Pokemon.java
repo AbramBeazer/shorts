@@ -14,6 +14,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.abilities.Ability;
 import org.shorts.model.abilities.IgnorableAbility;
 import org.shorts.model.abilities.NullifyingAbility;
+import org.shorts.model.abilities.UnsuppressableAbility;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.NoItem;
 import org.shorts.model.moves.Move;
@@ -649,7 +650,10 @@ public class Pokemon {
     }
 
     public void beforeSwitchOut(Pokemon opponent, Battle battle) {
-        ability.beforeSwitchOut(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.beforeSwitchOut(this, opponent, battle);
+        }
         heldItem.beforeSwitchOut(this, opponent, battle);
     }
 }
