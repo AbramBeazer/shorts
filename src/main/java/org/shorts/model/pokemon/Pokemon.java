@@ -60,9 +60,9 @@ public class Pokemon {
     private Ability ability;
     private Nature nature;
     @SuppressWarnings("checkstyle:MemberName")
-    private int[] EVs;
+    private int[] ev;
     @SuppressWarnings("checkstyle:MemberName")
-    private int[] IVs = { 31, 31, 31, 31, 31, 31 };
+    private int[] iv = { 31, 31, 31, 31, 31, 31 };
 
     private Move[] moves = new Move[4];
     private Move lastMoveUsed;
@@ -111,7 +111,7 @@ public class Pokemon {
         this.speciesName = pokedexEntry.getSpeciesName();
         this.types = pokedexEntry.getTypes();
         this.happiness = Byte.MAX_VALUE;
-        this.EVs = effortValues;
+        this.ev = effortValues;
 
         this.ability = pokedexEntry.getAbilities().stream().findFirst().orElse(null);
         this.level = Math.max(1, Math.min(100, level));
@@ -120,24 +120,24 @@ public class Pokemon {
             this.maxHP = 1;
         } else {
             this.maxHP =
-                (((2 * pokedexEntry.getBaseHP() + IVs[HP.ordinal()] + (EVs[HP.ordinal()] / 4)) * level) / 100) + level
+                (((2 * pokedexEntry.getBaseHP() + iv[HP.ordinal()] + (ev[HP.ordinal()] / 4)) * level) / 100) + level
                     + 10;
         }
 
         this.attack =
-            ((((2 * pokedexEntry.getBaseAtk() + IVs[ATK.ordinal()] + (EVs[ATK.ordinal()] / 4) * level) / 100) + 5)
+            ((((2 * pokedexEntry.getBaseAtk() + iv[ATK.ordinal()] + (ev[ATK.ordinal()] / 4) * level) / 100) + 5)
                 * nature.getMultiplier(ATK)) / 100;
         this.defense =
-            ((((2 * pokedexEntry.getBaseDef() + IVs[DEF.ordinal()] + (EVs[DEF.ordinal()] / 4) * level) / 100) + 5)
+            ((((2 * pokedexEntry.getBaseDef() + iv[DEF.ordinal()] + (ev[DEF.ordinal()] / 4) * level) / 100) + 5)
                 * nature.getMultiplier(DEF)) / 100;
         this.specialAttack =
-            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPATK.ordinal()] + (EVs[SPATK.ordinal()] / 4) * level) / 100) + 5)
+            ((((2 * pokedexEntry.getBaseAtk() + iv[SPATK.ordinal()] + (ev[SPATK.ordinal()] / 4) * level) / 100) + 5)
                 * nature.getMultiplier(SPATK)) / 100;
         this.specialDefense =
-            ((((2 * pokedexEntry.getBaseDef() + IVs[SPDEF.ordinal()] + (EVs[SPDEF.ordinal()] / 4) * level) / 100) + 5)
+            ((((2 * pokedexEntry.getBaseDef() + iv[SPDEF.ordinal()] + (ev[SPDEF.ordinal()] / 4) * level) / 100) + 5)
                 * nature.getMultiplier(SPDEF)) / 100;
         this.speed =
-            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPEED.ordinal()] + (EVs[SPEED.ordinal()] / 4) * level) / 100) + 5)
+            ((((2 * pokedexEntry.getBaseAtk() + iv[SPEED.ordinal()] + (ev[SPEED.ordinal()] / 4) * level) / 100) + 5)
                 * nature.getMultiplier(SPEED)) / 100;
     }
 
@@ -620,8 +620,7 @@ public class Pokemon {
         if (!(this.getAbility() instanceof IgnorableAbility && this.hasVolatileStatus(ABILITY_IGNORED))
             && (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
             || this.getAbility() instanceof UnsuppressableAbility)) {
-            return ability.isDropPossible(stat) &&
-                heldItem.isDropPossible(stat);
+            return ability.isDropPossible(stat) && heldItem.isDropPossible(stat);
         } else {
             return heldItem.isDropPossible(stat);
         }
