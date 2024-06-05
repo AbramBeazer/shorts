@@ -6,10 +6,10 @@ import org.shorts.model.status.VolatileStatusType;
 
 import static org.shorts.model.abilities.Ripen.RIPEN;
 
-public class OranBerry extends Berry {
+public class SitrusBerry extends Berry {
 
-    private OranBerry() {
-        super("Oran");
+    private SitrusBerry() {
+        super("Sitrus");
     }
 
     @Override
@@ -22,6 +22,6 @@ public class OranBerry extends Berry {
 
     @Override
     public void doEffect(Pokemon user) {
-        user.heal(10 * (user.getAbility() == RIPEN ? 2 : 1));
+        user.heal(user.getMaxHP() / (user.getAbility() == RIPEN ? 2 : 4));
     }
 }

@@ -27,13 +27,16 @@ public class BugBite extends Move {
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         HeldItem originalItem = user.getHeldItem();
+        HeldItem originalConsumedItem = user.getConsumedItem();
+
         Berry berry = (Berry) target.getHeldItem();
         target.setHeldItem(NO_ITEM);
         System.out.println(user.getNickname() + " stole " + target.getNickname() + "'s " + berry.getName() + "!");
-        berry.onEat(user, battle);
+
+        berry.tryEatingBerry(user, battle);
 
         //This is necessary because eating a berry sets the user's item to NO_ITEM.
         user.setHeldItem(originalItem);
-        user.setConsumedItem(NO_ITEM);
+        user.setConsumedItem(originalConsumedItem);
     }
 }
