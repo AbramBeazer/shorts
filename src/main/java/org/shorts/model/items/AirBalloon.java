@@ -13,9 +13,9 @@ public class AirBalloon extends HeldItem {
     public static final AirBalloon AIR_BALLOON = new AirBalloon();
 
     @Override
-    public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
+    public void afterHit(Pokemon user, Pokemon opponent, Battle battle, int previousHP, Move move) {
         //TODO: This should activate if the holder or its substitute is hit with a damaging move.
-        self.setHeldItem(NoItem.NO_ITEM);
-        System.out.println(self.getNickname() + "'s Air Balloon popped!");
+        user.setHeldItem(NoItem.NO_ITEM);
+        System.out.println(user.getNickname() + "'s Air Balloon popped!");
     }
 }

@@ -48,7 +48,7 @@ public abstract class HeldItem {
         return 1;
     }
 
-    public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
+    public void afterHit(Pokemon user, Pokemon opponent, Battle battle, int previousHP, Move move) {
     }
 
     public void afterStatus(Pokemon self, Pokemon opponent, Battle battle) {
@@ -58,7 +58,7 @@ public abstract class HeldItem {
 
     }
 
-    public void afterTurn(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterTurn(Pokemon user, Pokemon opponent, Battle battle) {
     }
 
     public void afterFaint(Pokemon self, Pokemon opponent, Battle battle) {
