@@ -10,10 +10,10 @@ import org.shorts.model.types.Type;
 import static org.shorts.model.abilities.StickyHold.STICKY_HOLD;
 import static org.shorts.model.items.NoItem.NO_ITEM;
 
-public class BugBite extends Move {
+public class Pluck extends Move {
 
-    public BugBite() {
-        super("Bug Bite", 60, 100, Type.BUG, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 32, true, 100);
+    public Pluck() {
+        super("Pluck", 60, 100, Type.FLYING, Category.PHYSICAL, Range.SINGLE_ANY, 32, true, 100);
     }
 
     @Override
