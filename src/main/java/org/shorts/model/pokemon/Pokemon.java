@@ -87,7 +87,7 @@ public class Pokemon {
     private Status status = Status.NONE;
     private final Map<VolatileStatusType, VolatileStatus> volatileStatuses = new HashMap<>();
     private HeldItem heldItem = NoItem.NO_ITEM;
-    private HeldItem consumedItem;
+    private HeldItem consumedItem = NoItem.NO_ITEM;
     private byte happiness;
     private int turnsInBattle;
 
