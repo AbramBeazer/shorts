@@ -5,14 +5,21 @@ import java.util.Objects;
 import org.shorts.battle.Battle;
 import org.shorts.model.StatEnum;
 import org.shorts.model.moves.Move;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 
 public abstract class Ability {
 
     private String name;
+    private Range range;
 
     protected Ability(String name) {
+        this(name, Range.SELF);
+    }
+
+    protected Ability(String name, Range range) {
         this.name = name;
+        this.range = range;
     }
 
     public String getName() {
@@ -23,7 +30,7 @@ public abstract class Ability {
         this.name = name;
     }
 
-    public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterEntry(Pokemon self, Battle battle) {
     }
 
     public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
@@ -71,7 +78,11 @@ public abstract class Ability {
 
     }
 
-    public void onGainAbility(Pokemon self) {
+    public void onInitiate(Pokemon self) {
+
+    }
+
+    public void onGainAbility(Pokemon self, Battle battle) {
 
     }
 

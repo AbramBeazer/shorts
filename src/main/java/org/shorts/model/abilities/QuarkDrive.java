@@ -1,12 +1,11 @@
 package org.shorts.model.abilities;
 
-public class QuarkDrive extends Ability {
+public class QuarkDrive extends Ability implements UnsuppressableAbility {
 
-    private QuarkDrive() {
+    public QuarkDrive() {
         super("Quark Drive");
     }
 
-    public static final QuarkDrive QUARK_DRIVE = new QuarkDrive();
     //TODO: Implement
 
 }

@@ -98,7 +98,7 @@ public class Pokemon {
         this.speciesName = speciesName;
         this.types = types;
         this.ability = ability;
-        this.ability.onGainAbility(this);
+        this.ability.onInitiate(this);
     }
 
     public Pokemon(int currentHP, int maxHP, Ability ability) {
@@ -330,6 +330,25 @@ public class Pokemon {
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    public double getStatApplyStage(StatEnum stat) {
+        switch (stat) {
+            case HP:
+                return this.getCurrentHP();
+            case ATK:
+                return this.attack * getStageMultiplier(this.stageAttack);
+            case DEF:
+                return this.defense * getStageMultiplier(this.stageDefense);
+            case SPATK:
+                return this.specialAttack * getStageMultiplier(this.stageSpecialAttack);
+            case SPDEF:
+                return this.specialDefense * getStageMultiplier(this.stageSpecialDefense);
+            case SPEED:
+                return this.speed * getStageMultiplier(this.stageSpeed);
+            default:
+                throw new IllegalArgumentException("This method is not for accuracy or evasion");
+        }
     }
 
     private double getStageMultiplier(int stage) {
@@ -570,9 +589,10 @@ public class Pokemon {
 
     public void afterEntry(Pokemon opponent, Battle battle) {
         setTurnsInBattle(0);
+        //TODO: If Neutralizing Gas is active, give this mon the AbilitySuppressed volatile status.
         if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
             || this.getAbility() instanceof UnsuppressableAbility) {
-            ability.afterEntry(this, opponent, battle);
+            ability.afterEntry(this, battle);
         }
         heldItem.afterEntry(this, opponent, battle);
     }

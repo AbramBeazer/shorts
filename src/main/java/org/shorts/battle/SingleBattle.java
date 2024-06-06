@@ -121,11 +121,11 @@ public class SingleBattle extends Battle {
 
         //TODO: Neutralizing Gas should stop this from happening, right?
         if (choiceOne > 4) {
-            playerOne.getLead().getAbility().afterEntry(playerOne.getLead(), playerTwo.getLead(), this);
+            playerOne.getLead().getAbility().afterEntry(playerOne.getLead(), this);
         }
 
         if (choiceTwo > 4) {
-            playerTwo.getLead().getAbility().afterEntry(playerTwo.getLead(), playerOne.getLead(), this);
+            playerTwo.getLead().getAbility().afterEntry(playerTwo.getLead(), this);
         }
     }
 

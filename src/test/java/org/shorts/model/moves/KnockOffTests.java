@@ -175,14 +175,14 @@ class KnockOffTests {
     @Test
     void testBoosterEnergyWithAbilitiesQuarkDriveAndProtosynthesis() {
         final Pokemon mon = getDummyPokemon();
-        mon.setAbility(Protosynthesis.PROTOSYNTHESIS);
+        mon.setAbility(new Protosynthesis());
         final BoosterEnergy item = BoosterEnergy.BOOSTER_ENERGY;
 
         testPersonalItemCannotBeKnockedOffButOtherItemsCan(mon, item);
         testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(mon, item);
         testOthersCanKnockOffPokemonSpecificItems(item);
 
-        mon.setAbility(QuarkDrive.QUARK_DRIVE);
+        mon.setAbility(new QuarkDrive());
 
         testPersonalItemCannotBeKnockedOffButOtherItemsCan(mon, item);
         testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(mon, item);

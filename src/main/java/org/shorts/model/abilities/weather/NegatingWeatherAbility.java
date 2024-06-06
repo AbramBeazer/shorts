@@ -11,7 +11,7 @@ public class NegatingWeatherAbility extends Ability {
     }
 
     @Override
-    public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterEntry(Pokemon self, Battle battle) {
         battle.setWeatherSuppressed(true);
         System.out.println("The effects of weather disappeared.");
     }
