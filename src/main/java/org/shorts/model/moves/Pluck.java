@@ -1,6 +1,7 @@
 package org.shorts.model.moves;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.abilities.Pickup;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.berries.Berry;
 import org.shorts.model.pokemon.Pokemon;
@@ -38,5 +39,6 @@ public class Pluck extends Move {
         //This is necessary because eating a berry sets the user's item to NO_ITEM.
         user.setHeldItem(originalItem);
         user.setConsumedItem(originalConsumedItem);
+        Pickup.removeFromConsumedItems(user);
     }
 }

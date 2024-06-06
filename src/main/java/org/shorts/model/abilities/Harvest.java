@@ -24,6 +24,7 @@ public class Harvest extends Ability {
 
             self.setHeldItem(self.getConsumedItem());
             self.setConsumedItem(NO_ITEM);
+            Pickup.removeFromConsumedItems(self);
         }
     }
 }

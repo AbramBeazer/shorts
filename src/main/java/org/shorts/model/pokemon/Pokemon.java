@@ -14,6 +14,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.abilities.Ability;
 import org.shorts.model.abilities.IgnorableAbility;
 import org.shorts.model.abilities.NullifyingAbility;
+import org.shorts.model.abilities.Pickup;
 import org.shorts.model.abilities.UnsuppressableAbility;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.NoItem;
@@ -689,6 +690,8 @@ public class Pokemon {
             ability.afterFaint(this, opponent, battle);
         }
         heldItem.afterFaint(this, opponent, battle);
+
+        Pickup.removeFromConsumedItems(this);
     }
 
     public void afterKO(Pokemon opponent, Battle battle) {
@@ -705,5 +708,7 @@ public class Pokemon {
             ability.beforeSwitchOut(this, opponent, battle);
         }
         heldItem.beforeSwitchOut(this, opponent, battle);
+
+        Pickup.removeFromConsumedItems(this);
     }
 }

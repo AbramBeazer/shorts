@@ -3,6 +3,7 @@ package org.shorts.model.items.berries;
 import org.shorts.battle.Battle;
 import org.shorts.model.abilities.CudChew;
 import org.shorts.model.abilities.OpponentCantEatBerriesAbility;
+import org.shorts.model.abilities.Pickup;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.pokemon.Pokemon;
 
@@ -56,6 +57,7 @@ public abstract class Berry extends HeldItem {
         System.out.println(user.getNickname() + " ate its " + this.getName());
         user.setHeldItem(NO_ITEM);
         user.setConsumedItem(this);
+        Pickup.addToConsumedItems(user);
 
         if (!user.hasVolatileStatus(ABILITY_SUPPRESSED)) {
             if (user.getAbility() == CHEEK_POUCH && !user.hasVolatileStatus(HEAL_BLOCKED)) {
