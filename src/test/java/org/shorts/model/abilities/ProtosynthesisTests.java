@@ -107,6 +107,16 @@ class ProtosynthesisTests {
     }
 
     @Test
+    void testMummyCannotReplaceProtosynthesis() {
+        assertThat(false).isTrue(); //TODO: Verify what should happen here.
+    }
+
+    @Test
+    void testWanderingSpiritCannotSwitchWithProtosynthesis() {
+        assertThat(false).isTrue(); //TODO: Verify what should happen here.
+    }
+
+    @Test
     void testOpponentThatCopiesAbilityWithImposterDoesNotActivateProtosynthesis() {
         //        opponent.setAbility(IMPOSTER);
         opponent.setHeldItem(BOOSTER_ENERGY);

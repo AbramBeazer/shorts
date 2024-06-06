@@ -271,11 +271,25 @@ public class SingleBattle extends Battle {
     }
 
     @Override
+    public void setWeatherSuppressed(boolean weatherSuppressed) {
+        super.setWeatherSuppressed(weatherSuppressed);
+        playerOne.getLead().onWeatherChange(this);
+        playerTwo.getLead().onWeatherChange(this);
+    }
+
+    @Override
     public void setWeather(Weather weather, int turns) {
         super.setWeather(weather, turns);
         if (!weatherSuppressed) {
             playerOne.getLead().onWeatherChange(this);
             playerTwo.getLead().onWeatherChange(this);
         }
+    }
+
+    @Override
+    public void setTerrain(Terrain terrain, int turns) {
+        super.setTerrain(terrain, turns);
+        playerOne.getLead().onTerrainChange(this);
+        playerTwo.getLead().onTerrainChange(this);
     }
 }

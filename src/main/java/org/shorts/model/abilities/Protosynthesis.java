@@ -24,12 +24,23 @@ public class Protosynthesis extends Ability implements UnsuppressableAbility {
     }
 
     @Override
+    public void beforeSwitchOut(Pokemon self, Pokemon opponent, Battle battle) {
+        boostedStat = null;
+        activatedBySun = false;
+    }
+
+    @Override
     public void afterEntry(Pokemon self, Battle battle) {
         checkActivation(self, battle);
     }
 
     @Override
     public void onGainAbility(Pokemon self, Battle battle) {
+        checkActivation(self, battle);
+    }
+
+    @Override
+    public void onWeatherChange(Pokemon self, Battle battle) {
         checkActivation(self, battle);
     }
 
@@ -40,12 +51,22 @@ public class Protosynthesis extends Ability implements UnsuppressableAbility {
         } else if (self.getHeldItem() == BOOSTER_ENERGY) {
             //TODO: Check if this interacts with effects that keep other Pokemon from using their item.
             activatedBySun = false;
+            boostedStat = null;
             grantStatBoost(self);
             self.setConsumedItem(self.getHeldItem());
             self.setHeldItem(NO_ITEM);
         }
     }
 
+    public StatEnum getBoostedStat() {
+        return boostedStat;
+    }
+
+    public boolean isActivatedBySun() {
+        return activatedBySun;
+    }
+
+    //TODO: Should we check which stat is highest every turn?
     protected void grantStatBoost(Pokemon user) {
         List<Double> values = new ArrayList<>();
 

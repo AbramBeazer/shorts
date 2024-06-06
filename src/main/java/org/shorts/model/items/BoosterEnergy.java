@@ -7,7 +7,4 @@ public class BoosterEnergy extends HeldItem {
     }
 
     public static final BoosterEnergy BOOSTER_ENERGY = new BoosterEnergy();
-
-    //TODO: Implement
-
 }
