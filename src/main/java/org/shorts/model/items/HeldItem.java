@@ -26,15 +26,15 @@ public abstract class HeldItem {
     public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
     }
 
-    public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public double getMovePowerMultipliers(Pokemon user, Pokemon opponent, Battle battle, Move move) {
         return 1;
     }
 
-    public double beforeAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public double beforeAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {
         return 1;
     }
 
-    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public void afterAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {
     }
 
     public boolean isDropPossible(StatEnum stat) {

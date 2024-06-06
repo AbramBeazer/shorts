@@ -16,10 +16,10 @@ public class LifeOrb extends HeldItem {
     public static final LifeOrb LIFE_ORB = new LifeOrb();
 
     @Override
-    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        if (!(self.hasFainted() || (move.getSecondaryEffectChance() > 0 && self.getAbility() == SHEER_FORCE)
-            || self.getAbility() == MAGIC_GUARD)) {
-            self.takeDamage(self.getMaxHP() / 10);
+    public void afterAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {
+        if (!(user.hasFainted() || (move.getSecondaryEffectChance() > 0 && user.getAbility() == SHEER_FORCE)
+            || user.getAbility() == MAGIC_GUARD)) {
+            user.takeDamage(user.getMaxHP() / 10);
         }
     }
 }
