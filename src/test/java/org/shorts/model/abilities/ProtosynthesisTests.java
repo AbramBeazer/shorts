@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummySingleBattle;
 import org.shorts.battle.Weather;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.items.BoosterEnergy.BOOSTER_ENERGY;
+import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 
 class ProtosynthesisTests {
@@ -24,34 +26,50 @@ class ProtosynthesisTests {
         user = getDummyPokemon();
         user.setAbility(protosynthesis);
         opponent = getDummyPokemon();
-        battle = new DummySingleBattle();
+        battle = new DummySingleBattle(user, opponent);
     }
 
     @Test
     void testActivatesInSun() {
-        assertThat(false).isTrue();
+        battle.setWeather(Weather.SUN, -1);
+
+        assertThat(protosynthesis.isActivatedBySun()).isTrue();
+        assertThat(protosynthesis.getBoostedStat()).isNotNull();
     }
 
     @Test
     void testActivatesInExtremeSun() {
-        assertThat(false).isTrue();
+        battle.setWeather(Weather.EXTREME_SUN, -1);
 
+        assertThat(protosynthesis.isActivatedBySun()).isTrue();
+        assertThat(protosynthesis.getBoostedStat()).isNotNull();
     }
 
     @Test
     void testDoesNotActivateWithoutBoosterEnergyInSuppressedWeather() {
-        assertThat(false).isTrue();
+        assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
 
+        battle.setWeatherSuppressed(true);
+        battle.setWeather(Weather.SUN, -1);
+
+        assertThat(protosynthesis.isActivatedBySun()).isFalse();
+        assertThat(protosynthesis.getBoostedStat()).isNull();
     }
 
     @Test
     void testDoesNotActivateWithoutBoosterEnergyInNoWeather() {
-        assertThat(false).isTrue();
+        assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
+        assertThat(battle.getWeather()).isEqualTo(Weather.NONE);
 
+        protosynthesis.checkActivation(user, battle);
+
+        assertThat(protosynthesis.isActivatedBySun()).isFalse();
+        assertThat(protosynthesis.getBoostedStat()).isNull();
     }
 
     @Test
     void testIgnoresNeutralizingGas() {
+
         assertThat(false).isTrue();
 
     }
@@ -122,6 +140,7 @@ class ProtosynthesisTests {
         opponent.setHeldItem(BOOSTER_ENERGY);
         battle.setWeather(Weather.SUN, -1);
 
+        //TODO: Implement
         assertThat(false).isTrue();
     }
 
@@ -130,29 +149,50 @@ class ProtosynthesisTests {
         //        opponent.setMoves(List.of(new TransformMove()));
         opponent.setHeldItem(BOOSTER_ENERGY);
         battle.setWeather(Weather.SUN, -1);
+        //TODO: Implement
 
         assertThat(false).isTrue();
     }
 
     @Test
     void testDoesNotActivateForHP() {
-
-        assertThat(false).isTrue();
+        assertThat(user.getCurrentHP()).isGreaterThan((int) user.getStatApplyStage(StatEnum.ATK));
+        protosynthesis.grantStatBoost(user);
+        assertThat(protosynthesis.getBoostedStat()).isNotEqualTo(StatEnum.HP);
     }
 
     @Test
     void testBoostsSpeedByFiftyPercent() {
-        assertThat(false).isTrue();
+        user.setSpeed(600);
+        protosynthesis.grantStatBoost(user);
+
+        assertThat(protosynthesis.getBoostedStat()).isEqualTo(StatEnum.SPEED);
+        assertThat(protosynthesis.onCalculateAttack(user)).isEqualTo(Protosynthesis.SPEED_MULTIPLIER);
+        assertThat(user.calculateSpeed()).isEqualTo(
+            user.getStatApplyStage(StatEnum.SPEED) * Protosynthesis.SPEED_MULTIPLIER);
     }
 
     @Test
     void testBoostsAttackingAndDefendingStatsByThirtyPercent() {
-        assertThat(false).isTrue();
+        user.setDefense(1000);
+        protosynthesis.grantStatBoost(user);
+
+        assertThat(protosynthesis.getBoostedStat()).isEqualTo(StatEnum.DEF);
+        assertThat(protosynthesis.onCalculateDefense(user)).isEqualTo(Protosynthesis.MULTIPLIER);
+        assertThat(user.calculateDefense()).isEqualTo(
+            user.getStatApplyStage(StatEnum.DEF) * Protosynthesis.MULTIPLIER);
     }
 
     @Test
     void testFactorsInStatChanges() {
-        assertThat(false).isTrue();
+        user.setDefense(300);
+        user.setStageSpeed(6);
+        protosynthesis.grantStatBoost(user);
+
+        assertThat(protosynthesis.getBoostedStat()).isEqualTo(StatEnum.SPEED);
+        assertThat(protosynthesis.onCalculateAttack(user)).isEqualTo(Protosynthesis.SPEED_MULTIPLIER);
+        assertThat(user.calculateSpeed()).isEqualTo(
+            user.getStatApplyStage(StatEnum.SPEED) * Protosynthesis.SPEED_MULTIPLIER);
     }
 
     @Test

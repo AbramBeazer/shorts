@@ -1,13 +1,10 @@
 package org.shorts.model.items;
 
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.SingleBattle;
+import org.shorts.battle.DummySingleBattle;
 import org.shorts.battle.Terrain;
-import org.shorts.battle.Trainer;
 import org.shorts.battle.Weather;
 import org.shorts.model.abilities.Protosynthesis;
 import org.shorts.model.abilities.QuarkDrive;
@@ -29,7 +26,7 @@ class BoosterEnergyTests {
         user = getDummyPokemon();
         user.setHeldItem(BOOSTER_ENERGY);
         opponent = getDummyPokemon();
-        battle = new SingleBattle(new Trainer("Red", List.of(user)), new Trainer("Green", List.of(opponent)));
+        battle = new DummySingleBattle(user, opponent);
     }
 
     @Test
