@@ -1,19 +1,6 @@
 package org.shorts.model.status;
 
 import org.shorts.Main;
-import org.shorts.battle.Battle;
-import org.shorts.battle.Terrain;
-import org.shorts.battle.Trainer;
-import org.shorts.battle.Weather;
-import org.shorts.model.abilities.StatusImmuneAbility;
-import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.types.Type;
-
-import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
-import static org.shorts.model.types.Type.ELECTRIC;
-import static org.shorts.model.types.Type.FIRE;
-import static org.shorts.model.types.Type.ICE;
-import static org.shorts.model.types.Type.STEEL;
 
 public class Status extends AbstractStatus {
 
@@ -24,6 +11,7 @@ public class Status extends AbstractStatus {
         this.type = type;
     }
 
+    @Override
     public StatusType getType() {
         return type;
     }
@@ -44,34 +32,6 @@ public class Status extends AbstractStatus {
     public static final Status FREEZE = new Status(StatusType.FREEZE, -1);
     public static final Status POISON = new Status(StatusType.POISON, -1);
     public static final Status TOXIC_POISON = new Status(StatusType.TOXIC_POISON, -1);
-
-    @Override
-    public boolean isStatusPossible(Pokemon target, Battle battle) {
-        final Trainer trainer =
-            battle.getPlayerOne().getLead() == target ? battle.getPlayerOne() : battle.getPlayerTwo();
-        if (target.getStatus() != NONE || trainer.getSafeguardTurns() > 0 || (target.isGrounded()
-            && battle.getTerrain() == Terrain.MISTY) || (!target.hasVolatileStatus(ABILITY_IGNORED)
-            && target.getAbility() instanceof StatusImmuneAbility
-            && ((StatusImmuneAbility) target.getAbility()).getImmunities().contains(this.getType()))) {
-            return false;
-        }
-        switch (this.type) {
-            case TOXIC_POISON:
-            case POISON:
-                return !(target.getTypes().contains(Type.POISON) || target.getTypes().contains(STEEL));
-            case FREEZE:
-                return !target.getTypes().contains(ICE) && battle.getWeather() != Weather.SUN
-                    && battle.getWeather() != Weather.EXTREME_SUN;
-            case SLEEP:
-                return !(target.isGrounded() && battle.getTerrain() == Terrain.ELECTRIC);
-            case PARALYZE:
-                return !target.getTypes().contains(ELECTRIC);
-            case BURN:
-                return !target.getTypes().contains(FIRE);
-            default:
-                return true;
-        }
-    }
 
     @Override
     public boolean equals(Object obj) {

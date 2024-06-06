@@ -24,8 +24,8 @@ public class NullifyingAbility extends Ability {
     } //TODO: Not sure if this needs to be beforeAttack or onMovePowerCalc. As early as possible for the purposes of ability ignoring.
 
     @Override
-    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle) {
-        super.afterAttack(self, opponent, battle);
+    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+        super.afterAttack(self, opponent, battle, move);
         opponent.removeVolatileStatus(VolatileStatusType.ABILITY_IGNORED);
     }
 }

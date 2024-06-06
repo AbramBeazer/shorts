@@ -14,7 +14,7 @@ public class EffectSpore extends Ability implements PowderSporeEffect {
     }
 
     @Override
-    public double beforeHit(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
         if (move.isContact() && this.asPowderSporeEffectData().canActivate(opponent)) {
             final int chance = Main.RANDOM.nextInt(30);
             Status status; //9% chance of poison, 10% chance of paralyze, 11% chance of sleep
@@ -25,10 +25,9 @@ public class EffectSpore extends Ability implements PowderSporeEffect {
             } else {
                 status = Status.PARALYZE;
             }
-            if (status.isStatusPossible(opponent, battle)) {
+            if (status.getType().isStatusPossible(opponent, battle)) {
                 opponent.setStatus(status);
             }
         }
-        return 1;
     }
 }

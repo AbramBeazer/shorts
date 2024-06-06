@@ -7,10 +7,10 @@ import java.util.Set;
 import org.shorts.Main;
 import org.shorts.model.moves.MeFirst;
 import org.shorts.model.moves.Move;
-import org.shorts.model.moves.StatusMove;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 
+import static org.shorts.model.abilities.VictoryStar.VICTORY_STAR;
 import static org.shorts.model.items.AssaultVest.ASSAULT_VEST;
 import static org.shorts.model.status.VolatileStatusType.CHOICE_LOCKED;
 import static org.shorts.model.status.VolatileStatusType.DISABLED;
@@ -41,6 +41,9 @@ public class SingleBattle extends Battle {
 
     @Override
     public void takeTurns() throws Exception {
+        playerOne.getLead().setMovedThisTurn(false);
+        playerTwo.getLead().setMovedThisTurn(false);
+
         //take player input
         int choiceOne = pollPlayerInput(playerOne);
         int choiceTwo = pollPlayerInput(playerTwo);
@@ -57,37 +60,47 @@ public class SingleBattle extends Battle {
         }
 
         int priorityOne = moveOne.getPriority(playerOne.getLead(), playerTwo.getLead(), this);
+        int abilityPriorityBonusOne = moveOne.getAbilityPriorityBonus(playerOne.getLead());
         int priorityTwo = moveTwo.getPriority(playerTwo.getLead(), playerOne.getLead(), this);
+        int abilityPriorityBonusTwo = moveTwo.getAbilityPriorityBonus(playerTwo.getLead());
+
+        // TODO:
+        //  Dark-type Pokémon are now immune to opposing Pokémon's moves that gain priority due to Prankster, including moves called by moves that call other moves
+        //  (such as Assist and Nature Power) and excluding moves that are repeated as a result of Prankster-affected Instruct
+        //  or moves that occur earlier than their usual order due to Prankster-affected After You. Ally Dark-type Pokémon are still affected by the user's status moves.
+        //  Dark-type Pokémon can still bounce moves back with Magic Bounce or Magic Coat; moves that have increased priority due to Prankster which are reflected
+        //  by Magic Bounce or Magic Coat can affect Dark-type Pokémon, unless the Pokémon that bounced the move with Magic Coat also has Prankster.
+        //  Moves that target all Pokémon (except Perish Song and Rototiller, which cannot affect Dark-type opponents if boosted by Prankster) and moves that set traps are successful regardless of the presence of Dark-type Pokémon.
 
         //TODO: Should I have an "onCalcPriority" method in Pokémon, Ability, and HeldItem? -- I can override getPriority in individual moves, at least.
         if (priorityOne > priorityTwo) {
-            moveOne.doMove(playerOne, playerTwo, this);
-            moveTwo.doMove(playerTwo, playerOne, this);
+            moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
+            moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
         } else if (priorityTwo > priorityOne) {
-            moveTwo.doMove(playerTwo, playerOne, this);
-            moveOne.doMove(playerOne, playerTwo, this);
+            moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
+            moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
         } else {
-            int speedOne = playerOne.getLead().getSpeed();
-            int speedTwo = playerTwo.getLead().getSpeed();
+            double speedOne = playerOne.getLead().calculateSpeed();
+            double speedTwo = playerTwo.getLead().calculateSpeed();
 
             if (speedOne > speedTwo) {
-                //playerOne goes first
-                moveOne.doMove(playerOne, playerTwo, this);
-                moveTwo.doMove(playerTwo, playerOne, this);
+                //playerOne.getLead() goes first
+                moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
+                moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
             } else if (speedTwo > speedOne) {
-                //playerTwo goes first
-                moveTwo.doMove(playerTwo, playerOne, this);
-                moveOne.doMove(playerOne, playerTwo, this);
+                //playerTwo.getLead() goes first
+                moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
+                moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
             } else {
                 int rand = Main.RANDOM.nextInt(2);
                 if (rand == 0) {
-                    //playerOne goes first
-                    moveOne.doMove(playerOne, playerTwo, this);
-                    moveTwo.doMove(playerTwo, playerOne, this);
+                    //playerOne.getLead() goes first
+                    moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
+                    moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
                 } else {
-                    //playerTwo goes first
-                    moveTwo.doMove(playerTwo, playerOne, this);
-                    moveOne.doMove(playerOne, playerTwo, this);
+                    //playerTwo.getLead() goes first
+                    moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
+                    moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
                 }
             }
         }
@@ -95,15 +108,18 @@ public class SingleBattle extends Battle {
 
     private void handleSwitches(int choiceOne, int choiceTwo) {
         if (choiceOne > 4) {
+            playerOne.getLead().setLastMoveUsed(null);
             playerOne.switchPokemon(0, choiceOne);
             playerOne.applyEntryHazards();
         }
 
         if (choiceTwo > 4) {
+            playerTwo.getLead().setLastMoveUsed(null);
             playerTwo.switchPokemon(0, choiceTwo);
             playerTwo.applyEntryHazards();
         }
 
+        //TODO: Neutralizing Gas should stop this from happening, right?
         if (choiceOne > 4) {
             playerOne.getLead().getAbility().afterEntry(playerOne.getLead(), playerTwo.getLead(), this);
         }
@@ -125,10 +141,9 @@ public class SingleBattle extends Battle {
                 invalidMoves.add(move);
             }
 
-            if ((pokemon.getHeldItem() == ASSAULT_VEST && (move instanceof StatusMove && !(move instanceof MeFirst)))
-                || (pokemon.hasVolatileStatus(CHOICE_LOCKED) && !pokemon.getVolatileStatus(CHOICE_LOCKED)
-                .getMove()
-                .equals(move)) || move.getCurrentPP() <= 0) {
+            if ((pokemon.getHeldItem() == ASSAULT_VEST && (move.getCategory() == Move.Category.STATUS
+                && !(move instanceof MeFirst))) || (pokemon.hasVolatileStatus(CHOICE_LOCKED)
+                && !pokemon.getVolatileStatus(CHOICE_LOCKED).getMove().equals(move)) || move.getCurrentPP() <= 0) {
                 invalidMoves.add(move);
             }
         }
@@ -156,17 +171,28 @@ public class SingleBattle extends Battle {
 
         printTeam(trainer);
 
-        int choice = 0;
+        int choice;
+        boolean choiceValid;
         //Choice is invalid if that Pokémon has fainted or if the move has no PP.
         do {
             choice = System.in.read();
-        } while (choice <= 0 || choice > 9 || trainer.getTeam().get(choice - 4).hasFainted() || invalidMoves.contains(
-            pokemon.getMoves()[choice - 1]));
+            if (choice <= 0 || choice > 9) {
+                choiceValid = false;
+            } else if (choice <= 4 && invalidMoves.contains(pokemon.getMoves()[choice - 1])) {
+                choiceValid = false;
+            } else if (choice > 4 && (trainer.getTeam().get(choice - 4).hasFainted() || trainer.getLead()
+                .isTrapped(this))) {
+                choiceValid = false;
+            } else {
+                choiceValid = true;
+            }
+
+        } while (!choiceValid);
         return choice;
     }
 
     @Override
-    public void promptSwitch(Trainer trainer) {
+    public void promptSwitchCausedByUserMove(Trainer trainer) {
         try {
             if (trainer.hasAvailableSwitch()) {
                 printTeam(trainer);
@@ -193,8 +219,54 @@ public class SingleBattle extends Battle {
             Pokemon teammate = trainer.getTeam().get(i);
 
             String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().getType().name();
-            System.out.println((i + 4) + ")" + "\t(" + teammate.getSpeciesName() + "\t(" + teammate.getCurrentHP() + "/"
-                + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
+            System.out.println(
+                (i + 4) + ")" + "\t(" + teammate.getPokedexEntry().getSpeciesName() + "\t(" + teammate.getCurrentHP()
+                    + "/" + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
+        }
+    }
+
+    @Override
+    public Trainer getCorrespondingTrainer(Pokemon pokemon) {
+        if (this.playerOne.getLead() == pokemon) {
+            return playerOne;
+        } else {
+            return playerTwo;
+        }
+    }
+
+    @Override
+    public Trainer getOpposingTrainer(Trainer trainer) {
+        if (this.playerOne == trainer) {
+            return playerTwo;
+        } else {
+            return playerOne;
+        }
+    }
+
+    @Override
+    public Trainer getOpposingTrainer(Pokemon pokemon) {
+        if (this.playerOne.getLead() == pokemon) {
+            return playerTwo;
+        } else {
+            return playerOne;
+        }
+    }
+
+    @Override
+    public Pokemon getOpposingLead(Pokemon pokemon) {
+        if (this.playerOne.getLead() == pokemon) {
+            return playerTwo.getLead();
+        } else {
+            return playerOne.getLead();
+        }
+    }
+
+    @Override
+    public int getNumberOfActivePokemonWithVictoryStar(Trainer trainer) {
+        if (trainer.getLead().getAbility() == VICTORY_STAR) {
+            return 1;
+        } else {
+            return 0;
         }
     }
 }

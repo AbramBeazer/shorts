@@ -1,9 +1,10 @@
 package org.shorts.model.items;
 
-import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 
 public class AssaultVest extends HeldItem {
+
+    private static final double ASSAULT_VEST_MULTIPLIER = 1.5;
 
     private AssaultVest() {
         super("Assault Vest");
@@ -11,11 +12,8 @@ public class AssaultVest extends HeldItem {
 
     public static final AssaultVest ASSAULT_VEST = new AssaultVest();
 
-    public void onGainItem(Pokemon self) {
-        self.setSpecialDefense(self.getSpecialDefense() * 3 / 2);
-    }
-
-    public void onLoseItem(Pokemon self, Pokemon opponent, Battle battle) {
-        self.setSpecialDefense(self.getSpecialDefense() * 2 / 3);
+    @Override
+    public double onCalculateSpecialDefense(Pokemon self) {
+        return ASSAULT_VEST_MULTIPLIER;
     }
 }

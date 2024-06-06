@@ -3,6 +3,7 @@ package org.shorts.model.abilities;
 import java.util.Objects;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 
@@ -25,7 +26,7 @@ public abstract class Ability {
     public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
     }
 
-    public double onMovePowerCalc(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
         return 1;
     }
 
@@ -33,7 +34,11 @@ public abstract class Ability {
         return 1;
     }
 
-    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    }
+
+    public boolean isDropPossible(StatEnum stat) {
+        return true;
     }
 
     public void afterDrop(Pokemon self, Pokemon opponent, Battle battle) {
@@ -72,6 +77,26 @@ public abstract class Ability {
 
     public void onLoseAbility(Pokemon self, Pokemon opponent, Battle battle) {
 
+    }
+
+    public double onCalculateAttack(Pokemon self) {
+        return 1;
+    }
+
+    public double onCalculateDefense(Pokemon self) {
+        return 1;
+    }
+
+    public double onCalculateSpecialAttack(Pokemon self) {
+        return 1;
+    }
+
+    public double onCalculateSpecialDefense(Pokemon self) {
+        return 1;
+    }
+
+    public double onCalculateSpeed(Pokemon self) {
+        return 1;
     }
 
     @Override

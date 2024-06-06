@@ -1,35 +1,32 @@
 package org.shorts.model.moves.recoil;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.shorts.model.moves.PhysicalMove;
+import org.shorts.MathUtils;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.TooManyTypesException;
 import org.shorts.model.types.Type;
 
-public class Struggle extends PhysicalMove implements RecoilAttack {
+public class Struggle extends RecoilAttack {
 
     private Struggle() {
-        super("Struggle", 50, -1, Type.NORMAL, 1, true, 100);
+        super("Struggle", 50, -1, Type.NORMAL, Category.PHYSICAL, Range.SINGLE_RANDOM_OPPONENT, 1, true, 0, 0.25);
     }
 
     @Override
-    protected double getTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
-        Set<Type> modifiedDefenderTypes = defenderTypes.stream()
-            .filter(type -> !type.equals(Type.GHOST))
-            .collect(Collectors.toSet());
-        return super.getTypeMultiplier(modifiedDefenderTypes);
+    protected double getSTABMultiplier(Set<Type> attackerTypes) throws TooManyTypesException {
+        return 1;
+    }
+
+    @Override
+    protected double getBaseTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
+        return 1;
     }
 
     @Override
     public void inflictRecoil(Pokemon user, int damageDealt) {
-        RecoilAttack.super.inflictRecoil(user, user.getMaxHP());
-    }
-
-    @Override
-    public double getRecoilPercentage() {
-        return 0.25;
+        user.takeDamage((int) MathUtils.roundHalfUp(user.getMaxHP() * this.recoilPercentage));
     }
 
     public static final Struggle STRUGGLE = new Struggle();

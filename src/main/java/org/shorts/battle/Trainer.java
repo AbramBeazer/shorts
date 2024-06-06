@@ -3,6 +3,8 @@ package org.shorts.battle;
 import java.util.List;
 import java.util.Objects;
 
+import org.shorts.Main;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.TooManyTypesException;
@@ -23,6 +25,11 @@ public class Trainer {
 
     private boolean stickyWeb = false;
     private int safeguardTurns = 0;
+    private int reflectTurns = 0;
+    private int lightScreenTurns = 0;
+    private int auroraVeilTurns = 0;
+    private int luckyChantTurns = 0;
+    private int mistTurns = 0;
 
     public Trainer(String name, List<Pokemon> team) {
         this.name = Objects.requireNonNull(name, "Come on, tell the professor your name!");
@@ -34,12 +41,15 @@ public class Trainer {
         }
     }
 
-    public boolean isRocks() {
+    public boolean hasRocks() {
         return rocks;
     }
 
-    public void setRocks(boolean rocks) {
-        this.rocks = rocks;
+    public void addRocks() {
+        if (!rocks) {
+            rocks = true;
+            //TODO: Output stealth-rock-laying message
+        }
     }
 
     public int getSpikes() {
@@ -58,12 +68,15 @@ public class Trainer {
         this.toxicSpikes = toxicSpikes;
     }
 
-    public boolean isStickyWeb() {
+    public boolean hasStickyWeb() {
         return stickyWeb;
     }
 
-    public void setStickyWeb(boolean stickyWeb) {
-        this.stickyWeb = stickyWeb;
+    public void addStickyWeb() {
+        if (!stickyWeb) {
+            this.stickyWeb = true;
+            //TODO: Output sticky web message
+        }
     }
 
     public int getSafeguardTurns() {
@@ -72,6 +85,46 @@ public class Trainer {
 
     public void setSafeguardTurns(int safeguardTurns) {
         this.safeguardTurns = safeguardTurns;
+    }
+
+    public int getReflectTurns() {
+        return reflectTurns;
+    }
+
+    public void setReflectTurns(int reflectTurns) {
+        this.reflectTurns = reflectTurns;
+    }
+
+    public int getLightScreenTurns() {
+        return lightScreenTurns;
+    }
+
+    public void setLightScreenTurns(int lightScreenTurns) {
+        this.lightScreenTurns = lightScreenTurns;
+    }
+
+    public int getAuroraVeilTurns() {
+        return auroraVeilTurns;
+    }
+
+    public void setAuroraVeilTurns(int auroraVeilTurns) {
+        this.auroraVeilTurns = auroraVeilTurns;
+    }
+
+    public int getLuckyChantTurns() {
+        return luckyChantTurns;
+    }
+
+    public void setLuckyChantTurns(int luckyChantTurns) {
+        this.luckyChantTurns = luckyChantTurns;
+    }
+
+    public int getMistTurns() {
+        return mistTurns;
+    }
+
+    public void setMistTurns(int mistTurns) {
+        this.mistTurns = mistTurns;
     }
 
     public String getName() {
@@ -102,6 +155,18 @@ public class Trainer {
         }
     }
 
+    public void forceRandomSwitch(Pokemon pokemon) {
+        //Why pass in a Pokemon instead of just 0? I'm thinking ahead to if I ever implement Double or Triple battles.
+        if (hasAvailableSwitch()) {
+            int knownIndex = team.indexOf(pokemon);
+            int switchIndex = Main.RANDOM.nextInt(6);
+            while (switchIndex % team.size() == knownIndex || team.get(switchIndex % team.size()).hasFainted()) {
+                switchIndex++;
+            }
+            switchPokemon(knownIndex, switchIndex % team.size());
+        }
+    }
+
     public void applyEntryHazards() {
         Pokemon pokemon = this.getLead();
         boolean boots = pokemon.getHeldItem().equals(HEAVY_DUTY_BOOTS);
@@ -123,7 +188,7 @@ public class Trainer {
                         pokemon.setStatus(toxicSpikes == 2 ? Status.TOXIC_POISON : Status.POISON);
                     }
                 }
-                if (stickyWeb) {
+                if (stickyWeb && pokemon.isDropPossible(StatEnum.SPEED)) {
                     pokemon.changeSpeed(-1);
                 }
             }
@@ -165,12 +230,14 @@ public class Trainer {
     public void addSpikes() {
         if (spikes < 3) {
             spikes++;
+            //TODO: Output spike-laying message
         }
     }
 
     public void addToxicSpikes() {
         if (toxicSpikes < 2) {
             toxicSpikes++;
+            //TODO: Output toxic-spike-laying message
         }
     }
 

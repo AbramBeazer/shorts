@@ -12,7 +12,7 @@ public class MegaStone extends HeldItem {
     }
 
     public boolean isCorrectPokemon(Pokemon pokemon) {
-        return pokemon.getSpeciesName().equals(species);
+        return pokemon.getPokedexEntry().getSpeciesName().equals(species);
     }
 
     public static final MegaStone TYRANITARITE = new MegaStone("Tyranitarite", "Tyranitar");

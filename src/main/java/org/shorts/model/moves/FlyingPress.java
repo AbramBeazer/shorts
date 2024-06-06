@@ -2,21 +2,27 @@ package org.shorts.model.moves;
 
 import java.util.Set;
 
+import org.shorts.battle.Battle;
+import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
+import static org.shorts.model.status.VolatileStatusType.MINIMIZED;
 import static org.shorts.model.types.Type.FIGHTING;
 import static org.shorts.model.types.Type.FLYING;
 
-public class FlyingPress extends PhysicalMove {
+public class FlyingPress extends Move implements HitsMinimize {
 
-    private FlyingPress(Type moveType) {
-        super("Flying Press", 100, 100, moveType, 95, true, 0);
+    public FlyingPress() {
+        super("Flying Press", 100, 100, FIGHTING, Category.PHYSICAL, Range.SINGLE_ANY, 95, true, 0);
     }
 
     @Override
-    public double getTypeMultiplier(Set<Type> defenderTypes) {
-        return super.getTypeMultiplier(defenderTypes) * Type.getTypeMultiplier(FLYING, defenderTypes);
+    public double getBaseTypeMultiplier(Set<Type> defenderTypes) {
+        return super.getBaseTypeMultiplier(defenderTypes) * Type.getTypeMultiplier(FLYING, defenderTypes);
     }
 
-    public static final FlyingPress FLYING_PRESS = new FlyingPress(FIGHTING);
+    @Override
+    public boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
+        return target.hasVolatileStatus(MINIMIZED) || super.rollToHit(user, target, battle);
+    }
 }

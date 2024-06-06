@@ -14,10 +14,11 @@ import org.shorts.model.pokemon.Gyarados;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.Squirtle;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.shorts.TestRandom.TEST_RANDOM;
+import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.abilities.Intimidate.INTIMIDATE;
 import static org.shorts.model.abilities.PinchTypeBoostAbility.OVERGROW;
 import static org.shorts.model.abilities.PinchTypeBoostAbility.TORRENT;
@@ -33,7 +34,7 @@ class FreezeDryTests {
 
     @BeforeEach
     void setup() {
-        Main.RANDOM = TEST_RANDOM;
+        Main.RANDOM = ZERO_RANDOM;
         battle = new SingleBattle(new Trainer("Red", List.of(squirtle)), new Trainer("Green", List.of(bulbasaur)));
     }
 
@@ -41,14 +42,14 @@ class FreezeDryTests {
     void testGetMultiplierOnWaterType() {
         Pokemon defender = squirtle;
         assertThat(defender.getTypes()).isEqualTo(Set.of(WATER));
-        assertThat(new FreezeDry().getTypeMultiplier(defender.getTypes())).isEqualTo(Type.SUPER_EFFECTIVE);
+        assertThat(new FreezeDry().getBaseTypeMultiplier(defender.getTypes())).isEqualTo(Type.SUPER_EFFECTIVE);
     }
 
     @Test
     void testGetMultiplierQuadEffectiveOnWaterType() {
         Pokemon defender = gyarados;
         assertThat(defender.getTypes()).isEqualTo(Set.of(WATER, FLYING));
-        assertThat(new FreezeDry().getTypeMultiplier(defender.getTypes())).isEqualTo(Type.QUAD_EFFECTIVE);
+        assertThat(new FreezeDry().getBaseTypeMultiplier(defender.getTypes())).isEqualTo(Type.QUAD_EFFECTIVE);
     }
 
     @Test
@@ -65,7 +66,7 @@ class FreezeDryTests {
         Pokemon attacker = squirtle;
         Pokemon defender = bulbasaur;
         assertThat(defender.getStatus()).isNotEqualTo(Status.FREEZE);
-        assertThat(Status.FREEZE.isStatusPossible(defender, battle)).isTrue();
+        assertThat(StatusType.FREEZE.isStatusPossible(defender, battle)).isTrue();
         new FreezeDry().trySecondaryEffect(attacker, defender, battle);
         assertThat(defender.getStatus()).isEqualTo(Status.FREEZE);
     }

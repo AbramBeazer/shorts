@@ -15,7 +15,7 @@ public class MagicBounce extends Ability implements IgnorableAbility {
 
     @Override
     public void onGainAbility(Pokemon self) {
-        self.addVolatileStatus(VolatileStatus.MAGIC_COAT);
+        self.addVolatileStatus(new VolatileStatus(VolatileStatusType.MAGIC_COAT, -1));
     }
 
     @Override

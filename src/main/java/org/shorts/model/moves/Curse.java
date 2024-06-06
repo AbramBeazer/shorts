@@ -5,34 +5,37 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
 
 import static org.shorts.model.types.Type.GHOST;
-import static org.shorts.model.types.Type.NORMAL;
 
-public class Curse extends StatusMove {
+public class Curse extends Move {
 
     public Curse() {
-        super("Curse", 0, NORMAL, 16, true);
+        super("Curse", 0, -1, GHOST, Category.STATUS, Range.VARIES, 16, true, 100);
     }
 
     @Override
-    protected boolean pressureApplies(Pokemon userMon) {
-        return userMon.getTypes().contains(GHOST);
+    public Range getRange(Pokemon user) {
+        if (user.getTypes().contains(GHOST)) {
+            return Range.SINGLE_RANDOM_OPPONENT;
+        } else {
+            return Range.SELF;
+        }
     }
 
     @Override
-    public void applySecondaryEffect(Pokemon attacker, Pokemon defender, Battle battle) {
-        if (attacker.getTypes().contains(GHOST)) {
-            final int previousHP = attacker.getCurrentHP();
-            attacker.takeDamage(attacker.getMaxHP() / 2);
+    public void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (user.getTypes().contains(GHOST)) {
+            final int previousHP = user.getCurrentHP();
+            user.takeDamage(user.getMaxHP() / 2);
 
             //TODO: Should this be afterHit, or should I have another listener for self-inflicted damage?
             //TODO: Should this only activate if the user hasn't fainted?
-            attacker.afterHit(defender, battle, previousHP, this);
-            defender.addVolatileStatus(VolatileStatus.CURSED);
+            user.afterHit(target, battle, previousHP, this);
+            target.addVolatileStatus(VolatileStatus.CURSED);
             //TODO: LOGGER.info("{} put a curse on {}!", attacker.getNickname(), defender.getNickname());
         } else {
-            attacker.changeSpeed(-1);
-            attacker.changeAttack(1);
-            attacker.changeDefense(1);
+            user.changeSpeed(-1);
+            user.changeAttack(1);
+            user.changeDefense(1);
         }
     }
 

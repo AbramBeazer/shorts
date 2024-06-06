@@ -5,15 +5,16 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Type {
-
+    public static final double NEUTRAL = 1;
     public static final double STAB = 1.5;
     public static final double SUPER_EFFECTIVE = 2;
 
     public static final double QUAD_EFFECTIVE = 4;
+    public static final double OCTO_EFFECTIVE = 8;
     public static final double NOT_VERY_EFFECTIVE = 0.5;
 
     public static final double QUAD_RESIST = 0.25;
-
+    public static final double OCTO_RESIST = 0.125;
     public static final double IMMUNE = 0;
 
     private final TypeId id;

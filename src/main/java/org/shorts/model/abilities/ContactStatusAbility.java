@@ -13,6 +13,7 @@ import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
 public class ContactStatusAbility extends Ability {
 
+    private static final int ACTIVATION_CHANCE = 30;
     private AbstractStatus status;
 
     private ContactStatusAbility(String name, AbstractStatus status) {
@@ -27,8 +28,8 @@ public class ContactStatusAbility extends Ability {
 
     @Override
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
-        if (move.isContact() && Main.RANDOM.nextInt(100) < 30 && !self.hasVolatileStatus(SUBSTITUTE)
-            && (status.isStatusPossible(opponent, battle))) {
+        if (move.isContact() && Main.RANDOM.nextInt(100) < ACTIVATION_CHANCE && !self.hasVolatileStatus(SUBSTITUTE)
+            && status.getType().isStatusPossible(opponent, battle)) {
             //TODO: Test this. I'm pretty sure there aren't any problems here. Status.isStatusPossible won't have to worry about nullified abilities since this Pokemon clearly doesn't have Mold Breaker, but rather Cute Charm or something.
             if (status instanceof VolatileStatus) {
                 opponent.addVolatileStatus((VolatileStatus) status);
