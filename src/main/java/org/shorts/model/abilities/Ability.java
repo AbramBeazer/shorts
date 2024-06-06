@@ -94,6 +94,10 @@ public abstract class Ability {
 
     }
 
+    public void onTerrainChange(Pokemon self, Battle battle) {
+
+    }
+
     public double onCalculateAttack(Pokemon self) {
         return 1;
     }

@@ -739,4 +739,12 @@ public class Pokemon {
         }
         heldItem.onWeatherChange(this, battle);
     }
+
+    public void onTerrainChange(Battle battle) {
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.onTerrainChange(this, battle);
+        }
+        heldItem.onTerrainChange(this, battle);
+    }
 }
