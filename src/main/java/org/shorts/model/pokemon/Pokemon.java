@@ -731,4 +731,12 @@ public class Pokemon {
 
         Pickup.removeFromConsumedItems(this);
     }
+
+    public void onWeatherChange(Battle battle) {
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.onWeatherChange(this, battle);
+        }
+        heldItem.onWeatherChange(this, battle);
+    }
 }

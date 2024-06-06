@@ -269,4 +269,13 @@ public class SingleBattle extends Battle {
             return 0;
         }
     }
+
+    @Override
+    public void setWeather(Weather weather, int turns) {
+        super.setWeather(weather, turns);
+        if (!weatherSuppressed) {
+            playerOne.getLead().onWeatherChange(this);
+            playerTwo.getLead().onWeatherChange(this);
+        }
+    }
 }

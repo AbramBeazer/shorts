@@ -71,6 +71,10 @@ public abstract class HeldItem {
 
     }
 
+    public void onWeatherChange(Pokemon self, Battle battle) {
+
+    }
+
     public double onCalculateAttack(Pokemon self) {
         return 1;
     }
