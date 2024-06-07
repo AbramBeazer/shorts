@@ -54,6 +54,7 @@ public class Covet extends Move {
             || target.getAbility() instanceof Protosynthesis || user.getAbility() instanceof QuarkDrive
             || target.getAbility() instanceof QuarkDrive))) {
             //TODO: Remember to add check for Ogerpon's masks
+            //TODO: Does a Cell Battery or Snowball trigger before being stolen if Covet's type is converted? Also, does Covet fail to steal Booster Energy even if held by Koraidon or Miraidon?
             super.trySecondaryEffect(user, target, battle);
         }
     }
