@@ -63,7 +63,6 @@ public class KnockOff extends Move {
     }
 
     private boolean bonusDamageApplies(Pokemon user, Pokemon target) {
-        // TODO: Remember to add check for booster energy
         //TODO: Remember to add check for Ogerpon's masks
 
         if (target.getHeldItem() == NO_ITEM) {

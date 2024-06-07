@@ -1,6 +1,8 @@
 package org.shorts.model.moves;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.abilities.Protosynthesis;
+import org.shorts.model.abilities.QuarkDrive;
 import org.shorts.model.items.DriveItem;
 import org.shorts.model.items.MegaStone;
 import org.shorts.model.items.MemoryItem;
@@ -19,6 +21,7 @@ import org.shorts.model.pokemon.Zamazenta;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.StickyHold.STICKY_HOLD;
+import static org.shorts.model.items.BoosterEnergy.BOOSTER_ENERGY;
 import static org.shorts.model.items.GriseousOrb.GRISEOUS_ORB;
 import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
@@ -47,7 +50,9 @@ public class Covet extends Move {
             || ((MegaStone) target.getHeldItem()).isCorrectPokemon(target)))
             && !(target.getHeldItem() instanceof PrimalOrb && (((PrimalOrb) target.getHeldItem()).isCorrectPokemon(user)
             || ((PrimalOrb) target.getHeldItem()).isCorrectPokemon(target)))
-        ) {// TODO: Remember to add check for booster energy
+            && !(target.getHeldItem() == BOOSTER_ENERGY && (user.getAbility() instanceof Protosynthesis
+            || target.getAbility() instanceof Protosynthesis || user.getAbility() instanceof QuarkDrive
+            || target.getAbility() instanceof QuarkDrive))) {
             //TODO: Remember to add check for Ogerpon's masks
             super.trySecondaryEffect(user, target, battle);
         }
