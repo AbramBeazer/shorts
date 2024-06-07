@@ -30,6 +30,10 @@ public abstract class Ability {
         this.name = name;
     }
 
+    public Range getRange() {
+        return range;
+    }
+
     public void afterEntry(Pokemon self, Battle battle) {
     }
 

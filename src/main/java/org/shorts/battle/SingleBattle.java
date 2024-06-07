@@ -2,6 +2,7 @@ package org.shorts.battle;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.shorts.Main;
@@ -21,7 +22,7 @@ public class SingleBattle extends Battle {
     private Move moveTwo;
 
     public SingleBattle(Trainer player1, Trainer player2) {
-        super(player1, player2);
+        super(player1, player2, 1);
     }
 
     @Override
@@ -253,11 +254,11 @@ public class SingleBattle extends Battle {
     }
 
     @Override
-    public Pokemon getOpposingLead(Pokemon pokemon) {
+    public List<Pokemon> getOpposingActivePokemon(Pokemon pokemon) {
         if (this.playerOne.getLead() == pokemon) {
-            return playerTwo.getLead();
+            return List.of(playerTwo.getLead());
         } else {
-            return playerOne.getLead();
+            return List.of(playerOne.getLead());
         }
     }
 

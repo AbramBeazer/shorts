@@ -1,5 +1,7 @@
 package org.shorts.model.abilities;
 
+import java.util.List;
+
 import org.shorts.battle.Battle;
 import org.shorts.model.StatEnum;
 import org.shorts.model.moves.Range;
@@ -34,34 +36,34 @@ public class Intimidate extends Ability {
     }
 
     protected void tryEffect(Pokemon self, Battle battle) {
-        Pokemon opponent = battle.getOpposingLead(self);
-        //TODO:        for(Pokemon opponent : targets) {
-        if (!opponent.hasVolatileStatus(SUBSTITUTE) && opponent.isDropPossible(StatEnum.ATK)
-            //TODO: Figure out how this works with Contrary. Adrenaline Orb shouldn't be consumed if a Contrary mon's attack is already maxed, or if any other mon's attack is at minimum.
-            && opponent.getAbility() != OWN_TEMPO && opponent.getAbility() != OBLIVIOUS
-            && opponent.getAbility() != INNER_FOCUS && opponent.getAbility() != SCRAPPY) {
+        List<Pokemon> targets = battle.getPossibleTargets(self, this.getRange());
+        for (Pokemon opponent : targets) {
+            if (!opponent.hasVolatileStatus(SUBSTITUTE) && opponent.isDropPossible(StatEnum.ATK)
+                //TODO: Figure out how this works with Contrary. Adrenaline Orb shouldn't be consumed if a Contrary mon's attack is already maxed, or if any other mon's attack is at minimum.
+                && opponent.getAbility() != OWN_TEMPO && opponent.getAbility() != OBLIVIOUS
+                && opponent.getAbility() != INNER_FOCUS && opponent.getAbility() != SCRAPPY) {
 
-            if (opponent.getAbility() == GUARD_DOG) {
-                opponent.changeAttack(1);
-            } else {
-                opponent.changeAttack(-1);
-                opponent.afterDrop(self, battle);
-            }
+                if (opponent.getAbility() == GUARD_DOG) {
+                    opponent.changeAttack(1);
+                } else {
+                    opponent.changeAttack(-1);
+                    opponent.afterDrop(self, battle);
+                }
 
-            if (opponent.getAbility() == RATTLED) {
-                opponent.changeSpeed(1);
-            }
-            //TODO: Does Rattled stack with Adrenaline Orb here?
-            if (opponent.getHeldItem() == ADRENALINE_ORB
-                && opponent.getStageSpeed() < 6) {
-                //TODO: replace line above with (opponent.getStageSpeed() < 6 && opponent.getAbility() != CONTRARY)|| (opponent.getAbility() == CONTRARY && opponent.getStageSpeed > -6)){
+                if (opponent.getAbility() == RATTLED) {
+                    opponent.changeSpeed(1);
+                }
+                //TODO: Does Rattled stack with Adrenaline Orb here?
+                if (opponent.getHeldItem() == ADRENALINE_ORB
+                    && opponent.getStageSpeed() < 6) {
+                    //TODO: replace line above with (opponent.getStageSpeed() < 6 && opponent.getAbility() != CONTRARY)|| (opponent.getAbility() == CONTRARY && opponent.getStageSpeed > -6)){
 
-                opponent.changeSpeed(1);
-                opponent.setConsumedItem(opponent.getHeldItem());
-                opponent.setHeldItem(NO_ITEM);
+                    opponent.changeSpeed(1);
+                    opponent.setConsumedItem(opponent.getHeldItem());
+                    opponent.setHeldItem(NO_ITEM);
+                }
             }
         }
-        //    }
         //TODO: If multiple Pokémon each holding an Adrenaline Orb are affected by Intimidate, each Pokémon will be affected by Intimidate and consume their Adrenaline Orb before Symbiosis transfers any item (including Adrenaline Orbs).
         //  Do the Symbiosis logic here.
     }

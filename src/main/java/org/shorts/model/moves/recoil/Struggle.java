@@ -11,7 +11,7 @@ import org.shorts.model.types.Type;
 public class Struggle extends RecoilAttack {
 
     private Struggle() {
-        super("Struggle", 50, -1, Type.NORMAL, Category.PHYSICAL, Range.SINGLE_RANDOM_OPPONENT, 1, true, 0, 0.25);
+        super("Struggle", 50, -1, Type.NORMAL, Category.PHYSICAL, Range.RANDOM_OPPONENT, 1, true, 0, 0.25);
     }
 
     @Override

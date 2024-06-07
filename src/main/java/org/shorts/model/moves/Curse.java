@@ -15,7 +15,7 @@ public class Curse extends Move {
     @Override
     public Range getRange(Pokemon user) {
         if (user.getTypes().contains(GHOST)) {
-            return Range.SINGLE_RANDOM_OPPONENT;
+            return Range.RANDOM_OPPONENT;
         } else {
             return Range.SELF;
         }
