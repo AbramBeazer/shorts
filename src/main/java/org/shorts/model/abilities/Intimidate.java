@@ -36,7 +36,7 @@ public class Intimidate extends Ability {
     }
 
     protected void tryEffect(Pokemon self, Battle battle) {
-        List<Pokemon> targets = battle.getPossibleTargets(self, this.getRange());
+        List<Pokemon> targets = battle.getPokemonWithinRange(self, this.getRange());
         for (Pokemon opponent : targets) {
             if (!opponent.hasVolatileStatus(SUBSTITUTE) && opponent.isDropPossible(StatEnum.ATK)
                 //TODO: Figure out how this works with Contrary. Adrenaline Orb shouldn't be consumed if a Contrary mon's attack is already maxed, or if any other mon's attack is at minimum.

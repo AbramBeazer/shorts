@@ -537,18 +537,22 @@ public class Pokemon {
     }
 
     public boolean isTrapped(Battle battle) {
-        Pokemon opponent = battle.getOpposingLead(this);
+        List<Pokemon> opposingActivePokemon = battle.getOpposingActivePokemon(this);
+
         if (getHeldItem() == SHED_SHELL || getTypes().contains(Type.GHOST)) {
             return false;
-        } else if (opponent.getAbility() == MAGNET_PULL && this.getTypes().contains(Type.STEEL)) {
-            return true;
-        } else if (opponent.getAbility() == ARENA_TRAP && this.isGrounded()) {
-            return true;
-        } else if (opponent.getAbility() == SHADOW_TAG && this.getAbility() != SHADOW_TAG) {
-            return true;
-        } else {
-            return hasVolatileStatus(CANT_ESCAPE) || hasVolatileStatus(NO_RETREAT) || hasVolatileStatus(OCTOLOCKED);
         }
+
+        for (Pokemon opponent : opposingActivePokemon) {
+            if (battle.getPokemonWithinRange(opponent, opponent.getAbility().getRange()).contains(this)
+                && ((opponent.getAbility() == MAGNET_PULL && this.getTypes().contains(Type.STEEL))
+                || (opponent.getAbility() == ARENA_TRAP && this.isGrounded())
+                || (opponent.getAbility() == SHADOW_TAG && this.getAbility() != SHADOW_TAG))) {
+                return true;
+            }
+        }
+
+        return hasVolatileStatus(CANT_ESCAPE) || hasVolatileStatus(NO_RETREAT) || hasVolatileStatus(OCTOLOCKED);
     }
 
     public VolatileStatus getVolatileStatus(VolatileStatusType type) {

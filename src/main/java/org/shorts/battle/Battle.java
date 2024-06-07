@@ -140,7 +140,7 @@ public abstract class Battle {
         return activeMonsPerSide;
     }
 
-    public List<Pokemon> getPossibleTargets(Pokemon user, Range range) {
+    public List<Pokemon> getPokemonWithinRange(Pokemon user, Range range) {
         final int activeMonsPerSide = getActiveMonsPerSide();
         final Trainer player = getCorrespondingTrainer(user);
         final Trainer opponent = getOpposingTrainer(user);
@@ -214,5 +214,25 @@ public abstract class Battle {
             default:
                 return possibleTargets;
         }
+    }
+
+    public void printField(Trainer player) {
+        final Trainer opponent = this.getOpposingTrainer(player);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < getActiveMonsPerSide(); i++) {
+            sb.append("                            ");
+        }
+        final String blankSpace = sb.toString();
+
+        final StringBuilder field = new StringBuilder("*" + blankSpace + "OPPONENT" + blankSpace + "*")
+            .append("\n|");
+
+        for (int i = 0; i < getActiveMonsPerSide(); i++) {
+            final Pokemon mon = opponent.getTeam().get(i);
+            final String name = mon.getNickname() + " (" + mon.getPokedexEntry().getSpeciesName() + ")";
+            field.append(blankSpace).append(name);
+        }
+
+        System.out.println(field);
     }
 }
