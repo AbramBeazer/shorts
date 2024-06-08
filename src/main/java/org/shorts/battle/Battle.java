@@ -216,6 +216,25 @@ public abstract class Battle {
         }
     }
 
+    //TODO: Maybe the choice should actually return the index and the actual Pokémon attacked will be determined at the time that the move executes?
+
+    private int promptChoiceOfTarget(Trainer player, List<Pokemon> pokemonInRange) {
+        System.out.println("SELECT TARGET");
+        for (int i = 0; i < pokemonInRange.size(); i++) {
+            final Pokemon mon = pokemonInRange.get(i);
+            final String allyOrOpponent = player.getTeam().contains(mon) ? " (ally) " : " (opponent) ";
+            System.out.println((i + 1) + ") " + mon.getDisplayName() + allyOrOpponent);
+        }
+        System.out.println("0) Back");
+
+        int choice;
+        do {
+            choice = System.in.read();
+        } while (choice < 0 || choice >= pokemonInRange.size());
+
+        return choice;
+    }
+
     public void printField(Trainer player) {
         final Trainer opponent = this.getOpposingTrainer(player);
         StringBuilder sb = new StringBuilder();
