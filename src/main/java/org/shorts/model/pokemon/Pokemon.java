@@ -107,14 +107,18 @@ public class Pokemon {
         this.ability = ability;
     }
 
-    public Pokemon(PokedexEntry pokedexEntry, int level, int[] effortValues) {
+    public Pokemon(PokedexEntry pokedexEntry, int level, int[] effortValues, Nature nature, Ability ability) {
         this.pokedexEntry = pokedexEntry;
+        this.setNature(nature);
         this.speciesName = pokedexEntry.getSpeciesName();
         this.types = pokedexEntry.getTypes();
         this.happiness = Byte.MAX_VALUE;
         this.ev = effortValues;
 
-        this.ability = pokedexEntry.getAbilities().stream().findFirst().orElse(null);
+        if (ability.getClass().isInstance(this.pokedexEntry.getHiddenAbility())
+            || this.pokedexEntry.getAbilities().contains(ability)) {
+            this.setAbility(ability);
+        }
         this.level = Math.max(1, Math.min(100, level));
 
         if (speciesName.equals("Shedinja")) {
@@ -223,6 +227,14 @@ public class Pokemon {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getDisplayName() {
+        if (nickname == null) {
+            return pokedexEntry.getSpeciesName();
+        } else {
+            return nickname + " (" + pokedexEntry.getSpeciesName() + ")";
+        }
     }
 
     @Deprecated

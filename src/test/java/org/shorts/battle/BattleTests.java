@@ -14,7 +14,5 @@ class BattleTests {
         final Battle battle = new DummySingleBattle(user, target);
 
         battle.printField(battle.getPlayerOne());
-
-        battle.printField(battle.getPlayerTwo());
     }
 }

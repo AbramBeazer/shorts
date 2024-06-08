@@ -220,18 +220,47 @@ public abstract class Battle {
         final Trainer opponent = this.getOpposingTrainer(player);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < getActiveMonsPerSide(); i++) {
-            sb.append("                            ");
+            sb.append("\t\t\t");
         }
         final String blankSpace = sb.toString();
 
-        final StringBuilder field = new StringBuilder("*" + blankSpace + "OPPONENT" + blankSpace + "*")
-            .append("\n|");
+        final StringBuilder field = new StringBuilder().append("*")
+            .append(blankSpace)
+            .append("OPPONENT")
+            .append(blankSpace)
+            .append("*")
+            .append("\n\n").append("|");
 
         for (int i = 0; i < getActiveMonsPerSide(); i++) {
             final Pokemon mon = opponent.getTeam().get(i);
-            final String name = mon.getNickname() + " (" + mon.getPokedexEntry().getSpeciesName() + ")";
-            field.append(blankSpace).append(name);
+            field.append("\t\t").append(mon.getDisplayName());
+            field.append("\t\t").append("|");
         }
+
+        field.append("\n").append("|");
+        for (int i = 0; i < getActiveMonsPerSide(); i++) {
+            final Pokemon mon = opponent.getTeam().get(i);
+            field.append("\t\t").append("HP: ").append(mon.getCurrentHP()).append("/").append(mon.getMaxHP());
+            field.append("\t\t\t\t").append("|");
+        }
+
+        field.append("\n\n\n\n");
+
+        field.append("\n").append("|");
+        for (int i = 0; i < getActiveMonsPerSide(); i++) {
+            final Pokemon mon = player.getTeam().get(i);
+            field.append("\t\t").append(mon.getDisplayName());
+            field.append("\t\t").append("|");
+        }
+
+        field.append("\n").append("|");
+        for (int i = 0; i < getActiveMonsPerSide(); i++) {
+            final Pokemon mon = player.getTeam().get(i);
+            field.append("\t\t").append("HP: ").append(mon.getCurrentHP()).append("/").append(mon.getMaxHP());
+            field.append("\t\t\t\t").append("|");
+        }
+
+        field.append("\n\n*").append(blankSpace).append("PLAYER").append(blankSpace).append("\t*");
 
         System.out.println(field);
     }

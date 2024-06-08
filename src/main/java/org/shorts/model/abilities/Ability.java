@@ -127,7 +127,12 @@ public abstract class Ability {
         if (obj == this) {
             return true;
         }
+
         if (obj instanceof Ability) {
+
+            if (obj.getClass() == this.getClass()) {
+                return true;
+            }
             Ability ability = (Ability) obj;
             return name.equals(ability.name);
         }
