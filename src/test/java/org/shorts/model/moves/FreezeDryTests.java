@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.Main;
 import org.shorts.battle.Battle;
-import org.shorts.battle.SingleBattle;
 import org.shorts.battle.Trainer;
 import org.shorts.model.pokemon.Bulbasaur;
 import org.shorts.model.pokemon.Gyarados;
@@ -35,7 +34,7 @@ class FreezeDryTests {
     @BeforeEach
     void setup() {
         Main.RANDOM = ZERO_RANDOM;
-        battle = new SingleBattle(new Trainer("Red", List.of(squirtle)), new Trainer("Green", List.of(bulbasaur)));
+        battle = new Battle(new Trainer("Red", List.of(squirtle)), new Trainer("Green", List.of(bulbasaur)), 1);
     }
 
     @Test

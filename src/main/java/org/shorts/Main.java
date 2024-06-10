@@ -3,7 +3,7 @@ package org.shorts;
 import java.util.List;
 import java.util.Random;
 
-import org.shorts.battle.SingleBattle;
+import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
 import org.shorts.model.moves.CloseCombat;
 import org.shorts.model.moves.FreezeDry;
@@ -28,6 +28,6 @@ public class Main {
         bulbasaur.setMoves(List.of(new CloseCombat(), new Scald(), new Spore(), new Thunder()));
         Trainer playerOne = new Trainer("Ash", List.of(bulbasaur));
         Trainer playerTwo = new Trainer("Gary", List.of(charmander));
-        new SingleBattle(playerOne, playerTwo).run();
+        new Battle(playerOne, playerTwo, 1).run();
     }
 }

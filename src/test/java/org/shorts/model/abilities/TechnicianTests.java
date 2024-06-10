@@ -5,7 +5,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.SingleBattle;
 import org.shorts.battle.Trainer;
 import org.shorts.model.moves.Bulldoze;
 import org.shorts.model.moves.Earthquake;
@@ -27,9 +26,9 @@ class TechnicianTests {
 
     @BeforeEach
     void setUp() {
-        battle = new SingleBattle(
+        battle = new Battle(
             new Trainer("Red", List.of(hasTechnician)),
-            new Trainer("Green", List.of(hasOtherAbility)));
+            new Trainer("Green", List.of(hasOtherAbility)), 1);
     }
 
     @Test

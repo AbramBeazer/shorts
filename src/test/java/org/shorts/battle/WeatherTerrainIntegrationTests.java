@@ -20,11 +20,11 @@ import static org.shorts.model.abilities.weather.WeatherAbility.SNOW_WARNING;
 
 class WeatherTerrainIntegrationTests {
 
-    private SingleBattle battle;
+    private Battle battle;
 
     @BeforeEach
     void setup() {
-        battle = new SingleBattle(
+        battle = new Battle(
             new Trainer(
                 "Red",
                 List.of(
@@ -36,6 +36,6 @@ class WeatherTerrainIntegrationTests {
                     new PrimalKyogre())),
             new Trainer(
                 "Green",
-                List.of(new Groudon(), new Tyranitar(SAND_STREAM), new Rayquaza(), new MegaRayquaza())));
+                List.of(new Groudon(), new Tyranitar(SAND_STREAM), new Rayquaza(), new MegaRayquaza())), 1);
     }
 }
