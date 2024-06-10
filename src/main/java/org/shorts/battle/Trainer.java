@@ -17,6 +17,7 @@ public class Trainer {
 
     private final String name;
     private final List<Pokemon> team;
+    private final int activeMonsPerSide;
     private boolean rocks = false;
 
     private int spikes = 0;
@@ -32,6 +33,14 @@ public class Trainer {
     private int mistTurns = 0;
 
     public Trainer(String name, List<Pokemon> team) {
+        this(name, team, 1);
+    }
+
+    public Trainer(String name, List<Pokemon> team, int activeMonsPerSide) {
+        if (activeMonsPerSide > 3 || activeMonsPerSide < 1) {
+            throw new IllegalArgumentException("Only Single, Double, and Triple battles are supported.");
+        }
+        this.activeMonsPerSide = activeMonsPerSide;
         this.name = Objects.requireNonNull(name, "Come on, tell the professor your name!");
         this.team = Objects.requireNonNull(team, "Constructor parameter \"team\" is null!");
         if (team.isEmpty()) {
@@ -144,11 +153,18 @@ public class Trainer {
     }
 
     public boolean hasAvailableSwitch() {
-        return this.team.stream().anyMatch(p -> !p.hasFainted() && p != this.getLead());
+        for (int i = activeMonsPerSide; i < team.size(); i++) {
+            if (!team.get(i).hasFainted()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void switchPokemon(int indexA, int indexB) {
-        if (indexA != indexB) {
+        if (indexA < activeMonsPerSide && indexB < activeMonsPerSide) {
+            throw new IllegalArgumentException("Cannot switch two Pokémon that are both in battle!");
+        } else if (indexA != indexB) {
             Pokemon a = this.team.get(indexA);
             this.team.set(indexA, team.get(indexB));
             this.team.set(indexB, a);
@@ -159,7 +175,7 @@ public class Trainer {
         //Why pass in a Pokemon instead of just 0? I'm thinking ahead to if I ever implement Double or Triple battles.
         if (hasAvailableSwitch()) {
             int knownIndex = team.indexOf(pokemon);
-            int switchIndex = Main.RANDOM.nextInt(6);
+            int switchIndex = Main.RANDOM.nextInt(6) + activeMonsPerSide;
             while (switchIndex % team.size() == knownIndex || team.get(switchIndex % team.size()).hasFainted()) {
                 switchIndex++;
             }
@@ -176,7 +192,7 @@ public class Trainer {
             //Stealth Rock
             if (rocks && !magicGuard && faintedFromRocks(pokemon)) {
                 return;
-            } //TODO: What happens if rocks put the mon into Sitrus Berry range before Spikes activates? Does the healing happen before the spikes deal damage?
+            } //TODO: What happens if rocks put the mon into Sitrus Berry range before Spikes activates? Does the healing happen before the spikes deal damage? I think the berry activates at the end of the turn.
             if (pokemon.isGrounded()) {
                 if (!magicGuard && faintedFromSpikes(pokemon)) {
                     return;

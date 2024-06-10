@@ -203,12 +203,15 @@ public class Battle {
     }
 
     public void takeTurns() throws Exception {
-        playerOne.getLead().setMovedThisTurn(false);
-        playerTwo.getLead().setMovedThisTurn(false);
+        for (int i = 0; i < activeMonsPerSide; i++) {
+            playerOne.getTeam().get(i).setMovedThisTurn(false);
+            playerTwo.getTeam().get(i).setMovedThisTurn(false);
+        }
 
         //take player input
         int choiceOne = pollPlayerInput(playerOne);
         int choiceTwo = pollPlayerInput(playerTwo);
+        //TODO: Create a Turn class that stores user, move, and target).
         Move moveOne = null;
         Move moveTwo = null;
 
@@ -227,7 +230,7 @@ public class Battle {
         int abilityPriorityBonusTwo = moveTwo.getAbilityPriorityBonus(playerTwo.getLead());
 
         // TODO:
-        //  Dark-type Pokémon are now immune to opposing Pokémon's moves that gain priority due to Prankster, including moves called by moves that call other moves
+        //  Dark-type Pokémon are now immune to opposing Pokémon's moves that gain priority due to Prankster, including moves called by another move.
         //  (such as Assist and Nature Power) and excluding moves that are repeated as a result of Prankster-affected Instruct
         //  or moves that occur earlier than their usual order due to Prankster-affected After You. Ally Dark-type Pokémon are still affected by the user's status moves.
         //  Dark-type Pokémon can still bounce moves back with Magic Bounce or Magic Coat; moves that have increased priority due to Prankster which are reflected

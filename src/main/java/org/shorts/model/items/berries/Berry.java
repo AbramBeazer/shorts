@@ -33,6 +33,7 @@ public abstract class Berry extends HeldItem {
         return this.threshold;
     }
 
+    //TODO: Is this correct? Do berries activate at the end of the turn from Gen 4 onward?
     @Override
     public void afterTurn(Pokemon user, Pokemon opponent, Battle battle) {
         if (!user.hasFainted() && user.getCurrentHP() < user.getMaxHP() * computeThreshold(user)) {
