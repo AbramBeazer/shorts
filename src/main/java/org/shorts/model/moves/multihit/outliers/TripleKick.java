@@ -21,7 +21,7 @@ public class TripleKick extends Move {
     }
 
     @Override
-    protected void executeMove(Pokemon user, Pokemon target, Battle battle) {
+    protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         final boolean skipRollToHit = user.getAbility() == SKILL_LINK || user.getHeldItem() == LOADED_DICE;
 
         if (rollToHit(user, target, battle)) {

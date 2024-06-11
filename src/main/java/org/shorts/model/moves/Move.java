@@ -295,17 +295,15 @@ public abstract class Move {
         return Objects.hash(name, power, accuracy, type, maxPP, contact, secondaryEffectChance);
     }
 
-    public void determineTargetAndExecuteMove(Pokemon user, List<Pokemon> targets, Battle battle) {
+    public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setMovedThisTurn(true);
+        this.decrementPP();
+
         for (Pokemon target : targets) {
-            if (getRange(user) == Range.SELF) {
-                target = user;
-            }
 
             //TODO: Check if curse is used by a Ghost-type and select a random opponent as the target, if so.
             //TODO: What if this rolls a target who has fainted and hasn't been replaced yet?
 
-            this.decrementPP();
             //TODO: Move this Pressure logic to whatever method calls this one. Pressure shouldn't activate for Curse or Sticky Web but should activate for moves that target the whole field, like Rain Dance.
             //  Should it affect moves that affect the enemy side? It affects all hazard moves except Sticky Web.
             //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
@@ -321,7 +319,7 @@ public abstract class Move {
                 target = user;
             }
 
-            executeMove(user, target, battle);
+            executeOnTarget(user, target, battle);
             user.setLastMoveUsed(this);
             //if(userMon.getCurrentHP() == 0) {
             //  //TODO: Handle fainting and subsequent switch-in.
@@ -338,7 +336,7 @@ public abstract class Move {
         }
     }
 
-    protected void executeMove(Pokemon user, Pokemon target, Battle battle) {
+    protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         if (rollToHit(user, target, battle)) {
             if (this.category == Category.STATUS) {
                 this.trySecondaryEffect(user, target, battle);

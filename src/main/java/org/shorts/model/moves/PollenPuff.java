@@ -15,9 +15,9 @@ public class PollenPuff extends Move implements BallBombMove {
     }
 
     @Override
-    protected void executeMove(Pokemon user, Pokemon target, Battle battle) {
+    protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         if (battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target)) {
-            super.executeMove(user, target, battle);
+            super.executeOnTarget(user, target, battle);
         } else {
             if (rollToHit(user, target, battle) && target.getAbility() != Bulletproof.BULLETPROOF
                 && target.getAbility() != TELEPATHY && !target.hasVolatileStatus(VolatileStatusType.HEAL_BLOCKED)) {

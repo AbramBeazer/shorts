@@ -46,7 +46,7 @@ public class Turn {
             } else {
                 targets = battle.getPokemonWithinRange(user, move.getRange(user));
             }
-            move.determineTargetAndExecuteMove(user, targets, battle);
+            move.execute(user, targets, battle);
         } else {
             //TODO: Switch
         }

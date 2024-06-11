@@ -23,7 +23,7 @@ public class BeatUp extends Move {
     }
 
     @Override
-    protected void executeMove(Pokemon user, Pokemon target, Battle battle) {
+    protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         if (rollToHit(user, target, battle)) {
 
             viableAttackers = battle.getCorrespondingTrainer(user)

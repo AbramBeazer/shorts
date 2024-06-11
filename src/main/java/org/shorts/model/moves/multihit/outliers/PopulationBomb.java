@@ -22,7 +22,7 @@ public class PopulationBomb extends Move implements SlicingMove {
     }
 
     @Override
-    protected void executeMove(Pokemon user, Pokemon target, Battle battle) {
+    protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         final boolean skipRollToHit;
         int maxHitsOverride = MAX_HITS;
         if (user.getAbility() == SKILL_LINK) {

@@ -16,9 +16,9 @@ public class FakeOut extends Move {
     }
 
     @Override
-    public void executeMove(Pokemon user, Pokemon target, Battle battle) {
+    public void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         if (user.getTurnsInBattle() == 1) {
-            super.executeMove(user, target, battle);
+            super.executeOnTarget(user, target, battle);
         }
     }
 
