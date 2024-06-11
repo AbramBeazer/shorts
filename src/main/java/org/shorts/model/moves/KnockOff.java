@@ -1,6 +1,8 @@
 package org.shorts.model.moves;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.abilities.Protosynthesis;
+import org.shorts.model.abilities.QuarkDrive;
 import org.shorts.model.items.DriveItem;
 import org.shorts.model.items.MegaStone;
 import org.shorts.model.items.MemoryItem;
@@ -17,6 +19,7 @@ import org.shorts.model.pokemon.Zamazenta;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.StickyHold.STICKY_HOLD;
+import static org.shorts.model.items.BoosterEnergy.BOOSTER_ENERGY;
 import static org.shorts.model.items.GriseousOrb.GRISEOUS_ORB;
 import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.items.RustedShield.RUSTED_SHIELD;
@@ -60,6 +63,8 @@ public class KnockOff extends Move {
     }
 
     private boolean bonusDamageApplies(Pokemon user, Pokemon target) {
+        //TODO: Remember to add check for Ogerpon's masks
+
         if (target.getHeldItem() == NO_ITEM) {
             return false;
         } else if ((target instanceof Giratina || user instanceof Giratina) && target.getHeldItem() == GRISEOUS_ORB) {
@@ -85,6 +90,10 @@ public class KnockOff extends Move {
         } else if (target.getHeldItem() instanceof PrimalOrb) {
             PrimalOrb primalOrb = (PrimalOrb) target.getHeldItem();
             return !(primalOrb.isCorrectPokemon(target) || primalOrb.isCorrectPokemon(user));
+        } else if (target.getHeldItem() == BOOSTER_ENERGY && (user.getAbility() instanceof Protosynthesis
+            || target.getAbility() instanceof Protosynthesis || user.getAbility() instanceof QuarkDrive
+            || target.getAbility() instanceof QuarkDrive)) {
+            return false;
         } else {
             return !(target.getHeldItem() instanceof ZCrystal); //Z-Crystal can't be knocked off. Otherwise, return true for everything else.
         }

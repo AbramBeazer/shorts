@@ -15,11 +15,11 @@ public class FocusSash extends HeldItem {
     public static final FocusSash FOCUS_SASH = new FocusSash();
 
     @Override
-    public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
-        if (self.getCurrentHP() == 0) {
-            self.setCurrentHP(1);
-            System.out.println(self.getNickname() + " held on due to Focus Sash!");
+    public void afterHit(Pokemon user, Pokemon opponent, Battle battle, int previousHP, Move move) {
+        if (user.getCurrentHP() == 0) {
+            user.setCurrentHP(1);
+            System.out.println(user.getNickname() + " held on due to Focus Sash!");
         }
-        self.setHeldItem(NO_ITEM);
+        user.setHeldItem(NO_ITEM);
     }
 }

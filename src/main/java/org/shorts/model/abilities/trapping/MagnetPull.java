@@ -1,11 +1,12 @@
 package org.shorts.model.abilities.trapping;
 
 import org.shorts.model.abilities.Ability;
+import org.shorts.model.moves.Range;
 
 public class MagnetPull extends Ability {
 
     private MagnetPull() {
-        super("Magnet Pull");
+        super("Magnet Pull", Range.ALL_ADJACENT_OPPONENTS);
     }
 
     public static final MagnetPull MAGNET_PULL = new MagnetPull();

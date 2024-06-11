@@ -32,7 +32,7 @@ class TrainerTests {
 
     @Test
     void testStealthRockNeutral() {
-        trainer.setRocks(true);
+        trainer.addRocks();
         trainer.applyEntryHazards();
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() / 8));
     }
@@ -40,7 +40,7 @@ class TrainerTests {
     @Test
     void testStealthRockSuperEffective() {
         pokemon.setTypes(Set.of(Type.FIRE));
-        trainer.setRocks(true);
+        trainer.addRocks();
         trainer.applyEntryHazards();
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() / 4));
     }
@@ -82,15 +82,15 @@ class TrainerTests {
 
     @Test
     void testStickyWeb() {
-        trainer.setStickyWeb(true);
+        trainer.addStickyWeb();
         trainer.applyEntryHazards();
         assertThat(pokemon.getStageSpeed()).isEqualTo(-1);
     }
 
     @Test
     void testAllHazards() {
-        trainer.setStickyWeb(true);
-        trainer.setRocks(true);
+        trainer.addStickyWeb();
+        trainer.addRocks();
         trainer.setSpikes(3);
         trainer.setToxicSpikes(2);
         trainer.applyEntryHazards();
@@ -102,8 +102,8 @@ class TrainerTests {
     @Test
     void testStickyBoots() {
         pokemon.setHeldItem(HeavyDutyBoots.HEAVY_DUTY_BOOTS);
-        trainer.setStickyWeb(true);
-        trainer.setRocks(true);
+        trainer.addStickyWeb();
+        trainer.addRocks();
         trainer.setSpikes(3);
         trainer.setToxicSpikes(2);
         trainer.applyEntryHazards();
@@ -117,8 +117,8 @@ class TrainerTests {
     void testStickyBootsAbsorbToxicSpikes() {
         pokemon.setTypes(Set.of(Type.POISON));
         pokemon.setHeldItem(HeavyDutyBoots.HEAVY_DUTY_BOOTS);
-        trainer.setStickyWeb(true);
-        trainer.setRocks(true);
+        trainer.addStickyWeb();
+        trainer.addRocks();
         trainer.setSpikes(3);
         trainer.setToxicSpikes(2);
         trainer.applyEntryHazards();

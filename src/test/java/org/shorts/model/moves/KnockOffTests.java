@@ -6,9 +6,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.Main;
-import org.shorts.TestRandom;
+import org.shorts.MockRandomReturnZero;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummySingleBattle;
+import org.shorts.model.abilities.Protosynthesis;
+import org.shorts.model.abilities.QuarkDrive;
+import org.shorts.model.items.BoosterEnergy;
 import org.shorts.model.items.DriveItem;
 import org.shorts.model.items.GriseousOrb;
 import org.shorts.model.items.HeldItem;
@@ -55,7 +58,7 @@ class KnockOffTests {
 
     @BeforeAll
     static void beforeAll() {
-        Main.RANDOM = new TestRandom();
+        Main.RANDOM = new MockRandomReturnZero();
     }
 
     @BeforeEach
@@ -170,6 +173,23 @@ class KnockOffTests {
     }
 
     @Test
+    void testBoosterEnergyWithAbilitiesQuarkDriveAndProtosynthesis() {
+        final Pokemon mon = getDummyPokemon();
+        mon.setAbility(new Protosynthesis());
+        final BoosterEnergy item = BoosterEnergy.BOOSTER_ENERGY;
+
+        testPersonalItemCannotBeKnockedOffButOtherItemsCan(mon, item);
+        testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(mon, item);
+        testOthersCanKnockOffPokemonSpecificItems(item);
+
+        mon.setAbility(new QuarkDrive());
+
+        testPersonalItemCannotBeKnockedOffButOtherItemsCan(mon, item);
+        testCannotKnockOffOwnPersonalItemHeldByDifferentSpecies(mon, item);
+        testOthersCanKnockOffPokemonSpecificItems(item);
+    }
+
+    @Test
     void testDoesNotWorkOnZCrystal() {
         Pokemon attacker = getDummyPokemon();
         Pokemon target = getDummyPokemon();
@@ -179,18 +199,6 @@ class KnockOffTests {
         assertThat(knockOff.getPowerMultipliers(attacker, target, battle)).isEqualTo(1);
         knockOff.trySecondaryEffect(attacker, target, battle);
         assertThat(target.getHeldItem()).isEqualTo(zCrystal);
-    }
-
-    @Test
-    void testDoesNotWorkOnProtoSynthesisOrQuarkDrivePokemonWithBoosterEnergy() {
-        assertThat(false).isTrue();
-
-    }
-
-    @Test
-    void testWorksOnBoosterEnergyForKoraidonAndMiraidon() {
-        assertThat(false).isTrue();
-
     }
 
     @Test

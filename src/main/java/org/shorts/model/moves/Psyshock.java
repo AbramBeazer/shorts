@@ -1,5 +1,6 @@
 package org.shorts.model.moves;
 
+import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
@@ -10,7 +11,7 @@ public class Psyshock extends Move {
     }
 
     @Override
-    protected int getDefendingStat(Pokemon user, Pokemon target) {
+    protected double getDefendingStat(Pokemon user, Pokemon target, Battle battle) {
         return target.calculateDefense();
     }
 }

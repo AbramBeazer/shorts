@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.SingleBattle;
 import org.shorts.battle.Trainer;
 import org.shorts.model.Sex;
 import org.shorts.model.pokemon.Axew;
@@ -25,9 +24,9 @@ import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 
 public class FixedDamageTests {
 
-    private final Battle battle = new SingleBattle(
+    private final Battle battle = new Battle(
         new Trainer("Red", List.of(new Squirtle(TORRENT))),
-        new Trainer("Green", List.of(new Bulbasaur(OVERGROW))));
+        new Trainer("Green", List.of(new Bulbasaur(OVERGROW))), 1);
 
     @Test
     void testSeismicToss() {

@@ -29,7 +29,7 @@ public class StatusImmuneAbility extends Ability implements IgnorableAbility {
     //TODO: Figure out which methods need to be implemented.
 
     @Override
-    public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterEntry(Pokemon self, Battle battle) {
         if (this.getImmunities().contains(self.getStatus().getType())) {
             self.setStatus(Status.NONE);
         }
@@ -42,7 +42,7 @@ public class StatusImmuneAbility extends Ability implements IgnorableAbility {
     }
 
     @Override
-    public void onGainAbility(Pokemon self) {
+    public void onGainAbility(Pokemon self, Battle battle) {
         if (this.getImmunities().contains(self.getStatus().getType())) {
             self.setStatus(Status.NONE);
         }

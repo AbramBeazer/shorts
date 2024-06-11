@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.Main;
 import org.shorts.battle.Battle;
-import org.shorts.battle.SingleBattle;
 import org.shorts.battle.Trainer;
 import org.shorts.model.pokemon.Bulbasaur;
 import org.shorts.model.pokemon.Gyarados;
@@ -18,7 +17,7 @@ import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.shorts.TestRandom.TEST_RANDOM;
+import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.abilities.Intimidate.INTIMIDATE;
 import static org.shorts.model.abilities.PinchTypeBoostAbility.OVERGROW;
 import static org.shorts.model.abilities.PinchTypeBoostAbility.TORRENT;
@@ -34,8 +33,8 @@ class FreezeDryTests {
 
     @BeforeEach
     void setup() {
-        Main.RANDOM = TEST_RANDOM;
-        battle = new SingleBattle(new Trainer("Red", List.of(squirtle)), new Trainer("Green", List.of(bulbasaur)));
+        Main.RANDOM = ZERO_RANDOM;
+        battle = new Battle(new Trainer("Red", List.of(squirtle)), new Trainer("Green", List.of(bulbasaur)), 1);
     }
 
     @Test

@@ -6,11 +6,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.shorts.battle.Battle;
+import org.shorts.battle.Weather;
 import org.shorts.model.Nature;
 import org.shorts.model.Sex;
+import org.shorts.model.StatEnum;
 import org.shorts.model.abilities.Ability;
 import org.shorts.model.abilities.IgnorableAbility;
 import org.shorts.model.abilities.NullifyingAbility;
+import org.shorts.model.abilities.Pickup;
+import org.shorts.model.abilities.UnsuppressableAbility;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.NoItem;
 import org.shorts.model.moves.Move;
@@ -56,13 +60,13 @@ public class Pokemon {
     private Ability ability;
     private Nature nature;
     @SuppressWarnings("checkstyle:MemberName")
-    private int[] EVs;
+    private int[] ev;
     @SuppressWarnings("checkstyle:MemberName")
-    private int[] IVs = { 31, 31, 31, 31, 31, 31 };
+    private int[] iv = { 31, 31, 31, 31, 31, 31 };
 
     private Move[] moves = new Move[4];
     private Move lastMoveUsed;
-
+    private boolean movedThisTurn;
     private Sex sex;
     private int level;
     private int maxHP;
@@ -83,6 +87,7 @@ public class Pokemon {
     private Status status = Status.NONE;
     private final Map<VolatileStatusType, VolatileStatus> volatileStatuses = new HashMap<>();
     private HeldItem heldItem = NoItem.NO_ITEM;
+    private HeldItem consumedItem = NoItem.NO_ITEM;
     private byte happiness;
     private int turnsInBattle;
 
@@ -92,7 +97,7 @@ public class Pokemon {
         this.speciesName = speciesName;
         this.types = types;
         this.ability = ability;
-        this.ability.onGainAbility(this);
+        this.ability.onInitiate(this);
     }
 
     public Pokemon(int currentHP, int maxHP, Ability ability) {
@@ -101,38 +106,42 @@ public class Pokemon {
         this.ability = ability;
     }
 
-    public Pokemon(PokedexEntry pokedexEntry, int level, int[] effortValues) {
+    public Pokemon(PokedexEntry pokedexEntry, int level, int[] effortValues, Nature nature, Ability ability) {
         this.pokedexEntry = pokedexEntry;
+        this.setNature(nature);
         this.speciesName = pokedexEntry.getSpeciesName();
         this.types = pokedexEntry.getTypes();
         this.happiness = Byte.MAX_VALUE;
-        this.EVs = effortValues;
+        this.ev = effortValues;
 
-        this.ability = pokedexEntry.getAbilities().stream().findFirst().orElse(null);
+        if (ability.getClass().isInstance(this.pokedexEntry.getHiddenAbility())
+            || this.pokedexEntry.getAbilities().contains(ability)) {
+            this.setAbility(ability);
+        }
         this.level = Math.max(1, Math.min(100, level));
 
-        if (speciesName.equals("Shedinja")) {
+        if (pokedexEntry.getSpeciesName().equals("Shedinja")) {
             this.maxHP = 1;
         } else {
             this.maxHP =
-                (((2 * pokedexEntry.getBaseHP() + IVs[HP.ordinal()] + (EVs[HP.ordinal()] / 4)) * level) / 100) + level
+                (((2 * pokedexEntry.getBaseHP() + iv[HP.ordinal()] + (ev[HP.ordinal()] / 4)) * level) / 100) + level
                     + 10;
         }
 
         this.attack =
-            ((((2 * pokedexEntry.getBaseAtk() + IVs[ATK.ordinal()] + (EVs[ATK.ordinal()] / 4) * level) / 100) + 5)
+            ((((2 * pokedexEntry.getBaseAtk() + iv[ATK.ordinal()] + (ev[ATK.ordinal()] / 4) * level) / 100) + 5)
                 * nature.getMultiplier(ATK)) / 100;
         this.defense =
-            ((((2 * pokedexEntry.getBaseDef() + IVs[DEF.ordinal()] + (EVs[DEF.ordinal()] / 4) * level) / 100) + 5)
+            ((((2 * pokedexEntry.getBaseDef() + iv[DEF.ordinal()] + (ev[DEF.ordinal()] / 4) * level) / 100) + 5)
                 * nature.getMultiplier(DEF)) / 100;
         this.specialAttack =
-            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPATK.ordinal()] + (EVs[SPATK.ordinal()] / 4) * level) / 100) + 5)
+            ((((2 * pokedexEntry.getBaseAtk() + iv[SPATK.ordinal()] + (ev[SPATK.ordinal()] / 4) * level) / 100) + 5)
                 * nature.getMultiplier(SPATK)) / 100;
         this.specialDefense =
-            ((((2 * pokedexEntry.getBaseDef() + IVs[SPDEF.ordinal()] + (EVs[SPDEF.ordinal()] / 4) * level) / 100) + 5)
+            ((((2 * pokedexEntry.getBaseDef() + iv[SPDEF.ordinal()] + (ev[SPDEF.ordinal()] / 4) * level) / 100) + 5)
                 * nature.getMultiplier(SPDEF)) / 100;
         this.speed =
-            ((((2 * pokedexEntry.getBaseAtk() + IVs[SPEED.ordinal()] + (EVs[SPEED.ordinal()] / 4) * level) / 100) + 5)
+            ((((2 * pokedexEntry.getBaseAtk() + iv[SPEED.ordinal()] + (ev[SPEED.ordinal()] / 4) * level) / 100) + 5)
                 * nature.getMultiplier(SPEED)) / 100;
     }
 
@@ -219,6 +228,14 @@ public class Pokemon {
         this.nickname = nickname;
     }
 
+    public String getDisplayName() {
+        if (nickname == null) {
+            return pokedexEntry.getSpeciesName();
+        } else {
+            return nickname + " (" + pokedexEntry.getSpeciesName() + ")";
+        }
+    }
+
     @Deprecated
     public String getSpeciesName() {
         return pokedexEntry != null ? pokedexEntry.getSpeciesName() : speciesName;
@@ -268,54 +285,81 @@ public class Pokemon {
         this.maxHP = maxHP;
     }
 
-    public int calculateAttack() {
+    public double calculateAttack() {
         double multiplier = 1;
         multiplier *= ability.onCalculateAttack(this) * heldItem.onCalculateAttack(this);
-        return (int) (this.attack * getStageMultiplier(attack) * multiplier);
+        return this.attack * getStageMultiplier(stageAttack) * multiplier;
     }
 
     public void setAttack(int attack) {
         this.attack = attack;
     }
 
-    public int calculateDefense() {
+    public double calculateDefense() {
         double multiplier = ability.onCalculateDefense(this) * heldItem.onCalculateDefense(this);
-        return (int) (this.defense * getStageMultiplier(stageDefense) * multiplier);
+        return this.defense * getStageMultiplier(stageDefense) * multiplier;
+    }
+
+    public double calculateDefenseIgnoreStage() {
+        double multiplier = ability.onCalculateDefense(this) * heldItem.onCalculateDefense(this);
+        return this.defense * multiplier;
     }
 
     public void setDefense(int defense) {
         this.defense = defense;
     }
 
-    public int calculateSpecialAttack() {
+    public double calculateSpecialAttack() {
         double multiplier = ability.onCalculateSpecialAttack(this) * heldItem.onCalculateSpecialAttack(this);
-        return (int) (this.specialAttack * getStageMultiplier(stageSpecialAttack) * multiplier);
+        return this.specialAttack * getStageMultiplier(stageSpecialAttack) * multiplier;
     }
 
     public void setSpecialAttack(int specialAttack) {
         this.specialAttack = specialAttack;
     }
 
-    public int calculateSpecialDefense() {
+    public double calculateSpecialDefense(Battle battle) {
         double multiplier = ability.onCalculateSpecialDefense(this) * heldItem.onCalculateSpecialDefense(this);
-        return (int) (this.specialDefense * getStageMultiplier(stageSpecialDefense) * multiplier);
+        if (types.contains(Type.ROCK) && !battle.isWeatherSuppressed() && battle.getWeather() == Weather.SAND) {
+            multiplier *= 1.5;
+        }
+        return this.specialDefense * getStageMultiplier(stageSpecialDefense) * multiplier;
     }
 
     public void setSpecialDefense(int specialDefense) {
         this.specialDefense = specialDefense;
     }
 
-    public int calculateSpeed() {
+    public double calculateSpeed() {
         double multiplier = ability.onCalculateSpeed(this) * heldItem.onCalculateSpeed(this);
         if (this.getStatus() == Status.PARALYZE) {
             multiplier *= 0.5;
         }
         //Verify in which order these calculations should take place.
-        return (int) (this.speed * getStageMultiplier(stageSpeed) * multiplier);
+        return this.speed * getStageMultiplier(stageSpeed) * multiplier;
     }
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    public double getStatApplyStage(StatEnum stat) {
+        switch (stat) {
+            case HP:
+                return this.getCurrentHP();
+            case ATK:
+                return this.attack * getStageMultiplier(this.stageAttack);
+            case DEF:
+                return this.defense * getStageMultiplier(this.stageDefense);
+            case SPATK:
+                return this.specialAttack * getStageMultiplier(this.stageSpecialAttack);
+            case SPDEF:
+                return this.specialDefense * getStageMultiplier(this.stageSpecialDefense);
+            case SPEED:
+                return this.speed * getStageMultiplier(this.stageSpeed);
+            default:
+                throw new IllegalArgumentException("This method is not for accuracy or evasion");
+        }
     }
 
     private double getStageMultiplier(int stage) {
@@ -426,6 +470,14 @@ public class Pokemon {
         return heldItem;
     }
 
+    public HeldItem getConsumedItem() {
+        return consumedItem;
+    }
+
+    public void setConsumedItem(HeldItem consumedItem) {
+        this.consumedItem = consumedItem;
+    }
+
     public void setHeldItem(HeldItem heldItem) {
         this.heldItem = heldItem;
     }
@@ -458,6 +510,14 @@ public class Pokemon {
         this.lastMoveUsed = lastMoveUsed;
     }
 
+    public boolean hasMovedThisTurn() {
+        return movedThisTurn;
+    }
+
+    public void setMovedThisTurn(boolean movedThisTurn) {
+        this.movedThisTurn = movedThisTurn;
+    }
+
     public byte getHappiness() {
         return happiness;
     }
@@ -488,18 +548,22 @@ public class Pokemon {
     }
 
     public boolean isTrapped(Battle battle) {
-        Pokemon opponent = battle.getOpposingLead(this);
+        List<Pokemon> opposingActivePokemon = battle.getOpposingActivePokemon(this);
+
         if (getHeldItem() == SHED_SHELL || getTypes().contains(Type.GHOST)) {
             return false;
-        } else if (opponent.getAbility() == MAGNET_PULL && this.getTypes().contains(Type.STEEL)) {
-            return true;
-        } else if (opponent.getAbility() == ARENA_TRAP && this.isGrounded()) {
-            return true;
-        } else if (opponent.getAbility() == SHADOW_TAG && this.getAbility() != SHADOW_TAG) {
-            return true;
-        } else {
-            return hasVolatileStatus(CANT_ESCAPE) || hasVolatileStatus(NO_RETREAT) || hasVolatileStatus(OCTOLOCKED);
         }
+
+        for (Pokemon opponent : opposingActivePokemon) {
+            if (battle.getPokemonWithinRange(opponent, opponent.getAbility().getRange()).contains(this)
+                && ((opponent.getAbility() == MAGNET_PULL && this.getTypes().contains(Type.STEEL))
+                || (opponent.getAbility() == ARENA_TRAP && this.isGrounded())
+                || (opponent.getAbility() == SHADOW_TAG && this.getAbility() != SHADOW_TAG))) {
+                return true;
+            }
+        }
+
+        return hasVolatileStatus(CANT_ESCAPE) || hasVolatileStatus(NO_RETREAT) || hasVolatileStatus(OCTOLOCKED);
     }
 
     public VolatileStatus getVolatileStatus(VolatileStatusType type) {
@@ -540,7 +604,11 @@ public class Pokemon {
 
     public void afterEntry(Pokemon opponent, Battle battle) {
         setTurnsInBattle(0);
-        ability.afterEntry(this, opponent, battle);
+        //TODO: If Neutralizing Gas is active, give this mon the AbilitySuppressed volatile status.
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterEntry(this, battle);
+        }
         heldItem.afterEntry(this, opponent, battle);
     }
 
@@ -551,7 +619,13 @@ public class Pokemon {
         } else {
             helpingHand = 1;
         }
-        return ability.getMovePowerMultipliers(this, opponent, battle, move) * heldItem.getMovePowerMultipliers(
+        final double abilityMultiplier = (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) ? ability.getMovePowerMultipliers(
+            this,
+            opponent,
+            battle,
+            move) : 1;
+        return abilityMultiplier * heldItem.getMovePowerMultipliers(
             this,
             opponent,
             battle,
@@ -559,7 +633,9 @@ public class Pokemon {
     }
 
     public double beforeAttack(Pokemon opponent, Battle battle, Move move) {
-        final double abilityMultiplier = ability.beforeAttack(this, opponent, battle, move);
+        final double abilityMultiplier = (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility)
+            ? ability.beforeAttack(this, opponent, battle, move) : 1;
         if (abilityMultiplier == 0) {
             return 0;
         } else {
@@ -569,18 +645,36 @@ public class Pokemon {
     }
 
     public void afterAttack(Pokemon opponent, Battle battle, Move move) {
-        ability.afterAttack(this, opponent, battle, move);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterAttack(this, opponent, battle, move);
+        }
         heldItem.afterAttack(this, opponent, battle, move);
     }
 
+    public boolean isDropPossible(StatEnum stat) {
+        if (!(this.getAbility() instanceof IgnorableAbility && this.hasVolatileStatus(ABILITY_IGNORED))
+            && (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility)) {
+            return ability.isDropPossible(stat) && heldItem.isDropPossible(stat);
+        } else {
+            return heldItem.isDropPossible(stat);
+        }
+    }
+
     public void afterDrop(Pokemon opponent, Battle battle) {
-        ability.afterDrop(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterDrop(this, opponent, battle);
+        }
         heldItem.afterDrop(this, opponent, battle);
     }
 
     public double beforeHit(Pokemon opponent, Battle battle, Move move) {
         double abilityMultiplier = 1;
-        if (!(ability instanceof IgnorableAbility && opponent.getAbility() instanceof NullifyingAbility)) {
+        if (!(ability instanceof IgnorableAbility && opponent.getAbility() instanceof NullifyingAbility) && (
+            !this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+                || this.getAbility() instanceof UnsuppressableAbility)) {
             abilityMultiplier *= ability.beforeHit(this, opponent, battle, move);
         }
         if (abilityMultiplier == 0) {
@@ -593,38 +687,79 @@ public class Pokemon {
     }
 
     public void afterHit(Pokemon opponent, Battle battle, int previousHP, Move move) {
-        ability.afterHit(this, opponent, battle, previousHP, move);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterHit(this, opponent, battle, previousHP, move);
+        }
         heldItem.afterHit(this, opponent, battle, previousHP, move);
     }
 
     public void afterStatus(Pokemon opponent, Battle battle) {
         //TODO: HeldItem is first here because Rawst Berry will activate before Water Veil. Is this how it works for all abilities/items?
         heldItem.afterStatus(this, opponent, battle);
-        ability.afterStatus(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterStatus(this, opponent, battle);
+        }
     }
 
     public void beforeTurn(Pokemon opponent, Battle battle) {
-        ability.beforeTurn(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.beforeTurn(this, opponent, battle);
+        }
         heldItem.beforeTurn(this, opponent, battle);
     }
 
     public void afterTurn(Pokemon opponent, Battle battle) {
-        ability.afterTurn(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterTurn(this, opponent, battle);
+        }
         heldItem.afterTurn(this, opponent, battle);
     }
 
     public void afterFaint(Pokemon opponent, Battle battle) {
-        ability.afterFaint(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterFaint(this, opponent, battle);
+        }
         heldItem.afterFaint(this, opponent, battle);
+
+        Pickup.removeFromConsumedItems(this);
     }
 
     public void afterKO(Pokemon opponent, Battle battle) {
-        ability.afterKO(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.afterKO(this, opponent, battle);
+        }
         heldItem.afterKO(this, opponent, battle);
     }
 
     public void beforeSwitchOut(Pokemon opponent, Battle battle) {
-        ability.beforeSwitchOut(this, opponent, battle);
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.beforeSwitchOut(this, opponent, battle);
+        }
         heldItem.beforeSwitchOut(this, opponent, battle);
+
+        Pickup.removeFromConsumedItems(this);
+    }
+
+    public void onWeatherChange(Battle battle) {
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.onWeatherChange(this, battle);
+        }
+        heldItem.onWeatherChange(this, battle);
+    }
+
+    public void onTerrainChange(Battle battle) {
+        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) {
+            ability.onTerrainChange(this, battle);
+        }
+        heldItem.onTerrainChange(this, battle);
     }
 }

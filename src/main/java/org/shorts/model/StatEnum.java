@@ -6,6 +6,8 @@ public enum StatEnum {
     DEF,
     SPATK,
     SPDEF,
-    SPEED;
-    
+    SPEED,
+    ACCURACY,
+    EVASION;
+
 }

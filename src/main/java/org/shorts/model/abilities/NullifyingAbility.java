@@ -28,4 +28,15 @@ public class NullifyingAbility extends Ability {
         super.afterAttack(self, opponent, battle, move);
         opponent.removeVolatileStatus(VolatileStatusType.ABILITY_IGNORED);
     }
+
+    //    Generation IV onward	Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightning Rod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke, Wonder Guard
+    //    Generation V onward	Big Pecks, Contrary, Friend Guard, Heavy Metal, Light Metal, Magic Bounce, Multiscale, Sap Sipper, Telepathy, Wonder Skin
+    //    Generation VI onward	Aura Break, Aroma Veil, Bulletproof, Dark Aura[a], Fairy Aura[a], Flower Veil, Fur Coat, Overcoat, Sweet Veil
+    //    Generation VII onward	Dazzling, Disguise, Fluffy, Queenly Majesty, Water Bubble
+    //    Generation VIII onward	Ice Scales, Ice Face, Mirror Armor, Pastel Veil, Punk Rock
+    //    Generation IX	Armor Tail, Earth Eater, Guard Dog, Good as Gold, Illuminate[b], Mind's Eye, Purifying Salt, Tera Shell, Tablets of Ruin, Thermal Exchange, Well-Baked Body, Vessel of Ruin, Wind Rider
+    //    From Generation VIII onward, Dark Aura and Fairy Aura can no longer be ignored; however, Aura Break still can be.
+    //    Although Illuminate was introduced in Generation III, it did not have an in-battle effect until version 2.0.1 of Pokémon Scarlet and Violet, which is when it became ignorable.
+    //    Despite being mechanically similar to ignorable Abilities, Magic Guard, Comatose, Shields Down, Full Metal Body, Shadow Shield, and Prism Armor cannot be ignored in any game.
+
 }

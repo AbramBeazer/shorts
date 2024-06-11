@@ -1,21 +1,31 @@
 package org.shorts.model.moves;
 
 public enum Range {
-    SINGLE_ADJACENT_ANY,
-    SINGLE_ANY,
-    SINGLE_ADJACENT_OPPONENT,
-    SELF,
-    SINGLE_ADJACENT_ALLY,
-    SINGLE_SELF_OR_ADJACENT_ALLY,
-    OWN_PARTY,
-    ALL_ALLIES_EXCEPT_SELF,
-    SINGLE_RANDOM_ADJACENT_OPPONENT,
-    SINGLE_RANDOM_OPPONENT,
-    ALL_ADJACENT_OPPONENTS,
-    ALL_ADJACENT,
-    ALL,
-    BOTH_SIDES,
-    OTHER_SIDE,
-    OWN_SIDE,
-    VARIES
+    SINGLE_ADJACENT_ANY(true),
+    SINGLE_ANY(true),
+    SINGLE_ADJACENT_OPPONENT(true),
+    SINGLE_ADJACENT_ALLY(true),
+    SINGLE_SELF_OR_ADJACENT_ALLY(true),
+    SELF(false),
+    OWN_PARTY(false),
+    ALL_ALLIES_EXCEPT_SELF(false),
+    RANDOM_ADJACENT_OPPONENT(false),
+    RANDOM_OPPONENT(false),
+    ALL_ADJACENT_OPPONENTS(false),
+    ALL_ADJACENT(false),
+    ALL(false),
+    BOTH_SIDES(false),
+    OTHER_SIDE(false),
+    OWN_SIDE(false),
+    VARIES(false);
+
+    private boolean promptForTargetChoice;
+
+    Range(boolean promptForTargetChoice) {
+        this.promptForTargetChoice = promptForTargetChoice;
+    }
+
+    public boolean isPromptForTargetChoice() {
+        return promptForTargetChoice;
+    }
 }

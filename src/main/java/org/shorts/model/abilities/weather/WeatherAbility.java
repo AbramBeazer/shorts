@@ -22,7 +22,7 @@ public class WeatherAbility extends Ability {
     }
 
     @Override
-    public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterEntry(Pokemon self, Battle battle) {
         if (!battle.getWeather().isExtreme()) {
             battle.setWeather(this.weather, DEFAULT_WEATHER_DURATION);
             if (self.getHeldItem() instanceof WeatherExtendingItem) {

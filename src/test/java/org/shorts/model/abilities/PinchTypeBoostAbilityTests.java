@@ -5,7 +5,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.SingleBattle;
 import org.shorts.battle.Trainer;
 import org.shorts.model.moves.Ember;
 import org.shorts.model.moves.Move;
@@ -28,7 +27,7 @@ class PinchTypeBoostAbilityTests {
     void setup() {
         attacker = new Pokemon(99, 99, DUMMY_ABILITY);
         defender = new Pokemon(99, 99, DUMMY_ABILITY);
-        battle = new SingleBattle(new Trainer("Red", List.of(attacker)), new Trainer("Green", List.of(defender)));
+        battle = new Battle(new Trainer("Red", List.of(attacker)), new Trainer("Green", List.of(defender)), 1);
     }
 
     void testActivatesOnlyUnder33PercentHP(Move move, PinchTypeBoostAbility ability) {

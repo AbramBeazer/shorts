@@ -17,6 +17,6 @@ public class Technician extends Ability {
 
     @Override
     public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        return move.getPower() <= BASE_POWER_THRESHOLD ? MULTIPLIER : 1;
+        return move.getPower(self, opponent, battle) <= BASE_POWER_THRESHOLD ? MULTIPLIER : 1;
     }
 }

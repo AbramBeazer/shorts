@@ -14,7 +14,7 @@ public class Magnitude extends Move {
     }
 
     @Override
-    public double getPower() {
+    public double getPower(Pokemon user, Pokemon target, Battle battle) {
 
         //TODO: Implement
         return 0;

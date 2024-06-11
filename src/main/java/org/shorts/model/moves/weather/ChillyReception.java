@@ -20,6 +20,7 @@ public class ChillyReception extends WeatherMove implements SwitchSelfMove {
         final Trainer trainer =
             battle.getPlayerOne().getLead() == user ? battle.getPlayerOne() : battle.getPlayerTwo();
 
-        battle.promptSwitchCausedByUserMove(trainer);//TODO: Remove this
+        battle.promptSwitchCausedByUserMove(trainer);
+        //TODO: Remove this
     }
 }

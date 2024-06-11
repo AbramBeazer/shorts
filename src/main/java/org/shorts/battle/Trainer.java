@@ -1,9 +1,13 @@
 package org.shorts.battle;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
 import org.shorts.Main;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.TooManyTypesException;
@@ -16,6 +20,7 @@ public class Trainer {
 
     private final String name;
     private final List<Pokemon> team;
+    private final int activeMonsPerSide;
     private boolean rocks = false;
 
     private int spikes = 0;
@@ -27,8 +32,18 @@ public class Trainer {
     private int reflectTurns = 0;
     private int lightScreenTurns = 0;
     private int auroraVeilTurns = 0;
+    private int luckyChantTurns = 0;
+    private int mistTurns = 0;
 
     public Trainer(String name, List<Pokemon> team) {
+        this(name, team, 1);
+    }
+
+    public Trainer(String name, List<Pokemon> team, int activeMonsPerSide) {
+        if (activeMonsPerSide > 3 || activeMonsPerSide < 1) {
+            throw new IllegalArgumentException("Only Single, Double, and Triple battles are supported.");
+        }
+        this.activeMonsPerSide = activeMonsPerSide;
         this.name = Objects.requireNonNull(name, "Come on, tell the professor your name!");
         this.team = Objects.requireNonNull(team, "Constructor parameter \"team\" is null!");
         if (team.isEmpty()) {
@@ -38,12 +53,15 @@ public class Trainer {
         }
     }
 
-    public boolean isRocks() {
+    public boolean hasRocks() {
         return rocks;
     }
 
-    public void setRocks(boolean rocks) {
-        this.rocks = rocks;
+    public void addRocks() {
+        if (!rocks) {
+            rocks = true;
+            //TODO: Output stealth-rock-laying message
+        }
     }
 
     public int getSpikes() {
@@ -62,12 +80,15 @@ public class Trainer {
         this.toxicSpikes = toxicSpikes;
     }
 
-    public boolean isStickyWeb() {
+    public boolean hasStickyWeb() {
         return stickyWeb;
     }
 
-    public void setStickyWeb(boolean stickyWeb) {
-        this.stickyWeb = stickyWeb;
+    public void addStickyWeb() {
+        if (!stickyWeb) {
+            this.stickyWeb = true;
+            //TODO: Output sticky web message
+        }
     }
 
     public int getSafeguardTurns() {
@@ -102,6 +123,22 @@ public class Trainer {
         this.auroraVeilTurns = auroraVeilTurns;
     }
 
+    public int getLuckyChantTurns() {
+        return luckyChantTurns;
+    }
+
+    public void setLuckyChantTurns(int luckyChantTurns) {
+        this.luckyChantTurns = luckyChantTurns;
+    }
+
+    public int getMistTurns() {
+        return mistTurns;
+    }
+
+    public void setMistTurns(int mistTurns) {
+        this.mistTurns = mistTurns;
+    }
+
     public String getName() {
         return name;
     }
@@ -110,20 +147,70 @@ public class Trainer {
         return team;
     }
 
+    @Deprecated
     public Pokemon getLead() {
         return team.get(0);
+    }
+
+    public List<Pokemon> getActivePokemon() {
+        return team.subList(0, activeMonsPerSide);
     }
 
     public boolean hasLost() {
         return this.team.stream().allMatch(p -> p.getCurrentHP() == 0);
     }
 
+    public void chooseLeads() throws IOException {
+        List<Integer> leadIndexes = new ArrayList<>();
+        System.out.println("\n~~~PICK " + activeMonsPerSide + " TO SEND OUT~~~");
+
+        for (int i = 0; i < team.size(); i++) {
+            Pokemon teammate = team.get(i);
+
+            System.out.println(
+                (i + 1) + ")" + "\t" + teammate.getDisplayName() + "\tability: " + teammate.getAbility()
+                    + "\titem: "
+                    + teammate.getHeldItem());
+        }
+        System.out.println("\nLEADS:");
+
+        while (leadIndexes.size() < activeMonsPerSide) {
+            int choice = System.in.read();
+            if (choice < 1 || choice > 6 || leadIndexes.contains(choice - 1)) {
+                System.out.println("INVALID CHOICE -- must be three unique choices from 1 to 6.");
+                continue;
+            }
+
+            leadIndexes.add(choice - 1);
+            final Pokemon mon = team.get(choice - 1);
+            System.out.println(
+                (leadIndexes.size()) + ")" + "\t" + mon.getDisplayName() + "\tability: " + mon.getAbility()
+                    + "\titem: " + mon.getHeldItem());
+        }
+
+        team.sort(Comparator.comparingInt((Pokemon p) -> {
+            final int index = leadIndexes.indexOf(team.indexOf(p));
+            if (index < 0) {
+                return 1000;
+            } else {
+                return index;
+            }
+        }));
+    }
+
     public boolean hasAvailableSwitch() {
-        return this.team.stream().anyMatch(p -> !p.hasFainted() && p != this.getLead());
+        for (int i = activeMonsPerSide; i < team.size(); i++) {
+            if (!team.get(i).hasFainted()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void switchPokemon(int indexA, int indexB) {
-        if (indexA != indexB) {
+        if (indexA < activeMonsPerSide && indexB < activeMonsPerSide) {
+            throw new IllegalArgumentException("Cannot switch two Pokémon that are both in battle!");
+        } else if (indexA != indexB) {
             Pokemon a = this.team.get(indexA);
             this.team.set(indexA, team.get(indexB));
             this.team.set(indexB, a);
@@ -134,7 +221,7 @@ public class Trainer {
         //Why pass in a Pokemon instead of just 0? I'm thinking ahead to if I ever implement Double or Triple battles.
         if (hasAvailableSwitch()) {
             int knownIndex = team.indexOf(pokemon);
-            int switchIndex = Main.RANDOM.nextInt(6);
+            int switchIndex = Main.RANDOM.nextInt(6) + activeMonsPerSide;
             while (switchIndex % team.size() == knownIndex || team.get(switchIndex % team.size()).hasFainted()) {
                 switchIndex++;
             }
@@ -151,7 +238,7 @@ public class Trainer {
             //Stealth Rock
             if (rocks && !magicGuard && faintedFromRocks(pokemon)) {
                 return;
-            } //TODO: What happens if rocks put the mon into Sitrus Berry range before Spikes activates? Does the healing happen before the spikes deal damage?
+            } //TODO: What happens if rocks put the mon into Sitrus Berry range before Spikes activates? Does the healing happen before the spikes deal damage? I think the berry activates at the end of the turn.
             if (pokemon.isGrounded()) {
                 if (!magicGuard && faintedFromSpikes(pokemon)) {
                     return;
@@ -163,7 +250,7 @@ public class Trainer {
                         pokemon.setStatus(toxicSpikes == 2 ? Status.TOXIC_POISON : Status.POISON);
                     }
                 }
-                if (stickyWeb) {
+                if (stickyWeb && pokemon.isDropPossible(StatEnum.SPEED)) {
                     pokemon.changeSpeed(-1);
                 }
             }
@@ -205,12 +292,14 @@ public class Trainer {
     public void addSpikes() {
         if (spikes < 3) {
             spikes++;
+            //TODO: Output spike-laying message
         }
     }
 
     public void addToxicSpikes() {
         if (toxicSpikes < 2) {
             toxicSpikes++;
+            //TODO: Output toxic-spike-laying message
         }
     }
 

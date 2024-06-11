@@ -3,15 +3,23 @@ package org.shorts.model.abilities;
 import java.util.Objects;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.moves.Move;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 
 public abstract class Ability {
 
     private String name;
+    private Range range;
 
     protected Ability(String name) {
+        this(name, Range.SELF);
+    }
+
+    protected Ability(String name, Range range) {
         this.name = name;
+        this.range = range;
     }
 
     public String getName() {
@@ -22,7 +30,11 @@ public abstract class Ability {
         this.name = name;
     }
 
-    public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
+    public Range getRange() {
+        return range;
+    }
+
+    public void afterEntry(Pokemon self, Battle battle) {
     }
 
     public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
@@ -34,6 +46,10 @@ public abstract class Ability {
     }
 
     public void afterAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    }
+
+    public boolean isDropPossible(StatEnum stat) {
+        return true;
     }
 
     public void afterDrop(Pokemon self, Pokemon opponent, Battle battle) {
@@ -66,11 +82,23 @@ public abstract class Ability {
 
     }
 
-    public void onGainAbility(Pokemon self) {
+    public void onInitiate(Pokemon self) {
+
+    }
+
+    public void onGainAbility(Pokemon self, Battle battle) {
 
     }
 
     public void onLoseAbility(Pokemon self, Pokemon opponent, Battle battle) {
+
+    }
+
+    public void onWeatherChange(Pokemon self, Battle battle) {
+
+    }
+
+    public void onTerrainChange(Pokemon self, Battle battle) {
 
     }
 
@@ -99,7 +127,12 @@ public abstract class Ability {
         if (obj == this) {
             return true;
         }
+
         if (obj instanceof Ability) {
+
+            if (obj.getClass() == this.getClass()) {
+                return true;
+            }
             Ability ability = (Ability) obj;
             return name.equals(ability.name);
         }

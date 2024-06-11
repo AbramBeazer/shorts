@@ -2,6 +2,7 @@ package org.shorts.model.moves;
 
 import org.shorts.battle.Battle;
 import org.shorts.battle.Terrain;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
@@ -11,6 +12,13 @@ public class Bulldoze extends Move {
 
     public Bulldoze() {
         super("Bulldoze", 60, 100, Type.GROUND, Category.PHYSICAL, Range.ALL_ADJACENT, 32, false, 100);
+    }
+
+    @Override
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        if (target.isDropPossible(StatEnum.SPEED)) {
+            super.trySecondaryEffect(user, target, battle);
+        }
     }
 
     @Override

@@ -21,7 +21,7 @@ public class ExtremeWeatherAbility extends WeatherAbility {
         Weather.EXTREME_WIND);
 
     @Override
-    public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterEntry(Pokemon self, Battle battle) {
         battle.setWeather(this.getWeather(), Weather.INFINITE_WEATHER_DURATION);
     }
 

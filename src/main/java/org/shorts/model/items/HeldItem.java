@@ -3,6 +3,7 @@ package org.shorts.model.items;
 import java.util.Objects;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 
@@ -25,15 +26,19 @@ public abstract class HeldItem {
     public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
     }
 
-    public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public double getMovePowerMultipliers(Pokemon user, Pokemon opponent, Battle battle, Move move) {
         return 1;
     }
 
-    public double beforeAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public double beforeAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {
         return 1;
     }
 
-    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public void afterAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {
+    }
+
+    public boolean isDropPossible(StatEnum stat) {
+        return true;
     }
 
     public void afterDrop(Pokemon self, Pokemon opponent, Battle battle) {
@@ -43,7 +48,7 @@ public abstract class HeldItem {
         return 1;
     }
 
-    public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
+    public void afterHit(Pokemon user, Pokemon opponent, Battle battle, int previousHP, Move move) {
     }
 
     public void afterStatus(Pokemon self, Pokemon opponent, Battle battle) {
@@ -53,7 +58,7 @@ public abstract class HeldItem {
 
     }
 
-    public void afterTurn(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterTurn(Pokemon user, Pokemon opponent, Battle battle) {
     }
 
     public void afterFaint(Pokemon self, Pokemon opponent, Battle battle) {
@@ -63,6 +68,14 @@ public abstract class HeldItem {
     }
 
     public void beforeSwitchOut(Pokemon self, Pokemon opponent, Battle battle) {
+
+    }
+
+    public void onWeatherChange(Pokemon self, Battle battle) {
+
+    }
+
+    public void onTerrainChange(Pokemon self, Battle battle) {
 
     }
 

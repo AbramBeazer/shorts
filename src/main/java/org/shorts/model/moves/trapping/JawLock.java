@@ -1,6 +1,7 @@
 package org.shorts.model.moves.trapping;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.BitingMove;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
@@ -8,7 +9,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.CANT_ESCAPE;
 
-public class JawLock extends TrappingMove {
+public class JawLock extends TrappingMove implements BitingMove {
 
     public JawLock() {
         super("Jaw Lock", 80, 100, Type.DARK, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, true, 100);
