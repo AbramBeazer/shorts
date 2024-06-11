@@ -301,10 +301,10 @@ public abstract class Move {
 
         for (Pokemon target : targets) {
 
-            //TODO: Check if curse is used by a Ghost-type and select a random opponent as the target, if so.
-            //TODO: What if this rolls a target who has fainted and hasn't been replaced yet?
+            //TODO: What if a random-target move targets a Pokemon that has fainted and hasn't been switched out yet?
+            //TODO: What if any move targets a Pokemon that's fainted? Does it just hit another available adjacent enemy?
 
-            //TODO: Move this Pressure logic to whatever method calls this one. Pressure shouldn't activate for Curse or Sticky Web but should activate for moves that target the whole field, like Rain Dance.
+            //TODO: Move this Pressure logic to whatever method calls this one. Pressure shouldn't activate for Curse or Sticky Web but should activate for moves that target the whole field, like Rain Dance. I think it should only activate once in the case of Rain Dance, even if multiple opponents have it.
             //  Should it affect moves that affect the enemy side? It affects all hazard moves except Sticky Web.
             //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
             //  Pressure increases the PP consumption of an opponent's Imprison and Snatch even though those are self-targeting moves; in Snatch's case the additional PP is consumed even if Snatch fails or snatches a move from a Pokémon other than the one with Pressure.
