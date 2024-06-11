@@ -2,6 +2,7 @@ package org.shorts.model.pokemon;
 
 import java.util.Set;
 
+import org.shorts.model.Sex;
 import org.shorts.model.abilities.Ability;
 import org.shorts.model.types.Type;
 
@@ -16,7 +17,7 @@ public class PokedexEntry {
     private Set<Type> types;
     private Set<Ability> abilities;
     private Ability hiddenAbility;
-    private Boolean genderless;
+    private Sex singleSex;
     private int baseHP;
     private int baseAtk;
     private int baseDef;
@@ -115,12 +116,12 @@ public class PokedexEntry {
         this.hiddenAbility = hiddenAbility;
     }
 
-    public boolean getGenderless() {
-        return Boolean.TRUE.equals(genderless);
+    public Sex getSingleSex() {
+        return singleSex;
     }
 
-    public void setGenderless(boolean genderless) {
-        this.genderless = Boolean.TRUE.equals(genderless) ? Boolean.TRUE : null;
+    public void setSingleSex(Sex singleSex) {
+        this.singleSex = singleSex;
     }
 
     public int getBaseHP() {
