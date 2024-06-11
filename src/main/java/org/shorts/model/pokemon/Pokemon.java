@@ -24,6 +24,7 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
+import static org.shorts.Main.RANDOM;
 import static org.shorts.model.StatEnum.ATK;
 import static org.shorts.model.StatEnum.DEF;
 import static org.shorts.model.StatEnum.HP;
@@ -113,6 +114,12 @@ public class Pokemon {
         this.types = pokedexEntry.getTypes();
         this.happiness = Byte.MAX_VALUE;
         this.ev = effortValues;
+
+        if (pokedexEntry.getSingleSex() == null) {
+            this.sex = RANDOM.nextInt(2) == 0 ? Sex.FEMALE : Sex.MALE;
+        } else {
+            this.sex = pokedexEntry.getSingleSex();
+        }
 
         if (ability.getClass().isInstance(this.pokedexEntry.getHiddenAbility())
             || this.pokedexEntry.getAbilities().contains(ability)) {
