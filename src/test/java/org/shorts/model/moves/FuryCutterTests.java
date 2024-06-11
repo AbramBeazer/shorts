@@ -1,5 +1,6 @@
 package org.shorts.model.moves;
 
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,7 @@ class FuryCutterTests {
 
     private Pokemon user;
     private Pokemon target;
+    private List<Pokemon> allTargets;
     private Battle battle;
 
     @BeforeEach
@@ -31,6 +33,7 @@ class FuryCutterTests {
         user.setTypes(types);
         target = getDummyPokemon();
         target.setTypes(types);
+        allTargets = List.of(target);
         battle = new DummySingleBattle();
         Main.RANDOM = new MockRandomReturnZero();
     }
@@ -40,14 +43,14 @@ class FuryCutterTests {
         FuryCutter furyCutter = new FuryCutter();
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.determineTargetAndExecuteMove(user, target, battle);
+        furyCutter.execute(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.determineTargetAndExecuteMove(user, target, battle);
+        furyCutter.execute(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(2);
 
         Main.RANDOM = new MockRandomReturnMax();
-        furyCutter.determineTargetAndExecuteMove(user, target, battle);
+        furyCutter.execute(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
     }
 
@@ -56,16 +59,16 @@ class FuryCutterTests {
         FuryCutter furyCutter = new FuryCutter();
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.determineTargetAndExecuteMove(user, target, battle);
+        furyCutter.execute(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.determineTargetAndExecuteMove(user, target, battle);
+        furyCutter.execute(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(2);
 
-        furyCutter.determineTargetAndExecuteMove(user, target, battle);
+        furyCutter.execute(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(4);
 
-        furyCutter.determineTargetAndExecuteMove(user, target, battle);
+        furyCutter.execute(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(4);
     }
 
@@ -74,14 +77,14 @@ class FuryCutterTests {
         FuryCutter furyCutter = new FuryCutter();
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.determineTargetAndExecuteMove(user, target, battle);
+        furyCutter.execute(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.determineTargetAndExecuteMove(user, target, battle);
+        furyCutter.execute(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(2);
 
-        new Earthquake().determineTargetAndExecuteMove(user, target, battle);
-        furyCutter.determineTargetAndExecuteMove(user, target, battle);
+        new Earthquake().execute(user, allTargets, battle);
+        furyCutter.execute(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
     }
 
@@ -92,10 +95,10 @@ class FuryCutterTests {
         FuryCutter furyCutter = new FuryCutter();
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.determineTargetAndExecuteMove(user, target, battle);
+        furyCutter.execute(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.determineTargetAndExecuteMove(user, target, battle);
+        furyCutter.execute(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(2);
 
         assertThat(furyCutter.calculateMovePower(user, target, battle)).isEqualTo(

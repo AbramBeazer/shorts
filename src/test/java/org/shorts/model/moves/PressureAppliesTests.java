@@ -1,5 +1,6 @@
 package org.shorts.model.moves;
 
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,7 @@ class PressureAppliesTests {
 
     private Pokemon attacker = new Groudon();
     private Pokemon defender = getDummyPokemon();
+    private List<Pokemon> allTargets = List.of(defender);
     private final Battle battle = new DummySingleBattle();
 
     @BeforeEach
@@ -48,7 +50,7 @@ class PressureAppliesTests {
     @Test
     void testReturnsFalseForStatusMoveThatOnlyTargetsSelf() {
         Move move = new Rest();
-        move.determineTargetAndExecuteMove(attacker, defender, battle);
+        move.execute(attacker, allTargets, battle);
         assertThat(move.getCurrentPP()).isEqualTo(move.getMaxPP() - 1);
     }
 
@@ -62,12 +64,12 @@ class PressureAppliesTests {
     void testCurse() {
         Curse curse = new Curse();
         assertThat(attacker.getTypes()).doesNotContain(GHOST);
-        curse.determineTargetAndExecuteMove(attacker, defender, battle);
+        curse.execute(attacker, allTargets, battle);
         assertThat(curse.getCurrentPP()).isEqualTo(curse.getMaxPP() - 1);
 
         curse = new Curse();
         attacker.setTypes(Set.of(GHOST));
-        curse.determineTargetAndExecuteMove(attacker, defender, battle);
+        curse.execute(attacker, allTargets, battle);
         assertThat(curse.getCurrentPP()).isEqualTo(curse.getMaxPP() - 2);
     }
 }
