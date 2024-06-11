@@ -1,5 +1,8 @@
 package org.shorts.battle;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -144,12 +147,55 @@ public class Trainer {
         return team;
     }
 
+    @Deprecated
     public Pokemon getLead() {
         return team.get(0);
     }
 
+    public List<Pokemon> getActivePokemon() {
+        return team.subList(0, activeMonsPerSide);
+    }
+
     public boolean hasLost() {
         return this.team.stream().allMatch(p -> p.getCurrentHP() == 0);
+    }
+
+    public void chooseLeads() throws IOException {
+        List<Integer> leadIndexes = new ArrayList<>();
+        System.out.println("\n~~~PICK " + activeMonsPerSide + " TO SEND OUT~~~");
+
+        for (int i = 0; i < team.size(); i++) {
+            Pokemon teammate = team.get(i);
+
+            System.out.println(
+                (i + 1) + ")" + "\t" + teammate.getDisplayName() + "\tability: " + teammate.getAbility()
+                    + "\titem: "
+                    + teammate.getHeldItem());
+        }
+        System.out.println("\nLEADS:");
+
+        while (leadIndexes.size() < activeMonsPerSide) {
+            int choice = System.in.read();
+            if (choice < 1 || choice > 6 || leadIndexes.contains(choice - 1)) {
+                System.out.println("INVALID CHOICE -- must be three unique choices from 1 to 6.");
+                continue;
+            }
+
+            leadIndexes.add(choice - 1);
+            final Pokemon mon = team.get(choice - 1);
+            System.out.println(
+                (leadIndexes.size()) + ")" + "\t" + mon.getDisplayName() + "\tability: " + mon.getAbility()
+                    + "\titem: " + mon.getHeldItem());
+        }
+
+        team.sort(Comparator.comparingInt((Pokemon p) -> {
+            final int index = leadIndexes.indexOf(team.indexOf(p));
+            if (index < 0) {
+                return 1000;
+            } else {
+                return index;
+            }
+        }));
     }
 
     public boolean hasAvailableSwitch() {

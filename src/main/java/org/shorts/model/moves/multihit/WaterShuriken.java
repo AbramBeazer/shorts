@@ -12,7 +12,7 @@ public class WaterShuriken extends MultiHitMove {
     }
 
     @Override
-    public int getPriority(Pokemon attacker, Pokemon defender, Battle battle) {
+    public int getPriority(Pokemon attacker, Battle battle) {
         return 1;
     }
 }

@@ -14,8 +14,8 @@ public class BabyDollEyes extends Move {
     }
 
     @Override
-    public int getPriority(Pokemon attacker, Pokemon defender, Battle battle) {
-        return 1 + super.getPriority(attacker, defender, battle);
+    public int getPriority(Pokemon attacker, Battle battle) {
+        return 1;
     }
 
     @Override

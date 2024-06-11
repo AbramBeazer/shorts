@@ -121,7 +121,7 @@ public class Pokemon {
         }
         this.level = Math.max(1, Math.min(100, level));
 
-        if (speciesName.equals("Shedinja")) {
+        if (pokedexEntry.getSpeciesName().equals("Shedinja")) {
             this.maxHP = 1;
         } else {
             this.maxHP =

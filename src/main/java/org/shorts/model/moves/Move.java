@@ -1,5 +1,6 @@
 package org.shorts.model.moves;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -167,12 +168,14 @@ public abstract class Move {
         return contact;
     }
 
-    public int getPriority(Pokemon attacker, Pokemon defender, Battle battle) {
+    public int getPriority(Pokemon attacker, Battle battle) {
         return 0;
     }
 
     public int getAbilityPriorityBonus(Pokemon user) {
-        if (user.getAbility() == PRANKSTER && this.category == Category.STATUS) {
+        if (user.hasVolatileStatus(ABILITY_SUPPRESSED)) {
+            return 0;
+        } else if (user.getAbility() == PRANKSTER && this.category == Category.STATUS) {
             return 1;
         } else if (user.getAbility() == GALE_WINGS && user.isAtFullHP() && this.type == FLYING) {
             return 1;
@@ -292,44 +295,46 @@ public abstract class Move {
         return Objects.hash(name, power, accuracy, type, maxPP, contact, secondaryEffectChance);
     }
 
-    public void determineTargetAndExecuteMove(Pokemon user, Pokemon target, Battle battle) {
+    public void determineTargetAndExecuteMove(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setMovedThisTurn(true);
-        if (getRange(user) == Range.SELF) {
-            target = user;
-        }
+        for (Pokemon target : targets) {
+            if (getRange(user) == Range.SELF) {
+                target = user;
+            }
 
-        //TODO: Check if curse is used by a Ghost-type and select a random opponent as the target, if so.
-        //TODO: What if this rolls a target who has fainted and hasn't been replaced yet?
+            //TODO: Check if curse is used by a Ghost-type and select a random opponent as the target, if so.
+            //TODO: What if this rolls a target who has fainted and hasn't been replaced yet?
 
-        this.decrementPP();
-        //TODO: Move this Pressure logic to whatever method calls this one. Pressure shouldn't activate for Curse or Sticky Web but should activate for moves that target the whole field, like Rain Dance.
-        //  Should it affect moves that affect the enemy side? It affects all hazard moves except Sticky Web.
-        //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
-        //  Pressure increases the PP consumption of an opponent's Imprison and Snatch even though those are self-targeting moves; in Snatch's case the additional PP is consumed even if Snatch fails or snatches a move from a Pokémon other than the one with Pressure.
-        if (battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target)
-            && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(
-            user,
-            target)) {
             this.decrementPP();
-        }
+            //TODO: Move this Pressure logic to whatever method calls this one. Pressure shouldn't activate for Curse or Sticky Web but should activate for moves that target the whole field, like Rain Dance.
+            //  Should it affect moves that affect the enemy side? It affects all hazard moves except Sticky Web.
+            //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
+            //  Pressure increases the PP consumption of an opponent's Imprison and Snatch even though those are self-targeting moves; in Snatch's case the additional PP is consumed even if Snatch fails or snatches a move from a Pokémon other than the one with Pressure.
+            if (battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target)
+                && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(
+                user,
+                target)) {
+                this.decrementPP();
+            }
 
-        if (this.category == Category.STATUS && user != target && target.hasVolatileStatus(MAGIC_COAT)) {
-            target = user;
-        }
+            if (this.category == Category.STATUS && user != target && target.hasVolatileStatus(MAGIC_COAT)) {
+                target = user;
+            }
 
-        executeMove(user, target, battle);
-        user.setLastMoveUsed(this);
-        //if(userMon.getCurrentHP() == 0) {
-        //  //TODO: Handle fainting and subsequent switch-in.
-        //}
+            executeMove(user, target, battle);
+            user.setLastMoveUsed(this);
+            //if(userMon.getCurrentHP() == 0) {
+            //  //TODO: Handle fainting and subsequent switch-in.
+            //}
 
-        //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
-        if (target.getCurrentHP() == 0) {
-            //Or should I have this call in Pokemon.takeDamage()?
-            target.afterFaint(user, battle);
-            user.afterKO(target, battle);
-            //TODO: Handle fainting and subsequent switch-in.
+            //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
+            if (target.getCurrentHP() == 0) {
+                //Or should I have this call in Pokemon.takeDamage()?
+                target.afterFaint(user, battle);
+                user.afterKO(target, battle);
+                //TODO: Handle fainting and subsequent switch-in.
 
+            }
         }
     }
 

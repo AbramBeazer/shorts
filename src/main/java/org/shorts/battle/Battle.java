@@ -2,17 +2,18 @@ package org.shorts.battle;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.shorts.Main;
 import org.shorts.model.moves.MeFirst;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 
+import static org.shorts.Main.RANDOM;
 import static org.shorts.model.abilities.VictoryStar.VICTORY_STAR;
 import static org.shorts.model.items.AssaultVest.ASSAULT_VEST;
 import static org.shorts.model.status.VolatileStatusType.CHOICE_LOCKED;
@@ -190,16 +191,12 @@ public class Battle {
     }
 
     public void run() throws Exception {
-        this.chooseLeads();
+        playerOne.chooseLeads();
+        playerTwo.chooseLeads();
+
         while (!(playerOne.hasLost() || playerTwo.hasLost())) {
             takeTurns();
         }
-    }
-
-    public void chooseLeads() throws IOException {
-        int leadIndexOne = pollPlayerInput(playerOne);
-        int leadIndexTwo = pollPlayerInput(playerTwo);
-        handleSwitches(leadIndexOne, leadIndexTwo);
     }
 
     public void takeTurns() throws Exception {
@@ -209,24 +206,31 @@ public class Battle {
         }
 
         //take player input
-        int choiceOne = pollPlayerInput(playerOne);
-        int choiceTwo = pollPlayerInput(playerTwo);
-        //TODO: Create a Turn class that stores user, move, and target).
+        List<Turn> turns = new ArrayList<>();
+        turns.addAll(pollPlayerInput(playerOne));
+        turns.addAll(pollPlayerInput(playerTwo));
+
+        turns.sort(Comparator.comparing(
+            turn -> turn.getMove().getPriority(turn.getUser(), this) + turn.getMove()
+                .getAbilityPriorityBonus(turn.getUser()),
+            (a, b) -> Integer.compare(b, a)));
+
         Move moveOne = null;
         Move moveTwo = null;
 
         //PRIORITY 6
-        handleSwitches(choiceOne, choiceTwo);
-        if (choiceOne <= 4) {
-            moveOne = playerOne.getLead().getMoves()[choiceOne - 1];
-        }
-        if (choiceTwo <= 4) {
-            moveTwo = playerTwo.getLead().getMoves()[choiceTwo - 1];
-        }
 
-        int priorityOne = moveOne.getPriority(playerOne.getLead(), playerTwo.getLead(), this);
+        //        handleSwitches(choiceOne, choiceTwo);
+        //        if (choiceOne <= 4) {
+        //            moveOne = playerOne.getLead().getMoves()[choiceOne - 1];
+        //        }
+        //        if (choiceTwo <= 4) {
+        //            moveTwo = playerTwo.getLead().getMoves()[choiceTwo - 1];
+        //        }
+
+        int priorityOne = moveOne.getPriority(playerOne.getLead(), this);
         int abilityPriorityBonusOne = moveOne.getAbilityPriorityBonus(playerOne.getLead());
-        int priorityTwo = moveTwo.getPriority(playerTwo.getLead(), playerOne.getLead(), this);
+        int priorityTwo = moveTwo.getPriority(playerTwo.getLead(), this);
         int abilityPriorityBonusTwo = moveTwo.getAbilityPriorityBonus(playerTwo.getLead());
 
         // TODO:
@@ -238,37 +242,37 @@ public class Battle {
         //  Moves that target all Pokémon (except Perish Song and Rototiller, which cannot affect Dark-type opponents if boosted by Prankster) and moves that set traps are successful regardless of the presence of Dark-type Pokémon.
 
         //TODO: Should I have an "onCalcPriority" method in Pokémon, Ability, and HeldItem? -- I can override getPriority in individual moves, at least.
-        if (priorityOne > priorityTwo) {
-            moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
-            moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
-        } else if (priorityTwo > priorityOne) {
-            moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
-            moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
-        } else {
-            double speedOne = playerOne.getLead().calculateSpeed();
-            double speedTwo = playerTwo.getLead().calculateSpeed();
-
-            if (speedOne > speedTwo) {
-                //playerOne.getLead() goes first
-                moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
-                moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
-            } else if (speedTwo > speedOne) {
-                //playerTwo.getLead() goes first
-                moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
-                moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
-            } else {
-                int rand = Main.RANDOM.nextInt(2);
-                if (rand == 0) {
-                    //playerOne.getLead() goes first
-                    moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
-                    moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
-                } else {
-                    //playerTwo.getLead() goes first
-                    moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
-                    moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
-                }
-            }
-        }
+        //        if (priorityOne > priorityTwo) {
+        //            moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
+        //            moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
+        //        } else if (priorityTwo > priorityOne) {
+        //            moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
+        //            moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
+        //        } else {
+        //            double speedOne = playerOne.getLead().calculateSpeed();
+        //            double speedTwo = playerTwo.getLead().calculateSpeed();
+        //
+        //            if (speedOne > speedTwo) {
+        //                //playerOne.getLead() goes first
+        //                moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
+        //                moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
+        //            } else if (speedTwo > speedOne) {
+        //                //playerTwo.getLead() goes first
+        //                moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
+        //                moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
+        //            } else {
+        //                int rand = Main.RANDOM.nextInt(2);
+        //                if (rand == 0) {
+        //                    //playerOne.getLead() goes first
+        //                    moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
+        //                    moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
+        //                } else {
+        //                    //playerTwo.getLead() goes first
+        //                    moveTwo.determineTargetAndExecuteMove(playerTwo.getLead(), playerOne.getLead(), this);
+        //                    moveOne.determineTargetAndExecuteMove(playerOne.getLead(), playerTwo.getLead(), this);
+        //                }
+        //            }
+        //        }
     }
 
     private void handleSwitches(int choiceOne, int choiceTwo) {
@@ -294,99 +298,84 @@ public class Battle {
         }
     }
 
-    private int pollPlayerInput(Trainer trainer) throws IOException {
-        //TODO: Move the invalid checking to the beginning -- this lets us display only Struggle if PP is gone or the only available moves are invalid due to Disable, Taunt, Torment, etc.
-        Pokemon pokemon = trainer.getLead();
+    private List<Turn> pollPlayerInput(Trainer trainer) throws IOException {
+        final List<Turn> turns = new ArrayList<>();
+        for (int i = 0; i < trainer.getActivePokemon().size(); i++) {
 
-        Set<Move> disabledMoves = new HashSet<>();
-        Set<Move> invalidMoves = new HashSet<>();
-        for (Move move : pokemon.getMoves()) {
-            if (pokemon.hasVolatileStatus(DISABLED) && pokemon.getVolatileStatus(DISABLED).getMove().equals(move)) {
-                disabledMoves.add(move);
-                invalidMoves.add(move);
-            }
+            Pokemon pokemon = trainer.getActivePokemon().get(i);
 
-            if ((pokemon.getHeldItem() == ASSAULT_VEST && (move.getCategory() == Move.Category.STATUS
-                && !(move instanceof MeFirst))) || (pokemon.hasVolatileStatus(CHOICE_LOCKED)
-                && !pokemon.getVolatileStatus(CHOICE_LOCKED).getMove().equals(move)) || move.getCurrentPP() <= 0) {
-                invalidMoves.add(move);
-            }
-        }
-        int option = 1;
-
-        Set<Move> movesToUse;
-        System.out.println("~~~MOVES~~~");
-        if (invalidMoves.size() == pokemon.getMoves().length) {
-            System.out.println("1. Struggle");
-        } else {
+            Set<Move> disabledMoves = new HashSet<>();
+            Set<Move> invalidMoves = new HashSet<>();
             for (Move move : pokemon.getMoves()) {
-                String invalidLabel = "";
-                if (move.getCurrentPP() <= 0) {
-                    invalidLabel = " Out of PP";
-                } else if (disabledMoves.contains(move)) {
-                    invalidLabel =
-                        " Disabled, " + pokemon.getVolatileStatus(DISABLED).getTurnsRemaining() + " turn(s) left.";
+                if (pokemon.hasVolatileStatus(DISABLED) && pokemon.getVolatileStatus(DISABLED).getMove().equals(move)) {
+                    disabledMoves.add(move);
+                    invalidMoves.add(move);
                 }
-                System.out.println(
-                    option + ") " + move.getName() + "\t(" + move.getCurrentPP() + "/" + move.getMaxPP() + ")"
-                        + invalidLabel);
-                option++;
+
+                if ((pokemon.getHeldItem() == ASSAULT_VEST && (move.getCategory() == Move.Category.STATUS
+                    && !(move instanceof MeFirst))) || (pokemon.hasVolatileStatus(CHOICE_LOCKED)
+                    && !pokemon.getVolatileStatus(CHOICE_LOCKED).getMove().equals(move)) || move.getCurrentPP() <= 0) {
+                    invalidMoves.add(move);
+                }
             }
-        }
+            int option = 1;
 
-        printTeam(trainer);
-
-        int choice;
-        boolean choiceValid;
-        //Choice is invalid if that Pokémon has fainted or if the move has no PP.
-        do {
-            choice = System.in.read();
-            if (choice <= 0 || choice > 9) {
-                choiceValid = false;
-            } else if (choice <= 4 && invalidMoves.contains(pokemon.getMoves()[choice - 1])) {
-                choiceValid = false;
-            } else if (choice > 4 && (trainer.getTeam().get(choice - 4).hasFainted() || trainer.getLead()
-                .isTrapped(this))) {
-                choiceValid = false;
+            Set<Move> movesToUse;
+            System.out.println("~~~MOVES~~~");
+            if (invalidMoves.size() == pokemon.getMoves().length) {
+                System.out.println("1. Struggle");
             } else {
-                choiceValid = true;
+                for (Move move : pokemon.getMoves()) {
+                    String invalidLabel = "";
+                    if (move.getCurrentPP() <= 0) {
+                        invalidLabel = " Out of PP";
+                    } else if (disabledMoves.contains(move)) {
+                        invalidLabel =
+                            " Disabled, " + pokemon.getVolatileStatus(DISABLED).getTurnsRemaining() + " turn(s) left.";
+                    }
+                    System.out.println(
+                        option + ") " + move.getName() + "\t(" + move.getCurrentPP() + "/" + move.getMaxPP() + ")"
+                            + invalidLabel);
+                    option++;
+                }
             }
 
-        } while (!choiceValid);
-        return choice;
-    }
+            printBench(trainer);
 
-    public void promptSwitchCausedByUserMove(Trainer trainer) {
-        try {
-            if (trainer.hasAvailableSwitch()) {
-                printTeam(trainer);
-                int choice = 0;
-                //Choice is invalid if that Pokémon has fainted or is already in battle
-                do {
-                    choice = System.in.read();
-                } while (choice <= 4 || choice > 9 || trainer.getTeam().get(choice - 4).hasFainted());
-                trainer.switchPokemon(0, choice - 4);
+            int choice;
+            boolean choiceValid;
+            //Choice is invalid if that Pokémon has fainted or if the move has no PP.
+            do {
+                choice = System.in.read();
+                if (choice <= 0 || choice > 9) {
+                    choiceValid = false;
+                } else if (choice <= 4 && invalidMoves.contains(pokemon.getMoves()[choice - 1])) {
+                    choiceValid = false;
+                } else if (choice > 4 && (trainer.getTeam().get(choice - 4).hasFainted() || pokemon.isTrapped(this))) {
+                    choiceValid = false;
+                } else {
+                    choiceValid = true;
 
-                //TODO: Is this the right place to do this? At the beginning of a turn, if both trainers switch, the abilities don't trigger until both new Pokemon are in.
-                //      This is probably fine if only one switch happens, but what if the attacker uses U-Turn and activates the opponent's Eject Button? Which switch happens first?
-                trainer.getLead()
-                    .afterEntry(getPlayerOne() == trainer ? playerTwo.getLead() : playerOne.getLead(), this);
+                    final Move move = pokemon.getMoves()[choice - 1];
+                    final Range range = move.getRange(pokemon);
+                    final List<Pokemon> possibleTargets = getPokemonWithinRange(pokemon, move.getRange(pokemon));
+                    if (possibleTargets.size() > 1 && range.isPromptForTargetChoice()) {
+                        int singleTargetIndex = promptChoiceOfTarget(pokemon, trainer, possibleTargets);
+                        if (singleTargetIndex == 6) {
+                            continue;
+                        }
+                        turns.add(new Turn(pokemon, move, singleTargetIndex));
+                    } else {
+                        turns.add(new Turn(pokemon, move));
+                    }
+                }
+
+            } while (!choiceValid);
+            if (choice >= 4 + activeMonsPerSide) {
+                turns.add(new Turn(pokemon, null, choice));
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
-    }
-
-    private void printTeam(Trainer trainer) {
-        System.out.println("\n~~~SWITCH POKÉMON~~~");
-        for (int i = 1; i < trainer.getTeam().size(); i++) {
-            Pokemon teammate = trainer.getTeam().get(i);
-
-            String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().getType().name();
-            System.out.println(
-                (i + 4) + ")" + "\t(" + teammate.getPokedexEntry().getSpeciesName() + "\t(" + teammate.getCurrentHP()
-                    + "/" + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
-        }
+        return turns;
     }
 
     public List<Pokemon> getPokemonWithinRange(Pokemon user, Range range) {
@@ -404,22 +393,22 @@ public class Battle {
             case ALL:
             case BOTH_SIDES: //TODO: Figure out what needs to be different between ALL and BOTH_SIDES.
                 final List<Pokemon> allPokemon = new ArrayList<>();
-                allPokemon.addAll(player.getTeam().subList(0, activeMonsPerSide));
-                allPokemon.addAll(opponent.getTeam().subList(0, activeMonsPerSide));
+                allPokemon.addAll(opponent.getActivePokemon());
+                allPokemon.addAll(player.getActivePokemon());
                 return allPokemon;
             case OWN_PARTY:
                 return player.getTeam();
             case OWN_SIDE:
-                return player.getTeam().subList(0, activeMonsPerSide);
+                return player.getActivePokemon();
             case OTHER_SIDE:
+                return opponent.getActivePokemon();
             case RANDOM_OPPONENT:
-                return opponent.getTeam().subList(0, activeMonsPerSide);
+                return List.of(opponent.getActivePokemon().get(RANDOM.nextInt(activeMonsPerSide)));
             case ALL_ALLIES_EXCEPT_SELF:
-                final List<Pokemon> allies = player.getTeam().subList(0, activeMonsPerSide);
+                final List<Pokemon> allies = player.getActivePokemon();
                 allies.remove(userIndex);
                 return allies;
             case ALL_ADJACENT_OPPONENTS:
-            case RANDOM_ADJACENT_OPPONENT:
             case SINGLE_ADJACENT_OPPONENT:
                 for (int i = 0; i < activeMonsPerSide; i++) {
                     if (Math.abs(i - userIndex) <= 1) {
@@ -427,6 +416,13 @@ public class Battle {
                     }
                 }
                 return possibleTargets;
+            case RANDOM_ADJACENT_OPPONENT:
+                for (int i = 0; i < activeMonsPerSide; i++) {
+                    if (Math.abs(i - userIndex) <= 1) {
+                        possibleTargets.add(opponent.getTeam().get(i));
+                    }
+                }
+                return List.of(possibleTargets.get(RANDOM.nextInt(possibleTargets.size())));
             case ALL_ADJACENT:
             case SINGLE_ADJACENT_ANY:
                 for (int i = 0; i < activeMonsPerSide; i++) {
@@ -465,23 +461,62 @@ public class Battle {
         }
     }
 
-    //TODO: Maybe the choice should actually return the index and the actual Pokémon attacked will be determined at the time that the move executes?
-
-    private int promptChoiceOfTarget(Trainer player, List<Pokemon> pokemonInRange) throws IOException {
+    private int promptChoiceOfTarget(Pokemon pokemon, Trainer player, List<Pokemon> pokemonInRange) throws IOException {
         System.out.println("SELECT TARGET");
-        for (int i = 0; i < pokemonInRange.size(); i++) {
-            final Pokemon mon = pokemonInRange.get(i);
-            final String allyOrOpponent = player.getTeam().contains(mon) ? " (ally) " : " (opponent) ";
-            System.out.println((i + 1) + ") " + mon.getDisplayName() + allyOrOpponent);
+        List<Pokemon> opponents = getOpposingTrainer(player).getActivePokemon();
+        List<Pokemon> selfAndAllies = player.getActivePokemon();
+        for (Pokemon possibleTarget : pokemonInRange) {
+            if (opponents.contains(possibleTarget)) {
+                final int index = opponents.indexOf(possibleTarget);
+                System.out.println(index + ") " + possibleTarget.getDisplayName() + " (opponent) ");
+            } else {
+                final String selfOrAlly = pokemon == possibleTarget ? " (self) " : " (ally) ";
+                final int index = selfAndAllies.indexOf(possibleTarget);
+                System.out.println((index + 3) + ") " + possibleTarget.getDisplayName() + selfOrAlly);
+            }
         }
-        System.out.println("0) Back");
+
+        System.out.println("6) Back");
 
         int choice;
         do {
             choice = System.in.read();
-        } while (choice < 0 || choice >= pokemonInRange.size());
+        } while (choice < 0 || choice >= 7);
 
         return choice;
+    }
+
+    public void promptSwitchCausedByUserMove(Trainer trainer) {
+        try {
+            if (trainer.hasAvailableSwitch()) {
+                printBench(trainer);
+                int choice = 0;
+                //Choice is invalid if that Pokémon has fainted or is already in battle
+                do {
+                    choice = System.in.read();
+                } while (choice <= 4 || choice > 9 || trainer.getTeam().get(choice - 4).hasFainted());
+                trainer.switchPokemon(0, choice - 4);
+
+                //TODO: Is this the right place to do this? At the beginning of a turn, if both trainers switch, the abilities don't trigger until both new Pokemon are in.
+                //      This is probably fine if only one switch happens, but what if the attacker uses U-Turn and activates the opponent's Eject Button? Which switch happens first?
+                trainer.getLead()
+                    .afterEntry(getPlayerOne() == trainer ? playerTwo.getLead() : playerOne.getLead(), this);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void printBench(Trainer trainer) {
+        System.out.println("\n~~~SWITCH POKÉMON~~~");
+        for (int i = activeMonsPerSide; i < trainer.getTeam().size(); i++) {
+            Pokemon teammate = trainer.getTeam().get(i);
+
+            String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().getType().name();
+            System.out.println(
+                (i + 4) + ")" + "\t(" + teammate.getPokedexEntry().getSpeciesName() + "\t(" + teammate.getCurrentHP()
+                    + "/" + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
+        }
     }
 
     public void printField(Trainer player) {
@@ -493,7 +528,8 @@ public class Battle {
             .append("OPPONENT")
             .append(blankSpace)
             .append("*")
-            .append("\n\n").append("|");
+            .append("\n\n")
+            .append("|");
 
         for (int i = 0; i < getActiveMonsPerSide(); i++) {
             final Pokemon mon = opponent.getTeam().get(i);
