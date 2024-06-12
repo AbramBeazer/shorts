@@ -9,7 +9,7 @@ public class PinchTypeBoostAbility extends Ability {
 
     private final Type type;
 
-    PinchTypeBoostAbility(String name, Type type) {
+    private PinchTypeBoostAbility(String name, Type type) {
         super(name);
         this.type = type;
     }

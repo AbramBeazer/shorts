@@ -111,7 +111,9 @@ public class Pokemon {
         this.pokedexEntry = pokedexEntry;
         this.setNature(nature);
         this.speciesName = pokedexEntry.getSpeciesName();
-        this.types = pokedexEntry.getTypes();
+        this.types = pokedexEntry.getType2() == null
+            ? Set.of(pokedexEntry.getType1())
+            : Set.of(pokedexEntry.getType1(), pokedexEntry.getType2());
         this.happiness = Byte.MAX_VALUE;
         this.ev = effortValues;
 
@@ -121,14 +123,14 @@ public class Pokemon {
             this.sex = pokedexEntry.getSingleSex();
         }
 
-        if (ability.getClass().isInstance(this.pokedexEntry.getHiddenAbility())
-            || this.pokedexEntry.getAbilities().contains(ability)) {
-            this.setAbility(ability);
+        if (ability.getName().equals(pokedexEntry.getHiddenAbility()) || ability.getName()
+            .equals(pokedexEntry.getAbility1()) || ability.getName().equals(pokedexEntry.getAbility2())) {
+            this.ability = ability;
         }
         this.level = Math.max(1, Math.min(100, level));
 
-        if (pokedexEntry.getSpeciesName().equals("Shedinja")) {
-            this.maxHP = 1;
+        if (pokedexEntry.getBaseHP() == 1) {
+            this.maxHP = 1; //Special case for Shedinja.
         } else {
             this.maxHP =
                 (((2 * pokedexEntry.getBaseHP() + iv[HP.ordinal()] + (ev[HP.ordinal()] / 4)) * level) / 100) + level

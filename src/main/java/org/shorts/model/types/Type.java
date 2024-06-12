@@ -1,10 +1,14 @@
 package org.shorts.model.types;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Type {
+
     public static final double NEUTRAL = 1;
     public static final double STAB = 1.5;
     public static final double SUPER_EFFECTIVE = 2;
@@ -229,6 +233,36 @@ public class Type {
     @Override
     public String toString() {
         return name;
+    }
+
+    private static final Map<String, Type> STRING_TYPE_MAP;
+
+    static {
+        Map<String, Type> map = new ConcurrentHashMap<>();
+        map.put(NORMAL.name, NORMAL);
+        map.put(FLYING.name, FLYING);
+        map.put(ROCK.name, ROCK);
+        map.put(GROUND.name, GROUND);
+        map.put(STEEL.name, STEEL);
+        map.put(BUG.name, BUG);
+        map.put(POISON.name, POISON);
+        map.put(FIGHTING.name, FIGHTING);
+        map.put(GHOST.name, GHOST);
+        map.put(DARK.name, DARK);
+        map.put(PSYCHIC.name, PSYCHIC);
+        map.put(DRAGON.name, DRAGON);
+        map.put(FAIRY.name, FAIRY);
+        map.put(FIRE.name, FIRE);
+        map.put(WATER.name, WATER);
+        map.put(GRASS.name, GRASS);
+        map.put(ELECTRIC.name, ELECTRIC);
+        map.put(ICE.name, ICE);
+
+        STRING_TYPE_MAP = Collections.unmodifiableMap(map);
+    }
+
+    public static Type fromString(String t) {
+        return STRING_TYPE_MAP.get(t);
     }
 
     private enum TypeId {
