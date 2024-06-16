@@ -33,7 +33,7 @@ class TrainerTests {
     @Test
     void testStealthRockNeutral() {
         trainer.addRocks();
-        trainer.applyEntryHazards();
+        trainer.applyEntryHazards(pokemon);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() / 8));
     }
 
@@ -41,49 +41,49 @@ class TrainerTests {
     void testStealthRockSuperEffective() {
         pokemon.setTypes(Set.of(Type.FIRE));
         trainer.addRocks();
-        trainer.applyEntryHazards();
+        trainer.applyEntryHazards(pokemon);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() / 4));
     }
 
     @Test
     void testSpikesOneLayer() {
         trainer.setSpikes(1);
-        trainer.applyEntryHazards();
+        trainer.applyEntryHazards(pokemon);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() / 8));
     }
 
     @Test
     void testSpikesTwoLayers() {
         trainer.setSpikes(2);
-        trainer.applyEntryHazards();
+        trainer.applyEntryHazards(pokemon);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() / 6));
     }
 
     @Test
     void testSpikesThreeLayers() {
         trainer.setSpikes(3);
-        trainer.applyEntryHazards();
+        trainer.applyEntryHazards(pokemon);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() / 4));
     }
 
     @Test
     void testToxicSpikesOneLayer() {
         trainer.setToxicSpikes(1);
-        trainer.applyEntryHazards();
+        trainer.applyEntryHazards(pokemon);
         assertThat(pokemon.getStatus()).isEqualTo(Status.POISON);
     }
 
     @Test
     void testToxicSpikesTwoLayers() {
         trainer.setToxicSpikes(2);
-        trainer.applyEntryHazards();
+        trainer.applyEntryHazards(pokemon);
         assertThat(pokemon.getStatus()).isEqualTo(Status.TOXIC_POISON);
     }
 
     @Test
     void testStickyWeb() {
         trainer.addStickyWeb();
-        trainer.applyEntryHazards();
+        trainer.applyEntryHazards(pokemon);
         assertThat(pokemon.getStageSpeed()).isEqualTo(-1);
     }
 
@@ -93,7 +93,7 @@ class TrainerTests {
         trainer.addRocks();
         trainer.setSpikes(3);
         trainer.setToxicSpikes(2);
-        trainer.applyEntryHazards();
+        trainer.applyEntryHazards(pokemon);
         assertThat(pokemon.getStageSpeed()).isEqualTo(-1);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() * 3 / 8));
         assertThat(pokemon.getStatus()).isEqualTo(Status.TOXIC_POISON);
@@ -106,7 +106,7 @@ class TrainerTests {
         trainer.addRocks();
         trainer.setSpikes(3);
         trainer.setToxicSpikes(2);
-        trainer.applyEntryHazards();
+        trainer.applyEntryHazards(pokemon);
         assertThat(pokemon.getStageSpeed()).isZero();
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP());
         assertThat(pokemon.getStatus()).isEqualTo(Status.NONE);
@@ -121,7 +121,7 @@ class TrainerTests {
         trainer.addRocks();
         trainer.setSpikes(3);
         trainer.setToxicSpikes(2);
-        trainer.applyEntryHazards();
+        trainer.applyEntryHazards(pokemon);
         assertThat(pokemon.getStageSpeed()).isZero();
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP());
         assertThat(pokemon.getStatus()).isEqualTo(Status.NONE);

@@ -39,7 +39,7 @@ public final class Pokedex {
             try (InputStream stream = Pokedex.class.getClassLoader().getResourceAsStream("pokedex.csv")) {
                 Objects.requireNonNull(stream, "Input stream cannot be null!");
                 final String text = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
-                final String[] lines = text.split("\r\n");
+                final String[] lines = text.split("\n");
 
                 int dexNo = 1;
                 for (String line : lines) {

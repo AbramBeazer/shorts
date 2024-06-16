@@ -143,4 +143,9 @@ public abstract class Ability {
     public int hashCode() {
         return Objects.hash(name);
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

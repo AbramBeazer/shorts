@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 import org.shorts.model.moves.MeFirst;
@@ -21,6 +22,7 @@ import static org.shorts.model.status.VolatileStatusType.DISABLED;
 
 public class Battle {
 
+    private Scanner scanner = new Scanner(System.in);
     private final int activeMonsPerSide;
 
     protected final Trainer playerOne;
@@ -191,8 +193,27 @@ public class Battle {
     }
 
     public void run() throws Exception {
-        playerOne.chooseLeads();
-        playerTwo.chooseLeads();
+        //Team Preview
+        System.out.println("\n" + playerOne.getName() + "'s team:");
+        StringBuilder teamOne = new StringBuilder();
+        for (Pokemon mon : playerOne.getTeam()) {
+            teamOne.append(mon.getDisplayName()).append("\t");
+        }
+        System.out.println(teamOne);
+
+        System.out.println("\n" + playerTwo.getName() + "'s team:");
+        StringBuilder teamTwo = new StringBuilder();
+        for (Pokemon mon : playerTwo.getTeam()) {
+            teamTwo.append(mon.getDisplayName()).append("\t");
+        }
+        System.out.println(teamTwo);
+
+        if (playerOne.getTeam().size() > activeMonsPerSide) {
+            playerOne.chooseLeads();
+        }
+        if (playerTwo.getTeam().size() > activeMonsPerSide) {
+            playerTwo.chooseLeads();
+        }
 
         while (!(playerOne.hasLost() || playerTwo.hasLost())) {
             takeTurns();
@@ -275,28 +296,28 @@ public class Battle {
         //        }
     }
 
-    private void handleSwitches(int choiceOne, int choiceTwo) {
-        if (choiceOne > 4) {
-            playerOne.getLead().setLastMoveUsed(null);
-            playerOne.switchPokemon(0, choiceOne);
-            playerOne.applyEntryHazards();
-        }
-
-        if (choiceTwo > 4) {
-            playerTwo.getLead().setLastMoveUsed(null);
-            playerTwo.switchPokemon(0, choiceTwo);
-            playerTwo.applyEntryHazards();
-        }
-
-        //TODO: Neutralizing Gas should stop this from happening, right?
-        if (choiceOne > 4) {
-            playerOne.getLead().getAbility().afterEntry(playerOne.getLead(), this);
-        }
-
-        if (choiceTwo > 4) {
-            playerTwo.getLead().getAbility().afterEntry(playerTwo.getLead(), this);
-        }
-    }
+    //    private void handleSwitches(int choiceOne, int choiceTwo) {
+    //        if (choiceOne > 4) {
+    //            playerOne.getLead().setLastMoveUsed(null);
+    //            playerOne.switchPokemon(0, choiceOne);
+    //            playerOne.applyEntryHazards();
+    //        }
+    //
+    //        if (choiceTwo > 4) {
+    //            playerTwo.getLead().setLastMoveUsed(null);
+    //            playerTwo.switchPokemon(0, choiceTwo);
+    //            playerTwo.applyEntryHazards();
+    //        }
+    //
+    //        //TODO: Neutralizing Gas should stop this from happening, right?
+    //        if (choiceOne > 4) {
+    //            playerOne.getLead().getAbility().afterEntry(playerOne.getLead(), this);
+    //        }
+    //
+    //        if (choiceTwo > 4) {
+    //            playerTwo.getLead().getAbility().afterEntry(playerTwo.getLead(), this);
+    //        }
+    //    }
 
     private List<Turn> pollPlayerInput(Trainer trainer) throws IOException {
         final List<Turn> turns = new ArrayList<>();
@@ -321,6 +342,7 @@ public class Battle {
             int option = 1;
 
             Set<Move> movesToUse;
+            System.out.println("\n\nWhat will " + pokemon.getDisplayName() + " do?");
             System.out.println("~~~MOVES~~~");
             if (invalidMoves.size() == pokemon.getMoves().length) {
                 System.out.println("1. Struggle");
@@ -346,7 +368,7 @@ public class Battle {
             boolean choiceValid;
             //Choice is invalid if that Pokémon has fainted or if the move has no PP.
             do {
-                choice = System.in.read();
+                choice = Integer.parseInt(scanner.nextLine());
                 if (choice <= 0 || choice > 9) {
                     choiceValid = false;
                 } else if (choice <= 4 && invalidMoves.contains(pokemon.getMoves()[choice - 1])) {
@@ -480,30 +502,26 @@ public class Battle {
 
         int choice;
         do {
-            choice = System.in.read();
+            choice = Integer.parseInt(scanner.nextLine());
         } while (choice < 0 || choice >= 7);
 
         return choice;
     }
 
     public void promptSwitchCausedByUserMove(Trainer trainer) {
-        try {
-            if (trainer.hasAvailableSwitch()) {
-                printBench(trainer);
-                int choice = 0;
-                //Choice is invalid if that Pokémon has fainted or is already in battle
-                do {
-                    choice = System.in.read();
-                } while (choice <= 4 || choice > 9 || trainer.getTeam().get(choice - 4).hasFainted());
-                trainer.switchPokemon(0, choice - 4);
+        if (trainer.hasAvailableSwitch()) {
+            printBench(trainer);
+            int choice = 0;
+            //Choice is invalid if that Pokémon has fainted or is already in battle
+            do {
+                choice = Integer.parseInt(scanner.nextLine());
+            } while (choice <= 4 || choice > 9 || trainer.getTeam().get(choice - 4).hasFainted());
+            trainer.switchPokemon(0, choice - 4);
 
-                //TODO: Is this the right place to do this? At the beginning of a turn, if both trainers switch, the abilities don't trigger until both new Pokemon are in.
-                //      This is probably fine if only one switch happens, but what if the attacker uses U-Turn and activates the opponent's Eject Button? Which switch happens first?
-                trainer.getLead()
-                    .afterEntry(getPlayerOne() == trainer ? playerTwo.getLead() : playerOne.getLead(), this);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            //TODO: Is this the right place to do this? At the beginning of a turn, if both trainers switch, the abilities don't trigger until both new Pokemon are in.
+            //      This is probably fine if only one switch happens, but what if the attacker uses U-Turn and activates the opponent's Eject Button? Which switch happens first?
+            trainer.getLead()
+                .afterEntry(getPlayerOne() == trainer ? playerTwo.getLead() : playerOne.getLead(), this);
         }
     }
 

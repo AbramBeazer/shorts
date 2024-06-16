@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Scanner;
 
 import org.shorts.Main;
 import org.shorts.model.StatEnum;
@@ -161,6 +162,7 @@ public class Trainer {
     }
 
     public void chooseLeads() throws IOException {
+        Scanner scanner = new Scanner(System.in);
         List<Integer> leadIndexes = new ArrayList<>();
         System.out.println("\n~~~PICK " + activeMonsPerSide + " TO SEND OUT~~~");
 
@@ -168,16 +170,16 @@ public class Trainer {
             Pokemon teammate = team.get(i);
 
             System.out.println(
-                (i + 1) + ")" + "\t" + teammate.getDisplayName() + "\tability: " + teammate.getAbility()
-                    + "\titem: "
+                (i + 1) + ")" + "\t" + teammate.getDisplayName() + "\t\tAbility: " + teammate.getAbility()
+                    + "\t\tItem: "
                     + teammate.getHeldItem());
         }
         System.out.println("\nLEADS:");
 
         while (leadIndexes.size() < activeMonsPerSide) {
-            int choice = System.in.read();
+            int choice = Integer.parseInt(scanner.nextLine());
             if (choice < 1 || choice > 6 || leadIndexes.contains(choice - 1)) {
-                System.out.println("INVALID CHOICE -- must be three unique choices from 1 to 6.");
+                System.out.println("INVALID CHOICE -- must be " + activeMonsPerSide + " unique choices from 1 to 6.");
                 continue;
             }
 
@@ -229,8 +231,7 @@ public class Trainer {
         }
     }
 
-    public void applyEntryHazards() {
-        Pokemon pokemon = this.getLead();
+    public void applyEntryHazards(Pokemon pokemon) {
         boolean boots = pokemon.getHeldItem().equals(HEAVY_DUTY_BOOTS);
         boolean magicGuard = pokemon.getAbility().equals(MAGIC_GUARD);
 

@@ -136,6 +136,7 @@ public class Pokemon {
                 (((2 * pokedexEntry.getBaseHP() + iv[HP.ordinal()] + (ev[HP.ordinal()] / 4)) * level) / 100) + level
                     + 10;
         }
+        this.currentHP = this.maxHP;
 
         this.attack =
             ((((2 * pokedexEntry.getBaseAtk() + iv[ATK.ordinal()] + (ev[ATK.ordinal()] / 4) * level) / 100) + 5)
