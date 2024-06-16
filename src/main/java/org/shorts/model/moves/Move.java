@@ -211,6 +211,9 @@ public abstract class Move {
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
     }
 
+    protected void onStartup(Pokemon user) {
+    }
+
     protected boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
         if (accuracy <= 0) {
             return true;
@@ -298,7 +301,7 @@ public abstract class Move {
     public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setMovedThisTurn(true);
         this.decrementPP();
-
+        this.onStartup(user);
         for (Pokemon target : targets) {
 
             //TODO: What if a random-target move targets a Pokemon that has fainted and hasn't been switched out yet?
@@ -339,6 +342,7 @@ public abstract class Move {
     protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         if (rollToHit(user, target, battle)) {
             if (this.category == Category.STATUS) {
+                target.beforeHit(user, battle, this);
                 this.trySecondaryEffect(user, target, battle);
             } else {
 
@@ -384,8 +388,10 @@ public abstract class Move {
 
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
         double movePower = calculateMovePower(user, target, battle);
+        double userAttackMultipliers = user.getAttackMultipliersFromAbilityAndItem(target, battle, this);
+
         //TODO: Critical hits should ignore attack drops and defense buffs.
-        double attackingStat = getAttackingStat(user, target);
+        double attackingStat = getAttackingStat(user, target) * userAttackMultipliers;
         double defendingStat = getDefendingStat(user, target, battle);
         //TODO: Deal with multi-hit moves and the weirdness that is Beat Up.
 
@@ -396,9 +402,6 @@ public abstract class Move {
     private int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
         boolean isCritical = rollForCrit(user, target, battle);
         double typeMultiplier = this.getTypeMultiplier(user, target, battle);
-
-        //TODO: Wait, what am I doing with this again? Is this for gems or what?
-        double userAbilityItemMultipliers = user.beforeAttack(target, battle, this);
 
         if (typeMultiplier == IMMUNE) {
             //TODO: LOGGER.info("It didn't affect {}", target.getLead().getNickname());

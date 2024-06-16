@@ -8,10 +8,15 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.StatusType.BURN;
 
-public class PyroBall extends Move implements BallBombMove {
+public class PyroBall extends Move implements BallBombMove, SelfThawingMove {
 
     public PyroBall() {
         super("Pyro Ball", 120, 90, Type.FIRE, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 8, false, 10);
+    }
+
+    @Override
+    protected void onStartup(Pokemon user) {
+        SelfThawingMove.super.thawSelf(user);
     }
 
     @Override

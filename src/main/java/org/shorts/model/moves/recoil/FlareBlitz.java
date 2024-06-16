@@ -2,15 +2,21 @@ package org.shorts.model.moves.recoil;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.moves.Range;
+import org.shorts.model.moves.SelfThawingMove;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class FlareBlitz extends RecoilAttack {
+public class FlareBlitz extends RecoilAttack implements SelfThawingMove {
 
     public FlareBlitz() {
         super("Flare Blitz", 120, 100, Type.FIRE, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 10, 1 / 3d);
+    }
+
+    @Override
+    protected void onStartup(Pokemon user) {
+        SelfThawingMove.super.thawSelf(user);
     }
 
     @Override

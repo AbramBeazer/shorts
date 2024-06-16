@@ -6,10 +6,15 @@ import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class Scald extends Move {
+public class Scald extends Move implements SelfThawingMove {
 
     public Scald() {
         super("Scald", 80, 100, Type.WATER, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 24, false, 30);
+    }
+
+    @Override
+    protected void onStartup(Pokemon user) {
+        SelfThawingMove.super.thawSelf(user);
     }
 
     @Override
