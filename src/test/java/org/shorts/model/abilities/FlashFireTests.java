@@ -13,6 +13,8 @@ import org.shorts.model.moves.Move;
 import org.shorts.model.moves.WillOWisp;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.VolatileStatus;
+import org.shorts.model.status.VolatileStatusType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
@@ -127,7 +129,9 @@ public class FlashFireTests {
 
     @Test
     void testDoesNotActivateWhenProtected() {
-        assertThat(false).isTrue();
+        ffMon.addVolatileStatus(new VolatileStatus(VolatileStatusType.PROTECTED, 1));
+        ember.execute(other, List.of(ffMon), battle);
+        assertThat(ability.isActivated()).isFalse();
     }
 
     @Test
