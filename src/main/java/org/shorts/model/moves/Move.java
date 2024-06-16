@@ -342,8 +342,10 @@ public abstract class Move {
     protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         if (rollToHit(user, target, battle)) {
             if (this.category == Category.STATUS) {
-                target.beforeHit(user, battle, this);
-                this.trySecondaryEffect(user, target, battle);
+                //TODO: This may change -- Will-O-Wisp shouldn't burn Flash Fire mons, Thunder Wave won't affect ground-types, and poison moves won't affect steels, but I think other status moves might ignore types.
+                if (target.beforeHit(user, battle, this) > 0 && getTypeMultiplier(user, target, battle) > 0) {
+                    this.trySecondaryEffect(user, target, battle);
+                }
             } else {
 
                 int hitNum = 0;
