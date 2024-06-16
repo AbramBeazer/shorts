@@ -33,9 +33,9 @@ class PinchTypeBoostAbilityTests {
     void testActivatesOnlyUnder33PercentHP(Move move, PinchTypeBoostAbility ability) {
         attacker.setAbility(ability);
         assertThat(move.getType()).isEqualTo(ability.getType());
-        assertThat(ability.beforeAttack(attacker, defender, battle, move)).isEqualTo(1.0);
+        assertThat(ability.getAttackMultipliers(attacker, defender, battle, move)).isEqualTo(1.0);
         attacker.setCurrentHP(attacker.getMaxHP() / 3);
-        assertThat(ability.beforeAttack(attacker, defender, battle, move)).isEqualTo(1.5);
+        assertThat(ability.getAttackMultipliers(attacker, defender, battle, move)).isEqualTo(1.5);
     }
 
     @Test

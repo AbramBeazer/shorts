@@ -30,8 +30,11 @@ public abstract class HeldItem {
         return 1;
     }
 
-    public double beforeAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {
+    public double getAttackMultipliers(Pokemon user, Pokemon opponent, Battle battle, Move move) {
         return 1;
+    }
+
+    public void beforeAttack(Pokemon self, Pokemon opponent) {
     }
 
     public void afterAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {

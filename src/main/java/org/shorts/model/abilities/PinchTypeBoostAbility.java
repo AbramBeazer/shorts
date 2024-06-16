@@ -19,7 +19,7 @@ public class PinchTypeBoostAbility extends Ability {
     }
 
     @Override
-    public double beforeAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public double getAttackMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
         if (self.getCurrentHP() <= self.getMaxHP() / 3 && move.getType().equals(this.type)) {
             return 1.5;
         } else {
