@@ -31,6 +31,7 @@ import static org.shorts.model.StatEnum.HP;
 import static org.shorts.model.StatEnum.SPATK;
 import static org.shorts.model.StatEnum.SPDEF;
 import static org.shorts.model.StatEnum.SPEED;
+import static org.shorts.model.abilities.Contrary.CONTRARY;
 import static org.shorts.model.abilities.Levitate.LEVITATE;
 import static org.shorts.model.abilities.trapping.ArenaTrap.ARENA_TRAP;
 import static org.shorts.model.abilities.trapping.MagnetPull.MAGNET_PULL;
@@ -153,6 +154,49 @@ public class Pokemon {
         this.speed =
             ((((2 * pokedexEntry.getBaseAtk() + iv[SPEED.ordinal()] + (ev[SPEED.ordinal()] / 4) * level) / 100) + 5)
                 * nature.getMultiplier(SPEED)) / 100;
+    }
+
+    public boolean canChangeStat(int change, StatEnum stat) {
+        final int stage;
+        switch (stat) {
+            case ATK:
+                stage = stageAttack;
+                break;
+            case DEF:
+                stage = stageDefense;
+                break;
+            case SPATK:
+                stage = stageSpecialAttack;
+                break;
+            case SPDEF:
+                stage = stageSpecialDefense;
+                break;
+            case SPEED:
+                stage = stageSpeed;
+                break;
+            case ACCURACY:
+                stage = stageAccuracy;
+                break;
+            case EVASION:
+                stage = stageEvasion;
+                break;
+            default:
+                return false;
+        }
+        if (stage == 6) {
+            if (change > 0) {
+                return this.ability == CONTRARY;
+            } else if (change < 0) {
+                return this.ability != CONTRARY;
+            }
+        } else if (stage == -6) {
+            if (change < 0) {
+                return this.ability == CONTRARY;
+            } else if (change > 0) {
+                return this.ability != CONTRARY;
+            }
+        }
+        return true;
     }
 
     public void changeAttack(int stages) {
