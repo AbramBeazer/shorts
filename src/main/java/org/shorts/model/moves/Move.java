@@ -49,6 +49,7 @@ import static org.shorts.model.abilities.Sniper.SNIPER;
 import static org.shorts.model.abilities.SnowCloak.SNOW_CLOAK;
 import static org.shorts.model.abilities.SuperLuck.SUPER_LUCK;
 import static org.shorts.model.abilities.TangledFeet.TANGLED_FEET;
+import static org.shorts.model.abilities.ThickFat.THICK_FAT;
 import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
 import static org.shorts.model.abilities.Triage.TRIAGE;
 import static org.shorts.model.items.BrightPowder.BRIGHT_POWDER;
@@ -82,6 +83,7 @@ import static org.shorts.model.types.Type.FIRE;
 import static org.shorts.model.types.Type.FLYING;
 import static org.shorts.model.types.Type.GHOST;
 import static org.shorts.model.types.Type.GROUND;
+import static org.shorts.model.types.Type.ICE;
 import static org.shorts.model.types.Type.IMMUNE;
 import static org.shorts.model.types.Type.NEUTRAL;
 import static org.shorts.model.types.Type.NORMAL;
@@ -667,10 +669,15 @@ public abstract class Move {
     }
 
     protected double getAttackingStat(Pokemon attacker, Pokemon defender) {
+        //WHY does Thick Fat apply to the attack calculation instead of just halving the damage like Heatproof does? This makes no sense! Why, GameFreak? Why?
+        final double applyThickFat = defender.getAbility() == THICK_FAT && (this.type == ICE || this.type == FIRE)
+            && !defender.hasVolatileStatus(ABILITY_IGNORED) && !defender.hasVolatileStatus(ABILITY_SUPPRESSED)
+            ? 0.5
+            : 1;
         if (category == Category.PHYSICAL) {
-            return attacker.calculateAttack();
+            return attacker.calculateAttack() * applyThickFat;
         } else if (category == Category.SPECIAL) {
-            return attacker.calculateSpecialAttack();
+            return attacker.calculateSpecialAttack() * applyThickFat;
         } else {
             return 0;
         }
