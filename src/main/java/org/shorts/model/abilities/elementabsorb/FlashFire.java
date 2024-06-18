@@ -1,6 +1,7 @@
-package org.shorts.model.abilities;
+package org.shorts.model.abilities.elementabsorb;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.abilities.Ability;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 

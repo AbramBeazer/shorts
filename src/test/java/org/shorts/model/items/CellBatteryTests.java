@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummySingleBattle;
-import org.shorts.model.abilities.MotorDrive;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.ThunderFang;
 import org.shorts.model.moves.ThunderWave;
@@ -15,6 +14,8 @@ import org.shorts.model.pokemon.Pokemon;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.abilities.Contrary.CONTRARY;
+import static org.shorts.model.abilities.elementabsorb.DrawingAbility.LIGHTNING_ROD;
+import static org.shorts.model.abilities.elementabsorb.ElementAbsorbRaiseStatAbility.MOTOR_DRIVE;
 import static org.shorts.model.items.CellBattery.CELL_BATTERY;
 import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
@@ -68,7 +69,18 @@ public class CellBatteryTests {
 
     @Test
     void testDoesNotActivateForMotorDriveUsers() {
-        holder.setAbility(new MotorDrive());
+        holder.setAbility(MOTOR_DRIVE);
+
+        assertThat(holder.getStageAttack()).isZero();
+        move.execute(opponent, List.of(holder), battle);
+        assertThat(holder.getStageAttack()).isZero();
+        assertThat(holder.getConsumedItem()).isEqualTo(NO_ITEM);
+        assertThat(holder.getHeldItem()).isEqualTo(CELL_BATTERY);
+    }
+
+    @Test
+    void testDoesNotActivateForLightningRodUsers() {
+        holder.setAbility(LIGHTNING_ROD);
 
         assertThat(holder.getStageAttack()).isZero();
         move.execute(opponent, List.of(holder), battle);

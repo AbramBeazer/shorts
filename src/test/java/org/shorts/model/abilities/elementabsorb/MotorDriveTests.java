@@ -1,4 +1,4 @@
-package org.shorts.model.abilities;
+package org.shorts.model.abilities.elementabsorb;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import static org.shorts.model.status.Status.NONE;
 
 public class MotorDriveTests {
 
-    private MotorDrive ability;
+    private ElementAbsorbRaiseStatAbility ability = ElementAbsorbRaiseStatAbility.MOTOR_DRIVE;
     private Pokemon mdMon;
     private Pokemon other;
     private Battle battle;
@@ -29,7 +29,6 @@ public class MotorDriveTests {
 
     @BeforeEach
     void setup() {
-        ability = new MotorDrive();
         mdMon = getDummyPokemon();
         mdMon.setAbility(ability);
         mdMon.setStageSpeed(0);

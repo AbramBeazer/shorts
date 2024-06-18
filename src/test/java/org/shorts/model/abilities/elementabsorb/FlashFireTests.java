@@ -1,4 +1,4 @@
-package org.shorts.model.abilities;
+package org.shorts.model.abilities.elementabsorb;
 
 import java.util.List;
 

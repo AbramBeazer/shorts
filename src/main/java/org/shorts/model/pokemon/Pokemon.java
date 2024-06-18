@@ -199,6 +199,33 @@ public class Pokemon {
         return true;
     }
 
+    public void changeStat(int stages, StatEnum stat) {
+        switch (stat) {
+            case ATK:
+                changeAttack(stages);
+                break;
+            case DEF:
+                changeDefense(stages);
+                break;
+            case SPATK:
+                changeSpecialAttack(stages);
+                break;
+            case SPDEF:
+                changeSpecialDefense(stages);
+                break;
+            case SPEED:
+                changeSpeed(stages);
+                break;
+            case ACCURACY:
+                changeAccuracy(stages);
+                break;
+            case EVASION:
+                changeEvasion(stages);
+                break;
+            default:
+        }
+    }
+
     public void changeAttack(int stages) {
         this.stageAttack += stages;
         if (this.stageAttack > 6) {
