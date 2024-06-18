@@ -89,4 +89,6 @@ public class StatusImmuneAbility extends Ability implements IgnorableAbility {
     public static final StatusImmuneAbility INNER_FOCUS = new StatusImmuneAbility(
         "Inner Focus",
         VolatileStatusType.FLINCH);
+
+    //TODO: Add tests
 }
