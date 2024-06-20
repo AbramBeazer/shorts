@@ -11,7 +11,7 @@ import static org.shorts.model.status.StatusType.POISON;
 import static org.shorts.model.status.StatusType.SLEEP;
 import static org.shorts.model.status.StatusType.TOXIC_POISON;
 
-public class Comatose extends Ability {
+public class Comatose extends Ability implements UnsuppressableAbility {
 
     private static final List<AbstractStatusType> IMMUNITIES = List.of(
         SLEEP,
