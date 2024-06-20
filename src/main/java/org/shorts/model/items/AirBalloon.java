@@ -7,7 +7,7 @@ import org.shorts.model.pokemon.Pokemon;
 public class AirBalloon extends HeldItem {
 
     private AirBalloon() {
-        super("Air Balloon");
+        super("Air Balloon", 10);
     }
 
     public static final AirBalloon AIR_BALLOON = new AirBalloon();

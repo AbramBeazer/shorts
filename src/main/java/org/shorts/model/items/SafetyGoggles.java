@@ -3,7 +3,7 @@ package org.shorts.model.items;
 public class SafetyGoggles extends HeldItem {
 
     private SafetyGoggles() {
-        super("Safety Goggles");
+        super("Safety Goggles", 80);
     }
 
     public static final SafetyGoggles SAFETY_GOGGLES = new SafetyGoggles();

@@ -12,7 +12,7 @@ public class MetronomeItem extends HeldItem {
     //TODO: What happens if this item is given by Trick or Fling? Does the boost retroactively apply?
 
     public MetronomeItem() {
-        super("Metronome");
+        super("Metronome", 30);
     }
 
     @Override

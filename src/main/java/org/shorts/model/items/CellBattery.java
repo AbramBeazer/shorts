@@ -12,7 +12,7 @@ import static org.shorts.model.items.NoItem.NO_ITEM;
 public class CellBattery extends HeldItem {
 
     private CellBattery() {
-        super("Cell Battery");
+        super("Cell Battery", 30);
     }
 
     public static final CellBattery CELL_BATTERY = new CellBattery();

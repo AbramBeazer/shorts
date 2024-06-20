@@ -7,7 +7,7 @@ public class DriveItem extends HeldItem {
     private Type type;
 
     private DriveItem(String name, Type type) {
-        super(name);
+        super(name, 70);
         this.type = type;
     }
 

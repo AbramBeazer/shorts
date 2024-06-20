@@ -10,9 +10,11 @@ import org.shorts.model.pokemon.Pokemon;
 public abstract class HeldItem {
 
     private String name;
+    private int flingPower;
 
-    protected HeldItem(String name) {
+    protected HeldItem(String name, int flingPower) {
         this.name = name;
+        this.flingPower = flingPower;
     }
 
     public String getName() {
@@ -21,6 +23,10 @@ public abstract class HeldItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getFlingPower() {
+        return flingPower;
     }
 
     public void afterEntry(Pokemon self, Battle battle) {

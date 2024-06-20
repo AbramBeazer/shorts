@@ -10,7 +10,7 @@ import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
 public class LifeOrb extends HeldItem {
 
     private LifeOrb() {
-        super("Life Orb");
+        super("Life Orb", 30);
     }
 
     public static final LifeOrb LIFE_ORB = new LifeOrb();

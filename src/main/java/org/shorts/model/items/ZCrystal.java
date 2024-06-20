@@ -7,7 +7,7 @@ public class ZCrystal extends HeldItem {
     private Type type;
 
     private ZCrystal(String name, Type type) {
-        super(name);
+        super(name, 0);
         this.type = type;
     }
 
