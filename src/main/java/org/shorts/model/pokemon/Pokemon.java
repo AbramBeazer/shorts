@@ -683,14 +683,14 @@ public class Pokemon {
     //                .get());
     //    }
 
-    public void afterEntry(Pokemon opponent, Battle battle) {
+    public void afterEntry(Battle battle) {
         setTurnsInBattle(0);
         //TODO: If Neutralizing Gas is active, give this mon the AbilitySuppressed volatile status.
         if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
             || this.getAbility() instanceof UnsuppressableAbility) {
             ability.afterEntry(this, battle);
         }
-        heldItem.afterEntry(this, opponent, battle);
+        heldItem.afterEntry(this, battle);
     }
 
     public double getMovePowerMultipliers(Pokemon opponent, Battle battle, Move move) {

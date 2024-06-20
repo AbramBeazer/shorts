@@ -90,7 +90,7 @@ class BoosterEnergyTests {
         battle.setWeather(Weather.SUN, -1);
         battle.setWeatherSuppressed(true);
         user.setAbility(new Protosynthesis());
-        user.afterEntry(opponent, battle);
+        user.afterEntry(battle);
 
         assertThat(((Protosynthesis) user.getAbility()).isActivatedBySun()).isFalse();
         assertThat(((Protosynthesis) user.getAbility()).getBoostedStat()).isNotNull();
@@ -101,7 +101,7 @@ class BoosterEnergyTests {
     @Test
     void testActivatesInNoWeatherOrTerrain() {
         user.setAbility(new Protosynthesis());
-        user.afterEntry(opponent, battle);
+        user.afterEntry(battle);
 
         assertThat(((Protosynthesis) user.getAbility()).isActivatedBySun()).isFalse();
         assertThat(((Protosynthesis) user.getAbility()).getBoostedStat()).isNotNull();

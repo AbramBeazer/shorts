@@ -23,7 +23,7 @@ public abstract class HeldItem {
         this.name = name;
     }
 
-    public void afterEntry(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterEntry(Pokemon self, Battle battle) {
     }
 
     public double getMovePowerMultipliers(Pokemon user, Pokemon opponent, Battle battle, Move move) {
