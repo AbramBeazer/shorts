@@ -60,7 +60,6 @@ import static org.shorts.model.items.Leek.LEEK;
 import static org.shorts.model.items.LifeOrb.LIFE_ORB;
 import static org.shorts.model.items.LoadedDice.LOADED_DICE;
 import static org.shorts.model.items.LuckyPunch.LUCKY_PUNCH;
-import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.items.RazorClaw.RAZOR_CLAW;
 import static org.shorts.model.items.RingTarget.RING_TARGET;
 import static org.shorts.model.items.ScopeLens.SCOPE_LENS;
@@ -638,11 +637,12 @@ public abstract class Move {
         if (target.getHeldItem() instanceof TypeResistBerry) {
             TypeResistBerry berry = (TypeResistBerry) target.getHeldItem();
             if (berry.getType() == this.type && (this.type == NORMAL || typeMultiplier > NEUTRAL)) {
-                double multiplier = target.getAbility() == RIPEN ? 0.25 : 0.5;
-                base = roundHalfUp(base * multiplier);
+                final boolean ateBerry = berry.tryEatingBerry(user, battle);
+                if (ateBerry) {
+                    double multiplier = target.getAbility() == RIPEN ? 0.25 : 0.5;
+                    base = roundHalfUp(base * multiplier);
+                }
             }
-            //TODO: Output berry-eating message
-            target.setHeldItem(NO_ITEM);
         }
         if (user.getHeldItem() == EXPERT_BELT && typeMultiplier > NEUTRAL) {
             base = roundHalfUp(base * 4915d / divisor);

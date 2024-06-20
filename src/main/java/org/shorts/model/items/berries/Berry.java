@@ -42,14 +42,14 @@ public abstract class Berry extends HeldItem {
     }
 
     public boolean tryEatingBerry(Pokemon user, Battle battle) {
-        Pokemon opponent = battle.getOpposingTrainer(user).getLead();
-        if (!(opponent.getAbility() instanceof OpponentCantEatBerriesAbility) || opponent.hasVolatileStatus(
-            ABILITY_SUPPRESSED)) {
-
-            this.eatBerry(user);
-            return true;
+        for (Pokemon opponent : battle.getOpposingActivePokemon(user)) {
+            if (opponent.getAbility() instanceof OpponentCantEatBerriesAbility && !opponent.hasVolatileStatus(
+                ABILITY_SUPPRESSED)) {
+                return false;
+            }
         }
-        return false;
+        this.eatBerry(user);
+        return true;
     }
 
     public void eatBerry(Pokemon user) {
