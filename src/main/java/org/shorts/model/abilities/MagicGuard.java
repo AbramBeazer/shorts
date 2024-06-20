@@ -1,6 +1,6 @@
 package org.shorts.model.abilities;
 
-public class MagicGuard extends Ability {
+public class MagicGuard extends Ability implements SandImmuneAbility, HailImmuneAbility {
 
     private MagicGuard() {
         super("Magic Guard");

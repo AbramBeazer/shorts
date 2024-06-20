@@ -21,7 +21,7 @@ public class CudChew extends Ability {
     }
 
     @Override
-    public void afterTurn(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterTurn(Pokemon self, Battle battle) {
         //TODO: What if the user's ability changes after eating the berry but before regurgitating it? Does it still get the effect again? If it does, I'll need to move the berryToRegurgitate field into a volatile RegurgitateStatus.
         if (berryToRegurgitate != null) {
             berryToRegurgitate.doEffect(self);

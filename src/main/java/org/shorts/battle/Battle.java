@@ -8,17 +8,24 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.shorts.model.abilities.HailImmuneAbility;
+import org.shorts.model.abilities.SandImmuneAbility;
 import org.shorts.model.moves.MeFirst;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.types.Type;
 
 import static org.shorts.Main.RANDOM;
+import static org.shorts.model.abilities.MagicGuard.MAGIC_GUARD;
+import static org.shorts.model.abilities.PoisonHeal.POISON_HEAL;
 import static org.shorts.model.abilities.VictoryStar.VICTORY_STAR;
 import static org.shorts.model.items.AssaultVest.ASSAULT_VEST;
+import static org.shorts.model.items.SafetyGoggles.SAFETY_GOGGLES;
 import static org.shorts.model.status.VolatileStatusType.CHOICE_LOCKED;
 import static org.shorts.model.status.VolatileStatusType.DISABLED;
+import static org.shorts.model.status.VolatileStatusType.HEAL_BLOCKED;
 
 public class Battle {
 
@@ -217,6 +224,7 @@ public class Battle {
 
         while (!(playerOne.hasLost() || playerTwo.hasLost())) {
             takeTurns();
+            endOfTurn();
         }
     }
 
@@ -231,10 +239,8 @@ public class Battle {
         turns.addAll(pollPlayerInput(playerOne));
         turns.addAll(pollPlayerInput(playerTwo));
 
-        turns.sort(Comparator.comparing(
-            turn -> turn.getMove().getPriority(turn.getUser(), this) + turn.getMove()
-                .getAbilityPriorityBonus(turn.getUser()),
-            (a, b) -> Integer.compare(b, a)));
+        turns.sort(Comparator.comparing(turn -> turn.getMove().getPriority(turn.getUser(), this) + turn.getMove()
+            .getAbilityPriorityBonus(turn.getUser()), (a, b) -> Integer.compare(b, a)));
 
         Move moveOne = null;
         Move moveTwo = null;
@@ -520,8 +526,7 @@ public class Battle {
 
             //TODO: Is this the right place to do this? At the beginning of a turn, if both trainers switch, the abilities don't trigger until both new Pokemon are in.
             //      This is probably fine if only one switch happens, but what if the attacker uses U-Turn and activates the opponent's Eject Button? Which switch happens first?
-            trainer.getLead()
-                .afterEntry(this);
+            trainer.getLead().afterEntry(this);
         }
     }
 
@@ -581,5 +586,59 @@ public class Battle {
         field.append("\n\n*").append(blankSpace).append("PLAYER").append(blankSpace).append("\t*");
 
         System.out.println(field);
+    }
+
+    private List<Pokemon> getAllActivePokemon() {
+        List<Pokemon> allActiveMons = new ArrayList<>();
+        allActiveMons.addAll(playerOne.getActivePokemon());
+        allActiveMons.addAll(playerTwo.getActivePokemon());
+        return allActiveMons;
+    }
+
+    private void endOfTurn() {
+        List<Pokemon> activeMons = getAllActivePokemon();
+        activeMons.sort(Comparator.comparing(Pokemon::calculateSpeed, Double::compareTo));
+        for (Pokemon mon : activeMons) {
+            if (!isWeatherSuppressed() && mon.getHeldItem() != SAFETY_GOGGLES && (
+                (weather == Weather.SAND && !mon.getTypes().contains(Type.ROCK) && !mon.getTypes().contains(Type.GROUND)
+                    && !mon.getTypes().contains(Type.STEEL) && !(mon.getAbility() instanceof SandImmuneAbility))
+                    || (weather == Weather.HAIL && !mon.getTypes().contains(Type.ICE)
+                    && !(mon.getAbility() instanceof HailImmuneAbility)))) {
+
+                mon.takeDamage(mon.getMaxHP() / 16);
+            }
+        }
+
+        for (Pokemon mon : activeMons) {
+            mon.afterTurn(this);
+        }
+
+        //TODO: Where do I put LeechSeed, Curse, etc?
+
+        for (Pokemon mon : activeMons) {
+            if (mon.getAbility() != MAGIC_GUARD) {
+                if (mon.getStatus() == Status.BURN) {
+                    mon.takeDamage(mon.getMaxHP() / 16);
+                } else if (mon.getAbility() != POISON_HEAL) {
+                    if (mon.getStatus() == Status.POISON) {
+                        mon.takeDamage(mon.getMaxHP() / 8);
+                    } else if (mon.getStatus() == Status.TOXIC_POISON) {
+                        mon.takeDamage((mon.getMaxHP() / 16) * mon.getStatus().getTurnsRemaining());
+                    }
+                } else if (mon.getAbility() == POISON_HEAL && mon.getStatus() == Status.POISON
+                    || mon.getStatus() == Status.TOXIC_POISON && !mon.hasVolatileStatus(HEAL_BLOCKED)) {
+                    mon.heal(mon.getMaxHP() / 8);
+                }
+            }
+        }
+
+        for (Pokemon mon : activeMons) {
+            if (mon.getStatus() == Status.TOXIC_POISON) {
+                mon.getStatus().incrementTurns();
+            } else {
+                mon.getStatus().decrementTurns();
+            }
+            mon.decrementVolatileStatusTurns();
+        }
     }
 }

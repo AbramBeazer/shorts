@@ -685,7 +685,7 @@ public abstract class Move {
 
     protected double getDefendingStat(Pokemon attacker, Pokemon defender, Battle battle) {
         if (category == Category.PHYSICAL) {
-            return defender.calculateDefense();
+            return defender.calculateDefense(battle);
         } else if (category == Category.SPECIAL) {
             return defender.calculateSpecialDefense(battle);
         } else {

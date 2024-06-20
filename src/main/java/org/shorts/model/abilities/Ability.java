@@ -72,7 +72,7 @@ public abstract class Ability {
 
     }
 
-    public void afterTurn(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterTurn(Pokemon self, Battle battle) {
     }
 
     public void afterFaint(Pokemon self, Pokemon opponent, Battle battle) {

@@ -17,7 +17,7 @@ public class Harvest extends Ability {
     public static final Harvest HARVEST = new Harvest();
 
     @Override
-    public void afterTurn(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterTurn(Pokemon self, Battle battle) {
         if (self.getHeldItem() == NO_ITEM && self.getConsumedItem() instanceof Berry
             && (battle.getWeather() == Weather.SUN || battle.getWeather() == Weather.EXTREME_SUN
             || RANDOM.nextInt(2) == 0)) {

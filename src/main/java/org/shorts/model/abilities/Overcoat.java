@@ -1,6 +1,6 @@
 package org.shorts.model.abilities;
 
-public class Overcoat extends Ability {
+public class Overcoat extends Ability implements SandImmuneAbility, HailImmuneAbility {
 
     private Overcoat() {
         super("Overcoat");

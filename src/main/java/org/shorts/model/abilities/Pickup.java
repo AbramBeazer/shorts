@@ -35,7 +35,7 @@ public class Pickup extends Ability {
     }
 
     @Override
-    public void afterTurn(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterTurn(Pokemon self, Battle battle) {
         if (self.getHeldItem() == NO_ITEM && !consumedItemsThisTurn.isEmpty()) {
             int selfIndex = consumedItemsThisTurn.indexOf(self);
             int index = consumedItemsThisTurn.size() - 1;

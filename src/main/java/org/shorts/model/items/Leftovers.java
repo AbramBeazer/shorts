@@ -12,7 +12,7 @@ public class Leftovers extends HeldItem {
     public static final Leftovers LEFTOVERS = new Leftovers();
 
     @Override
-    public void afterTurn(Pokemon user, Pokemon opponent, Battle battle) {
+    public void afterTurn(Pokemon user, Battle battle) {
         if (user.getCurrentHP() < user.getMaxHP() && !user.hasFainted()) {
             int healing = Math.max(user.getMaxHP() / 16, 1);
             user.heal(healing);

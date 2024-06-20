@@ -12,7 +12,7 @@ public class SpeedBoost extends Ability {
     public static final SpeedBoost SPEED_BOOST = new SpeedBoost();
 
     @Override
-    public void afterTurn(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterTurn(Pokemon self, Battle battle) {
         self.changeSpeed(1);
     }
 }
