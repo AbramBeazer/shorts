@@ -14,6 +14,7 @@ import org.shorts.model.moves.MeFirst;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.SeededStatus;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
@@ -26,6 +27,7 @@ import static org.shorts.model.items.SafetyGoggles.SAFETY_GOGGLES;
 import static org.shorts.model.status.VolatileStatusType.CHOICE_LOCKED;
 import static org.shorts.model.status.VolatileStatusType.DISABLED;
 import static org.shorts.model.status.VolatileStatusType.HEAL_BLOCKED;
+import static org.shorts.model.status.VolatileStatusType.SEEDED;
 
 public class Battle {
 
@@ -613,8 +615,6 @@ public class Battle {
             mon.afterTurn(this);
         }
 
-        //TODO: Where do I put LeechSeed, Curse, etc?
-
         for (Pokemon mon : activeMons) {
             if (mon.getAbility() != MAGIC_GUARD) {
                 if (mon.getStatus() == Status.BURN) {
@@ -629,6 +629,15 @@ public class Battle {
                     || mon.getStatus() == Status.TOXIC_POISON && !mon.hasVolatileStatus(HEAL_BLOCKED)) {
                     mon.heal(mon.getMaxHP() / 8);
                 }
+            }
+        }
+
+        //TODO:
+        //Binding damage
+
+        for (Pokemon mon : activeMons) {
+            if (mon.hasVolatileStatus(SEEDED)) {
+                ((SeededStatus) mon.getVolatileStatus(SEEDED)).drain(mon, this);
             }
         }
 

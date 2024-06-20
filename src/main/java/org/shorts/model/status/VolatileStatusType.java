@@ -3,6 +3,7 @@ package org.shorts.model.status;
 import org.shorts.battle.Battle;
 import org.shorts.model.abilities.StatusImmuneAbility;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.types.Type;
 
 public enum VolatileStatusType implements AbstractStatusType {
     ABILITY_CHANGED, // TODO: Maybe I need to allow this one to take an ability as a member?
@@ -85,6 +86,10 @@ public enum VolatileStatusType implements AbstractStatusType {
             && ((StatusImmuneAbility) target.getAbility()).getImmunities().contains(this))
             && !target.hasVolatileStatus(this)) {
             switch (this) {
+                case SEEDED:
+                    return !target.hasVolatileStatus(SEEDED) && !target.hasVolatileStatus(SUBSTITUTE)
+                        && !target.getTypes().contains(
+                        Type.GRASS);
                 case DROWSY:
                     return battle.getCorrespondingTrainer(target).getSafeguardTurns() == 0;
                 case CANT_ESCAPE:
