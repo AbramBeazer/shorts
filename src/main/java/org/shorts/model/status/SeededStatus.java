@@ -35,7 +35,7 @@ public class SeededStatus extends VolatileStatus {
 
             if (afflicted.getAbility() == LIQUID_OOZE) {
                 drainer.takeDamage(healed);
-            } else {
+            } else if (!drainer.hasVolatileStatus(VolatileStatusType.HEAL_BLOCKED)) {
                 drainer.heal(healed);
             }
         }
