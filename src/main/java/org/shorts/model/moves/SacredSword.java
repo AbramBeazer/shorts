@@ -13,7 +13,7 @@ public class SacredSword extends Move implements SlicingMove {
     @Override
     protected double getDefendingStat(Pokemon attacker, Pokemon defender, Battle battle) {
         //TODO: When it says it ignores changes to defense, does that just mean stage?
-        return defender.calculateDefenseIgnoreStage();
+        return defender.calculateDefenseIgnoreStage(battle);
     }
 
     @Override

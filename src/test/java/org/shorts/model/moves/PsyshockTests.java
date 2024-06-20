@@ -21,6 +21,6 @@ class PsyshockTests {
         defender.setSpecialDefense(100);
         Psyshock move = new Psyshock();
         assertThat(move.getAttackingStat(attacker, defender)).isEqualTo(attacker.calculateSpecialAttack());
-        assertThat(move.getDefendingStat(attacker, defender, battle)).isEqualTo(defender.calculateDefense());
+        assertThat(move.getDefendingStat(attacker, defender, battle)).isEqualTo(defender.calculateDefense(battle));
     }
 }

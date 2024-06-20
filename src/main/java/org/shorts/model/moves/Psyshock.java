@@ -12,6 +12,6 @@ public class Psyshock extends Move {
 
     @Override
     protected double getDefendingStat(Pokemon user, Pokemon target, Battle battle) {
-        return target.calculateDefense();
+        return target.calculateDefense(battle);
     }
 }

@@ -376,13 +376,19 @@ public class Pokemon {
         this.attack = attack;
     }
 
-    public double calculateDefense() {
+    public double calculateDefense(Battle battle) {
         double multiplier = ability.onCalculateDefense(this) * heldItem.onCalculateDefense(this);
+        if (types.contains(Type.ICE) && !battle.isWeatherSuppressed() && battle.getWeather() == Weather.SNOW) {
+            multiplier *= 1.5;
+        }
         return this.defense * getStageMultiplier(stageDefense) * multiplier;
     }
 
-    public double calculateDefenseIgnoreStage() {
+    public double calculateDefenseIgnoreStage(Battle battle) {
         double multiplier = ability.onCalculateDefense(this) * heldItem.onCalculateDefense(this);
+        if (types.contains(Type.ICE) && !battle.isWeatherSuppressed() && battle.getWeather() == Weather.SNOW) {
+            multiplier *= 1.5;
+        }
         return this.defense * multiplier;
     }
 
@@ -456,8 +462,8 @@ public class Pokemon {
     }
 
     public void takeDamage(int damage) {
-        if (damage < 0) {
-            throw new IllegalArgumentException("Damage cannot be negative");
+        if (damage <= 0) {
+            throw new IllegalArgumentException("Damage must be positive");
         }
         this.currentHP = currentHP - damage;
         if (this.currentHP < 0) {
@@ -466,8 +472,8 @@ public class Pokemon {
     }
 
     public void heal(int health) {
-        if (health < 0) {
-            throw new IllegalArgumentException("Health restored cannot be negative");
+        if (health <= 0) {
+            throw new IllegalArgumentException("Health restored must be positive");
         }
         this.currentHP = currentHP + health;
         if (this.currentHP > this.maxHP) {
@@ -665,6 +671,10 @@ public class Pokemon {
         }
     }
 
+    public void decrementVolatileStatusTurns() {
+        volatileStatuses.forEach((key, value) -> value.decrementTurns());
+    }
+
     public boolean isAtFullHP() {
         return currentHP == maxHP;
     }
@@ -800,12 +810,12 @@ public class Pokemon {
         heldItem.beforeTurn(this, opponent, battle);
     }
 
-    public void afterTurn(Pokemon opponent, Battle battle) {
+    public void afterTurn(Battle battle) {
         if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
             || this.getAbility() instanceof UnsuppressableAbility) {
-            ability.afterTurn(this, opponent, battle);
+            ability.afterTurn(this, battle);
         }
-        heldItem.afterTurn(this, opponent, battle);
+        heldItem.afterTurn(this, battle);
     }
 
     public void afterFaint(Pokemon opponent, Battle battle) {

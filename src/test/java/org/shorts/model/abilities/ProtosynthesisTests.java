@@ -179,7 +179,7 @@ class ProtosynthesisTests {
 
         assertThat(protosynthesis.getBoostedStat()).isEqualTo(StatEnum.DEF);
         assertThat(protosynthesis.onCalculateDefense(user)).isEqualTo(Protosynthesis.MULTIPLIER);
-        assertThat(user.calculateDefense()).isEqualTo(
+        assertThat(user.calculateDefense(battle)).isEqualTo(
             user.getStatApplyStage(StatEnum.DEF) * Protosynthesis.MULTIPLIER);
     }
 
@@ -231,6 +231,6 @@ class ProtosynthesisTests {
         user.setDefense(500);
         protosynthesis.grantStatBoost(user);
 
-        assertThat(user.calculateAttack()).isGreaterThan(user.calculateDefense());
+        assertThat(user.calculateAttack()).isGreaterThan(user.calculateDefense(battle));
     }
 }

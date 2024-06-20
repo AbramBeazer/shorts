@@ -159,7 +159,7 @@ class QuarkDriveTests {
 
         assertThat(quarkDrive.getBoostedStat()).isEqualTo(StatEnum.DEF);
         assertThat(quarkDrive.onCalculateDefense(user)).isEqualTo(QuarkDrive.MULTIPLIER);
-        assertThat(user.calculateDefense()).isEqualTo(
+        assertThat(user.calculateDefense(battle)).isEqualTo(
             user.getStatApplyStage(StatEnum.DEF) * QuarkDrive.MULTIPLIER);
     }
 
@@ -206,6 +206,6 @@ class QuarkDriveTests {
         user.setDefense(500);
         quarkDrive.grantStatBoost(user);
 
-        assertThat(user.calculateAttack()).isGreaterThan(user.calculateDefense());
+        assertThat(user.calculateAttack()).isGreaterThan(user.calculateDefense(battle));
     }
 }
