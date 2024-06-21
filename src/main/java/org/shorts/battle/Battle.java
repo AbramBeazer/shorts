@@ -42,6 +42,7 @@ public class Battle {
     protected Terrain terrain = Terrain.NONE;
     protected int fairyLockTurns;
     protected int gravityTurns;
+    protected int magicRoomTurns;
 
     public Battle(Trainer player1, Trainer player2, int activeMonsPerSide) {
         this.playerOne = player1;
@@ -113,6 +114,18 @@ public class Battle {
         this.gravityTurns = gravityTurns;
     }
 
+    public int getMagicRoomTurns() {
+        return magicRoomTurns;
+    }
+
+    public void setMagicRoomTurns(int magicRoomTurns) {
+        if (this.magicRoomTurns > 0) {
+            magicRoomTurns = 0;
+        } else {
+            this.magicRoomTurns = magicRoomTurns;
+        }
+    }
+
     public void countDownWeather() {
         if (weatherTurns > 0) {
             weatherTurns--;
@@ -142,6 +155,12 @@ public class Battle {
     public void countDownGravity() {
         if (gravityTurns > 0) {
             gravityTurns--;
+        }
+    }
+
+    public void countDownMagicRoom() {
+        if (magicRoomTurns > 0) {
+            magicRoomTurns--;
         }
     }
 
