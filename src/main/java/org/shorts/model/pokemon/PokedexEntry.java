@@ -156,6 +156,14 @@ public class PokedexEntry {
         return baseHP + baseAtk + baseDef + baseSpAtk + baseSpDef + baseSpeed;
     }
 
+    public boolean equalsSpecies(PokedexEntry entry) {
+        return this.pokedexNo == entry.pokedexNo;
+    }
+
+    public boolean equalsSpeciesAndForm(PokedexEntry entry) {
+        return this.pokedexNo == entry.pokedexNo && this.speciesName.equals(entry.speciesName);
+    }
+
     public static class PokedexEntryBuilder {
 
         private int pokedexNo;

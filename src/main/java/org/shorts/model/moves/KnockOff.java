@@ -64,23 +64,24 @@ public class KnockOff extends Move {
         final PokedexEntry userDex = user.getPokedexEntry();
         if (target.getHeldItem() == NO_ITEM) {
             return false;
-        } else if ((Pokedex.get("Giratina").equals(userDex) || Pokedex.get("Giratina").equals(targetDex))
+        } else if ((Pokedex.get("Giratina").equalsSpecies(userDex) || Pokedex.get("Giratina").equalsSpecies(targetDex))
             && target.getHeldItem() == GRISEOUS_ORB) {
             return false;
-        } else if ((Pokedex.get("Arceus").equals(userDex) || Pokedex.get("Arceus").equals(targetDex))
+        } else if ((Pokedex.get("Arceus").equalsSpecies(userDex) || Pokedex.get("Arceus").equalsSpecies(targetDex))
             && target.getHeldItem() instanceof PlateItem) {
             return false;
-        } else if ((Pokedex.get("Genesect").equals(userDex) || Pokedex.get("Genesect").equals(targetDex))
+        } else if ((Pokedex.get("Genesect").equalsSpecies(userDex) || Pokedex.get("Genesect").equalsSpecies(targetDex))
             && target.getHeldItem() instanceof DriveItem) {
             return false;
-        } else if ((Pokedex.get("Silvally").equals(userDex) || Pokedex.get("Silvally").equals(targetDex))
+        } else if ((Pokedex.get("Silvally").equalsSpecies(userDex) || Pokedex.get("Silvally").equalsSpecies(targetDex))
             && target.getHeldItem() instanceof MemoryItem) {
             return false;
-        } else if ((Pokedex.get("Zacian").equals(userDex) || Pokedex.get("Zacian").equals(targetDex))
+        } else if ((Pokedex.get("Zacian").equalsSpecies(userDex) || Pokedex.get("Zacian").equalsSpecies(targetDex))
             && target.getHeldItem() == RUSTED_SWORD) {
             return false;
-        } else if ((Pokedex.get("Zamazenta").equals(userDex) || Pokedex.get("Zamazenta").equals(targetDex))
-            && target.getHeldItem() == RUSTED_SHIELD) {
+        } else if (
+            (Pokedex.get("Zamazenta").equalsSpecies(userDex) || Pokedex.get("Zamazenta").equalsSpecies(targetDex))
+                && target.getHeldItem() == RUSTED_SHIELD) {
             return false;
         } else if (target.getHeldItem() instanceof MegaStone) {
             MegaStone megaStone = (MegaStone) target.getHeldItem();
