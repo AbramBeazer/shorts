@@ -13,8 +13,14 @@ import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.items.BoosterEnergy.BOOSTER_ENERGY;
+import static org.shorts.model.items.FlameOrb.FLAME_ORB;
+import static org.shorts.model.items.KingsRock.KINGS_ROCK;
+import static org.shorts.model.items.LightBall.LIGHT_BALL;
 import static org.shorts.model.items.MentalHerb.MENTAL_HERB;
 import static org.shorts.model.items.NoItem.NO_ITEM;
+import static org.shorts.model.items.PoisonBarb.POISON_BARB;
+import static org.shorts.model.items.RazorFang.RAZOR_FANG;
+import static org.shorts.model.items.ToxicOrb.TOXIC_ORB;
 import static org.shorts.model.items.WhiteHerb.WHITE_HERB;
 
 public class Fling extends Move {
