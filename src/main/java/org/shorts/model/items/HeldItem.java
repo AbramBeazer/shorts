@@ -88,6 +88,14 @@ public abstract class HeldItem {
 
     }
 
+    public void onGainItem(Pokemon self, Battle battle) {
+
+    }
+
+    public void onLoseItem(Pokemon self, Pokemon opponent, Battle battle) {
+
+    }
+
     public double onCalculateAttack(Pokemon self) {
         return 1;
     }
