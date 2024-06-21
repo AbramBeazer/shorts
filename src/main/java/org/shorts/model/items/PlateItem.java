@@ -7,7 +7,7 @@ public class PlateItem extends HeldItem {
     private final Type type;
 
     private PlateItem(String name, Type type) {
-        super(name + " Plate");
+        super(name + " Plate", 90);
         this.type = type;
     }
 

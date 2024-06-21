@@ -9,13 +9,9 @@ import org.shorts.model.items.MemoryItem;
 import org.shorts.model.items.PlateItem;
 import org.shorts.model.items.PrimalOrb;
 import org.shorts.model.items.ZCrystal;
-import org.shorts.model.pokemon.Arceus;
-import org.shorts.model.pokemon.Genesect;
-import org.shorts.model.pokemon.Giratina;
+import org.shorts.model.pokemon.Pokedex;
+import org.shorts.model.pokemon.PokedexEntry;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.pokemon.Silvally;
-import org.shorts.model.pokemon.Zacian;
-import org.shorts.model.pokemon.Zamazenta;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.StickyHold.STICKY_HOLD;
@@ -63,26 +59,29 @@ public class KnockOff extends Move {
     }
 
     private boolean bonusDamageApplies(Pokemon user, Pokemon target) {
-        //TODO: Remember to add check for Ogerpon's masks
-
+        //TODO: Does Knock Off work on Ogerpon's masks?
+        final PokedexEntry targetDex = target.getPokedexEntry();
+        final PokedexEntry userDex = user.getPokedexEntry();
         if (target.getHeldItem() == NO_ITEM) {
             return false;
-        } else if ((target instanceof Giratina || user instanceof Giratina) && target.getHeldItem() == GRISEOUS_ORB) {
+        } else if ((Pokedex.get("Giratina").equalsSpecies(userDex) || Pokedex.get("Giratina").equalsSpecies(targetDex))
+            && target.getHeldItem() == GRISEOUS_ORB) {
             return false;
-        } else if ((target instanceof Arceus || user instanceof Arceus)
+        } else if ((Pokedex.get("Arceus").equalsSpecies(userDex) || Pokedex.get("Arceus").equalsSpecies(targetDex))
             && target.getHeldItem() instanceof PlateItem) {
             return false;
-        } else if ((target instanceof Genesect || user instanceof Genesect)
+        } else if ((Pokedex.get("Genesect").equalsSpecies(userDex) || Pokedex.get("Genesect").equalsSpecies(targetDex))
             && target.getHeldItem() instanceof DriveItem) {
             return false;
-        } else if ((target instanceof Silvally || user instanceof Silvally)
+        } else if ((Pokedex.get("Silvally").equalsSpecies(userDex) || Pokedex.get("Silvally").equalsSpecies(targetDex))
             && target.getHeldItem() instanceof MemoryItem) {
             return false;
-        } else if ((target instanceof Zacian || user instanceof Zacian)
+        } else if ((Pokedex.get("Zacian").equalsSpecies(userDex) || Pokedex.get("Zacian").equalsSpecies(targetDex))
             && target.getHeldItem() == RUSTED_SWORD) {
             return false;
-        } else if ((target instanceof Zamazenta || user instanceof Zamazenta)
-            && target.getHeldItem() == RUSTED_SHIELD) {
+        } else if (
+            (Pokedex.get("Zamazenta").equalsSpecies(userDex) || Pokedex.get("Zamazenta").equalsSpecies(targetDex))
+                && target.getHeldItem() == RUSTED_SHIELD) {
             return false;
         } else if (target.getHeldItem() instanceof MegaStone) {
             MegaStone megaStone = (MegaStone) target.getHeldItem();

@@ -7,7 +7,7 @@ public class PrimalOrb extends HeldItem {
     private final String species;
 
     private PrimalOrb(String name, String species) {
-        super(name);
+        super(name, 0);
         this.species = species;
     }
 

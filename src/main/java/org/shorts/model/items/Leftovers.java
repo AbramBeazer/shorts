@@ -6,7 +6,7 @@ import org.shorts.model.pokemon.Pokemon;
 public class Leftovers extends HeldItem {
 
     private Leftovers() {
-        super("Leftovers");
+        super("Leftovers", 10);
     }
 
     public static final Leftovers LEFTOVERS = new Leftovers();

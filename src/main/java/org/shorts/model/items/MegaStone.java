@@ -7,7 +7,7 @@ public class MegaStone extends HeldItem {
     private String species;
 
     private MegaStone(String name, String species) {
-        super(name);
+        super(name, 80);
         this.species = species;
     }
 

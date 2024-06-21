@@ -9,7 +9,7 @@ import static org.shorts.model.items.NoItem.NO_ITEM;
 public class FocusSash extends HeldItem {
 
     private FocusSash() {
-        super("Focus Sash");
+        super("Focus Sash", 10);
     }
 
     public static final FocusSash FOCUS_SASH = new FocusSash();

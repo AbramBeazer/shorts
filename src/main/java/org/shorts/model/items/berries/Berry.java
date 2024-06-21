@@ -22,7 +22,7 @@ public abstract class Berry extends HeldItem {
     }
 
     protected Berry(String name, double threshold) {
-        super(name + " Berry");
+        super(name + " Berry", 10);
         this.threshold = threshold;
     }
 

@@ -7,7 +7,7 @@ public class MemoryItem extends HeldItem {
     private final Type type;
 
     private MemoryItem(Type type) {
-        super(type.getName() + " Memory");
+        super(type.getName() + " Memory", 50);
         this.type = type;
     }
 

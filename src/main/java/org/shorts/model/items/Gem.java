@@ -30,7 +30,7 @@ public class Gem extends HeldItem {
     private Type type;
 
     private Gem(Type type) {
-        super(type.getName() + " Gem");
+        super(type.getName() + " Gem", 0);
     }
 
     @Override
