@@ -673,6 +673,8 @@ public class Pokemon {
 
     public void decrementVolatileStatusTurns() {
         volatileStatuses.forEach((key, value) -> value.decrementTurns());
+        volatileStatuses.entrySet()
+            .removeIf(entry -> entry.getValue() != null && entry.getValue().getTurnsRemaining() == 0);
     }
 
     public boolean isAtFullHP() {
