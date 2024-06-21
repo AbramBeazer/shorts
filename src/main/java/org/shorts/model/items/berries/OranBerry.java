@@ -12,6 +12,8 @@ public class OranBerry extends Berry {
         super("Oran");
     }
 
+    public static final OranBerry ORAN_BERRY = new OranBerry();
+
     @Override
     public boolean tryEatingBerry(Pokemon user, Battle battle) {
         if (!user.hasVolatileStatus(VolatileStatusType.HEAL_BLOCKED)) {
