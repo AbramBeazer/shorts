@@ -12,7 +12,7 @@ import static org.shorts.model.abilities.StatusImmuneAbility.IMMUNITY;
 import static org.shorts.model.abilities.ThickFat.THICK_FAT;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 
-public class ThickFatTests {
+class ThickFatTests {
 
     private Pokemon snorlax;
     private Pokemon foe;

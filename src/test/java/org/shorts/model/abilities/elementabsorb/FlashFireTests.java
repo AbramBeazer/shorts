@@ -19,7 +19,7 @@ import org.shorts.model.status.VolatileStatusType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 
-public class FlashFireTests {
+class FlashFireTests {
 
     private Pokemon ffMon;
     private FlashFire ability;

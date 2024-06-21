@@ -16,7 +16,7 @@ import static org.shorts.model.abilities.PinchTypeBoostAbility.TORRENT;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
 
-public class NeutralizingGasTests {
+class NeutralizingGasTests {
 
     private Pokemon user;
     private Pokemon ally;

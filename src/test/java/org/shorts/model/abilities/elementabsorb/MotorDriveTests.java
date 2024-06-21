@@ -19,7 +19,7 @@ import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 import static org.shorts.model.status.Status.NONE;
 
-public class MotorDriveTests {
+class MotorDriveTests {
 
     private ElementAbsorbRaiseStatAbility ability = ElementAbsorbRaiseStatAbility.MOTOR_DRIVE;
     private Pokemon mdMon;

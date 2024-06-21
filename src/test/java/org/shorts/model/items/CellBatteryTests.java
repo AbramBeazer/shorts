@@ -21,7 +21,7 @@ import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 import static org.shorts.model.types.Type.GROUND;
 
-public class CellBatteryTests {
+class CellBatteryTests {
 
     private Pokemon holder;
     private Pokemon opponent;

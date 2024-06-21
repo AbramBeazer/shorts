@@ -22,7 +22,7 @@ import static org.shorts.model.abilities.PinchTypeBoostAbility.TORRENT;
 import static org.shorts.model.abilities.Rivalry.RIVALRY;
 import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 
-public class FixedDamageTests {
+class FixedDamageTests {
 
     private final Battle battle = new Battle(
         new Trainer("Red", List.of(new Squirtle(TORRENT))),

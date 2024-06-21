@@ -18,7 +18,7 @@ import static org.shorts.model.status.Status.PARALYZE;
 import static org.shorts.model.types.Type.ELECTRIC;
 import static org.shorts.model.types.Type.GROUND;
 
-public class ThunderWaveTests {
+class ThunderWaveTests {
 
     private ThunderWave tWave;
     private Pokemon user;
