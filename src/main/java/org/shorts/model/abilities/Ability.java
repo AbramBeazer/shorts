@@ -45,6 +45,10 @@ public abstract class Ability {
         return 1;
     }
 
+    public double getDefenseMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+        return 1;
+    }
+
     public void beforeAttack(Pokemon self, Pokemon opponent) {
     }
 

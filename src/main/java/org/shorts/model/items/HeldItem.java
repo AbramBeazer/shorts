@@ -40,6 +40,10 @@ public abstract class HeldItem {
         return 1;
     }
 
+    public double getDefenseMultipliers(Pokemon user, Pokemon opponent, Battle battle, Move move) {
+        return 1;
+    }
+
     public void beforeAttack(Pokemon self, Pokemon opponent) {
     }
 

@@ -737,6 +737,18 @@ public class Pokemon {
         //Again, I don't want to consume an item if the ability's going to nullify the effect anyway.
     }
 
+    public double getDefenseMultipliersFromAbilityAndItem(Pokemon opponent, Battle battle, Move move) {
+        final double abilityMultiplier = (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility)
+            ? ability.getDefenseMultipliers(this, opponent, battle, move) : 1;
+        if (abilityMultiplier == 0) {
+            return 0;
+        } else {
+            return abilityMultiplier * heldItem.getDefenseMultipliers(this, opponent, battle, move);
+        }
+        //Again, I don't want to consume an item if the ability's going to nullify the effect anyway.
+    }
+
     public void beforeAttack(Pokemon target) {
         if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
             || this.getAbility() instanceof UnsuppressableAbility) {
