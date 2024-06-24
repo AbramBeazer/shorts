@@ -885,7 +885,7 @@ public class Pokemon {
         final double floatStoneMultiplier = this.getHeldItem() == FLOAT_STONE ? .5 : 1;
         final int autotomizedLevels = hasVolatileStatus(AUTOTOMIZED)
             ? ((AutotomizedStatus) getVolatileStatus(AUTOTOMIZED)).getLevels()
-            : 1;
+            : 0;
 
         final int weightAfterAutomotize = Math.max(1, baseWeight - (1000 * autotomizedLevels));
         final int roundedWeight = (int) Math.max(

@@ -14,7 +14,7 @@ public final class PokemonTestUtils {
         PokedexEntry.PokedexEntryBuilder builder = PokedexEntry.PokedexEntryBuilder.createNewInstance();
         builder.setSpeciesName("TEST MON");
         builder.setHeight(1);
-        builder.setWeight(1);
+        builder.setWeight(100);
         builder.setBaseHP(300);
         builder.setBaseAtk(100);
         builder.setBaseDef(100);
