@@ -109,6 +109,10 @@ public abstract class Ability {
 
     }
 
+    public double getWeightMultiplier() {
+        return 1;
+    }
+
     public double onCalculateAttack(Pokemon self) {
         return 1;
     }

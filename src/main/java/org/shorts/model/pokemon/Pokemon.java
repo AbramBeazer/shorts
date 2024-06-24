@@ -18,6 +18,7 @@ import org.shorts.model.abilities.UnsuppressableAbility;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.NoItem;
 import org.shorts.model.moves.Move;
+import org.shorts.model.status.AutotomizedStatus;
 import org.shorts.model.status.HelpingHandStatus;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.VolatileStatus;
@@ -37,9 +38,11 @@ import static org.shorts.model.abilities.trapping.ArenaTrap.ARENA_TRAP;
 import static org.shorts.model.abilities.trapping.MagnetPull.MAGNET_PULL;
 import static org.shorts.model.abilities.trapping.ShadowTag.SHADOW_TAG;
 import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
+import static org.shorts.model.items.FloatStone.FLOAT_STONE;
 import static org.shorts.model.items.ShedShell.SHED_SHELL;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
+import static org.shorts.model.status.VolatileStatusType.AUTOTOMIZED;
 import static org.shorts.model.status.VolatileStatusType.CANT_ESCAPE;
 import static org.shorts.model.status.VolatileStatusType.GROUNDED;
 import static org.shorts.model.status.VolatileStatusType.HELPING_HAND;
@@ -83,7 +86,6 @@ public class Pokemon {
     private int stageSpecialDefense = 0;
     private int speed;
     private int stageSpeed = 0;
-
     private int stageAccuracy = 0;
     private int stageEvasion = 0;
     private Status status = Status.NONE;
@@ -874,5 +876,21 @@ public class Pokemon {
             ability.onTerrainChange(this, battle);
         }
         heldItem.onTerrainChange(this, battle);
+    }
+
+    public double getWeight() {
+        //Weight calculations are rounded to nearest tenth of a kilogram, which we can do by multiplying the weight by 10 and treating it as an integer.
+        //This is why that CSV I found with the weight values had them all listed at 10x the values I was used to seeing.
+        final int baseWeight = (int) (pokedexEntry.getWeight() * 10);
+        final double floatStoneMultiplier = this.getHeldItem() == FLOAT_STONE ? .5 : 1;
+        final int autotomizedLevels = hasVolatileStatus(AUTOTOMIZED)
+            ? ((AutotomizedStatus) getVolatileStatus(AUTOTOMIZED)).getLevels()
+            : 1;
+
+        final int weightAfterAutomotize = Math.max(1, baseWeight - (1000 * autotomizedLevels));
+        final int roundedWeight = (int) Math.max(
+            1,
+            weightAfterAutomotize * floatStoneMultiplier * ability.getWeightMultiplier());
+        return roundedWeight / 10d;
     }
 }
