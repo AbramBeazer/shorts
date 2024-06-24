@@ -8,6 +8,7 @@ import org.shorts.Main;
 import org.shorts.MockRandomReturnZero;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.Weather;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
@@ -74,6 +75,17 @@ class BodyPressTests {
         final int damageWithBand = bp.calculateDamage(user, target, battle);
 
         assertThat(damageWithBand).isGreaterThan(baseDamage);
+    }
+
+    @Test
+    void testSnowBoostsDamageForIceType() {
+        final int baseDamage = bp.calculateDamage(user, target, battle);
+        user.setTypes(Set.of(Type.ICE));
+        battle.setWeather(Weather.SNOW, 5);
+
+        final int snowDamage = bp.calculateDamage(user, target, battle);
+
+        assertThat(snowDamage).isGreaterThan(baseDamage);
     }
 
     @Test

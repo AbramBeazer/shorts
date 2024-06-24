@@ -392,10 +392,11 @@ public abstract class Move {
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
         double movePower = calculateMovePower(user, target, battle);
         double userAttackMultipliers = user.getAttackMultipliersFromAbilityAndItem(target, battle, this);
+        double targetDefenseMultipliers = target.getDefenseMultipliersFromAbilityAndItem(user, battle, this);
 
         //TODO: Critical hits should ignore attack drops and defense buffs.
         double attackingStat = getAttackingStat(user, target, battle) * userAttackMultipliers;
-        double defendingStat = getDefendingStat(user, target, battle);
+        double defendingStat = getDefendingStat(user, target, battle) * targetDefenseMultipliers;
         //TODO: Deal with multi-hit moves and the weirdness that is Beat Up.
 
         double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attackingStat / defendingStat) * 0.02) + 2;
@@ -422,6 +423,7 @@ public abstract class Move {
         baseDamage = roundHalfDown(baseDamage * getRandomMultiplier());
         baseDamage = roundHalfDown(baseDamage * stabMultiplier);
         baseDamage = roundHalfDown(baseDamage * typeMultiplier);
+        baseDamage = roundHalfDown(baseDamage * getBurnMultiplier(user));
         baseDamage = roundHalfDown(baseDamage * getOtherMultiplier(user, target, battle, isCritical, typeMultiplier));
         return (int) baseDamage;
     }
