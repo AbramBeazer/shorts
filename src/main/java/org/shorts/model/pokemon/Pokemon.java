@@ -887,10 +887,10 @@ public class Pokemon {
             ? ((AutotomizedStatus) getVolatileStatus(AUTOTOMIZED)).getLevels()
             : 0;
 
-        final int weightAfterAutomotize = Math.max(1, baseWeight - (1000 * autotomizedLevels));
+        final int weightAfterAutotomize = Math.max(1, baseWeight - (1000 * autotomizedLevels));
         final int roundedWeight = (int) Math.max(
             1,
-            weightAfterAutomotize * floatStoneMultiplier * ability.getWeightMultiplier());
+            weightAfterAutotomize * floatStoneMultiplier * ability.getWeightMultiplier());
         return roundedWeight / 10d;
     }
 }
