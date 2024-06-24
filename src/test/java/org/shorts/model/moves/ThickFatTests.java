@@ -31,10 +31,10 @@ public class ThickFatTests {
         assertThat(move.getType()).isEqualTo(Type.ICE);
 
         snorlax.setAbility(IMMUNITY);
-        double atk = move.getAttackingStat(foe, snorlax);
+        double atk = move.getAttackingStat(foe, snorlax, battle);
 
         snorlax.setAbility(THICK_FAT);
-        double reducedAtk = move.getAttackingStat(foe, snorlax);
+        double reducedAtk = move.getAttackingStat(foe, snorlax, battle);
 
         assertThat(atk).isEqualTo(reducedAtk * 2);
     }
@@ -45,10 +45,10 @@ public class ThickFatTests {
         assertThat(move.getType()).isEqualTo(Type.FIRE);
 
         snorlax.setAbility(IMMUNITY);
-        double spAtk = move.getAttackingStat(foe, snorlax);
+        double spAtk = move.getAttackingStat(foe, snorlax, battle);
 
         snorlax.setAbility(THICK_FAT);
-        double reducedSpAtk = move.getAttackingStat(foe, snorlax);
+        double reducedSpAtk = move.getAttackingStat(foe, snorlax, battle);
 
         assertThat(spAtk).isEqualTo(reducedSpAtk * 2);
     }

@@ -394,7 +394,7 @@ public abstract class Move {
         double userAttackMultipliers = user.getAttackMultipliersFromAbilityAndItem(target, battle, this);
 
         //TODO: Critical hits should ignore attack drops and defense buffs.
-        double attackingStat = getAttackingStat(user, target) * userAttackMultipliers;
+        double attackingStat = getAttackingStat(user, target, battle) * userAttackMultipliers;
         double defendingStat = getDefendingStat(user, target, battle);
         //TODO: Deal with multi-hit moves and the weirdness that is Beat Up.
 
@@ -668,7 +668,7 @@ public abstract class Move {
         return userMon != targetMon;
     }
 
-    protected double getAttackingStat(Pokemon attacker, Pokemon defender) {
+    protected double getAttackingStat(Pokemon attacker, Pokemon defender, Battle battle) {
         //WHY does Thick Fat apply to the attack calculation instead of just halving the damage like Heatproof does? This makes no sense! Why, GameFreak? Why?
         final double applyThickFat = defender.getAbility() == THICK_FAT && (this.type == ICE || this.type == FIRE)
             && !defender.hasVolatileStatus(ABILITY_IGNORED) && !defender.hasVolatileStatus(ABILITY_SUPPRESSED)

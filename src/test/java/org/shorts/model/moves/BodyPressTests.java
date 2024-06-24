@@ -1,0 +1,104 @@
+package org.shorts.model.moves;
+
+import java.util.Set;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.shorts.Main;
+import org.shorts.MockRandomReturnZero;
+import org.shorts.battle.Battle;
+import org.shorts.battle.DummySingleBattle;
+import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.Status;
+import org.shorts.model.types.Type;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.model.abilities.AttackDoublingAbility.HUGE_POWER;
+import static org.shorts.model.items.ChoiceBand.CHOICE_BAND;
+import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
+
+class BodyPressTests {
+
+    private Pokemon user;
+    private Pokemon target;
+    private Battle battle;
+    private BodyPress bp;
+
+    @BeforeEach
+    void setup() {
+        user = getDummyPokemon();
+        user.setTypes(Set.of(Type.GROUND));
+        target = getDummyPokemon();
+        target.setTypes(Set.of(Type.GROUND));
+        battle = new DummySingleBattle(user, target);
+        bp = new BodyPress();
+        Main.RANDOM = new MockRandomReturnZero();
+    }
+
+    @Test
+    void testUsesDefenseAndDefenseStage() {
+        user.setAttack(1);
+        user.setDefense(100);
+        target.setDefense(50);
+
+        final Crunch crunch = new Crunch();
+        assertThat(crunch.getPower(user, target, battle)).isEqualTo(bp.getPower(user, target, battle));
+        final int slamDamage = crunch.calculateDamage(user, target, battle);
+        final int pressDamage = bp.calculateDamage(user, target, battle);
+
+        assertThat(pressDamage).isGreaterThan(slamDamage * 20);
+    }
+
+    @Test
+    void testBurnStillHalvesDamage() {
+        final int healthyDamage = bp.calculateDamage(user, target, battle);
+        user.setStatus(Status.BURN);
+        final int burnedDamage = bp.calculateDamage(user, target, battle);
+
+        assertThat(healthyDamage).isEqualTo(burnedDamage * 2);
+    }
+
+    @Test
+    void testHugePowerStillDoublesDamage() {
+        final int baseDamage = bp.calculateDamage(user, target, battle);
+        user.setAbility(HUGE_POWER);
+        final int damageWithHugePower = bp.calculateDamage(user, target, battle);
+
+        assertThat(damageWithHugePower).isGreaterThan(baseDamage);
+    }
+
+    @Test
+    void testChoiceBandStillIncreasesDamage() {
+        final int baseDamage = bp.calculateDamage(user, target, battle);
+        user.setHeldItem(CHOICE_BAND);
+        final int damageWithBand = bp.calculateDamage(user, target, battle);
+
+        assertThat(damageWithBand).isGreaterThan(baseDamage);
+    }
+
+    @Test
+    void testEvioliteDoesNotBoostDamage() {
+        assertThat(false).isTrue();
+    }
+
+    @Test
+    void testFurCoatDoesNotBoostDamage() {
+        assertThat(false).isTrue();
+    }
+
+    @Test
+    void testSlowStartDecreasesDamage() {
+        assertThat(false).isTrue();
+    }
+
+    @Test
+    void testWorksWithProtosynthesisBoost() {
+        assertThat(false).isTrue();
+    }
+
+    @Test
+    void testWorksWithQuarkDriveBoost() {
+        assertThat(false).isTrue();
+    }
+
+}
