@@ -1,6 +1,6 @@
 package org.shorts.model.abilities;
 
-public class HeavyMetal extends Ability {
+public class HeavyMetal extends Ability implements IgnorableAbility {
 
     private HeavyMetal() {
         super("Heavy Metal");

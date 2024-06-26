@@ -6,10 +6,14 @@ public class AutotomizedStatus extends VolatileStatus {
 
     public AutotomizedStatus() {
         super(VolatileStatusType.AUTOTOMIZED, -1);
-        this.levels = levels;
+        this.levels = 1;
     }
 
     public int getLevels() {
         return levels;
+    }
+
+    public void incrementLevels() {
+        levels++;
     }
 }

@@ -7,7 +7,7 @@ import org.shorts.model.pokemon.Pokemon;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 
-public class FloatStoneTests {
+class FloatStoneTests {
 
     private Pokemon mon;
 
