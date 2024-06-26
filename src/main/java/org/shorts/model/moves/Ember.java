@@ -14,11 +14,6 @@ public class Ember extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        //TODO: Does the thawing happen before the burn chance? Can they happen on the same turn?
-        if (target.getStatus().getType().equals(StatusType.FREEZE)) {
-            System.out.println(target.getNickname() + " was thawed out!");
-            target.setStatus(Status.NONE);
-        }
         if (StatusType.BURN.isStatusPossible(target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }

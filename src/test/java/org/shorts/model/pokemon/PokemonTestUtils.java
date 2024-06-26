@@ -40,6 +40,10 @@ public final class PokemonTestUtils {
         return mon;
     }
 
+    public static Pokemon getDummyPokemonFromEntry(PokedexEntry entry) {
+        return new Pokemon(entry, 100, new int[] { 0, 0, 0, 0, 0, 0 }, Nature.SERIOUS, DUMMY_ABILITY);
+    }
+
     public static Pokemon getDummyPokemon() {
         return getDummyPokemon(100);
     }

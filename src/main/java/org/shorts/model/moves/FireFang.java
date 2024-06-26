@@ -3,7 +3,6 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
-import org.shorts.model.status.StatusType;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
 
@@ -20,10 +19,6 @@ public class FireFang extends Move implements BitingMove {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.getStatus().getType().equals(StatusType.FREEZE)) {
-            System.out.println(target.getNickname() + " was thawed out!");
-            target.setStatus(Status.NONE);
-        }
         calculatingBurn = true;
         if (BURN.isStatusPossible(target, battle)) {
             super.trySecondaryEffect(user, target, battle);

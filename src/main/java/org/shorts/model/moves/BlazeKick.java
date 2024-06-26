@@ -14,10 +14,6 @@ public class BlazeKick extends Move implements HighCritChanceMove {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.getStatus().getType().equals(StatusType.FREEZE)) {
-            System.out.println(target.getNickname() + " was thawed out!");
-            target.setStatus(Status.NONE);
-        }
         if (StatusType.BURN.isStatusPossible(target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }

@@ -349,6 +349,13 @@ public abstract class Move {
                 }
             } else {
 
+                if ((this.getType() == Type.FIRE || this instanceof ThawingMove)
+                    && target.getStatus() == Status.FREEZE) {
+                    //TODO: Should this thaw a Pokemon through substitute?
+                    System.out.println(target.getNickname() + " was thawed out!");
+                    target.setStatus(Status.NONE);
+                }
+
                 int hitNum = 0;
                 final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK, user.getHeldItem() == LOADED_DICE);
                 while (hitNum < maxHits && !user.hasFainted() && !target.hasFainted()) {
@@ -357,7 +364,7 @@ public abstract class Move {
                     int damage = calculateDamage(user, target, battle);
                     if (target.hasVolatileStatus(SUBSTITUTE)) { //TODO: Handle moves and abilities that ignore substitute.
                         ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
-                    } else {
+                    } else if (damage > 0) {
                         target.takeDamage(damage);
                     }
 
@@ -400,7 +407,8 @@ public abstract class Move {
         //TODO: Deal with multi-hit moves and the weirdness that is Beat Up.
 
         double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attackingStat / defendingStat) * 0.02) + 2;
-        return applyMultipliers(user, target, battle, baseDamage);
+        double realDamage = applyMultipliers(user, target, battle, baseDamage);
+        return realDamage == 0 ? 0 : (int) Math.max(1, realDamage);
     }
 
     private int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {

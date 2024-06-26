@@ -9,6 +9,7 @@ import org.shorts.MockRandomReturnZero;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummySingleBattle;
 import org.shorts.model.moves.Ember;
+import org.shorts.model.moves.HeatCrash;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.WillOWisp;
 import org.shorts.model.pokemon.Pokemon;
@@ -33,7 +34,7 @@ public class FlashFireTests {
         ability = new FlashFire();
         ffMon.setAbility(ability);
         other = getDummyPokemon();
-        battle = new DummySingleBattle();
+        battle = new DummySingleBattle(ffMon, other);
         ember = new Ember();
         Main.RANDOM = new MockRandomReturnZero();
     }
@@ -94,8 +95,33 @@ public class FlashFireTests {
     }
 
     @Test
-    void testActivatesEvenIfUserIsFrozen() {
+    void testDamagingMoveThawsAndActivatesEvenIfTargetIsFrozen() {
+        final Move move = new HeatCrash();
+        assertThat(ffMon.getAttackMultipliersFromAbilityAndItem(other, battle, move)).isEqualTo(1);
+
+        move.execute(ffMon, List.of(other), battle);
+        int baseDamage = other.getMaxHP() - other.getCurrentHP();
+        other.setCurrentHP(other.getMaxHP());
+
+        assertThat(ffMon.beforeHit(other, battle, move)).isZero();
         ffMon.setStatus(Status.FREEZE);
+        move.execute(other, List.of(ffMon), battle);
+        assertThat(ffMon.getMaxHP()).isEqualTo(ffMon.getCurrentHP());
+        assertThat(ability.isActivated()).isTrue();
+        assertThat(ffMon.getStatus()).isEqualTo(Status.NONE);
+
+        assertThat(ffMon.getAttackMultipliersFromAbilityAndItem(
+            other,
+            battle,
+            move)).isEqualTo(FlashFire.MULTIPLIER);
+        move.execute(ffMon, List.of(other), battle);
+        int boostedDamage = other.getMaxHP() - other.getCurrentHP();
+        assertThat(boostedDamage).isGreaterThan(baseDamage);
+    }
+
+    @Test
+    void testFireStatusMoveActivatesOnFrozenTargetButDoesNotThaw() {
+        final WillOWisp wisp = new WillOWisp();
 
         assertThat(ffMon.getAttackMultipliersFromAbilityAndItem(other, battle, ember)).isEqualTo(1);
 
@@ -104,9 +130,11 @@ public class FlashFireTests {
         other.setCurrentHP(other.getMaxHP());
 
         assertThat(ffMon.beforeHit(other, battle, ember)).isZero();
-        ember.execute(other, List.of(ffMon), battle);
+        ffMon.setStatus(Status.FREEZE);
+        wisp.execute(other, List.of(ffMon), battle);
         assertThat(ffMon.getMaxHP()).isEqualTo(ffMon.getCurrentHP());
         assertThat(ability.isActivated()).isTrue();
+        assertThat(ffMon.getStatus()).isEqualTo(Status.FREEZE);
 
         assertThat(ffMon.getAttackMultipliersFromAbilityAndItem(
             other,
