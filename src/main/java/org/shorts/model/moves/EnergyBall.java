@@ -20,6 +20,6 @@ public class EnergyBall extends Move implements BallBombMove {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeSpecialDefense(-1);
+        target.changeStat(-1, StatEnum.SPDEF);
     }
 }

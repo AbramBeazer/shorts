@@ -187,21 +187,28 @@ public class Pokemon {
         }
         if (stage == 6) {
             if (change > 0) {
-                return this.ability == CONTRARY;
+                return this.ability == CONTRARY && !this.hasVolatileStatus(ABILITY_IGNORED) && !this.hasVolatileStatus(
+                    ABILITY_SUPPRESSED);
             } else if (change < 0) {
-                return this.ability != CONTRARY;
+                return this.ability != CONTRARY || this.hasVolatileStatus(ABILITY_IGNORED) || this.hasVolatileStatus(
+                    ABILITY_SUPPRESSED);
             }
         } else if (stage == -6) {
             if (change < 0) {
-                return this.ability == CONTRARY;
+                return this.ability == CONTRARY && !this.hasVolatileStatus(ABILITY_IGNORED) && !this.hasVolatileStatus(
+                    ABILITY_SUPPRESSED);
             } else if (change > 0) {
-                return this.ability != CONTRARY;
+                return this.ability != CONTRARY || this.hasVolatileStatus(ABILITY_IGNORED) || this.hasVolatileStatus(
+                    ABILITY_SUPPRESSED);
             }
         }
         return true;
     }
 
     public void changeStat(int stages, StatEnum stat) {
+        if (this.getAbility() == CONTRARY) {
+            stages = stages * -1;
+        }
         switch (stat) {
             case ATK:
                 changeAttack(stages);
@@ -228,52 +235,66 @@ public class Pokemon {
         }
     }
 
-    public void changeAttack(int stages) {
+    private void changeAttack(int stages) {
         this.stageAttack += stages;
         if (this.stageAttack > 6) {
             this.stageAttack = 6;
+        } else if (this.stageAttack < -6) {
+            this.stageAttack = -6;
         }
     }
 
-    public void changeDefense(int stages) {
+    private void changeDefense(int stages) {
         this.stageDefense += stages;
         if (this.stageDefense > 6) {
             this.stageDefense = 6;
+        } else if (this.stageDefense < -6) {
+            this.stageDefense = -6;
         }
     }
 
-    public void changeSpecialAttack(int stages) {
+    private void changeSpecialAttack(int stages) {
         this.stageSpecialAttack += stages;
         if (this.stageSpecialAttack > 6) {
             this.stageSpecialAttack = 6;
+        } else if (this.stageSpecialAttack < -6) {
+            this.stageSpecialAttack = -6;
         }
     }
 
-    public void changeSpecialDefense(int stages) {
+    private void changeSpecialDefense(int stages) {
         this.stageSpecialDefense += stages;
         if (this.stageSpecialDefense > 6) {
             this.stageSpecialDefense = 6;
+        } else if (this.stageSpecialDefense < -6) {
+            this.stageSpecialDefense = -6;
         }
     }
 
-    public void changeSpeed(int stages) {
+    private void changeSpeed(int stages) {
         this.stageSpeed += stages;
         if (this.stageSpeed > 6) {
             this.stageSpeed = 6;
+        } else if (this.stageSpeed < -6) {
+            this.stageSpeed = -6;
         }
     }
 
-    public void changeAccuracy(int stages) {
+    private void changeAccuracy(int stages) {
         this.stageAccuracy += stages;
         if (this.stageAccuracy > 6) {
             this.stageAccuracy = 6;
+        } else if (this.stageAccuracy < -6) {
+            this.stageAccuracy = -6;
         }
     }
 
-    public void changeEvasion(int stages) {
+    private void changeEvasion(int stages) {
         this.stageEvasion += stages;
         if (this.stageEvasion > 6) {
             this.stageEvasion = 6;
+        } else if (this.stageEvasion < -6) {
+            this.stageEvasion = -6;
         }
     }
 
@@ -768,6 +789,9 @@ public class Pokemon {
     }
 
     public boolean isDropPossible(StatEnum stat) {
+        if (!canChangeStat(-1, stat)) {
+            return false;
+        }
         if (!(this.getAbility() instanceof IgnorableAbility && this.hasVolatileStatus(ABILITY_IGNORED))
             && (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
             || this.getAbility() instanceof UnsuppressableAbility)) {

@@ -39,28 +39,27 @@ public class Intimidate extends Ability {
         List<Pokemon> targets = battle.getPokemonWithinRange(self, this.getRange());
         for (Pokemon opponent : targets) {
             if (!opponent.hasVolatileStatus(SUBSTITUTE) && opponent.isDropPossible(StatEnum.ATK)
-                //TODO: Figure out how this works with Contrary. Adrenaline Orb shouldn't be consumed if a Contrary mon's attack is already maxed, or if any other mon's attack is at minimum.
                 && opponent.getAbility() != OWN_TEMPO && opponent.getAbility() != OBLIVIOUS
                 && opponent.getAbility() != INNER_FOCUS && opponent.getAbility() != SCRAPPY) {
 
                 if (opponent.getAbility() == GUARD_DOG) {
-                    opponent.changeAttack(1);
+                    opponent.changeStat(1, StatEnum.ATK);
                 } else {
-                    opponent.changeAttack(-1);
+                    opponent.changeStat(-1, StatEnum.ATK);
                     opponent.afterDrop(self, battle);
                 }
 
-                if (opponent.getAbility() == RATTLED) {
-                    opponent.changeSpeed(1);
-                }
-                //TODO: Does Rattled stack with Adrenaline Orb here?
-                if (opponent.getHeldItem() == ADRENALINE_ORB
-                    && opponent.getStageSpeed() < 6) {
-                    //TODO: replace line above with (opponent.getStageSpeed() < 6 && opponent.getAbility() != CONTRARY)|| (opponent.getAbility() == CONTRARY && opponent.getStageSpeed > -6)){
+                if (opponent.canChangeStat(1, StatEnum.SPEED)) {
+                    if (opponent.getAbility() == RATTLED) {
+                        opponent.changeStat(1, StatEnum.SPEED);
+                    }
+                    //TODO: Does Rattled stack with Adrenaline Orb here?
+                    if (opponent.getHeldItem() == ADRENALINE_ORB) {
 
-                    opponent.changeSpeed(1);
-                    opponent.setConsumedItem(opponent.getHeldItem());
-                    opponent.setHeldItem(NO_ITEM);
+                        opponent.changeStat(1, StatEnum.SPEED);
+                        opponent.setConsumedItem(opponent.getHeldItem());
+                        opponent.setHeldItem(NO_ITEM);
+                    }
                 }
             }
         }

@@ -20,6 +20,6 @@ public class Crunch extends Move implements BitingMove {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeDefense(-1);
+        target.changeStat(-1, StatEnum.DEF);
     }
 }

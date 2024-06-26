@@ -252,7 +252,7 @@ public class Trainer {
                     }
                 }
                 if (stickyWeb && pokemon.isDropPossible(StatEnum.SPEED)) {
-                    pokemon.changeSpeed(-1);
+                    pokemon.changeStat(-1, StatEnum.SPEED);
                 }
             }
         } else { //A Grounded Poison-type Pokémon with Heavy-Duty Boots should still absorb Toxic Spikes

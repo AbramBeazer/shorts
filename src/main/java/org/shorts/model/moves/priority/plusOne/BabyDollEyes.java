@@ -27,6 +27,6 @@ public class BabyDollEyes extends Move {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeAttack(-1);
+        target.changeStat(-1, StatEnum.ATK);
     }
 }

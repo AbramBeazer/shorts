@@ -1,6 +1,7 @@
 package org.shorts.model.moves;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
 
@@ -33,9 +34,9 @@ public class Curse extends Move {
             target.addVolatileStatus(VolatileStatus.CURSED);
             //TODO: LOGGER.info("{} put a curse on {}!", attacker.getNickname(), defender.getNickname());
         } else {
-            user.changeSpeed(-1);
-            user.changeAttack(1);
-            user.changeDefense(1);
+            user.changeStat(1, StatEnum.ATK);
+            user.changeStat(1, StatEnum.DEF);
+            user.changeStat(-1, StatEnum.SPEED);
         }
     }
 

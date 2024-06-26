@@ -1,6 +1,7 @@
 package org.shorts.model.abilities;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 
 public class Moxie extends Ability {
@@ -13,6 +14,6 @@ public class Moxie extends Ability {
 
     @Override
     public void afterKO(Pokemon self, Pokemon opponent, Battle battle) {
-        self.changeAttack(1);
+        self.changeStat(1, StatEnum.ATK);
     }
 }

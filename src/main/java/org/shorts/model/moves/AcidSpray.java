@@ -20,6 +20,6 @@ public class AcidSpray extends Move implements BallBombMove {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeSpecialDefense(-2);
+        target.changeStat(-2, StatEnum.SPDEF);
     }
 }

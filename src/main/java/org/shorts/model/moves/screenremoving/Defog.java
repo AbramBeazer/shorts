@@ -3,6 +3,7 @@ package org.shorts.model.moves.screenremoving;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Terrain;
 import org.shorts.battle.Trainer;
+import org.shorts.model.StatEnum;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
@@ -18,7 +19,7 @@ public class Defog extends Move {
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         if (!target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
-            target.changeEvasion(-1);
+            target.changeStat(-1, StatEnum.EVASION);
         }
         //        if(battle.getWeather() == Weather.FOG){
         //            battle.setWeather(Weather.NONE);

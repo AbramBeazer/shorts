@@ -20,6 +20,6 @@ public class MudBomb extends Move implements BallBombMove {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeAccuracy(-1);
+        target.changeStat(-1, StatEnum.ACCURACY);
     }
 }

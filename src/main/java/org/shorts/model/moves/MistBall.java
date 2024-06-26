@@ -20,6 +20,6 @@ public class MistBall extends Move implements BallBombMove {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeSpecialAttack(-1);
+        target.changeStat(-1, StatEnum.SPATK);
     }
 }

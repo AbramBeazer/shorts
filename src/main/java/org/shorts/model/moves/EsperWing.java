@@ -1,6 +1,7 @@
 package org.shorts.model.moves;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
@@ -12,6 +13,6 @@ public class EsperWing extends Move implements HighCritChanceMove {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        user.changeSpeed(1);
+        user.changeStat(1, StatEnum.SPEED);
     }
 }

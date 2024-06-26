@@ -1,6 +1,7 @@
 package org.shorts.model.abilities;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatusType;
@@ -18,7 +19,7 @@ public class Justified extends Ability {
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
         //TODO: Make sure the logic for hitting/damaging/breaking a sub happens before this.
         if (move.getType() == Type.DARK && !opponent.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
-            self.changeAttack(1);
+            self.changeStat(1, StatEnum.ATK);
         }
     }
 }

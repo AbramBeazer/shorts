@@ -23,7 +23,7 @@ public class Autotomize extends Move {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        user.changeSpeed(2);
+        user.changeStat(2, StatEnum.SPEED);
         if (user.hasVolatileStatus(AUTOTOMIZED)) {
             ((AutotomizedStatus) user.getVolatileStatus(AUTOTOMIZED)).incrementLevels();
         } else {
