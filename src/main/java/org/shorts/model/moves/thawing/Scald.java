@@ -1,15 +1,16 @@
-package org.shorts.model.moves;
+package org.shorts.model.moves.thawing;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class FlameWheel extends Move implements SelfThawingMove {
+public class Scald extends ThawingMove {
 
-    public FlameWheel() {
-        super("Flame Wheel", 60, 100, Type.FIRE, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 40, true, 10);
+    public Scald() {
+        super("Scald", 80, 100, Type.WATER, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 24, false, 30);
     }
 
     @Override
@@ -20,7 +21,7 @@ public class FlameWheel extends Move implements SelfThawingMove {
     }
 
     @Override
-    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+    public void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         target.setStatus(Status.BURN);
     }
 }

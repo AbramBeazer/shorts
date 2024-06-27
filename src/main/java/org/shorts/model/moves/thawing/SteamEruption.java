@@ -1,20 +1,16 @@
-package org.shorts.model.moves;
+package org.shorts.model.moves.thawing;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class Scald extends Move implements SelfThawingMove, ThawingMove {
+public class SteamEruption extends ThawingMove {
 
-    public Scald() {
-        super("Scald", 80, 100, Type.WATER, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 24, false, 30);
-    }
-
-    @Override
-    protected void onStartup(Pokemon user) {
-        SelfThawingMove.super.thawSelf(user);
+    public SteamEruption() {
+        super("Steam Eruption", 110, 95, Type.WATER, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 8, false, 30);
     }
 
     @Override
@@ -25,7 +21,7 @@ public class Scald extends Move implements SelfThawingMove, ThawingMove {
     }
 
     @Override
-    public void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         target.setStatus(Status.BURN);
     }
 }

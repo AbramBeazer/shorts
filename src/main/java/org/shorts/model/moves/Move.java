@@ -13,6 +13,7 @@ import org.shorts.model.abilities.SuperEffectiveReducingAbility;
 import org.shorts.model.abilities.statpreserving.PreserveAccuracyIgnoreEvasionAbility;
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
+import org.shorts.model.moves.thawing.ThawingMove;
 import org.shorts.model.moves.trapping.binding.Whirlpool;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.PumpedStatus;
@@ -212,9 +213,6 @@ public abstract class Move {
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
     }
 
-    protected void onStartup(Pokemon user) {
-    }
-
     protected boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
         if (accuracy <= 0) {
             return true;
@@ -302,7 +300,6 @@ public abstract class Move {
     public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setMovedThisTurn(true);
         this.decrementPP();
-        this.onStartup(user);
         for (Pokemon target : targets) {
 
             //TODO: What if a random-target move targets a Pokemon that has fainted and hasn't been switched out yet?
@@ -352,8 +349,7 @@ public abstract class Move {
                 if ((this.getType() == Type.FIRE || this instanceof ThawingMove)
                     && target.getStatus() == Status.FREEZE) {
                     //TODO: Should this thaw a Pokemon through substitute?
-                    System.out.println(target.getNickname() + " was thawed out!");
-                    target.setStatus(Status.NONE);
+                    target.thaw();
                 }
 
                 int hitNum = 0;

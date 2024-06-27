@@ -1,12 +1,13 @@
-package org.shorts.model.moves;
+package org.shorts.model.moves.thawing;
 
 import java.util.List;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class BurnUp extends Move implements SelfThawingMove {
+public class BurnUp extends ThawingMove {
 
     public BurnUp() {
         super("Burn Up", 130, 100, Type.FIRE, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 8, false, 0);

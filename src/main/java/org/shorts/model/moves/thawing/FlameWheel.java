@@ -1,15 +1,16 @@
-package org.shorts.model.moves;
+package org.shorts.model.moves.thawing;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class SacredFire extends Move implements SelfThawingMove {
+public class FlameWheel extends ThawingMove {
 
-    public SacredFire() {
-        super("Sacred Fire", 100, 95, Type.FIRE, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 8, false, 50);
+    public FlameWheel() {
+        super("Flame Wheel", 60, 100, Type.FIRE, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 40, true, 10);
     }
 
     @Override

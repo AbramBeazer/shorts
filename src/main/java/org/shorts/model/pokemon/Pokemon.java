@@ -917,4 +917,11 @@ public class Pokemon {
             weightAfterAutotomize * floatStoneMultiplier * ability.getWeightMultiplier());
         return roundedWeight / 10d;
     }
+
+    public void thaw() {
+        if (this.getStatus() == Status.FREEZE) {
+            System.out.println(this.getNickname() + " was thawed out!");
+            this.setStatus(Status.NONE);
+        }
+    }
 }

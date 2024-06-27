@@ -1,20 +1,23 @@
-package org.shorts.model.moves;
+package org.shorts.model.moves.thawing;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.BallBombMove;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
-import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class MatchaGotcha extends Move implements HealingMove, ThawingMove, SelfThawingMove {
+import static org.shorts.model.status.StatusType.BURN;
 
-    public MatchaGotcha() {
-        super("Matcha Gotcha", 80, 90, Type.GRASS, Category.SPECIAL, Range.ALL_ADJACENT_OPPONENTS, 24, false, 20);
+public class PyroBall extends ThawingMove implements BallBombMove {
+
+    public PyroBall() {
+        super("Pyro Ball", 120, 90, Type.FIRE, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 8, false, 10);
     }
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (StatusType.BURN.isStatusPossible(target, battle)) {
+        if (BURN.isStatusPossible(target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }
@@ -23,6 +26,4 @@ public class MatchaGotcha extends Move implements HealingMove, ThawingMove, Self
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         target.setStatus(Status.BURN);
     }
-
-    //TODO: Implement HP draining.
 }

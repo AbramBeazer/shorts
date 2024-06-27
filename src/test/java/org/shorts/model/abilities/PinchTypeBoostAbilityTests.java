@@ -8,9 +8,9 @@ import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
 import org.shorts.model.moves.Ember;
 import org.shorts.model.moves.Move;
-import org.shorts.model.moves.Scald;
 import org.shorts.model.moves.XScissor;
 import org.shorts.model.moves.priority.plusOne.GrassyGlide;
+import org.shorts.model.moves.thawing.Scald;
 import org.shorts.model.pokemon.Pokemon;
 
 import static org.assertj.core.api.Assertions.assertThat;

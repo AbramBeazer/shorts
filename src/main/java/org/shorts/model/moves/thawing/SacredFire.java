@@ -1,15 +1,16 @@
-package org.shorts.model.moves;
+package org.shorts.model.moves.thawing;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class ScorchingSands extends Move implements ThawingMove, SelfThawingMove {
+public class SacredFire extends ThawingMove {
 
-    public ScorchingSands() {
-        super("Scorching Sands", 70, 100, Type.GROUND, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 30);
+    public SacredFire() {
+        super("Sacred Fire", 100, 95, Type.FIRE, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 8, false, 50);
     }
 
     @Override

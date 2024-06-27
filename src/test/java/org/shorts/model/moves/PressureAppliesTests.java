@@ -9,6 +9,7 @@ import org.shorts.battle.Battle;
 import org.shorts.battle.DummySingleBattle;
 import org.shorts.model.moves.entryhazardsetter.StealthRock;
 import org.shorts.model.moves.entryhazardsetter.StickyWeb;
+import org.shorts.model.moves.thawing.Scald;
 import org.shorts.model.pokemon.Groudon;
 import org.shorts.model.pokemon.Pokemon;
 
