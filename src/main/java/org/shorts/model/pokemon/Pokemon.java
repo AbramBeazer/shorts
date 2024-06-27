@@ -115,7 +115,7 @@ public class Pokemon {
         this.pokedexEntry = pokedexEntry;
         this.setNature(nature);
         this.speciesName = pokedexEntry.getSpeciesName();
-        
+
         this.types = new HashSet<>();
         this.types.add(pokedexEntry.getType1());
         if (pokedexEntry.getType2() != null) {
@@ -928,5 +928,14 @@ public class Pokemon {
             System.out.println(this.getNickname() + " was thawed out!");
             this.setStatus(Status.NONE);
         }
+    }
+
+    public void maxPotion() {
+        this.setCurrentHP(this.maxHP);
+    }
+
+    public void fullRestore() {
+        this.setStatus(Status.NONE);
+        this.maxPotion();
     }
 }
