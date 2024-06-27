@@ -5,13 +5,13 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.Main;
-import org.shorts.MockRandomReturnZero;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.SubstituteStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 import static org.shorts.model.status.Status.NONE;
 import static org.shorts.model.status.Status.PARALYZE;
@@ -30,8 +30,8 @@ public class ThunderWaveTests {
         tWave = new ThunderWave();
         user = getDummyPokemon();
         target = getDummyPokemon();
-        battle = new DummySingleBattle();
-        Main.RANDOM = new MockRandomReturnZero();
+        battle = new DummyBattle();
+        Main.HIT_RANDOM = ZERO_RANDOM;
     }
 
     @Test

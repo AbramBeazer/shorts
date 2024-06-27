@@ -6,9 +6,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.Main;
-import org.shorts.MockRandomReturnZero;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.abilities.Protosynthesis;
 import org.shorts.model.abilities.QuarkDrive;
 import org.shorts.model.items.BoosterEnergy;
@@ -35,6 +34,8 @@ import org.shorts.model.status.SubstituteStatus;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
+import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.abilities.Pressure.PRESSURE;
 import static org.shorts.model.abilities.StickyHold.STICKY_HOLD;
 import static org.shorts.model.abilities.weather.WeatherAbility.SAND_STREAM;
@@ -54,11 +55,13 @@ import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 class KnockOffTests {
 
     private KnockOff knockOff;
-    private final Battle battle = new DummySingleBattle();
+    private final Battle battle = new DummyBattle();
 
     @BeforeAll
     static void beforeAll() {
-        Main.RANDOM = new MockRandomReturnZero();
+        Main.HIT_RANDOM = ZERO_RANDOM;
+        Main.DAMAGE_RANDOM = ZERO_RANDOM;
+        Main.CRIT_RANDOM = MAX_RANDOM;
     }
 
     @BeforeEach

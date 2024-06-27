@@ -5,7 +5,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.battle.Weather;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
@@ -37,7 +37,7 @@ class TestTypeMultiplierSpecialCases {
     void setUp() {
         user = getDummyPokemon();
         target = getDummyPokemon();
-        battle = new DummySingleBattle();
+        battle = new DummyBattle();
     }
 
     @Test

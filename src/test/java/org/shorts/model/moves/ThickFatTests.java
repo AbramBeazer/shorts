@@ -3,7 +3,7 @@ package org.shorts.model.moves;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
@@ -22,7 +22,7 @@ public class ThickFatTests {
     void setup() {
         snorlax = getDummyPokemon();
         foe = getDummyPokemon();
-        battle = new DummySingleBattle();
+        battle = new DummyBattle();
     }
 
     @Test

@@ -129,38 +129,48 @@ public class Battle {
     public void countDownWeather() {
         if (weatherTurns > 0) {
             weatherTurns--;
-        }
-        if (weatherTurns == 0) {
-            System.out.println(weather.getDeactivationMessage());
-            setWeather(Weather.NONE, Weather.INFINITE_WEATHER_DURATION);
+            if (weatherTurns == 0) {
+                System.out.println(weather.getDeactivationMessage());
+                setWeather(Weather.NONE, Weather.INFINITE_WEATHER_DURATION);
+            }
         }
     }
 
     public void countDownTerrain() {
         if (terrainTurns > 0) {
             terrainTurns--;
+            if (terrainTurns == 0) {
+                //            System.out.println(terrain.getDeactivationMessage());
+                setTerrain(Terrain.NONE, Terrain.INFINITE_TERRAIN_DURATION);
+            }
         }
-        if (terrainTurns == 0) {
-            //            System.out.println(terrain.getDeactivationMessage());
-            setTerrain(Terrain.NONE, Terrain.INFINITE_TERRAIN_DURATION);
-        }
+
     }
 
     public void countDownFairyLock() {
         if (fairyLockTurns > 0) {
             fairyLockTurns--;
+            if (fairyLockTurns == 0) {
+                System.out.println("The effects of Fairy Lock ended.");
+            }
         }
     }
 
     public void countDownGravity() {
         if (gravityTurns > 0) {
             gravityTurns--;
+            if (gravityTurns == 0) {
+                System.out.println("The effects of Gravity ended.");
+            }
         }
     }
 
     public void countDownMagicRoom() {
         if (magicRoomTurns > 0) {
             magicRoomTurns--;
+            if (magicRoomTurns == 0) {
+                System.out.println("The effects of Magic Room ended.");
+            }
         }
     }
 
@@ -659,5 +669,19 @@ public class Battle {
             }
             mon.decrementVolatileStatusTurns();
         }
+
+        //TODO: Check if weather stopping happens before or after taking hail/sand damage
+        decrementAllCounters();
+
+    }
+
+    public void decrementAllCounters() {
+        this.countDownWeather();
+        this.countDownTerrain();
+        this.countDownFairyLock();
+        this.countDownGravity();
+        this.countDownMagicRoom();
+        playerOne.decrementAllCounters();
+        playerTwo.decrementAllCounters();
     }
 }

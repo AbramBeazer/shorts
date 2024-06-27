@@ -3,7 +3,7 @@ package org.shorts.model.abilities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.battle.Terrain;
 import org.shorts.battle.Weather;
 import org.shorts.model.StatEnum;
@@ -27,7 +27,7 @@ class QuarkDriveTests {
         user = getDummyPokemon();
         user.setAbility(quarkDrive);
         opponent = getDummyPokemon();
-        battle = new DummySingleBattle(user, opponent);
+        battle = new DummyBattle(user, opponent);
     }
 
     @Test

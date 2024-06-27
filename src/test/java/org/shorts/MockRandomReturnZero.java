@@ -9,5 +9,8 @@ public class MockRandomReturnZero extends Random {
         return 0;
     }
 
+    private MockRandomReturnZero() {
+    }
+
     public static final MockRandomReturnZero ZERO_RANDOM = new MockRandomReturnZero();
 }

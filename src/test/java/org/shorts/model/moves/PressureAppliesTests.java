@@ -6,7 +6,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.moves.entryhazardsetter.StealthRock;
 import org.shorts.model.moves.entryhazardsetter.StickyWeb;
 import org.shorts.model.moves.thawing.Scald;
@@ -23,7 +23,7 @@ class PressureAppliesTests {
     private Pokemon attacker = new Groudon();
     private Pokemon defender = getDummyPokemon();
     private List<Pokemon> allTargets = List.of(defender);
-    private final Battle battle = new DummySingleBattle();
+    private final Battle battle = new DummyBattle();
 
     @BeforeEach
     void setup() {

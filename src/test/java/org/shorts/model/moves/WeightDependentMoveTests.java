@@ -3,7 +3,7 @@ package org.shorts.model.moves;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.pokemon.PokedexEntry;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.AutotomizedStatus;
@@ -27,7 +27,7 @@ class WeightDependentMoveTests {
     @BeforeEach
     void setup() {
         this.user = getDummyPokemon();
-        battle = new DummySingleBattle();
+        battle = new DummyBattle();
     }
 
     private Pokemon buildMonWithWeight(double weight) {

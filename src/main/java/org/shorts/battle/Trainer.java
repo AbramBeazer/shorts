@@ -315,4 +315,67 @@ public class Trainer {
         this.toxicSpikes = 0;
         this.stickyWeb = false;
     }
+
+    public void decrementAllCounters() {
+        countDownSafeguard();
+        countDownReflect();
+        countDownLightScreen();
+        countDownAuroraVeil();
+        countDownLuckyChant();
+        countDownMist();
+    }
+
+    private void countDownSafeguard() {
+        if (safeguardTurns > 0) {
+            safeguardTurns--;
+            if (safeguardTurns == 0) {
+                System.out.println("Safeguard ended for " + getName() + "'s team.");
+            }
+        }
+    }
+
+    private void countDownReflect() {
+        if (reflectTurns > 0) {
+            reflectTurns--;
+            if (reflectTurns == 0) {
+                System.out.println("Reflect ended for " + getName() + "'s team.");
+            }
+        }
+    }
+
+    private void countDownLightScreen() {
+        if (lightScreenTurns > 0) {
+            lightScreenTurns--;
+            if (lightScreenTurns == 0) {
+                System.out.println("Light Screen ended for " + getName() + "'s team.");
+            }
+        }
+    }
+
+    private void countDownAuroraVeil() {
+        if (auroraVeilTurns > 0) {
+            auroraVeilTurns--;
+            if (auroraVeilTurns == 0) {
+                System.out.println("Aurora Veil ended for " + getName() + "'s team.");
+            }
+        }
+    }
+
+    private void countDownLuckyChant() {
+        if (luckyChantTurns > 0) {
+            luckyChantTurns--;
+            if (luckyChantTurns == 0) {
+                System.out.println("Lucky Chant ended for " + getName() + "'s team.");
+            }
+        }
+    }
+
+    private void countDownMist() {
+        if (mistTurns > 0) {
+            mistTurns--;
+            if (mistTurns == 0) {
+                System.out.println("Mist ended for " + getName() + "'s team.");
+            }
+        }
+    }
 }

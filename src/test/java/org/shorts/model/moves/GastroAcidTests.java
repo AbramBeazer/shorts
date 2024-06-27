@@ -5,7 +5,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
 
@@ -30,7 +30,7 @@ class GastroAcidTests {
         user = getDummyPokemon();
         target = getDummyPokemon();
         move = new GastroAcid();
-        battle = new DummySingleBattle();
+        battle = new DummyBattle();
     }
 
     @Test

@@ -5,15 +5,16 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.Main;
-import org.shorts.MockRandomReturnZero;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.battle.Weather;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
+import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.abilities.AttackDoublingAbility.HUGE_POWER;
 import static org.shorts.model.items.ChoiceBand.CHOICE_BAND;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
@@ -31,9 +32,11 @@ class BodyPressTests {
         user.setTypes(Set.of(Type.GROUND));
         target = getDummyPokemon();
         target.setTypes(Set.of(Type.GROUND));
-        battle = new DummySingleBattle(user, target);
+        battle = new DummyBattle(user, target);
         bp = new BodyPress();
-        Main.RANDOM = new MockRandomReturnZero();
+        Main.HIT_RANDOM = ZERO_RANDOM;
+        Main.DAMAGE_RANDOM = ZERO_RANDOM;
+        Main.CRIT_RANDOM = MAX_RANDOM;
     }
 
     @Test

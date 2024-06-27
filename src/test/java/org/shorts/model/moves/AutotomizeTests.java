@@ -3,7 +3,7 @@ package org.shorts.model.moves;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.abilities.Contrary;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.AutotomizedStatus;
@@ -20,7 +20,7 @@ class AutotomizeTests {
 
     @BeforeEach
     void setUp() {
-        battle = new DummySingleBattle();
+        battle = new DummyBattle();
         user = getDummyPokemon();
         move = new Autotomize();
     }

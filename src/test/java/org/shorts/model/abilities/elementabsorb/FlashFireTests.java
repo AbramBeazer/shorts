@@ -5,9 +5,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.Main;
-import org.shorts.MockRandomReturnZero;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.moves.Ember;
 import org.shorts.model.moves.HeatCrash;
 import org.shorts.model.moves.Move;
@@ -18,6 +17,8 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
+import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 
 public class FlashFireTests {
@@ -34,9 +35,11 @@ public class FlashFireTests {
         ability = new FlashFire();
         ffMon.setAbility(ability);
         other = getDummyPokemon();
-        battle = new DummySingleBattle(ffMon, other);
+        battle = new DummyBattle(ffMon, other);
         ember = new Ember();
-        Main.RANDOM = new MockRandomReturnZero();
+        Main.HIT_RANDOM = ZERO_RANDOM;
+        Main.DAMAGE_RANDOM = ZERO_RANDOM;
+        Main.CRIT_RANDOM = MAX_RANDOM;
     }
 
     @Test

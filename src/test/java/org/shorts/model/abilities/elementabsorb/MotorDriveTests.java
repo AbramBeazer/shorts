@@ -5,7 +5,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.ThunderFang;
 import org.shorts.model.moves.ThunderWave;
@@ -33,7 +33,7 @@ public class MotorDriveTests {
         mdMon.setAbility(ability);
         mdMon.setStageSpeed(0);
         other = getDummyPokemon();
-        battle = new DummySingleBattle();
+        battle = new DummyBattle();
         move = new ThunderFang();
     }
 

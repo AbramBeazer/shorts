@@ -2,7 +2,7 @@ package org.shorts.model.moves;
 
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.pokemon.Pokemon;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +12,7 @@ class PsyshockTests {
 
     @Test
     void testUsesSpecialAttackAndPhysicalDefense() {
-        Battle battle = new DummySingleBattle();
+        Battle battle = new DummyBattle();
         Pokemon attacker = getDummyPokemon();
         attacker.setAttack(100);
         attacker.setSpecialAttack(33);

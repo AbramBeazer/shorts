@@ -3,9 +3,8 @@ package org.shorts.model.moves;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.Main;
-import org.shorts.MockRandomReturnZero;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.abilities.Protosynthesis;
 import org.shorts.model.abilities.QuarkDrive;
 import org.shorts.model.items.GriseousOrb;
@@ -20,6 +19,8 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
+import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.abilities.Klutz.KLUTZ;
 import static org.shorts.model.abilities.Unnerve.UNNERVE;
 import static org.shorts.model.items.BoosterEnergy.BOOSTER_ENERGY;
@@ -56,8 +57,10 @@ class FlingTests {
         fling = new Fling();
         user = PokemonTestUtils.getDummyPokemon();
         target = PokemonTestUtils.getDummyPokemon();
-        battle = new DummySingleBattle(user, target);
-        Main.RANDOM = new MockRandomReturnZero();
+        battle = new DummyBattle(user, target);
+        Main.HIT_RANDOM = ZERO_RANDOM;
+        Main.DAMAGE_RANDOM = ZERO_RANDOM;
+        Main.CRIT_RANDOM = MAX_RANDOM;
     }
 
     @Test

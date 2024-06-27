@@ -23,6 +23,9 @@ import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.TooManyTypesException;
 import org.shorts.model.types.Type;
 
+import static org.shorts.Main.CRIT_RANDOM;
+import static org.shorts.Main.DAMAGE_RANDOM;
+import static org.shorts.Main.HIT_RANDOM;
 import static org.shorts.Main.RANDOM;
 import static org.shorts.MathUtils.roundHalfDown;
 import static org.shorts.MathUtils.roundHalfUp;
@@ -111,6 +114,7 @@ public abstract class Move {
 
     private final int secondaryEffectChance;
     private boolean disabled = false;
+    public static final double REGULAR_CRIT_MULTIPLIER = 1.5;
 
     protected Move(
         String name,
@@ -221,7 +225,7 @@ public abstract class Move {
         int threshold = (int) roundHalfDown(
             getModifiedAccuracy(user, target, battle) * getAccuracyEvasionStageModifier(user, target)
                 * (user.hasVolatileStatus(MICLE_BERRY_EFFECT) ? 1.2 : 1));
-        return RANDOM.nextInt(100) < threshold;
+        return HIT_RANDOM.nextInt(100) < threshold;
     }
 
     private double getModifiedAccuracy(Pokemon user, Pokemon target, Battle battle) {
@@ -493,7 +497,7 @@ public abstract class Move {
     }
 
     private double getRandomMultiplier() {
-        return (RANDOM.nextInt(16) + 85) / 100d;
+        return (DAMAGE_RANDOM.nextInt(16) + 85) / 100d;
     }
 
     private double getNumTargetsMultiplier() {
@@ -551,7 +555,7 @@ public abstract class Move {
                 stage += ((PumpedStatus) user.getVolatileStatus(PUMPED)).getLevels();
             }
 
-            final int rand = RANDOM.nextInt(24);
+            final int rand = CRIT_RANDOM.nextInt(24);
             if (stage <= 0) {
                 return rand < 1;
             } else if (stage == 1) {
@@ -565,7 +569,7 @@ public abstract class Move {
     }
 
     private double getCriticalMultiplier(boolean isCritical) {
-        return isCritical ? 1.5 : 1;
+        return isCritical ? REGULAR_CRIT_MULTIPLIER : 1;
     }
 
     protected double getBurnMultiplier(Pokemon user) {
@@ -594,12 +598,14 @@ public abstract class Move {
 
         if (!critical && user.getAbility() != INFILTRATOR) {
             Trainer opposingTrainer = battle.getOpposingTrainer(user);
-            if (this.category == Category.PHYSICAL && (opposingTrainer.getReflectTurns() > 0
-                || opposingTrainer.getAuroraVeilTurns() > 0)) {
-                base = roundHalfUp(base * 0.5);
-            } else if (this.category == Category.SPECIAL && (opposingTrainer.getLightScreenTurns() > 0
-                || opposingTrainer.getAuroraVeilTurns() > 0)) {
-                base = roundHalfUp(base * 0.5);
+            double screenMultiplier = battle.getActiveMonsPerSide() == 1 ? 0.5 : (2732 / divisor);
+
+            if (opposingTrainer.getAuroraVeilTurns() > 0) {
+                base = roundHalfUp(base * screenMultiplier);
+            } else if (this.category == Category.PHYSICAL && opposingTrainer.getReflectTurns() > 0) {
+                base = roundHalfUp(base * screenMultiplier);
+            } else if (this.category == Category.SPECIAL && opposingTrainer.getLightScreenTurns() > 0) {
+                base = roundHalfUp(base * screenMultiplier);
             }
         }
 
