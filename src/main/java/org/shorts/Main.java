@@ -34,6 +34,9 @@ import static org.shorts.model.abilities.RockHead.ROCK_HEAD;
 public class Main {
 
     public static Random RANDOM = new Random();
+    public static Random HIT_RANDOM = new Random();
+    public static Random CRIT_RANDOM = new Random();
+    public static Random DAMAGE_RANDOM = new Random();
 
     public static void main(String[] args) throws Exception {
         Pokedex.create();
