@@ -536,7 +536,7 @@ public class Battle {
     public void promptSwitchCausedByUserMove(Trainer trainer) {
         if (trainer.hasAvailableSwitch()) {
             printBench(trainer);
-            int choice = 0;
+            int choice;
             //Choice is invalid if that Pokémon has fainted or is already in battle
             do {
                 choice = Integer.parseInt(scanner.nextLine());
