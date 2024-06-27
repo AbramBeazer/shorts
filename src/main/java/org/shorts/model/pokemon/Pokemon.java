@@ -1,6 +1,7 @@
 package org.shorts.model.pokemon;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -114,9 +115,13 @@ public class Pokemon {
         this.pokedexEntry = pokedexEntry;
         this.setNature(nature);
         this.speciesName = pokedexEntry.getSpeciesName();
-        this.types = pokedexEntry.getType2() == null
-            ? Set.of(pokedexEntry.getType1())
-            : Set.of(pokedexEntry.getType1(), pokedexEntry.getType2());
+        
+        this.types = new HashSet<>();
+        this.types.add(pokedexEntry.getType1());
+        if (pokedexEntry.getType2() != null) {
+            this.types.add(pokedexEntry.getType2());
+        }
+
         this.happiness = Byte.MAX_VALUE;
         this.ev = effortValues;
 
