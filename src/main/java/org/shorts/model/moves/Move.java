@@ -269,9 +269,9 @@ public abstract class Move {
 
     protected double getAccuracyEvasionStageModifier(Pokemon user, Pokemon target) {
         int evasionStage = target.getStageEvasion();
-        if (evasionStage > 0 && (target.hasVolatileStatus(IDENTIFIED)
-            || (user.getAbility() instanceof PreserveAccuracyIgnoreEvasionAbility && !user.hasVolatileStatus(
-            ABILITY_SUPPRESSED)))) {
+        if (evasionStage > 0 && (target.hasVolatileStatus(IDENTIFIED) || (
+            user.getAbility() instanceof PreserveAccuracyIgnoreEvasionAbility && !user.hasVolatileStatus(
+                ABILITY_SUPPRESSED)))) {
             evasionStage = 0;
         }
         int combinedStage = Math.max(-6, Math.min(user.getStageAccuracy() - evasionStage, 6));
@@ -313,10 +313,8 @@ public abstract class Move {
             //  Should it affect moves that affect the enemy side? It affects all hazard moves except Sticky Web.
             //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
             //  Pressure increases the PP consumption of an opponent's Imprison and Snatch even though those are self-targeting moves; in Snatch's case the additional PP is consumed even if Snatch fails or snatches a move from a Pokémon other than the one with Pressure.
-            if (battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target)
-                && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(
-                user,
-                target)) {
+            if (battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target) && target.getAbility()
+                .equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(user, target)) {
                 this.decrementPP();
             }
 
@@ -362,7 +360,9 @@ public abstract class Move {
                     final int previousTargetHP = target.getCurrentHP();
 
                     int damage = calculateDamage(user, target, battle);
-                    if (target.hasVolatileStatus(SUBSTITUTE)) { //TODO: Handle moves and abilities that ignore substitute.
+                    if (target.hasVolatileStatus(SUBSTITUTE) && (user.getAbility() != INFILTRATOR
+                        || user.hasVolatileStatus(ABILITY_SUPPRESSED))) {
+                        //TODO: Handle moves and abilities that ignore substitute.
                         ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
                     } else if (damage > 0) {
                         target.takeDamage(damage);
