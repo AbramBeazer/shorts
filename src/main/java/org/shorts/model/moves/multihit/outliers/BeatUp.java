@@ -36,7 +36,9 @@ public class BeatUp extends Move {
                 final int previousTargetHP = target.getCurrentHP();
 
                 int damage = calculateDamage(user, target, battle);
-                if (target.hasVolatileStatus(SUBSTITUTE)) {
+
+                final boolean hitSub = checkForHitSub(user, target);
+                if (hitSub) {
                     ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
                 } else {
                     target.takeDamage(damage);
@@ -46,7 +48,7 @@ public class BeatUp extends Move {
                     this.inflictRecoil(user, damage);
                 }
 
-                if (!target.hasVolatileStatus(SUBSTITUTE)) {
+                if (!hitSub) {
                     target.afterHit(user, battle, previousTargetHP, this);
                 }
 

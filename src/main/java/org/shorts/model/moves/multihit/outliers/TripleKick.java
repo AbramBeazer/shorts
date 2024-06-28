@@ -32,7 +32,9 @@ public class TripleKick extends Move {
 
                 hitNum++;
                 int damage = calculateDamage(user, target, battle);
-                if (target.hasVolatileStatus(SUBSTITUTE)) { //TODO: Handle moves and abilities that ignore substitute.
+
+                final boolean hitSub = checkForHitSub(user, target);
+                if (hitSub) {
                     ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
                 } else {
                     target.takeDamage(damage);
@@ -42,7 +44,7 @@ public class TripleKick extends Move {
                 }
 
                 //TODO: Verify which effects should happen after the attack hits the sub and which shouldn't.
-                if (!target.hasVolatileStatus(SUBSTITUTE)) {
+                if (!hitSub) {
                     target.afterHit(user, battle, previousTargetHP, this);
                 }
 

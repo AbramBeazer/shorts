@@ -360,8 +360,9 @@ public abstract class Move {
                     final int previousTargetHP = target.getCurrentHP();
 
                     int damage = calculateDamage(user, target, battle);
-                    if (target.hasVolatileStatus(SUBSTITUTE) && (user.getAbility() != INFILTRATOR
-                        || user.hasVolatileStatus(ABILITY_SUPPRESSED))) {
+
+                    final boolean hitSub = checkForHitSub(user, target);
+                    if (hitSub) {
                         //TODO: Handle moves and abilities that ignore substitute.
                         ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
                     } else if (damage > 0) {
@@ -373,7 +374,7 @@ public abstract class Move {
                     }
 
                     //TODO: Verify which effects should happen after the attack hits the sub and which shouldn't.
-                    if (!target.hasVolatileStatus(SUBSTITUTE)) {
+                    if (!hitSub) {
                         target.afterHit(user, battle, previousTargetHP, this);
                     }
 
@@ -394,6 +395,12 @@ public abstract class Move {
                 }
             }
         }
+    }
+
+    //TODO: Remember to override this in Transform and Sky Drop -- Infiltrator still can't get through a substitute when using those moves.
+    protected boolean checkForHitSub(Pokemon user, Pokemon target) {
+        return target.hasVolatileStatus(SUBSTITUTE) && (user.getAbility() != INFILTRATOR
+            || user.hasVolatileStatus(ABILITY_SUPPRESSED));
     }
 
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {

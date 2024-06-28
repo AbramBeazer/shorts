@@ -65,6 +65,12 @@ public class Fling extends Move {
     }
 
     @Override
+    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        //TODO: Should this have a secondary effect if it hits the target's substitute?
+        super.trySecondaryEffect(user, target, battle);
+    }
+
+    @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         final HeldItem item = user.getHeldItem();
         if (item instanceof Berry) {
