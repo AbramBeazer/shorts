@@ -18,7 +18,9 @@ public class Defog extends Move {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (!target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
+        if (!target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)
+            && !target.hasVolatileStatus(VolatileStatusType.SEMI_INVULNERABLE)
+            && target.isDropPossible(StatEnum.EVASION)) {
             target.changeStat(-1, StatEnum.EVASION);
         }
         //        if(battle.getWeather() == Weather.FOG){
