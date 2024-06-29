@@ -436,7 +436,6 @@ public class Battle {
     }
 
     public List<Pokemon> getPokemonWithinRange(Pokemon user, Range range) {
-        final int activeMonsPerSide = getActiveMonsPerSide();
         final Trainer player = getCorrespondingTrainer(user);
         final Trainer opponent = getOpposingTrainer(user);
         final int userIndex = player.getTeam().indexOf(user);
@@ -467,33 +466,40 @@ public class Battle {
                 return allies;
             case ALL_ADJACENT_OPPONENTS:
             case SINGLE_ADJACENT_OPPONENT:
-                for (int i = 0; i < activeMonsPerSide; i++) {
-                    if (Math.abs(i - userIndex) <= 1) {
-                        possibleTargets.add(opponent.getTeam().get(i));
-                    }
+                if (activeMonsPerSide < 3 || userIndex == 1) {
+                    return opponent.getActivePokemon();
+                } else if (userIndex == 0) {
+                    return opponent.getActivePokemon().subList(1, 3);
+                } else if (userIndex == 2) {
+                    return opponent.getActivePokemon().subList(0, 2);
                 }
-                return possibleTargets;
             case RANDOM_ADJACENT_OPPONENT:
-                for (int i = 0; i < activeMonsPerSide; i++) {
-                    if (Math.abs(i - userIndex) <= 1) {
-                        possibleTargets.add(opponent.getTeam().get(i));
-                    }
+                if (activeMonsPerSide < 3 || userIndex == 1) {
+                    possibleTargets.addAll(opponent.getActivePokemon());
+                } else if (userIndex == 0) {
+                    possibleTargets.addAll(opponent.getActivePokemon().subList(1, 3));
+                } else if (userIndex == 2) {
+                    possibleTargets.addAll(opponent.getActivePokemon().subList(0, 2));
                 }
                 return List.of(possibleTargets.get(RANDOM.nextInt(possibleTargets.size())));
             case ALL_ADJACENT:
             case SINGLE_ADJACENT_ANY:
                 for (int i = 0; i < activeMonsPerSide; i++) {
-                    if (Math.abs(i - userIndex) <= 1) {
-                        possibleTargets.add(opponent.getTeam().get(i));
-                        if (i != userIndex) {
-                            possibleTargets.add(player.getTeam().get(i));
-                        }
+                    if (Math.abs(i - userIndex) == 1) {
+                        possibleTargets.add(player.getActivePokemon().get(i));
                     }
+                }
+                if (activeMonsPerSide < 3 || userIndex == 1) {
+                    possibleTargets.addAll(opponent.getActivePokemon());
+                } else if (userIndex == 0) {
+                    possibleTargets.addAll(opponent.getActivePokemon().subList(1, 3));
+                } else if (userIndex == 2) {
+                    possibleTargets.addAll(opponent.getActivePokemon().subList(0, 2));
                 }
                 return possibleTargets;
             case SINGLE_ANY:
+                possibleTargets.addAll(opponent.getActivePokemon());
                 for (int i = 0; i < activeMonsPerSide; i++) {
-                    possibleTargets.add(opponent.getTeam().get(i));
                     if (i != userIndex) {
                         possibleTargets.add(player.getTeam().get(i));
                     }
@@ -501,7 +507,7 @@ public class Battle {
                 return possibleTargets;
             case SINGLE_ADJACENT_ALLY:
                 for (int i = 0; i < activeMonsPerSide; i++) {
-                    if (Math.abs(i - userIndex) <= 1 && i != userIndex) {
+                    if (Math.abs(i - userIndex) == 1) {
                         possibleTargets.add(player.getTeam().get(i));
                     }
                 }
@@ -583,14 +589,14 @@ public class Battle {
             .append("\n\n")
             .append("|");
 
-        for (int i = 0; i < getActiveMonsPerSide(); i++) {
+        for (int i = getActiveMonsPerSide() - 1; i >= 0; i--) {
             final Pokemon mon = opponent.getTeam().get(i);
             field.append("\t\t").append(mon.getDisplayName());
             field.append("\t\t").append("|");
         }
 
         field.append("\n").append("|");
-        for (int i = 0; i < getActiveMonsPerSide(); i++) {
+        for (int i = getActiveMonsPerSide() - 1; i >= 0; i--) {
             final Pokemon mon = opponent.getTeam().get(i);
             field.append("\t\t").append("HP: ").append(mon.getCurrentHP()).append("/").append(mon.getMaxHP());
             field.append("\t\t\t\t").append("|");
@@ -630,9 +636,9 @@ public class Battle {
         for (Pokemon mon : activeMons) {
             if (!isWeatherSuppressed() && mon.getHeldItem() != SAFETY_GOGGLES && (
                 (weather == Weather.SAND && !mon.getTypes().contains(Type.ROCK) && !mon.getTypes().contains(Type.GROUND)
-                    && !mon.getTypes().contains(Type.STEEL) && !(mon.getAbility() instanceof SandImmuneAbility))
-                    || (weather == Weather.HAIL && !mon.getTypes().contains(Type.ICE)
-                    && !(mon.getAbility() instanceof HailImmuneAbility)))) {
+                    && !mon.getTypes().contains(Type.STEEL) && !(mon.getAbility() instanceof SandImmuneAbility)) || (
+                    weather == Weather.HAIL && !mon.getTypes().contains(Type.ICE)
+                        && !(mon.getAbility() instanceof HailImmuneAbility)))) {
 
                 mon.takeDamage(mon.getMaxHP() / 16);
             }
