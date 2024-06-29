@@ -7,7 +7,7 @@ import org.shorts.model.status.VolatileStatus;
 
 import static org.shorts.model.types.Type.GHOST;
 
-public class Curse extends Move {
+public class Curse extends Move implements NotAffectedByMagicCoat {
 
     public Curse() {
         super("Curse", 0, -1, GHOST, Category.STATUS, Range.VARIES, 16, true, 100);

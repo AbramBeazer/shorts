@@ -318,7 +318,9 @@ public abstract class Move {
                 this.decrementPP();
             }
 
-            if (this.category == Category.STATUS && user != target && target.hasVolatileStatus(MAGIC_COAT)) {
+            //Might need to move this outside of this method, because moves with Range OTHER_SIDE will bounce back to the user's side, while moves that hit multiple targets will be reflected back at the user's team.
+            if (this.category == Category.STATUS && target.hasVolatileStatus(MAGIC_COAT)
+                && !(this instanceof NotAffectedByMagicCoat)) {
                 target = user;
             }
 
