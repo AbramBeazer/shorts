@@ -2,7 +2,6 @@ package org.shorts.model.moves.trapping;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.moves.Move;
-import org.shorts.model.moves.NotAffectedByMagicCoat;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
@@ -10,7 +9,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.OCTOLOCKED;
 
-public class Octolock extends Move implements NotAffectedByMagicCoat {
+public class Octolock extends Move {
 
     public Octolock() {
         super("Octolock", 0, 100, Type.FIGHTING, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 24, false, 100);
