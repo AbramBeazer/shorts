@@ -1,13 +1,13 @@
-package org.shorts.model.moves;
+package org.shorts.model.abilities;
 
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MagicCoatTests {
+class MagicBounceTests {
 
     @Test
-    void testMoveGrantsVolatileStatus() {
+    void testBounceStatusMove() {
         assertThat(false).isTrue();
     }
 }

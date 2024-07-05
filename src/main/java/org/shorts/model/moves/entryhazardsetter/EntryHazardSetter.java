@@ -1,7 +1,7 @@
 package org.shorts.model.moves.entryhazardsetter;
 
-import org.shorts.model.moves.AffectedByMagicCoat;
+import org.shorts.model.moves.AffectedByMagicBounce;
 
-public interface EntryHazardSetter extends AffectedByMagicCoat {
+public interface EntryHazardSetter extends AffectedByMagicBounce {
 
 }

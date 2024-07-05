@@ -4,14 +4,14 @@ import org.shorts.battle.Battle;
 import org.shorts.battle.Terrain;
 import org.shorts.battle.Trainer;
 import org.shorts.model.StatEnum;
-import org.shorts.model.moves.AffectedByMagicCoat;
+import org.shorts.model.moves.AffectedByMagicBounce;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-public class Defog extends Move implements AffectedByMagicCoat {
+public class Defog extends Move implements AffectedByMagicBounce {
 
     public Defog() {
         super("Defog", 0, -1, Type.FLYING, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 24, false, 100);

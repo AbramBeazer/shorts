@@ -17,8 +17,8 @@ import org.shorts.model.status.VolatileStatusType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
 import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
+import static org.shorts.model.abilities.MagicBounce.MAGIC_BOUNCE;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
-import static org.shorts.model.status.VolatileStatusType.MAGIC_COAT;
 
 class DefogTests {
 
@@ -133,8 +133,8 @@ class DefogTests {
     }
 
     @Test
-    void testReflectedByMagicCoat() {
-        enemy.addVolatileStatus(new VolatileStatus(MAGIC_COAT, -1));
+    void testReflectedByMagicBounce() {
+        enemy.setAbility(MAGIC_BOUNCE);
 
         final Trainer player = battle.getCorrespondingTrainer(user);
         player.setLightScreenTurns(5);
@@ -151,7 +151,7 @@ class DefogTests {
         opponent.setSafeguardTurns(5);
 
         defog.execute(user, List.of(enemy), battle);
-        
+
         assertThat(player.getLightScreenTurns()).isZero();
         assertThat(player.getReflectTurns()).isZero();
         assertThat(player.getAuroraVeilTurns()).isZero();

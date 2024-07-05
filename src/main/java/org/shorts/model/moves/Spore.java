@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
-public class Spore extends Move implements PowderSporeEffect, AffectedByMagicCoat {
+public class Spore extends Move implements PowderSporeEffect, AffectedByMagicBounce {
 
     public Spore() {
         super("Spore", 0, -1, Type.GRASS, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 24, false, 100);

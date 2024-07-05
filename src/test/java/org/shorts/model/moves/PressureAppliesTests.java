@@ -33,19 +33,19 @@ class PressureAppliesTests {
     @Test
     void testReturnsTrueForPhysicalAttack() {
         Move move = new Earthquake();
-        assertThat(move.pressureApplies(attacker, defender)).isTrue();
+        assertThat(move.pressureApplies(attacker, defender, battle)).isTrue();
     }
 
     @Test
     void testReturnsTrueForSpecialAttack() {
         Move move = new Scald();
-        assertThat(move.pressureApplies(attacker, defender)).isTrue();
+        assertThat(move.pressureApplies(attacker, defender, battle)).isTrue();
     }
 
     @Test
     void testReturnsTrueForStatusMoveThatTargetsOthers() {
         Move move = new StealthRock();
-        assertThat(move.pressureApplies(attacker, defender)).isTrue();
+        assertThat(move.pressureApplies(attacker, defender, battle)).isTrue();
     }
 
     @Test
@@ -58,7 +58,7 @@ class PressureAppliesTests {
     @Test
     void testReturnsFalseForStickyWeb() {
         Move move = new StickyWeb();
-        assertThat(move.pressureApplies(attacker, defender)).isFalse();
+        assertThat(move.pressureApplies(attacker, defender, battle)).isFalse();
     }
 
     @Test

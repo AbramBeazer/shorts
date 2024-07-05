@@ -72,7 +72,6 @@ public enum VolatileStatusType implements AbstractStatusType {
     FLINCH,
     BRACING,
     CENTER_OF_ATTENTION,
-    MAGIC_COAT, // Applies to Magic Bounce -- Should I just make Magic Bounce bestow this condition?
     PROTECTED,
     HELPING_HAND,
     MICLE_BERRY_EFFECT,
