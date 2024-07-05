@@ -22,7 +22,8 @@ public class PowderSporeEffectData {
     }
 
     public boolean canActivate(Pokemon target) {
-        return (target.getAbility().equals(OVERCOAT) && !target.hasVolatileStatus(VolatileStatusType.ABILITY_IGNORED))
-            && !target.getTypes().contains(Type.GRASS) && !target.getHeldItem().equals(SAFETY_GOGGLES);
+        return !target.getTypes().contains(Type.GRASS) && target.getHeldItem() != SAFETY_GOGGLES
+            && (target.getAbility() != OVERCOAT || target.hasVolatileStatus(VolatileStatusType.ABILITY_IGNORED)
+            || target.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED));
     }
 }
