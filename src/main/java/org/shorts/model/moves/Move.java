@@ -1,5 +1,6 @@
 package org.shorts.model.moves;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -37,6 +38,7 @@ import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.Hustle.HUSTLE;
 import static org.shorts.model.abilities.IceScales.ICE_SCALES;
 import static org.shorts.model.abilities.Infiltrator.INFILTRATOR;
+import static org.shorts.model.abilities.MagicBounce.MAGIC_BOUNCE;
 import static org.shorts.model.abilities.Merciless.MERCILESS;
 import static org.shorts.model.abilities.Neuroforce.NEUROFORCE;
 import static org.shorts.model.abilities.Prankster.PRANKSTER;
@@ -74,7 +76,6 @@ import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
 import static org.shorts.model.status.VolatileStatusType.CONFUSED;
 import static org.shorts.model.status.VolatileStatusType.IDENTIFIED;
 import static org.shorts.model.status.VolatileStatusType.LASER_FOCUS;
-import static org.shorts.model.status.VolatileStatusType.MAGIC_COAT;
 import static org.shorts.model.status.VolatileStatusType.MICLE_BERRY_EFFECT;
 import static org.shorts.model.status.VolatileStatusType.MINIMIZED;
 import static org.shorts.model.status.VolatileStatusType.PUMPED;
@@ -305,40 +306,81 @@ public abstract class Move {
         user.setMovedThisTurn(true);
         this.decrementPP();
         for (Pokemon target : targets) {
-
-            //TODO: What if a random-target move targets a Pokemon that has fainted and hasn't been switched out yet?
-            //TODO: What if any move targets a Pokemon that's fainted? Does it just hit another available adjacent enemy?
-
-            //TODO: Move this Pressure logic to whatever method calls this one. Pressure shouldn't activate for Curse or Sticky Web but should activate for moves that target the whole field, like Rain Dance. I think it should only activate once in the case of Rain Dance, even if multiple opponents have it.
-            //  Should it affect moves that affect the enemy side? It affects all hazard moves except Sticky Web.
+            //TODO:
             //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
             //  Pressure increases the PP consumption of an opponent's Imprison and Snatch even though those are self-targeting moves; in Snatch's case the additional PP is consumed even if Snatch fails or snatches a move from a Pokémon other than the one with Pressure.
-            if (battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target) && target.getAbility()
-                .equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(user, target)) {
+            if (pressureApplies(user, target, battle)) {
                 this.decrementPP();
             }
+        }
 
-            //Might need to move this outside of this method, because moves with Range OTHER_SIDE will bounce back to the user's side, while moves that hit multiple targets will be reflected back at the user's team.
-            if (this.category == Category.STATUS && target.hasVolatileStatus(MAGIC_COAT)
-                && !(this instanceof NotAffectedByMagicCoat)) {
-                target = user;
+        if (range == Range.BOTH_SIDES || range == Range.OWN_SIDE || range == Range.OWN_PARTY
+            || range == Range.OTHER_SIDE) {
+            executeOnSide(user, battle);
+        } else {
+            if (this instanceof AffectedByMagicBounce) { //Hit the ones without MagicBounce first.
+                targets.sort(Comparator.comparing(p -> p.getAbility() == MAGIC_BOUNCE));
             }
+            for (Pokemon target : targets) {
+                //TODO: Implement redirecting moves
 
-            executeOnTarget(user, target, battle);
-            user.setLastMoveUsed(this);
-            //if(userMon.getCurrentHP() == 0) {
-            //  //TODO: Handle fainting and subsequent switch-in.
-            //}
+                //TODO: What if a random-target move targets a Pokemon that has fainted and hasn't been switched out yet?
+                //TODO: What if any move targets a Pokemon that's fainted? Does it just hit another available adjacent enemy?
 
-            //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
-            if (target.getCurrentHP() == 0) {
-                //Or should I have this call in Pokemon.takeDamage()?
-                target.afterFaint(user, battle);
-                user.afterKO(target, battle);
-                //TODO: Handle fainting and subsequent switch-in.
+                //I'm pretty sure the bouncing happens before the hit roll. Each bounced attack has a chance to miss
+                ////TODO: Is the accuracy calculated using the original user's accuracy, or the bouncer's?
+                final boolean magicBounced = this instanceof AffectedByMagicBounce
+                    && target.getAbility() == MAGIC_BOUNCE && !target.hasVolatileStatus(SEMI_INVULNERABLE)
+                    && !target.hasVolatileStatus(ABILITY_SUPPRESSED) && !target.hasVolatileStatus(ABILITY_IGNORED);
 
+                if (magicBounced) {
+                    if (range.isPromptForTargetChoice() || range == Range.RANDOM_OPPONENT
+                        || range == Range.RANDOM_ADJACENT_OPPONENT) {
+                        executeOnTarget(user, user, battle);
+                    } else {
+                        //Range of the bounced attack is determined by the bouncer, not the user.
+                        for (Pokemon mon : battle.getPokemonWithinRange(target, range)) {
+                            executeOnTarget(user, mon, battle);
+                        }
+                    }
+                } else {
+                    executeOnTarget(user, target, battle);
+                }
+                //if(userMon.getCurrentHP() == 0) {
+                //  //TODO: Handle fainting and subsequent switch-in.
+                //}
+
+                //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
+                if (target.getCurrentHP() == 0) {
+                    //Or should I have this call in Pokemon.takeDamage()?
+                    target.afterFaint(user, battle);
+                    user.afterKO(target, battle);
+                    //TODO: Handle fainting and subsequent switch-in.
+
+                }
             }
         }
+
+        user.setLastMoveUsed(this);
+    }
+
+    protected void executeOnSide(Pokemon user, Battle battle) {
+        final Trainer side;
+        if (range == Range.OTHER_SIDE) {
+            boolean magicBounceApplies =
+                this instanceof AffectedByMagicBounce && battle.getOpposingActivePokemon(user)
+                    .stream()
+                    .anyMatch(t -> t.getAbility() == MAGIC_BOUNCE
+                        && !t.hasVolatileStatus(SEMI_INVULNERABLE)
+                        && !t.hasVolatileStatus(ABILITY_SUPPRESSED) && !t.hasVolatileStatus(ABILITY_IGNORED));
+            side = magicBounceApplies ? battle.getCorrespondingTrainer(user) : battle.getOpposingTrainer(user);
+        } else if (range == Range.OWN_SIDE || range == Range.BOTH_SIDES || range == Range.OWN_PARTY) {
+            side = battle.getCorrespondingTrainer(user);
+        } else {
+            throw new IllegalArgumentException(
+                "Specified range is not whole field, one side of field, or one player's party");
+        }
+        trySecondaryEffect(user, side.getActivePokemon().get(0), battle);
     }
 
     protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
@@ -685,8 +727,9 @@ public abstract class Move {
         }
     }
 
-    protected boolean pressureApplies(Pokemon userMon, Pokemon targetMon) {
-        return userMon != targetMon;
+    protected boolean pressureApplies(Pokemon user, Pokemon target, Battle battle) {
+        return battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target) && target.getAbility()
+            .equals(PRESSURE) && this.getCurrentPP() > 0;
     }
 
     protected double getAttackingStat(Pokemon attacker, Pokemon defender, Battle battle) {
