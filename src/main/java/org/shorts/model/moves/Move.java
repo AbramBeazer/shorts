@@ -1,6 +1,5 @@
 package org.shorts.model.moves;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -318,9 +317,6 @@ public abstract class Move {
             || range == Range.OTHER_SIDE) {
             executeOnSide(user, battle);
         } else {
-            if (this instanceof AffectedByMagicBounce) { //Hit the ones without MagicBounce first.
-                targets.sort(Comparator.comparing(p -> p.getAbility() == MAGIC_BOUNCE));
-            }
             for (Pokemon target : targets) {
                 //TODO: Implement redirecting moves
 
