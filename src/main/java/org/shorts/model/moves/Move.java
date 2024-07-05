@@ -9,6 +9,7 @@ import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
 import org.shorts.battle.Weather;
 import org.shorts.model.abilities.FullHealthHalfDamageAbility;
+import org.shorts.model.abilities.MagicBounce;
 import org.shorts.model.abilities.SuperEffectiveReducingAbility;
 import org.shorts.model.abilities.statpreserving.PreserveAccuracyIgnoreEvasionAbility;
 import org.shorts.model.items.MetronomeItem;
@@ -330,6 +331,7 @@ public abstract class Move {
                     && !target.hasVolatileStatus(ABILITY_SUPPRESSED) && !target.hasVolatileStatus(ABILITY_IGNORED);
 
                 if (magicBounced) {
+                    MagicBounce.printMessage(target, this);
                     if (range.isPromptForTargetChoice() || range == Range.RANDOM_OPPONENT
                         || range == Range.RANDOM_ADJACENT_OPPONENT) {
                         executeOnTarget(user, user, battle);
@@ -363,13 +365,23 @@ public abstract class Move {
     protected void executeOnSide(Pokemon user, Battle battle) {
         final Trainer side;
         if (range == Range.OTHER_SIDE) {
-            boolean magicBounceApplies =
-                this instanceof AffectedByMagicBounce && battle.getOpposingActivePokemon(user)
+
+            Pokemon magicBouncer =
+                this instanceof AffectedByMagicBounce ? battle.getOpposingActivePokemon(user)
                     .stream()
-                    .anyMatch(t -> t.getAbility() == MAGIC_BOUNCE
+                    .filter(t -> t.getAbility() == MAGIC_BOUNCE
                         && !t.hasVolatileStatus(SEMI_INVULNERABLE)
-                        && !t.hasVolatileStatus(ABILITY_SUPPRESSED) && !t.hasVolatileStatus(ABILITY_IGNORED));
-            side = magicBounceApplies ? battle.getCorrespondingTrainer(user) : battle.getOpposingTrainer(user);
+                        && !t.hasVolatileStatus(ABILITY_SUPPRESSED) && !t.hasVolatileStatus(ABILITY_IGNORED))
+                    .findFirst()
+                    .orElse(null) : null;
+
+            if (magicBouncer == null) {
+                side = battle.getOpposingTrainer(user);
+            } else {
+                side = battle.getCorrespondingTrainer(user);
+                MagicBounce.printMessage(magicBouncer, this);
+            }
+
         } else if (range == Range.OWN_SIDE || range == Range.BOTH_SIDES || range == Range.OWN_PARTY) {
             side = battle.getCorrespondingTrainer(user);
         } else {

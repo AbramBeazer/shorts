@@ -535,16 +535,16 @@ public class Battle {
             } else {
                 final String selfOrAlly = pokemon == possibleTarget ? " (self) " : " (ally) ";
                 final int index = selfAndAllies.indexOf(possibleTarget);
-                System.out.println((index + 3) + ") " + possibleTarget.getDisplayName() + selfOrAlly);
+                System.out.println((index + activeMonsPerSide) + ") " + possibleTarget.getDisplayName() + selfOrAlly);
             }
         }
 
-        System.out.println("6) Back");
+        System.out.println(activeMonsPerSide * 2 + ") Back");
 
         int choice;
         do {
             choice = Integer.parseInt(scanner.nextLine());
-        } while (choice < 0 || choice >= 7);
+        } while (choice < 0 || choice > activeMonsPerSide * 2);
 
         return choice;
     }

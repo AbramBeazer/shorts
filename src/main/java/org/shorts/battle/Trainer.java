@@ -37,7 +37,7 @@ public class Trainer {
     private int mistTurns = 0;
 
     public Trainer(String name, List<Pokemon> team) {
-        this(name, team, 1);
+        this(name, team, team.size());
     }
 
     public Trainer(String name, List<Pokemon> team, int activeMonsPerSide) {

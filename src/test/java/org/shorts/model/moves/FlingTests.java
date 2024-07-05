@@ -53,6 +53,7 @@ class FlingTests {
 
     @BeforeEach
     void setup() throws Exception {
+        //TODO: There has to be a better way than loading the whole Pokédex. The only reason I do it this way is because we check for a user/item match by comparing with the species in the dex entry, to allow Zacian-Crowned and regular Zacian to both appear as Zacian, for example.
         Pokedex.create();
         fling = new Fling();
         user = PokemonTestUtils.getDummyPokemon();
