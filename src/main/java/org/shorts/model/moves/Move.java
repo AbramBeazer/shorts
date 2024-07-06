@@ -206,7 +206,7 @@ public abstract class Move {
     }
 
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (category == Category.STATUS || (user.getAbility() != SHEER_FORCE && secondaryEffectChance > 0)) {
+        if (!(user.getAbility() == SHEER_FORCE && this instanceof GetsSheerForceBoost) && secondaryEffectChance > 0) {
 
             final int chance = getSecondaryEffectChance() * (user.getAbility().equals(SERENE_GRACE) ? 2 : 1);
             if (RANDOM.nextInt(100) < chance) {
