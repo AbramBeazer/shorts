@@ -5,7 +5,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class MistBall extends Move implements BallBombMove {
+public class MistBall extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public MistBall() {
         super("Mist Ball", 95, 100, Type.PSYCHIC, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 8, false, 50);

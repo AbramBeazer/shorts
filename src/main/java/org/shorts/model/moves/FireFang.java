@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 import static org.shorts.model.status.StatusType.BURN;
 import static org.shorts.model.status.VolatileStatusType.FLINCH;
 
-public class FireFang extends Move implements BitingMove {
+public class FireFang extends Move implements BitingMove, GetsSheerForceBoost {
 
     private boolean calculatingBurn;
 

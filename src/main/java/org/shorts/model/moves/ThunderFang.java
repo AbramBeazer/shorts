@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 import static org.shorts.model.status.StatusType.PARALYZE;
 import static org.shorts.model.status.VolatileStatusType.FLINCH;
 
-public class ThunderFang extends Move implements BitingMove {
+public class ThunderFang extends Move implements BitingMove, GetsSheerForceBoost {
 
     private boolean calculatingParalyze;
 

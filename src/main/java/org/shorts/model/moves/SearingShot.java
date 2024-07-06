@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.StatusType.BURN;
 
-public class SearingShot extends Move implements BallBombMove {
+public class SearingShot extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public SearingShot() {
         super("Searing Shot", 100, 100, Type.FIRE, Category.SPECIAL, Range.ALL_ADJACENT, 8, false, 30);

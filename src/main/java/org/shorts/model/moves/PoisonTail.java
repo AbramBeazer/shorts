@@ -6,7 +6,7 @@ import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class PoisonTail extends Move implements HighCritChanceMove {
+public class PoisonTail extends Move implements HighCritChanceMove, GetsSheerForceBoost {
 
     public PoisonTail() {
         super("Poison Tail", 50, 100, Type.POISON, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 40, true, 10);

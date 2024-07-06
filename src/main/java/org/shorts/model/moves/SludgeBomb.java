@@ -6,7 +6,7 @@ import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class SludgeBomb extends Move implements BallBombMove {
+public class SludgeBomb extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public SludgeBomb() {
         super("Sludge Bomb", 90, 100, Type.POISON, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 30);

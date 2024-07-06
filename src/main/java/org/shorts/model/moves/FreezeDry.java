@@ -9,7 +9,7 @@ import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class FreezeDry extends Move {
+public class FreezeDry extends Move implements GetsSheerForceBoost {
 
     public FreezeDry() {
         super("Freeze-Dry", 70, 100, Type.ICE, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 32, false, 10);

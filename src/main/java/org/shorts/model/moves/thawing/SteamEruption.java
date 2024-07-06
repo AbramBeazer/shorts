@@ -1,13 +1,14 @@
 package org.shorts.model.moves.thawing;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.GetsSheerForceBoost;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class SteamEruption extends ThawingMove {
+public class SteamEruption extends ThawingMove implements GetsSheerForceBoost {
 
     public SteamEruption() {
         super("Steam Eruption", 110, 95, Type.WATER, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 8, false, 30);

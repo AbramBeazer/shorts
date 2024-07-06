@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.StatusType.PARALYZE;
 
-public class ZapCannon extends Move implements BallBombMove {
+public class ZapCannon extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public ZapCannon() {
         super("Zap Cannon", 120, 50, Type.ELECTRIC, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 8, false, 100);

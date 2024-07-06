@@ -5,7 +5,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class ShadowBall extends Move implements BallBombMove {
+public class ShadowBall extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public ShadowBall() {
         super("Shadow Ball", 80, 100, Type.GHOST, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 24, false, 20);

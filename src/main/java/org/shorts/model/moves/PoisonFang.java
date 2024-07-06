@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.StatusType.TOXIC_POISON;
 
-public class PoisonFang extends Move implements BitingMove {
+public class PoisonFang extends Move implements BitingMove, GetsSheerForceBoost {
 
     public PoisonFang() {
         super("Poison Fang", 50, 100, Type.POISON, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 50);

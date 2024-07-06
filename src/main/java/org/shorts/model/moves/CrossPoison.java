@@ -6,7 +6,7 @@ import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class CrossPoison extends Move implements HighCritChanceMove {
+public class CrossPoison extends Move implements HighCritChanceMove, GetsSheerForceBoost {
 
     public CrossPoison() {
         super("Cross Poison", 70, 100, Type.POISON, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 32, true, 10);

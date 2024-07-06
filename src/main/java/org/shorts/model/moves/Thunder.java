@@ -6,7 +6,7 @@ import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class Thunder extends Move {
+public class Thunder extends Move implements GetsSheerForceBoost {
 
     public Thunder() {
         super("Thunder", 110, 70, Type.ELECTRIC, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 30);

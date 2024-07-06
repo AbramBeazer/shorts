@@ -688,7 +688,7 @@ public abstract class Move {
             base = roundHalfUp(base * 0.5);
         }
 
-        //Friend guard would go here, in double/triple battles.
+        //TODO: Friend Guard would go here, in double/triple battles.
 
         if (typeMultiplier > NEUTRAL && target.getAbility() instanceof SuperEffectiveReducingAbility) {
             base = roundHalfUp(base * 0.75);

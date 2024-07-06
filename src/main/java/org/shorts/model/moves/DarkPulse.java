@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.FLINCH;
 
-public class DarkPulse extends Move implements PulseEffect {
+public class DarkPulse extends Move implements PulseEffect, GetsSheerForceBoost {
 
     public DarkPulse() {
         super("Dark Pulse", 80, 100, Type.DARK, Category.SPECIAL, Range.SINGLE_ANY, 24, false, 20);

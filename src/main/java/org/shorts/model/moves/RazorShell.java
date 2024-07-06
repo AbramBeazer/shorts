@@ -5,7 +5,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class RazorShell extends Move implements SlicingMove {
+public class RazorShell extends Move implements SlicingMove, GetsSheerForceBoost {
 
     public RazorShell() {
         super("Razor Shell", 75, 95, Type.WATER, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, true, 50);

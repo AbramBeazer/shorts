@@ -5,7 +5,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class EarthPower extends Move {
+public class EarthPower extends Move implements GetsSheerForceBoost {
 
     public EarthPower() {
         super("Earth Power", 90, 100, Type.GROUND, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 10);

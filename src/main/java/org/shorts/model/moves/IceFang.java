@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 import static org.shorts.model.status.StatusType.FREEZE;
 import static org.shorts.model.status.VolatileStatusType.FLINCH;
 
-public class IceFang extends Move implements BitingMove {
+public class IceFang extends Move implements BitingMove, GetsSheerForceBoost {
 
     private boolean calculatingFreeze;
 

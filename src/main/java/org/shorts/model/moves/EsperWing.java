@@ -5,7 +5,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class EsperWing extends Move implements HighCritChanceMove {
+public class EsperWing extends Move implements HighCritChanceMove, GetsSheerForceBoost {
 
     public EsperWing() {
         super("Esper Wing", 80, 100, Type.PSYCHIC, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 100);

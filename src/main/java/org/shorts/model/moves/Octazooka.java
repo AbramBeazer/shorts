@@ -5,7 +5,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class Octazooka extends Move implements BallBombMove {
+public class Octazooka extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public Octazooka() {
         super("Octazooka", 65, 85, Type.WATER, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 50);

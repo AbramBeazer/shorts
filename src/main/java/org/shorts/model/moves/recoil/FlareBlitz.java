@@ -3,16 +3,27 @@ package org.shorts.model.moves.recoil;
 import java.util.List;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.GetsSheerForceBoost;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class FlareBlitz extends RecoilAttack {
+public class FlareBlitz extends RecoilAttack implements GetsSheerForceBoost {
 
     public FlareBlitz() {
-        super("Flare Blitz", 120, 100, Type.FIRE, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 10, 1 / 3d);
+        super(
+            "Flare Blitz",
+            120,
+            100,
+            Type.FIRE,
+            Category.PHYSICAL,
+            Range.SINGLE_ADJACENT_ANY,
+            24,
+            true,
+            10,
+            1 / 3d);
     }
 
     @Override

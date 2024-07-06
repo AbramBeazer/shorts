@@ -6,7 +6,7 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-public class RapidSpin extends Move {
+public class RapidSpin extends Move implements GetsSheerForceBoost {
 
     public RapidSpin() {
         super("Rapid Spin", 50, 100, Type.NORMAL, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 64, true, 100);

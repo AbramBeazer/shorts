@@ -5,7 +5,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class FocusBlast extends Move implements BallBombMove {
+public class FocusBlast extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public FocusBlast() {
         super("Focus Blast", 120, 70, Type.FIGHTING, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 8, false, 10);
