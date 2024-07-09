@@ -9,7 +9,7 @@ import static org.shorts.model.abilities.Ripen.RIPEN;
 public class OranBerry extends Berry {
 
     private OranBerry() {
-        super("Oran");
+        super("Oran", .5);
     }
 
     public static final OranBerry ORAN_BERRY = new OranBerry();
