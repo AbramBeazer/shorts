@@ -39,6 +39,7 @@ import static org.shorts.model.abilities.Hustle.HUSTLE;
 import static org.shorts.model.abilities.IceScales.ICE_SCALES;
 import static org.shorts.model.abilities.Infiltrator.INFILTRATOR;
 import static org.shorts.model.abilities.MagicBounce.MAGIC_BOUNCE;
+import static org.shorts.model.abilities.MagicGuard.MAGIC_GUARD;
 import static org.shorts.model.abilities.Merciless.MERCILESS;
 import static org.shorts.model.abilities.Neuroforce.NEUROFORCE;
 import static org.shorts.model.abilities.Prankster.PRANKSTER;
@@ -436,6 +437,8 @@ public abstract class Move {
                         target.removeVolatileStatus(SUBSTITUTE);
                     }
 
+                    checkForLifeOrbRecoil(user);
+
                     hitNum++;
                 }
                 if (hitNum > 1) {
@@ -446,6 +449,13 @@ public abstract class Move {
                     user.afterAttack(target, battle, this);
                 }
             }
+        }
+    }
+
+    protected void checkForLifeOrbRecoil(Pokemon user) {
+        if (user.getHeldItem() == LIFE_ORB && user.getAbility() != MAGIC_GUARD && !(user.getAbility() == SHEER_FORCE
+            && this instanceof GetsSheerForceBoost)) {
+            user.takeDamage(user.getMaxHP() / 10);
         }
     }
 

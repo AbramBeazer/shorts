@@ -72,6 +72,8 @@ public class PopulationBomb extends Move implements SlicingMove {
                 System.out.println("Hit " + hitNum + " times!");
             }
 
+            checkForLifeOrbRecoil(user);
+
             if (!user.hasFainted()) {
                 user.afterAttack(target, battle, this);
             }

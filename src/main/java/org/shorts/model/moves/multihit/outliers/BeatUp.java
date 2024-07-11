@@ -59,6 +59,9 @@ public class BeatUp extends Move {
 
                 currentAttackerIndex++;
             }
+
+            checkForLifeOrbRecoil(user);
+
             viableAttackers.clear();
             currentAttackerIndex = 0;
 
