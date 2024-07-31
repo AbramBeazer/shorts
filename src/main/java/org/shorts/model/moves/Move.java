@@ -227,7 +227,11 @@ public abstract class Move {
         int threshold = (int) roundHalfDown(
             getModifiedAccuracy(user, target, battle) * getAccuracyEvasionStageModifier(user, target)
                 * (user.hasVolatileStatus(MICLE_BERRY_EFFECT) ? 1.2 : 1));
-        return HIT_RANDOM.nextInt(100) < threshold;
+        final boolean hit = HIT_RANDOM.nextInt(100) < threshold;
+        if (!hit) {
+            System.out.println(user.getDisplayName() + "'s attack missed!");
+        }
+        return hit;
     }
 
     private double getModifiedAccuracy(Pokemon user, Pokemon target, Battle battle) {
@@ -327,9 +331,10 @@ public abstract class Move {
 
                 //I'm pretty sure the bouncing happens before the hit roll. Each bounced attack has a chance to miss
                 ////TODO: Is the accuracy calculated using the original user's accuracy, or the bouncer's?
-                final boolean magicBounced = this instanceof AffectedByMagicBounce
-                    && target.getAbility() == MAGIC_BOUNCE && !target.hasVolatileStatus(SEMI_INVULNERABLE)
-                    && !target.hasVolatileStatus(ABILITY_SUPPRESSED) && !target.hasVolatileStatus(ABILITY_IGNORED);
+                final boolean magicBounced =
+                    this instanceof AffectedByMagicBounce && target.getAbility() == MAGIC_BOUNCE
+                        && !target.hasVolatileStatus(SEMI_INVULNERABLE) && !target.hasVolatileStatus(ABILITY_SUPPRESSED)
+                        && !target.hasVolatileStatus(ABILITY_IGNORED);
 
                 if (magicBounced) {
                     MagicBounce.printMessage(target, this);
@@ -367,14 +372,12 @@ public abstract class Move {
         final Trainer side;
         if (range == Range.OTHER_SIDE) {
 
-            Pokemon magicBouncer =
-                this instanceof AffectedByMagicBounce ? battle.getOpposingActivePokemon(user)
-                    .stream()
-                    .filter(t -> t.getAbility() == MAGIC_BOUNCE
-                        && !t.hasVolatileStatus(SEMI_INVULNERABLE)
-                        && !t.hasVolatileStatus(ABILITY_SUPPRESSED) && !t.hasVolatileStatus(ABILITY_IGNORED))
-                    .findFirst()
-                    .orElse(null) : null;
+            Pokemon magicBouncer = this instanceof AffectedByMagicBounce ? battle.getOpposingActivePokemon(user)
+                .stream()
+                .filter(t -> t.getAbility() == MAGIC_BOUNCE && !t.hasVolatileStatus(SEMI_INVULNERABLE)
+                    && !t.hasVolatileStatus(ABILITY_SUPPRESSED) && !t.hasVolatileStatus(ABILITY_IGNORED))
+                .findFirst()
+                .orElse(null) : null;
 
             if (magicBouncer == null) {
                 side = battle.getOpposingTrainer(user);
@@ -420,6 +423,8 @@ public abstract class Move {
                         ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
                     } else if (damage > 0) {
                         target.takeDamage(damage);
+                        System.out.println(target.getDisplayName() + " took " + (damage / target.getMaxHP()) + "%");
+
                     }
 
                     if (!user.hasFainted()) {
@@ -461,8 +466,8 @@ public abstract class Move {
 
     //TODO: Remember to override this in Transform and Sky Drop -- Infiltrator still can't get through a substitute when using those moves.
     protected boolean checkForHitSub(Pokemon user, Pokemon target) {
-        return target.hasVolatileStatus(SUBSTITUTE) && (user.getAbility() != INFILTRATOR
-            || user.hasVolatileStatus(ABILITY_SUPPRESSED));
+        return target.hasVolatileStatus(SUBSTITUTE) && (user.getAbility() != INFILTRATOR || user.hasVolatileStatus(
+            ABILITY_SUPPRESSED));
     }
 
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {

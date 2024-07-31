@@ -268,11 +268,11 @@ public class Battle {
         turns.addAll(pollPlayerInput(playerOne));
         turns.addAll(pollPlayerInput(playerTwo));
 
-        turns.sort(Comparator.comparing(turn -> turn.getMove().getPriority(turn.getUser(), this) + turn.getMove()
-            .getAbilityPriorityBonus(turn.getUser()), (a, b) -> Integer.compare(b, a)));
+        turns.sort(Comparator.comparing(turn -> turn.getPriority(this), (a, b) -> Integer.compare(b, a)));
 
-        Move moveOne = null;
-        Move moveTwo = null;
+        for (Turn turn : turns) {
+            turn.takeTurn(this);
+        }
 
         //PRIORITY 6
 
@@ -283,11 +283,6 @@ public class Battle {
         //        if (choiceTwo <= 4) {
         //            moveTwo = playerTwo.getLead().getMoves()[choiceTwo - 1];
         //        }
-
-        int priorityOne = moveOne.getPriority(playerOne.getLead(), this);
-        int abilityPriorityBonusOne = moveOne.getAbilityPriorityBonus(playerOne.getLead());
-        int priorityTwo = moveTwo.getPriority(playerTwo.getLead(), this);
-        int abilityPriorityBonusTwo = moveTwo.getAbilityPriorityBonus(playerTwo.getLead());
 
         // TODO:
         //  Dark-type Pokémon are now immune to opposing Pokémon's moves that gain priority due to Prankster, including moves called by another move.
@@ -400,7 +395,7 @@ public class Battle {
             printBench(trainer);
 
             int choice;
-            boolean choiceValid;
+            boolean choiceValid = true;
             //Choice is invalid if that Pokémon has fainted or if the move has no PP.
             do {
                 choice = Integer.parseInt(scanner.nextLine());
@@ -410,7 +405,7 @@ public class Battle {
                     choiceValid = false;
                 } else if (choice > 4 && (trainer.getTeam().get(choice - 4).hasFainted() || pokemon.isTrapped(this))) {
                     choiceValid = false;
-                } else {
+                } else if (choice < 4 + activeMonsPerSide) {
                     choiceValid = true;
 
                     final Move move = pokemon.getMoves()[choice - 1];
@@ -572,7 +567,7 @@ public class Battle {
 
             String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().getType().name();
             System.out.println(
-                (i + 4) + ")" + "\t(" + teammate.getPokedexEntry().getSpeciesName() + "\t(" + teammate.getCurrentHP()
+                (i + 4) + ")" + "\t" + teammate.getPokedexEntry().getSpeciesName() + "\t(" + teammate.getCurrentHP()
                     + "/" + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
         }
     }

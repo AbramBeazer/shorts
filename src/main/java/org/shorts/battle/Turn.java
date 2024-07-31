@@ -33,6 +33,14 @@ public class Turn {
         return singleTargetIndex;
     }
 
+    public int getPriority(Battle battle) {
+        if (move == null) {
+            return 6;
+        } else {
+            return move.getPriority(user, battle) + move.getAbilityPriorityBonus(user);
+        }
+    }
+
     public void takeTurn(Battle battle) {
         final int activeMonsPerSide = battle.getActiveMonsPerSide();
         final Trainer player = battle.getCorrespondingTrainer(user);
@@ -46,9 +54,13 @@ public class Turn {
             } else {
                 targets = battle.getPokemonWithinRange(user, move.getRange(user));
             }
+            System.out.println(user.getDisplayName() + " used " + move.getName() + "!");
             move.execute(user, targets, battle);
         } else {
-            //TODO: Switch
+            System.out.println(player.getName() + " recalled " + user.getDisplayName() + "!");
+            final int index = player.getTeam().indexOf(user);
+            player.switchPokemon(index, singleTargetIndex - 4);
+            System.out.println(player.getName() + " sent out " + player.getTeam().get(index).getDisplayName() + "!");
         }
     }
 }

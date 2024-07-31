@@ -40,29 +40,30 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         Pokedex.create();
+        final int activeMonsPerSide = 1;
 
-        Pokemon bulbasaur = new Pokemon(
-            Pokedex.get("Bulbasaur"),
+        Pokemon bulbasaur = new Pokemon(Pokedex.get("Bulbasaur"),
             50,
             new int[] { 4, 0, 8, 0, 0, 0 },
             Nature.QUIRKY,
             OVERGROW);
         bulbasaur.setMoves(List.of(new RazorLeaf(), new Tackle(), new SludgeBomb(), new Rest()));
 
-        Pokemon slowbro = new Pokemon(Pokedex.get("Slowbro"), 100, new int[] { 252, 0, 128, 0, 128, 0 }, Nature.BOLD,
+        Pokemon slowbro = new Pokemon(Pokedex.get("Slowbro"),
+            100,
+            new int[] { 252, 0, 128, 0, 128, 0 },
+            Nature.BOLD,
             Regenerator.REGENERATOR);
         slowbro.setMoves(List.of(new Scald(), new Psyshock(), new ShadowBall(), new Bite()));
 
-        Pokemon charmander = new Pokemon(
-            Pokedex.get("Charmander"),
+        Pokemon charmander = new Pokemon(Pokedex.get("Charmander"),
             100,
             new int[] { 4, 0, 0, 252, 0, 252 },
             Nature.TIMID,
             BLAZE);
         charmander.setMoves(List.of(new Ember(), new FlareBlitz(), new SunnyDay(), new SubstituteMove()));
 
-        Pokemon rhydon = new Pokemon(
-            Pokedex.get("Rhydon"),
+        Pokemon rhydon = new Pokemon(Pokedex.get("Rhydon"),
             100,
             new int[] { 252, 252, 4, 0, 0, 0 },
             Nature.IMPISH,
@@ -75,8 +76,8 @@ public class Main {
         List<Pokemon> teamTwo = new ArrayList<>();
         teamTwo.add(charmander);
         teamTwo.add(rhydon);
-        Trainer playerOne = new Trainer("Ash", teamOne);
-        Trainer playerTwo = new Trainer("Gary", teamTwo);
-        new Battle(playerOne, playerTwo, 1).run();
+        Trainer playerOne = new Trainer("Ash", teamOne, activeMonsPerSide);
+        Trainer playerTwo = new Trainer("Gary", teamTwo, activeMonsPerSide);
+        new Battle(playerOne, playerTwo, activeMonsPerSide).run();
     }
 }
