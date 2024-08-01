@@ -147,19 +147,19 @@ public class Pokemon {
         this.currentHP = this.maxHP;
 
         this.attack =
-            ((((2 * pokedexEntry.getBaseAtk() + iv[ATK.ordinal()] + (ev[ATK.ordinal()] / 4) * level) / 100) + 5)
+            (((((2 * pokedexEntry.getBaseAtk() + iv[ATK.ordinal()] + (ev[ATK.ordinal()] / 4)) * level) / 100) + 5)
                 * nature.getMultiplier(ATK)) / 100;
         this.defense =
-            ((((2 * pokedexEntry.getBaseDef() + iv[DEF.ordinal()] + (ev[DEF.ordinal()] / 4) * level) / 100) + 5)
+            (((((2 * pokedexEntry.getBaseDef() + iv[DEF.ordinal()] + (ev[DEF.ordinal()] / 4)) * level) / 100) + 5)
                 * nature.getMultiplier(DEF)) / 100;
         this.specialAttack =
-            ((((2 * pokedexEntry.getBaseAtk() + iv[SPATK.ordinal()] + (ev[SPATK.ordinal()] / 4) * level) / 100) + 5)
+            (((((2 * pokedexEntry.getBaseAtk() + iv[SPATK.ordinal()] + (ev[SPATK.ordinal()] / 4)) * level) / 100) + 5)
                 * nature.getMultiplier(SPATK)) / 100;
         this.specialDefense =
-            ((((2 * pokedexEntry.getBaseDef() + iv[SPDEF.ordinal()] + (ev[SPDEF.ordinal()] / 4) * level) / 100) + 5)
+            (((((2 * pokedexEntry.getBaseDef() + iv[SPDEF.ordinal()] + (ev[SPDEF.ordinal()] / 4)) * level) / 100) + 5)
                 * nature.getMultiplier(SPDEF)) / 100;
         this.speed =
-            ((((2 * pokedexEntry.getBaseAtk() + iv[SPEED.ordinal()] + (ev[SPEED.ordinal()] / 4) * level) / 100) + 5)
+            (((((2 * pokedexEntry.getBaseAtk() + iv[SPEED.ordinal()] + (ev[SPEED.ordinal()] / 4)) * level) / 100) + 5)
                 * nature.getMultiplier(SPEED)) / 100;
     }
 
@@ -670,10 +670,10 @@ public class Pokemon {
         }
 
         for (Pokemon opponent : opposingActivePokemon) {
-            if (battle.getPokemonWithinRange(opponent, opponent.getAbility().getRange()).contains(this)
-                && ((opponent.getAbility() == MAGNET_PULL && this.getTypes().contains(Type.STEEL))
-                || (opponent.getAbility() == ARENA_TRAP && this.isGrounded())
-                || (opponent.getAbility() == SHADOW_TAG && this.getAbility() != SHADOW_TAG))) {
+            if (battle.getPokemonWithinRange(opponent, opponent.getAbility().getRange()).contains(this) && (
+                (opponent.getAbility() == MAGNET_PULL && this.getTypes().contains(Type.STEEL)) || (
+                    opponent.getAbility() == ARENA_TRAP && this.isGrounded()) || (opponent.getAbility() == SHADOW_TAG
+                    && this.getAbility() != SHADOW_TAG))) {
                 return true;
             }
         }
@@ -741,22 +741,20 @@ public class Pokemon {
             helpingHand = 1;
         }
         final double abilityMultiplier = (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
-            || this.getAbility() instanceof UnsuppressableAbility) ? ability.getMovePowerMultipliers(
-            this,
+            || this.getAbility() instanceof UnsuppressableAbility) ? ability.getMovePowerMultipliers(this,
             opponent,
             battle,
             move) : 1;
-        return abilityMultiplier * heldItem.getMovePowerMultipliers(
-            this,
-            opponent,
-            battle,
-            move) * helpingHand;
+        return abilityMultiplier * heldItem.getMovePowerMultipliers(this, opponent, battle, move) * helpingHand;
     }
 
     public double getAttackMultipliersFromAbilityAndItem(Pokemon opponent, Battle battle, Move move) {
         final double abilityMultiplier = (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
-            || this.getAbility() instanceof UnsuppressableAbility)
-            ? ability.getAttackMultipliers(this, opponent, battle, move) : 1;
+            || this.getAbility() instanceof UnsuppressableAbility) ? ability.getAttackMultipliers(
+            this,
+            opponent,
+            battle,
+            move) : 1;
         if (abilityMultiplier == 0) {
             return 0;
         } else {
@@ -767,8 +765,11 @@ public class Pokemon {
 
     public double getDefenseMultipliersFromAbilityAndItem(Pokemon opponent, Battle battle, Move move) {
         final double abilityMultiplier = (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
-            || this.getAbility() instanceof UnsuppressableAbility)
-            ? ability.getDefenseMultipliers(this, opponent, battle, move) : 1;
+            || this.getAbility() instanceof UnsuppressableAbility) ? ability.getDefenseMultipliers(
+            this,
+            opponent,
+            battle,
+            move) : 1;
         if (abilityMultiplier == 0) {
             return 0;
         } else {
@@ -797,9 +798,9 @@ public class Pokemon {
         if (!canChangeStat(-1, stat)) {
             return false;
         }
-        if (!(this.getAbility() instanceof IgnorableAbility && this.hasVolatileStatus(ABILITY_IGNORED))
-            && (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
-            || this.getAbility() instanceof UnsuppressableAbility)) {
+        if (!(this.getAbility() instanceof IgnorableAbility && this.hasVolatileStatus(ABILITY_IGNORED)) && (
+            !this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+                || this.getAbility() instanceof UnsuppressableAbility)) {
             return ability.isDropPossible(stat) && heldItem.isDropPossible(stat);
         } else {
             return heldItem.isDropPossible(stat);
@@ -912,13 +913,11 @@ public class Pokemon {
         //This is why that CSV I found with the weight values had them all listed at 10x the values I was used to seeing.
         final int baseWeight = (int) (pokedexEntry.getWeight() * 10);
         final double floatStoneMultiplier = this.getHeldItem() == FLOAT_STONE ? .5 : 1;
-        final int autotomizedLevels = hasVolatileStatus(AUTOTOMIZED)
-            ? ((AutotomizedStatus) getVolatileStatus(AUTOTOMIZED)).getLevels()
-            : 0;
+        final int autotomizedLevels = hasVolatileStatus(AUTOTOMIZED) ? ((AutotomizedStatus) getVolatileStatus(
+            AUTOTOMIZED)).getLevels() : 0;
 
         final int weightAfterAutotomize = Math.max(1, baseWeight - (1000 * autotomizedLevels));
-        final int roundedWeight = (int) Math.max(
-            1,
+        final int roundedWeight = (int) Math.max(1,
             weightAfterAutotomize * floatStoneMultiplier * ability.getWeightMultiplier());
         return roundedWeight / 10d;
     }
