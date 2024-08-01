@@ -26,6 +26,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.Main.CRIT_RANDOM;
 import static org.shorts.Main.DAMAGE_RANDOM;
+import static org.shorts.Main.DECIMAL;
 import static org.shorts.Main.HIT_RANDOM;
 import static org.shorts.Main.RANDOM;
 import static org.shorts.MathUtils.roundHalfDown;
@@ -423,7 +424,9 @@ public abstract class Move {
                         ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
                     } else if (damage > 0) {
                         target.takeDamage(damage);
-                        System.out.println(target.getDisplayName() + " took " + (damage / target.getMaxHP()) + "%");
+                        System.out.println(
+                            target.getDisplayName() + " took " + DECIMAL.format(100d * damage / target.getMaxHP())
+                                + "%");
 
                     }
 
