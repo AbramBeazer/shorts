@@ -382,7 +382,7 @@ public class Battle {
             Set<Move> movesToUse;
             System.out.println("\n\nWhat will " + pokemon.getDisplayName() + " do?");
             System.out.println(
-                DECIMAL.format(100 * pokemon.getCurrentHP() / pokemon.getMaxHP()) + " % HP (" + pokemon.getCurrentHP()
+                DECIMAL.format(100d * pokemon.getCurrentHP() / pokemon.getMaxHP()) + " % HP (" + pokemon.getCurrentHP()
                     + "/" + pokemon.getMaxHP() + ")");
             System.out.println("~~~MOVES~~~");
             if (invalidMoves.size() == pokemon.getMoves().length) {
