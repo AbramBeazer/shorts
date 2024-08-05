@@ -510,6 +510,9 @@ public abstract class Move {
         baseDamage = roundHalfDown(baseDamage * typeMultiplier);
         baseDamage = roundHalfDown(baseDamage * getBurnMultiplier(user));
         baseDamage = roundHalfDown(baseDamage * getOtherMultiplier(user, target, battle, isCritical, typeMultiplier));
+        if (isCritical) {
+            System.out.println("A Critical Hit!!");
+        }
         return (int) baseDamage;
     }
 

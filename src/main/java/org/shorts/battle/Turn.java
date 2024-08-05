@@ -61,6 +61,7 @@ public class Turn {
             final int index = player.getTeam().indexOf(user);
             player.switchPokemon(index, singleTargetIndex - 4);
             System.out.println(player.getName() + " sent out " + player.getTeam().get(index).getDisplayName() + "!");
+            player.applyEntryHazards(player.getTeam().get(index));
         }
     }
 }

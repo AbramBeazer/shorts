@@ -17,6 +17,7 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
+import static org.shorts.Main.DECIMAL;
 import static org.shorts.Main.RANDOM;
 import static org.shorts.model.abilities.MagicGuard.MAGIC_GUARD;
 import static org.shorts.model.abilities.PoisonHeal.POISON_HEAL;
@@ -268,7 +269,14 @@ public class Battle {
         turns.addAll(pollPlayerInput(playerOne));
         turns.addAll(pollPlayerInput(playerTwo));
 
-        turns.sort(Comparator.comparing(turn -> turn.getPriority(this), (a, b) -> Integer.compare(b, a)));
+        turns.sort((t1, t2) -> {
+            int priority = Integer.compare(t2.getPriority(this), t1.getPriority(this));
+            if (priority == 0) {
+                return Double.compare(t2.getUser().calculateSpeed(), t1.getUser().calculateSpeed());
+            } else {
+                return priority;
+            }
+        });
 
         for (Turn turn : turns) {
             turn.takeTurn(this);
@@ -373,6 +381,9 @@ public class Battle {
 
             Set<Move> movesToUse;
             System.out.println("\n\nWhat will " + pokemon.getDisplayName() + " do?");
+            System.out.println(
+                DECIMAL.format(100 * pokemon.getCurrentHP() / pokemon.getMaxHP()) + " % HP (" + pokemon.getCurrentHP()
+                    + "/" + pokemon.getMaxHP() + ")");
             System.out.println("~~~MOVES~~~");
             if (invalidMoves.size() == pokemon.getMoves().length) {
                 System.out.println("1. Struggle");

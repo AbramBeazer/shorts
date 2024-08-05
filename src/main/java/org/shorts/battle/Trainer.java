@@ -171,8 +171,7 @@ public class Trainer {
 
             System.out.println(
                 (i + 1) + ")" + "\t" + teammate.getDisplayName() + "\t\tAbility: " + teammate.getAbility()
-                    + "\t\tItem: "
-                    + teammate.getHeldItem());
+                    + "\t\tItem: " + teammate.getHeldItem());
         }
         System.out.println("\nLEADS:");
 
@@ -186,8 +185,8 @@ public class Trainer {
             leadIndexes.add(choice - 1);
             final Pokemon mon = team.get(choice - 1);
             System.out.println(
-                (leadIndexes.size()) + ")" + "\t" + mon.getDisplayName() + "\tability: " + mon.getAbility()
-                    + "\titem: " + mon.getHeldItem());
+                (leadIndexes.size()) + ")" + "\t" + mon.getDisplayName() + "\tability: " + mon.getAbility() + "\titem: "
+                    + mon.getHeldItem());
         }
 
         team.sort(Comparator.comparingInt((Pokemon p) -> {
@@ -246,12 +245,19 @@ public class Trainer {
                 }
                 if (toxicSpikes > 0) {
                     if (pokemon.getTypes().contains(Type.POISON)) {
-                        toxicSpikes = 0;
+                        absorbToxicSpikes(pokemon);
                     } else if (!pokemon.getTypes().contains(Type.STEEL)) {
-                        pokemon.setStatus(toxicSpikes == 2 ? Status.TOXIC_POISON : Status.POISON);
+                        if (toxicSpikes == 2) {
+                            System.out.println(pokemon.getDisplayName() + " is badly poisoned by the Toxic Spikes!");
+                            pokemon.setStatus(Status.TOXIC_POISON);
+                        } else if (toxicSpikes == 1) {
+                            System.out.println(pokemon.getDisplayName() + " is poisoned by the Toxic Spikes!");
+                            pokemon.setStatus(Status.POISON);
+                        }
                     }
                 }
                 if (stickyWeb && pokemon.isDropPossible(StatEnum.SPEED)) {
+                    System.out.println(pokemon.getDisplayName() + " is slowed by the Sticky Web!");
                     pokemon.changeStat(-1, StatEnum.SPEED);
                 }
             }
@@ -271,21 +277,26 @@ public class Trainer {
         }
         int damage = (int) (multiplier * pokemon.getMaxHP());
         pokemon.takeDamage(damage);
+        System.out.println("Pointed stones dug into " + pokemon.getDisplayName() + ".");
         return pokemon.hasFainted();
     }
 
     private boolean faintedFromSpikes(Pokemon pokemon) {
-        if (spikes == 1) {
-            int damage = pokemon.getMaxHP() / 8;
-            pokemon.takeDamage(damage);
-        }
-        if (spikes == 2) {
-            int damage = pokemon.getMaxHP() / 6;
-            pokemon.takeDamage(damage);
-        }
-        if (spikes == 3) {
-            int damage = pokemon.getMaxHP() / 4;
-            pokemon.takeDamage(damage);
+        if (spikes > 0) {
+            System.out.println("Spikes dug into " + pokemon.getDisplayName() + ".");
+            switch (spikes) {
+                case 1:
+                    pokemon.takeDamage(pokemon.getMaxHP() / 8);
+                    break;
+                case 2:
+                    pokemon.takeDamage(pokemon.getMaxHP() / 6);
+                    break;
+                case 3:
+                    pokemon.takeDamage(pokemon.getMaxHP() / 4);
+                    break;
+                default:
+                    break;
+            }
         }
         return pokemon.hasFainted();
     }
@@ -306,7 +317,7 @@ public class Trainer {
 
     public void absorbToxicSpikes(Pokemon pokemon) {
         toxicSpikes = 0;
-        System.out.println(pokemon.getSpeciesName() + " absorbed the toxic spikes!");
+        System.out.println(pokemon.getDisplayName() + " absorbed the Toxic Spikes!");
     }
 
     public void removeEntryHazards() {
