@@ -743,7 +743,7 @@ public abstract class Move {
         if (target.getHeldItem() instanceof TypeResistBerry) {
             TypeResistBerry berry = (TypeResistBerry) target.getHeldItem();
             if (berry.getType() == this.type && (this.type == NORMAL || typeMultiplier > NEUTRAL)) {
-                final boolean ateBerry = berry.tryEatingBerry(target, battle);
+                final boolean ateBerry = berry.tryEatingOwnBerry(target, battle);
                 if (ateBerry) {
                     target.setHeldItem(NO_ITEM);
                     target.setConsumedItem(berry);

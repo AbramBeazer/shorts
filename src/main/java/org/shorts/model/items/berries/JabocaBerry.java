@@ -14,7 +14,7 @@ public class JabocaBerry extends Berry {
 
     @Override
     public void afterHit(Pokemon user, Pokemon opponent, Battle battle, int previousHP, Move move) {
-        if (tryEatingBerry(user, battle)) {
+        if (tryEatingOwnBerry(user, battle)) {
             opponent.takeDamage(opponent.getMaxHP() / 8);
         }
     }

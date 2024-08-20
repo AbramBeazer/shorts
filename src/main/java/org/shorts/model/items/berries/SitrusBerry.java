@@ -15,9 +15,9 @@ public class SitrusBerry extends Berry {
     public static final SitrusBerry SITRUS_BERRY = new SitrusBerry();
 
     @Override
-    public boolean tryEatingBerry(Pokemon user, Battle battle) {
+    public boolean tryEatingOwnBerry(Pokemon user, Battle battle) {
         if (!user.hasVolatileStatus(VolatileStatusType.HEAL_BLOCKED)) {
-            return super.tryEatingBerry(user, battle);
+            return super.tryEatingOwnBerry(user, battle);
         }
         return false;
     }

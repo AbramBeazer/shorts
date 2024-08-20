@@ -46,13 +46,7 @@ public abstract class BerryStealingMove extends Move {
         target.setHeldItem(NO_ITEM);
         System.out.println(user.getNickname() + " stole " + target.getNickname() + "'s " + berry.getName() + "!");
 
-        berry.eatBerry(user);
-        //This is necessary because eating a berry sets the user's item to NO_ITEM.
-        user.setHeldItem(originalItem);
-        user.setConsumedItem(originalConsumedItem);
-        Pickup.removeFromConsumedItems(user);
-        Pickup.insertPokemonAtIndex(originalIndex, user);
-
+        berry.doEffect(user);
     }
 
     @Override

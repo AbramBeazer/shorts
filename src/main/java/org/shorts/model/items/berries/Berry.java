@@ -37,28 +37,30 @@ public abstract class Berry extends HeldItem {
     @Override
     public void afterTurn(Pokemon user, Battle battle) {
         if (!user.hasFainted() && user.getCurrentHP() < user.getMaxHP() * computeThreshold(user)) {
-            tryEatingBerry(user, battle);
+            tryEatingOwnBerry(user, battle);
         }
     }
 
-    public boolean tryEatingBerry(Pokemon user, Battle battle) {
+    public boolean tryEatingOwnBerry(Pokemon user, Battle battle) {
         for (Pokemon opponent : battle.getOpposingActivePokemon(user)) {
             if (opponent.getAbility() instanceof OpponentCantEatBerriesAbility && !opponent.hasVolatileStatus(
                 ABILITY_SUPPRESSED)) {
                 return false;
             }
         }
-        this.eatBerry(user);
+        this.eatOwnBerry(user);
         return true;
     }
 
-    public void eatBerry(Pokemon user) {
-
+    public void eatOwnBerry(Pokemon user) {
         this.doEffect(user);
-        System.out.println(user.getNickname() + " ate its " + this.getName());
         user.setHeldItem(NO_ITEM);
         user.setConsumedItem(this);
         Pickup.addToConsumedItems(user);
+    }
+
+    public void doEffect(Pokemon user) {
+        System.out.println(user.getNickname() + " ate the " + this.getName());
 
         if (!user.hasVolatileStatus(ABILITY_SUPPRESSED)) {
             if (user.getAbility() == CHEEK_POUCH && !user.hasVolatileStatus(HEAL_BLOCKED)) {
@@ -67,8 +69,5 @@ public abstract class Berry extends HeldItem {
                 ((CudChew) user.getAbility()).setBerryToRegurgitate(this);
             }
         }
-    }
-
-    public void doEffect(Pokemon user) {
     }
 }

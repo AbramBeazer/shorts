@@ -235,32 +235,29 @@ class FlingTests {
     }
 
     @Test
-    void testFlingingBerryMakesOpponentConsumeBerry() {
+    void testFlingingBerryMakesOpponentEatBerry() {
         user.setHeldItem(ORAN_BERRY);
 
         final int damage = fling.calculateDamage(user, target, battle);
         fling.executeOnTarget(user, target, battle);
 
         assertThat(target.getCurrentHP()).isEqualTo(Math.min((target.getMaxHP() - damage) + 10, target.getMaxHP()));
-        assertThat(target.getConsumedItem()).isEqualTo(ORAN_BERRY);
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
-        assertThat(user.getConsumedItem()).isEqualTo(NO_ITEM);
-        //TODO: The item should count as "consumed" by whom? The user or the target?
+        assertThat(user.getConsumedItem()).isEqualTo(ORAN_BERRY);
     }
 
     @Test
-    void testUserOfUnnerveFlingsBerryAndTargetDoesNotConsumeIt() {
+    void testUserOfUnnerveFlingsBerryAndTargetStillEatsIt() {
         user.setHeldItem(ORAN_BERRY);
         user.setAbility(UNNERVE);
 
-        final int damage = fling.calculateDamage(user, target, battle);
         fling.executeOnTarget(user, target, battle);
 
-        assertThat(target.getCurrentHP()).isEqualTo(target.getMaxHP() - damage);
+        assertThat(target.getCurrentHP()).isEqualTo(target.getMaxHP());
         assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
-        assertThat(user.getConsumedItem()).isEqualTo(NO_ITEM);
-        //TODO: Is this right? Should the berry be counted as the flinger's consumed item?
+        assertThat(user.getConsumedItem()).isEqualTo(ORAN_BERRY);
     }
 
     @Test
@@ -451,12 +448,11 @@ class FlingTests {
         assertThat(user.getMaxHP() - damage).isGreaterThan(user.getMaxHP() / 2);
         fling.executeOnTarget(user, target, battle);
 
-        assertThat(target.getCurrentHP()).isEqualTo(Math.min(
-            target.getMaxHP(),
+        assertThat(target.getCurrentHP()).isEqualTo(Math.min(target.getMaxHP(),
             (target.getMaxHP() - damage) + target.getMaxHP() / 2));
-        assertThat(target.getConsumedItem()).isEqualTo(SITRUS_BERRY);
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
-        assertThat(user.getConsumedItem()).isEqualTo(NO_ITEM);
+        assertThat(user.getConsumedItem()).isEqualTo(SITRUS_BERRY);
     }
 
     @Test
