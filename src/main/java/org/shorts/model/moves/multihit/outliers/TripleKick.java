@@ -62,8 +62,6 @@ public class TripleKick extends Move {
             }
             hitNum = 0;
 
-            checkForLifeOrbRecoil(user);
-
             if (!user.hasFainted()) {
                 user.afterAttack(target, battle, this);
             }
