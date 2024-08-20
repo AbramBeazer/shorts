@@ -74,8 +74,7 @@ class BerryStealingMoveTests {
         assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP());
         assertThat(user.getHeldItem()).isEqualTo(originalUserItem);
-        assertThat(user.getConsumedItem()).isEqualTo(ORAN_BERRY);
-        //TODO: Am I sure that the user's consumed item becomes the item it plucked?
+        assertThat(user.getConsumedItem()).isEqualTo(originalUserConsumed);
     }
 
     @Test
@@ -146,38 +145,40 @@ class BerryStealingMoveTests {
     @Test
     void testUserStealsAndEatsPinchBerryEvenIfTargetIsWithinThresholdAfterDamage() {
         target.setHeldItem(LIECHI_BERRY);
-        target.setCurrentHP((target.getMaxHP() / 2) + 1);
+        final int justAboveThreshold = (target.getMaxHP() / 2) + 1;
+        target.setCurrentHP(justAboveThreshold);
 
         int damage = move.calculateDamage(user, target, battle);
         move.executeOnTarget(user, target, battle);
 
         assertThat(target.hasFainted()).isFalse();
-        assertThat(target.getCurrentHP()).isEqualTo(target.getMaxHP() + (1 - damage));
+        assertThat(target.getCurrentHP()).isEqualTo(justAboveThreshold - damage);
         assertThat(target.getStageAttack()).isZero();
         assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getStageAttack()).isOne();
         assertThat(user.getHeldItem()).isEqualTo(originalUserItem);
-        assertThat(user.getConsumedItem()).isEqualTo(LIECHI_BERRY);
+        assertThat(user.getConsumedItem()).isEqualTo(originalUserConsumed);
         //TODO: When the user has Ripen, does the stat still get raised two stages?
     }
 
     @Test
     void testUserStealsAndEatsSitrusBerryEvenIfTargetIsWithinThresholdAfterDamage() {
         target.setHeldItem(SITRUS_BERRY);
-        target.setCurrentHP((target.getMaxHP() / 2) + 1);
+        final int justAboveThreshold = (target.getMaxHP() / 2) + 1;
+        target.setCurrentHP(justAboveThreshold);
         user.takeDamage(10);
 
         int damage = move.calculateDamage(user, target, battle);
         move.executeOnTarget(user, target, battle);
 
         assertThat(target.hasFainted()).isFalse();
-        assertThat(target.getCurrentHP()).isEqualTo(target.getMaxHP() - damage);
+        assertThat(target.getCurrentHP()).isEqualTo(justAboveThreshold - damage);
         assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP());
         assertThat(user.getHeldItem()).isEqualTo(originalUserItem);
-        assertThat(user.getConsumedItem()).isEqualTo(SITRUS_BERRY);
+        assertThat(user.getConsumedItem()).isEqualTo(originalUserConsumed);
     }
 
     @Test
@@ -195,7 +196,7 @@ class BerryStealingMoveTests {
         assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP());
         assertThat(user.getHeldItem()).isEqualTo(originalUserItem);
-        assertThat(user.getConsumedItem()).isEqualTo(ORAN_BERRY);
+        assertThat(user.getConsumedItem()).isEqualTo(originalUserConsumed);
     }
 
     @Test
@@ -213,6 +214,6 @@ class BerryStealingMoveTests {
         assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP());
         assertThat(user.getHeldItem()).isEqualTo(originalUserItem);
-        assertThat(user.getConsumedItem()).isEqualTo(ORAN_BERRY);
+        assertThat(user.getConsumedItem()).isEqualTo(originalUserConsumed);
     }
 }
