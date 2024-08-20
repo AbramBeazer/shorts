@@ -8,9 +8,11 @@ import static org.shorts.model.abilities.Ripen.RIPEN;
 
 public class SitrusBerry extends Berry {
 
-    public SitrusBerry() {
+    private SitrusBerry() {
         super("Sitrus", .5);
     }
+
+    public static final SitrusBerry SITRUS_BERRY = new SitrusBerry();
 
     @Override
     public boolean tryEatingBerry(Pokemon user, Battle battle) {
