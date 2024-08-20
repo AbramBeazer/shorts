@@ -25,5 +25,6 @@ public class OranBerry extends Berry {
     @Override
     public void doEffect(Pokemon user) {
         user.heal(10 * (user.getAbility() == RIPEN ? 2 : 1));
+        super.doEffect(user);
     }
 }

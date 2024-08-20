@@ -25,5 +25,6 @@ public class SitrusBerry extends Berry {
     @Override
     public void doEffect(Pokemon user) {
         user.heal(user.getMaxHP() / (user.getAbility() == RIPEN ? 2 : 4));
+        super.doEffect(user);
     }
 }
