@@ -83,9 +83,9 @@ public class Fling extends Move {
 
                     if (!hitSub) {
                         target.afterHit(user, battle, previousTargetHP, this);
-                        //TODO: Should the target consume the flung item if the sub took the attack?
-                        this.trySecondaryEffect(user, target, battle);
                     }
+
+                    this.trySecondaryEffect(user, target, battle);
 
                     if (target.hasVolatileStatus(SUBSTITUTE)
                         && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
@@ -107,8 +107,10 @@ public class Fling extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        //TODO: Should this have a secondary effect if it hits the target's substitute?
-        super.trySecondaryEffect(user, target, battle);
+        //TODO: Should the target consume the flung item if the sub took the attack?
+        if (!target.hasVolatileStatus(SUBSTITUTE)) {
+            super.trySecondaryEffect(user, target, battle);
+        }
     }
 
     @Override

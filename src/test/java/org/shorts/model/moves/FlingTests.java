@@ -11,7 +11,6 @@ import org.shorts.model.items.GriseousOrb;
 import org.shorts.model.items.MegaStone;
 import org.shorts.model.items.MemoryItem;
 import org.shorts.model.items.WhiteHerb;
-import org.shorts.model.items.berries.SitrusBerry;
 import org.shorts.model.pokemon.Pokedex;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.PokemonTestUtils;
@@ -45,6 +44,7 @@ import static org.shorts.model.items.ToxicOrb.TOXIC_ORB;
 import static org.shorts.model.items.TypeBoostItem.BLACK_GLASSES;
 import static org.shorts.model.items.TypeBoostItem.POISON_BARB;
 import static org.shorts.model.items.berries.OranBerry.ORAN_BERRY;
+import static org.shorts.model.items.berries.SitrusBerry.SITRUS_BERRY;
 import static org.shorts.model.status.Status.BURN;
 import static org.shorts.model.status.Status.NONE;
 import static org.shorts.model.status.Status.PARALYZE;
@@ -431,10 +431,8 @@ class FlingTests {
 
     @Test
     void testSitrusBerryFlungAtTargetHoldingSitrusBerry() {
-        final SitrusBerry userBerry = new SitrusBerry();
-        final SitrusBerry targetBerry = new SitrusBerry();
-        user.setHeldItem(userBerry);
-        target.setHeldItem(targetBerry);
+        user.setHeldItem(SITRUS_BERRY);
+        target.setHeldItem(SITRUS_BERRY);
         target.setCurrentHP((target.getMaxHP() / 2) + 1);
 
         final int damage = fling.calculateDamage(user, target, battle);
@@ -448,17 +446,15 @@ class FlingTests {
 
     @Test
     void testBerryActivatesWithoutUsualTriggerCondition() {
-        final SitrusBerry berry = new SitrusBerry();
-        user.setHeldItem(berry);
+        user.setHeldItem(SITRUS_BERRY);
 
         final int damage = fling.calculateDamage(user, target, battle);
         assertThat(user.getMaxHP() - damage).isGreaterThan(user.getMaxHP() / 2);
         fling.executeOnTarget(user, target, battle);
 
-        assertThat(target.getCurrentHP()).isEqualTo(Math.min(
-            target.getMaxHP(),
+        assertThat(target.getCurrentHP()).isEqualTo(Math.min(target.getMaxHP(),
             (target.getMaxHP() - damage) + target.getMaxHP() / 2));
-        assertThat(target.getConsumedItem()).isEqualTo(berry);
+        assertThat(target.getConsumedItem()).isEqualTo(SITRUS_BERRY);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(NO_ITEM);
     }
