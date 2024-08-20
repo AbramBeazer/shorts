@@ -20,6 +20,7 @@ import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
 import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.abilities.Klutz.KLUTZ;
 import static org.shorts.model.abilities.StickyHold.STICKY_HOLD;
+import static org.shorts.model.abilities.Unnerve.UNNERVE;
 import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
 import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.items.berries.JabocaBerry.JABOCA_BERRY;
@@ -185,6 +186,24 @@ class BerryStealingMoveTests {
     void testUserWithKlutzStealsAndEatsBerry() {
         target.setHeldItem(ORAN_BERRY);
         user.setAbility(KLUTZ);
+        user.setCurrentHP(user.getMaxHP() - 10);
+
+        int damage = move.calculateDamage(user, target, battle);
+        move.executeOnTarget(user, target, battle);
+
+        assertThat(target.hasFainted()).isFalse();
+        assertThat(target.getCurrentHP()).isEqualTo(target.getMaxHP() - damage);
+        assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
+        assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP());
+        assertThat(user.getHeldItem()).isEqualTo(originalUserItem);
+        assertThat(user.getConsumedItem()).isEqualTo(originalUserConsumed);
+    }
+
+    @Test
+    void testUserStealsAndEatsBerryWhenTargetHasUnnerve() {
+        target.setHeldItem(ORAN_BERRY);
+        target.setAbility(UNNERVE);
         user.setCurrentHP(user.getMaxHP() - 10);
 
         int damage = move.calculateDamage(user, target, battle);
