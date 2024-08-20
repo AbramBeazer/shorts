@@ -70,6 +70,7 @@ import static org.shorts.model.items.Leek.LEEK;
 import static org.shorts.model.items.LifeOrb.LIFE_ORB;
 import static org.shorts.model.items.LoadedDice.LOADED_DICE;
 import static org.shorts.model.items.LuckyPunch.LUCKY_PUNCH;
+import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.items.RazorClaw.RAZOR_CLAW;
 import static org.shorts.model.items.RingTarget.RING_TARGET;
 import static org.shorts.model.items.ScopeLens.SCOPE_LENS;
@@ -416,9 +417,7 @@ public abstract class Move {
                 }
 
                 int hitNum = 0;
-                final int maxHits = this.getNumHits(
-                    user.getAbility() == SKILL_LINK,
-                    user.getHeldItem() == LOADED_DICE);
+                final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK, user.getHeldItem() == LOADED_DICE);
                 while (hitNum < maxHits && !user.hasFainted() && !target.hasFainted()) {
                     final int previousTargetHP = target.getCurrentHP();
 
@@ -746,7 +745,10 @@ public abstract class Move {
             if (berry.getType() == this.type && (this.type == NORMAL || typeMultiplier > NEUTRAL)) {
                 final boolean ateBerry = berry.tryEatingBerry(user, battle);
                 if (ateBerry) {
-                    double multiplier = target.getAbility() == RIPEN ? 0.25 : 0.5;
+                    target.setHeldItem(NO_ITEM);
+                    target.setConsumedItem(berry);
+                    double multiplier =
+                        target.getAbility() == RIPEN ? TypeResistBerry.MULTIPLIER * 0.5 : TypeResistBerry.MULTIPLIER;
                     base = roundHalfUp(base * multiplier);
                 }
             }

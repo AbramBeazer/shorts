@@ -6,6 +6,7 @@ import org.shorts.model.types.Type;
 public class TypeResistBerry extends Berry {
 
     private final Type type;
+    public static final double MULTIPLIER = 0.5;
 
     public TypeResistBerry(String name, Type type) {
         super(name);
