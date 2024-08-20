@@ -83,10 +83,9 @@ public class Fling extends Move {
 
                     if (!hitSub) {
                         target.afterHit(user, battle, previousTargetHP, this);
+                        //TODO: Should the target consume the flung item if the sub took the attack?
+                        this.trySecondaryEffect(user, target, battle);
                     }
-
-                    //TODO: Should the target consume the flung item if the sub took the attack?
-                    this.trySecondaryEffect(user, target, battle);
 
                     if (target.hasVolatileStatus(SUBSTITUTE)
                         && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {

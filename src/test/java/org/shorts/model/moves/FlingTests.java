@@ -235,11 +235,6 @@ class FlingTests {
     }
 
     @Test
-    void testFlingingTRHasPowerEqualToPowerOfMoveInTR() {
-        assertThat(false).isTrue();
-    }
-
-    @Test
     void testFlingingBerryMakesOpponentConsumeBerry() {
         user.setHeldItem(ORAN_BERRY);
 
