@@ -34,6 +34,16 @@ public class Pickup extends Ability {
         consumedItemsThisTurn.remove(pokemon);
     }
 
+    public static int getConsumedItemsIndexForUser(Pokemon pokemon) {
+        return consumedItemsThisTurn.indexOf(pokemon);
+    }
+
+    public static void insertPokemonAtIndex(int index, Pokemon pokemon) {
+        if (index >= 0) {
+            consumedItemsThisTurn.add(index, pokemon);
+        }
+    }
+
     @Override
     public void afterTurn(Pokemon self, Battle battle) {
         if (self.getHeldItem() == NO_ITEM && !consumedItemsThisTurn.isEmpty()) {
