@@ -8,7 +8,7 @@ import static org.shorts.model.abilities.Ripen.RIPEN;
 
 public class SitrusBerry extends Berry {
 
-    private SitrusBerry() {
+    public SitrusBerry() {
         super("Sitrus", .5);
     }
 

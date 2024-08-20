@@ -50,8 +50,8 @@ public class Fling extends Move {
     @Override
     protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         final PokedexEntry entry = user.getPokedexEntry();
-        //TODO: Is the item consumed if it misses?
         final HeldItem item = user.getHeldItem();
+
         if (!(item == NO_ITEM || getPower(user, target, battle) == 0 || battle.getMagicRoomTurns() > 0
             || user.getAbility() == KLUTZ || user.hasVolatileStatus(VolatileStatusType.EMBARGOED) || (
             item == BOOSTER_ENERGY && (user.getAbility() instanceof Protosynthesis
@@ -79,10 +79,6 @@ public class Fling extends Move {
                         System.out.println(
                             target.getDisplayName() + " took " + DECIMAL.format(100d * damage / target.getMaxHP())
                                 + "% (" + damage + ")");
-                    }
-
-                    if (!user.hasFainted()) {
-                        this.inflictRecoil(user, damage);
                     }
 
                     if (!hitSub) {

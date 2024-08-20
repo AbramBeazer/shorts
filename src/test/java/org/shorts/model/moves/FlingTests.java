@@ -11,10 +11,12 @@ import org.shorts.model.items.GriseousOrb;
 import org.shorts.model.items.MegaStone;
 import org.shorts.model.items.MemoryItem;
 import org.shorts.model.items.WhiteHerb;
+import org.shorts.model.items.berries.SitrusBerry;
 import org.shorts.model.pokemon.Pokedex;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.PokemonTestUtils;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.SubstituteStatus;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 
@@ -260,6 +262,7 @@ class FlingTests {
         fling.executeOnTarget(user, target, battle);
 
         assertThat(target.getCurrentHP()).isEqualTo(target.getMaxHP() - damage);
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(NO_ITEM);
         //TODO: Is this right? Should the berry be counted as the flinger's consumed item?
@@ -433,16 +436,62 @@ class FlingTests {
 
     @Test
     void testSitrusBerryFlungAtTargetHoldingSitrusBerry() {
-        assertThat(false).isTrue();
+        final SitrusBerry userBerry = new SitrusBerry();
+        final SitrusBerry targetBerry = new SitrusBerry();
+        user.setHeldItem(userBerry);
+        target.setHeldItem(targetBerry);
+        target.setCurrentHP((target.getMaxHP() / 2) + 1);
+
+        final int damage = fling.calculateDamage(user, target, battle);
+        fling.executeOnTarget(user, target, battle);
+
+        //TODO: Keep this one if the target eats its own held berry before the flung berry
+        assertThat(target.getCurrentHP()).isEqualTo(((target.getMaxHP() / 2) + (1 - damage)) + target.getMaxHP() / 2);
+        //TODO: Keep this one if the target eats the flung berry before its own held berry.
+        assertThat(target.getCurrentHP()).isEqualTo(((target.getMaxHP() / 2) + (1 - damage)) + target.getMaxHP() / 4);
+    }
+
+    @Test
+    void testBerryActivatesWithoutUsualTriggerCondition() {
+        final SitrusBerry berry = new SitrusBerry();
+        user.setHeldItem(berry);
+
+        final int damage = fling.calculateDamage(user, target, battle);
+        assertThat(user.getMaxHP() - damage).isGreaterThan(user.getMaxHP() / 2);
+        fling.executeOnTarget(user, target, battle);
+
+        assertThat(target.getCurrentHP()).isEqualTo(Math.min(
+            target.getMaxHP(),
+            (target.getMaxHP() - damage) + target.getMaxHP() / 2));
+        assertThat(target.getConsumedItem()).isEqualTo(berry);
+        assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
+        assertThat(user.getConsumedItem()).isEqualTo(NO_ITEM);
     }
 
     @Test
     void testItemNotConsumedIfAttackMisses() {
         Main.HIT_RANDOM = MAX_RANDOM;
-
+        user.setHeldItem(LEFTOVERS);
         fling.executeOnTarget(user, target, battle);
 
+        assertThat(user.getHeldItem()).isEqualTo(LEFTOVERS);
+        assertThat(user.getConsumedItem()).isEqualTo(NO_ITEM);
         //TODO: Should the item be consumed if the attack misses?
+        assertThat(false).isTrue();
+    }
+
+    @Test
+    void testUserConsumesItemAndNotTargetIfAttackHitsSubstitute() {
+        target.addVolatileStatus(new SubstituteStatus(100));
+        user.setHeldItem(FLAME_ORB);
+        fling.executeOnTarget(user, target, battle);
+
+        assertThat(target.getCurrentHP()).isEqualTo(target.getMaxHP());
+        assertThat(target.getStatus()).isEqualTo(NONE);
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
+        assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
+        assertThat(user.getConsumedItem()).isEqualTo(FLAME_ORB);
+        //TODO: Is this what's supposed to happen?
         assertThat(false).isTrue();
     }
 }
