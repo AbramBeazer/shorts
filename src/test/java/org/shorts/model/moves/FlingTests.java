@@ -430,18 +430,17 @@ class FlingTests {
     }
 
     @Test
-    void testSitrusBerryFlungAtTargetHoldingSitrusBerry() {
+    void testFlungSitrusBerryHealsTargetAndPutsItOutOfRangeForItsOwnBerryToActivateAtEndOfTurn() {
         user.setHeldItem(SITRUS_BERRY);
         target.setHeldItem(SITRUS_BERRY);
-        target.setCurrentHP((target.getMaxHP() / 2) + 1);
+        final int justAboveThreshold = (target.getMaxHP() / 2) + 1;
+        target.setCurrentHP(justAboveThreshold);
 
         final int damage = fling.calculateDamage(user, target, battle);
         fling.executeOnTarget(user, target, battle);
+        SITRUS_BERRY.afterTurn(target, battle);
 
-        //TODO: Keep this one if the target eats its own held berry before the flung berry
-        assertThat(target.getCurrentHP()).isEqualTo(((target.getMaxHP() / 2) + (1 - damage)) + target.getMaxHP() / 2);
-        //TODO: Keep this one if the target eats the flung berry before its own held berry.
-        assertThat(target.getCurrentHP()).isEqualTo(((target.getMaxHP() / 2) + (1 - damage)) + target.getMaxHP() / 4);
+        assertThat(target.getCurrentHP()).isEqualTo((justAboveThreshold - damage) + target.getMaxHP() / 4);
     }
 
     @Test
@@ -452,7 +451,8 @@ class FlingTests {
         assertThat(user.getMaxHP() - damage).isGreaterThan(user.getMaxHP() / 2);
         fling.executeOnTarget(user, target, battle);
 
-        assertThat(target.getCurrentHP()).isEqualTo(Math.min(target.getMaxHP(),
+        assertThat(target.getCurrentHP()).isEqualTo(Math.min(
+            target.getMaxHP(),
             (target.getMaxHP() - damage) + target.getMaxHP() / 2));
         assertThat(target.getConsumedItem()).isEqualTo(SITRUS_BERRY);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
