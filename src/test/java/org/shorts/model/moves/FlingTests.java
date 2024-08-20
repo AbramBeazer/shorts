@@ -29,18 +29,22 @@ import static org.shorts.model.items.FlameOrb.FLAME_ORB;
 import static org.shorts.model.items.Gem.DARK_GEM;
 import static org.shorts.model.items.KingsRock.KINGS_ROCK;
 import static org.shorts.model.items.Leftovers.LEFTOVERS;
+import static org.shorts.model.items.LifeOrb.LIFE_ORB;
 import static org.shorts.model.items.LightBall.LIGHT_BALL;
+import static org.shorts.model.items.LoadedDice.LOADED_DICE;
 import static org.shorts.model.items.MentalHerb.MENTAL_HERB;
 import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.items.PlateItem.SPLASH_PLATE;
-import static org.shorts.model.items.PoisonBarb.POISON_BARB;
 import static org.shorts.model.items.PrimalOrb.RED_ORB;
 import static org.shorts.model.items.RazorFang.RAZOR_FANG;
 import static org.shorts.model.items.RustedShield.RUSTED_SHIELD;
 import static org.shorts.model.items.RustedSword.RUSTED_SWORD;
 import static org.shorts.model.items.ToxicOrb.TOXIC_ORB;
+import static org.shorts.model.items.TypeBoostItem.BLACK_GLASSES;
+import static org.shorts.model.items.TypeBoostItem.POISON_BARB;
 import static org.shorts.model.items.berries.OranBerry.ORAN_BERRY;
 import static org.shorts.model.status.Status.BURN;
+import static org.shorts.model.status.Status.NONE;
 import static org.shorts.model.status.Status.PARALYZE;
 import static org.shorts.model.status.Status.TOXIC_POISON;
 
@@ -96,15 +100,16 @@ class FlingTests {
 
     @Test
     void failsButConsumesItemWhenTargetIsProtected() {
-        user.setHeldItem(LEFTOVERS);
+        user.setHeldItem(FLAME_ORB);
 
         target.addVolatileStatus(new VolatileStatus(VolatileStatusType.PROTECTED, 1));
 
         fling.executeOnTarget(user, target, battle);
 
         assertThat(target.getCurrentHP()).isEqualTo(target.getMaxHP());
+        assertThat(target.getStatus()).isEqualTo(NONE);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
-        assertThat(user.getConsumedItem()).isEqualTo(LEFTOVERS);
+        assertThat(user.getConsumedItem()).isEqualTo(FLAME_ORB);
     }
 
     @Test
@@ -239,8 +244,10 @@ class FlingTests {
         final int damage = fling.calculateDamage(user, target, battle);
         fling.executeOnTarget(user, target, battle);
 
-        assertThat(target.getCurrentHP()).isEqualTo((target.getMaxHP() - damage) + 10);
+        assertThat(target.getCurrentHP()).isEqualTo(Math.min((target.getMaxHP() - damage) + 10, target.getMaxHP()));
+        assertThat(target.getConsumedItem()).isEqualTo(ORAN_BERRY);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
+        assertThat(user.getConsumedItem()).isEqualTo(NO_ITEM);
         //TODO: The item should count as "consumed" by whom? The user or the target?
     }
 
@@ -254,13 +261,24 @@ class FlingTests {
 
         assertThat(target.getCurrentHP()).isEqualTo(target.getMaxHP() - damage);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
-        assertThat(user.getConsumedItem()).isEqualTo(ORAN_BERRY);
+        assertThat(user.getConsumedItem()).isEqualTo(NO_ITEM);
         //TODO: Is this right? Should the berry be counted as the flinger's consumed item?
     }
 
     @Test
     void testBlackGlassesBoostsAttackBeforeBeingLost() {
-        assertThat(false).isTrue();
+        assertThat(BLACK_GLASSES.getFlingPower()).isEqualTo(LOADED_DICE.getFlingPower());
+
+        user.setHeldItem(LOADED_DICE);
+        fling.executeOnTarget(user, target, battle);
+        int unboostedDamage = target.getMaxHP() - target.getCurrentHP();
+        target.fullRestore();
+
+        user.setHeldItem(BLACK_GLASSES);
+        fling.executeOnTarget(user, target, battle);
+        int boostedDamage = target.getMaxHP() - target.getCurrentHP();
+
+        assertThat(boostedDamage).isGreaterThan(unboostedDamage);
     }
 
     @Test
@@ -274,7 +292,18 @@ class FlingTests {
 
     @Test
     void testLifeOrbBoostsPowerOfFlingButDealsNoRecoilDamage() {
-        assertThat(false).isTrue();
+        assertThat(LOADED_DICE.getFlingPower()).isEqualTo(LIFE_ORB.getFlingPower());
+        user.setHeldItem(LOADED_DICE);
+        fling.executeOnTarget(user, target, battle);
+        int unboostedDamage = target.getMaxHP() - target.getCurrentHP();
+        target.fullRestore();
+
+        user.setHeldItem(LIFE_ORB);
+        fling.executeOnTarget(user, target, battle);
+        int boostedDamage = target.getMaxHP() - target.getCurrentHP();
+
+        assertThat(boostedDamage).isGreaterThan(unboostedDamage);
+        assertThat(user.getMaxHP()).isEqualTo(user.getCurrentHP());
     }
 
     @Test
@@ -285,6 +314,7 @@ class FlingTests {
 
         assertThat(target.getCurrentHP()).isLessThan(target.getMaxHP());
         assertThat(target.getStatus()).isEqualTo(BURN);
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(FLAME_ORB);
     }
@@ -297,6 +327,7 @@ class FlingTests {
 
         assertThat(target.getCurrentHP()).isLessThan(target.getMaxHP());
         assertThat(target.getStatus()).isEqualTo(TOXIC_POISON);
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(TOXIC_ORB);
     }
@@ -309,6 +340,7 @@ class FlingTests {
 
         assertThat(target.getCurrentHP()).isLessThan(target.getMaxHP());
         assertThat(target.hasVolatileStatus(VolatileStatusType.FLINCH)).isTrue();
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(KINGS_ROCK);
     }
@@ -321,6 +353,7 @@ class FlingTests {
 
         assertThat(target.getCurrentHP()).isLessThan(target.getMaxHP());
         assertThat(target.getStatus()).isEqualTo(PARALYZE);
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(LIGHT_BALL);
     }
@@ -333,6 +366,7 @@ class FlingTests {
 
         assertThat(target.getCurrentHP()).isLessThan(target.getMaxHP());
         assertThat(target.hasVolatileStatus(VolatileStatusType.FLINCH)).isTrue();
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(RAZOR_FANG);
     }
@@ -345,6 +379,7 @@ class FlingTests {
 
         assertThat(target.getCurrentHP()).isLessThan(target.getMaxHP());
         assertThat(target.getStatus()).isEqualTo(Status.POISON);
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(POISON_BARB);
     }
@@ -369,6 +404,7 @@ class FlingTests {
         assertThat(target.hasVolatileStatus(VolatileStatusType.TORMENTED)).isFalse();
         assertThat(target.hasVolatileStatus(VolatileStatusType.DISABLED)).isFalse();
         assertThat(target.hasVolatileStatus(VolatileStatusType.HEAL_BLOCKED)).isFalse();
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(MENTAL_HERB);
     }
@@ -389,8 +425,24 @@ class FlingTests {
         assertThat(target.getStageDefense()).isZero();
         assertThat(target.getStageSpecialDefense()).isZero();
         assertThat(target.getStageSpeed()).isZero();
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(WhiteHerb.WHITE_HERB);
         //TODO: Same question as with berries -- does this count as the consumed item for the user or the target?
+    }
+
+    @Test
+    void testSitrusBerryFlungAtTargetHoldingSitrusBerry() {
+        assertThat(false).isTrue();
+    }
+
+    @Test
+    void testItemNotConsumedIfAttackMisses() {
+        Main.HIT_RANDOM = MAX_RANDOM;
+
+        fling.executeOnTarget(user, target, battle);
+
+        //TODO: Should the item be consumed if the attack misses?
+        assertThat(false).isTrue();
     }
 }

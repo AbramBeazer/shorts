@@ -14,6 +14,7 @@ import org.shorts.model.abilities.SuperEffectiveReducingAbility;
 import org.shorts.model.abilities.statpreserving.PreserveAccuracyIgnoreEvasionAbility;
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
+import org.shorts.model.moves.entryhazardsetter.EntryHazardSetter;
 import org.shorts.model.moves.thawing.ThawingMove;
 import org.shorts.model.moves.trapping.binding.Whirlpool;
 import org.shorts.model.pokemon.Pokemon;
@@ -60,6 +61,7 @@ import static org.shorts.model.abilities.TangledFeet.TANGLED_FEET;
 import static org.shorts.model.abilities.ThickFat.THICK_FAT;
 import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
 import static org.shorts.model.abilities.Triage.TRIAGE;
+import static org.shorts.model.abilities.UnseenFist.UNSEEN_FIST;
 import static org.shorts.model.items.BrightPowder.BRIGHT_POWDER;
 import static org.shorts.model.items.ExpertBelt.EXPERT_BELT;
 import static org.shorts.model.items.IronBall.IRON_BALL;
@@ -80,6 +82,7 @@ import static org.shorts.model.status.VolatileStatusType.IDENTIFIED;
 import static org.shorts.model.status.VolatileStatusType.LASER_FOCUS;
 import static org.shorts.model.status.VolatileStatusType.MICLE_BERRY_EFFECT;
 import static org.shorts.model.status.VolatileStatusType.MINIMIZED;
+import static org.shorts.model.status.VolatileStatusType.PROTECTED;
 import static org.shorts.model.status.VolatileStatusType.PUMPED;
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
@@ -397,7 +400,8 @@ public abstract class Move {
     }
 
     protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
-        if (rollToHit(user, target, battle)) {
+        if (rollToHit(user, target, battle) && !isTargetProtected(user, target, battle)) {
+
             if (this.category == Category.STATUS) {
                 //TODO: This may change -- Will-O-Wisp shouldn't burn Flash Fire mons, Thunder Wave won't affect ground-types, and poison moves won't affect steels, but I think other status moves might ignore types.
                 if (target.beforeHit(user, battle, this) > 0 && getTypeMultiplier(user, target, battle) > 0) {
@@ -412,7 +416,9 @@ public abstract class Move {
                 }
 
                 int hitNum = 0;
-                final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK, user.getHeldItem() == LOADED_DICE);
+                final int maxHits = this.getNumHits(
+                    user.getAbility() == SKILL_LINK,
+                    user.getHeldItem() == LOADED_DICE);
                 while (hitNum < maxHits && !user.hasFainted() && !target.hasFainted()) {
                     final int previousTargetHP = target.getCurrentHP();
 
@@ -426,7 +432,7 @@ public abstract class Move {
                         target.takeDamage(damage);
                         System.out.println(
                             target.getDisplayName() + " took " + DECIMAL.format(100d * damage / target.getMaxHP())
-                                + "%");
+                                + "% (" + damage + ")");
 
                     }
 
@@ -445,8 +451,6 @@ public abstract class Move {
                         target.removeVolatileStatus(SUBSTITUTE);
                     }
 
-                    checkForLifeOrbRecoil(user);
-
                     hitNum++;
                 }
                 if (hitNum > 1) {
@@ -458,6 +462,17 @@ public abstract class Move {
                 }
             }
         }
+    }
+
+    protected boolean isTargetProtected(Pokemon user, Pokemon target, Battle battle) {
+        if (this instanceof IgnoresProtect) {
+            target.removeVolatileStatus(PROTECTED);
+            return false;
+        }
+        return target.hasVolatileStatus(PROTECTED) && !(this instanceof EntryHazardSetter) && this.range != Range.ALL
+            && this.range != Range.BOTH_SIDES && battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(
+            target) && !(user.getAbility() == UNSEEN_FIST && !user.hasVolatileStatus(ABILITY_SUPPRESSED)
+            && this.isContact());
     }
 
     protected void checkForLifeOrbRecoil(Pokemon user) {
