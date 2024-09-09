@@ -46,6 +46,7 @@ import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
 import static org.shorts.model.status.VolatileStatusType.AUTOTOMIZED;
 import static org.shorts.model.status.VolatileStatusType.CANT_ESCAPE;
 import static org.shorts.model.status.VolatileStatusType.GROUNDED;
+import static org.shorts.model.status.VolatileStatusType.HEAL_BLOCKED;
 import static org.shorts.model.status.VolatileStatusType.HELPING_HAND;
 import static org.shorts.model.status.VolatileStatusType.MAGNET_LEVITATION;
 import static org.shorts.model.status.VolatileStatusType.NO_RETREAT;
@@ -500,12 +501,14 @@ public class Pokemon {
     }
 
     public void heal(int health) {
-        if (health <= 0) {
-            throw new IllegalArgumentException("Health restored must be positive");
-        }
-        this.currentHP = currentHP + health;
-        if (this.currentHP > this.maxHP) {
-            this.currentHP = this.maxHP;
+        if (!this.hasVolatileStatus(HEAL_BLOCKED)) {
+            if (health <= 0) {
+                throw new IllegalArgumentException("Health restored must be positive");
+            }
+            this.currentHP = currentHP + health;
+            if (this.currentHP > this.maxHP) {
+                this.currentHP = this.maxHP;
+            }
         }
     }
 
@@ -741,7 +744,8 @@ public class Pokemon {
             helpingHand = 1;
         }
         final double abilityMultiplier = (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
-            || this.getAbility() instanceof UnsuppressableAbility) ? ability.getMovePowerMultipliers(this,
+            || this.getAbility() instanceof UnsuppressableAbility) ? ability.getMovePowerMultipliers(
+            this,
             opponent,
             battle,
             move) : 1;
@@ -917,7 +921,8 @@ public class Pokemon {
             AUTOTOMIZED)).getLevels() : 0;
 
         final int weightAfterAutotomize = Math.max(1, baseWeight - (1000 * autotomizedLevels));
-        final int roundedWeight = (int) Math.max(1,
+        final int roundedWeight = (int) Math.max(
+            1,
             weightAfterAutotomize * floatStoneMultiplier * ability.getWeightMultiplier());
         return roundedWeight / 10d;
     }

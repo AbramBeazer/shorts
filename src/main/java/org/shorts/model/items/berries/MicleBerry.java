@@ -14,6 +14,5 @@ public class MicleBerry extends Berry {
     @Override
     public void doEffect(Pokemon user) {
         user.addVolatileStatus(new VolatileStatus(MICLE_BERRY_EFFECT, 1));
-        super.doEffect(user);
     }
 }

@@ -27,39 +27,60 @@ public abstract class Berry extends HeldItem {
     }
 
     private double computeThreshold(Pokemon user) {
-        if (this.threshold == 0.25 && user.getAbility() == GLUTTONY) {
+        if (this.threshold == 0.25 && user.getAbility() == GLUTTONY && !user.hasVolatileStatus(ABILITY_SUPPRESSED)) {
             return 0.5;
         }
         return this.threshold;
     }
 
-    //TODO: Is this correct? Do berries activate at the end of the turn from Gen 4 onward?
-    @Override
-    public void afterTurn(Pokemon user, Battle battle) {
-        if (!user.hasFainted() && user.getCurrentHP() < user.getMaxHP() * computeThreshold(user)) {
-            tryEatingOwnBerry(user, battle);
-        }
+    protected boolean isWithinThreshold(Pokemon user) {
+        return !user.hasFainted() && user.getCurrentHP() < user.getMaxHP() * computeThreshold(user);
     }
 
-    public boolean tryEatingOwnBerry(Pokemon user, Battle battle) {
+    public boolean isUnnerveActive(Pokemon user, Battle battle) {
         for (Pokemon opponent : battle.getOpposingActivePokemon(user)) {
             if (opponent.getAbility() instanceof OpponentCantEatBerriesAbility && !opponent.hasVolatileStatus(
                 ABILITY_SUPPRESSED)) {
-                return false;
+                return true;
             }
         }
-        this.eatOwnBerry(user);
+        return false;
+    }
+
+    public boolean canDoEffect(Pokemon user) {
         return true;
+    }
+
+    public boolean tryEatingOwnBerry(Pokemon user, Battle battle) {
+        if (isWithinThreshold(user) && !isUnnerveActive(user, battle) && canDoEffect(user)) {
+            eatOwnBerry(user);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void eatOwnBerry(Pokemon user) {
         this.doEffect(user);
+        printMessageAndAfterEffects(user);
+
         user.setHeldItem(NO_ITEM);
         user.setConsumedItem(this);
         Pickup.addToConsumedItems(user);
     }
 
-    public void doEffect(Pokemon user) {
+    public void tryEatingOtherBerry(Pokemon user) {
+        if (canDoEffect(user)) {
+            doEffect(user);
+            printMessageAndAfterEffects(user);
+        }
+        //TODO: What if a CudChew user is at full health and steals a berry with Pluck?
+        // The berry can't heal it, but will it activate Cud Chew and heal the user if it takes damage before the end of the next turn?
+    }
+
+    public abstract void doEffect(Pokemon user);
+
+    public void printMessageAndAfterEffects(Pokemon user) {
         System.out.println(user.getNickname() + " ate the " + this.getName());
 
         if (!user.hasVolatileStatus(ABILITY_SUPPRESSED)) {

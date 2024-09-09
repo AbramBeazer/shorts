@@ -117,7 +117,7 @@ public class Fling extends Move {
 
         if (!isTargetProtected(user, target, battle)) {
             if (item instanceof Berry) {
-                ((Berry) item).doEffect(target);
+                ((Berry) item).tryEatingOtherBerry(target);
                 //TODO: Does this become the consumed item for the both the user and target?
             } else if (item == FLAME_ORB && StatusType.BURN.isStatusPossible(target, battle)) {
                 target.setStatus(Status.BURN);
@@ -127,7 +127,8 @@ public class Fling extends Move {
                 target.setStatus(Status.TOXIC_POISON);
             } else if (item == POISON_BARB && StatusType.POISON.isStatusPossible(target, battle)) {
                 target.setStatus(Status.POISON);
-            } else if ((item == RAZOR_FANG || item == KINGS_ROCK) && VolatileStatusType.FLINCH.isStatusPossible(target,
+            } else if ((item == RAZOR_FANG || item == KINGS_ROCK) && VolatileStatusType.FLINCH.isStatusPossible(
+                target,
                 battle)) {
                 target.addVolatileStatus(new VolatileStatus(VolatileStatusType.FLINCH, 1));
             } else if (item == MENTAL_HERB) {

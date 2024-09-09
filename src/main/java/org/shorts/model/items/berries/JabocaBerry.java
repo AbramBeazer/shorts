@@ -14,13 +14,19 @@ public class JabocaBerry extends Berry {
 
     @Override
     public void afterHit(Pokemon user, Pokemon opponent, Battle battle, int previousHP, Move move) {
-        if (tryEatingOwnBerry(user, battle)) {
+        if (!isUnnerveActive(user, battle) && move.getCategory().equals(Move.Category.PHYSICAL)) {
+            eatOwnBerry(user);
             opponent.takeDamage(opponent.getMaxHP() / 8);
         }
     }
 
     @Override
-    public void afterTurn(Pokemon user, Battle battle) {
-        return;
+    public boolean canDoEffect(Pokemon user) {
+        return false;
+    }
+
+    @Override
+    public void doEffect(Pokemon user) {
+
     }
 }
