@@ -438,6 +438,10 @@ class FlingTests {
         SITRUS_BERRY.afterTurn(target, battle);
 
         assertThat(target.getCurrentHP()).isEqualTo((justAboveThreshold - damage) + target.getMaxHP() / 4);
+        assertThat(target.getHeldItem()).isEqualTo(SITRUS_BERRY);
+        assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
+        assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
+        assertThat(user.getConsumedItem()).isEqualTo(SITRUS_BERRY);
     }
 
     @Test
@@ -480,11 +484,6 @@ class FlingTests {
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(FLAME_ORB);
         //TODO: Is this what's supposed to happen?
-        assertThat(false).isTrue();
-    }
-
-    @Test
-    void testFlingHealingBerryAtPokemonWithFullHealth() {
         assertThat(false).isTrue();
     }
 }
