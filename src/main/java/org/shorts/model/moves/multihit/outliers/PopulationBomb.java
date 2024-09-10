@@ -41,30 +41,32 @@ public class PopulationBomb extends Move implements SlicingMove {
                 final int previousTargetHP = target.getCurrentHP();
 
                 int damage = calculateDamage(user, target, battle);
+                if (damage > 0) {
 
-                final boolean hitSub = checkForHitSub(user, target);
-                if (hitSub) {
-                    ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
-                } else {
-                    target.takeDamage(damage);
+                    final boolean hitSub = checkForHitSub(user, target);
+                    if (hitSub) {
+                        ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
+                    } else {
+                        target.takeDamage(damage);
+                    }
+
+                    if (!user.hasFainted()) {
+                        this.inflictRecoil(user, damage);
+                    }
+
+                    //TODO: Verify which effects should happen after the attack hits the sub and which shouldn't.
+                    if (!hitSub) {
+                        target.afterHit(user, battle, previousTargetHP, this);
+                    }
+
+                    if (target.hasVolatileStatus(SUBSTITUTE)
+                        && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
+                        target.removeVolatileStatus(SUBSTITUTE);
+                    }
+
+                    hitNum++;
                 }
-
-                if (!user.hasFainted()) {
-                    this.inflictRecoil(user, damage);
-                }
-
-                //TODO: Verify which effects should happen after the attack hits the sub and which shouldn't.
-                if (!hitSub) {
-                    target.afterHit(user, battle, previousTargetHP, this);
-                }
-
-                if (target.hasVolatileStatus(SUBSTITUTE)
-                    && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
-                    target.removeVolatileStatus(SUBSTITUTE);
-                }
-
-                hitNum++;
-                if (!skipRollToHit && !rollToHit(user, target, battle)) {
+                if ((!skipRollToHit && !rollToHit(user, target, battle)) || damage <= 0) {
                     break;
                 }
             }

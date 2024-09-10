@@ -30,30 +30,33 @@ public class TripleKick extends Move {
             while (hitNum < MAX_HITS && !user.hasFainted() && !target.hasFainted()) {
                 final int previousTargetHP = target.getCurrentHP();
 
-                hitNum++;
                 int damage = calculateDamage(user, target, battle);
+                if (damage > 0) {
 
-                final boolean hitSub = checkForHitSub(user, target);
-                if (hitSub) {
-                    ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
-                } else {
-                    target.takeDamage(damage);
-                }
-                if (!user.hasFainted()) {
-                    this.inflictRecoil(user, damage);
+                    hitNum++;
+
+                    final boolean hitSub = checkForHitSub(user, target);
+                    if (hitSub) {
+                        ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
+                    } else {
+                        target.takeDamage(damage);
+                    }
+                    if (!user.hasFainted()) {
+                        this.inflictRecoil(user, damage);
+                    }
+
+                    //TODO: Verify which effects should happen after the attack hits the sub and which shouldn't.
+                    if (!hitSub) {
+                        target.afterHit(user, battle, previousTargetHP, this);
+                    }
+
+                    if (target.hasVolatileStatus(SUBSTITUTE)
+                        && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
+                        target.removeVolatileStatus(SUBSTITUTE);
+                    }
                 }
 
-                //TODO: Verify which effects should happen after the attack hits the sub and which shouldn't.
-                if (!hitSub) {
-                    target.afterHit(user, battle, previousTargetHP, this);
-                }
-
-                if (target.hasVolatileStatus(SUBSTITUTE)
-                    && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
-                    target.removeVolatileStatus(SUBSTITUTE);
-                }
-
-                if (!skipRollToHit && !rollToHit(user, target, battle)) {
+                if ((!skipRollToHit && !rollToHit(user, target, battle)) || damage <= 0) {
                     break;
                 }
             }
