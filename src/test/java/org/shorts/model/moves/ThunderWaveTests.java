@@ -12,6 +12,7 @@ import org.shorts.model.status.SubstituteStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
+import static org.shorts.model.abilities.elementabsorb.ElementAbsorbingAbility.VOLT_ABSORB;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 import static org.shorts.model.status.Status.NONE;
 import static org.shorts.model.status.Status.PARALYZE;
@@ -65,4 +66,11 @@ class ThunderWaveTests {
         assertThat(target.getStatus()).isEqualTo(NONE);
     }
 
+    @Test
+    void testFailsOnTargetWithVoltAbsorb() {
+        target.setAbility(VOLT_ABSORB);
+        assertThat(target.getStatus()).isEqualTo(NONE);
+        tWave.executeOnTarget(user, target, battle);
+        assertThat(target.getStatus()).isEqualTo(NONE);
+    }
 }
