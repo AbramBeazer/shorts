@@ -1,8 +1,6 @@
 package org.shorts.model.moves.stealberry;
 
 import org.shorts.battle.Battle;
-import org.shorts.model.abilities.Pickup;
-import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.berries.Berry;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
@@ -38,15 +36,11 @@ public abstract class BerryStealingMove extends Move {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        HeldItem originalItem = user.getHeldItem();
-        HeldItem originalConsumedItem = user.getConsumedItem();
-        int originalIndex = Pickup.getConsumedItemsIndexForUser(user);
-
         Berry berry = (Berry) target.getHeldItem();
         target.setHeldItem(NO_ITEM);
         System.out.println(user.getNickname() + " stole " + target.getNickname() + "'s " + berry.getName() + "!");
 
-        berry.doEffect(user);
+        berry.tryEatingOtherBerry(user);
     }
 
     @Override
