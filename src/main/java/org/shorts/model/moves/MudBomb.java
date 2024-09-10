@@ -5,7 +5,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class MudBomb extends Move implements BallBombMove {
+public class MudBomb extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public MudBomb() {
         super("Mud Bomb", 65, 85, Type.GROUND, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 30);
@@ -20,6 +20,6 @@ public class MudBomb extends Move implements BallBombMove {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeAccuracy(-1);
+        target.changeStat(-1, StatEnum.ACCURACY);
     }
 }

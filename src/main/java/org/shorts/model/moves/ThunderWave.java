@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.StatusType.PARALYZE;
 
-public class ThunderWave extends Move {
+public class ThunderWave extends Move implements AffectedByMagicBounce {
 
     public ThunderWave() {
         super("Thunder Wave", 0, 90, Type.ELECTRIC, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 32, false, 100);

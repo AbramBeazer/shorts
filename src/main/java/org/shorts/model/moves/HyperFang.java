@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.FLINCH;
 
-public class HyperFang extends Move implements BitingMove {
+public class HyperFang extends Move implements BitingMove, GetsSheerForceBoost {
 
     public HyperFang() {
         super("Hyper Fang", 80, 90, Type.NORMAL, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 10);

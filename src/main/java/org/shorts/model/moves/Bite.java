@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.FLINCH;
 
-public class Bite extends Move implements BitingMove {
+public class Bite extends Move implements BitingMove, GetsSheerForceBoost {
 
     public Bite() {
         super("Bite", 60, 100, Type.DARK, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 40, true, 30);

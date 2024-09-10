@@ -1,6 +1,7 @@
 package org.shorts.model.pokemon;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +19,7 @@ import org.shorts.model.abilities.UnsuppressableAbility;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.NoItem;
 import org.shorts.model.moves.Move;
+import org.shorts.model.status.AutotomizedStatus;
 import org.shorts.model.status.HelpingHandStatus;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.VolatileStatus;
@@ -37,11 +39,14 @@ import static org.shorts.model.abilities.trapping.ArenaTrap.ARENA_TRAP;
 import static org.shorts.model.abilities.trapping.MagnetPull.MAGNET_PULL;
 import static org.shorts.model.abilities.trapping.ShadowTag.SHADOW_TAG;
 import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
+import static org.shorts.model.items.FloatStone.FLOAT_STONE;
 import static org.shorts.model.items.ShedShell.SHED_SHELL;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
 import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
+import static org.shorts.model.status.VolatileStatusType.AUTOTOMIZED;
 import static org.shorts.model.status.VolatileStatusType.CANT_ESCAPE;
 import static org.shorts.model.status.VolatileStatusType.GROUNDED;
+import static org.shorts.model.status.VolatileStatusType.HEAL_BLOCKED;
 import static org.shorts.model.status.VolatileStatusType.HELPING_HAND;
 import static org.shorts.model.status.VolatileStatusType.MAGNET_LEVITATION;
 import static org.shorts.model.status.VolatileStatusType.NO_RETREAT;
@@ -83,7 +88,6 @@ public class Pokemon {
     private int stageSpecialDefense = 0;
     private int speed;
     private int stageSpeed = 0;
-
     private int stageAccuracy = 0;
     private int stageEvasion = 0;
     private Status status = Status.NONE;
@@ -112,9 +116,13 @@ public class Pokemon {
         this.pokedexEntry = pokedexEntry;
         this.setNature(nature);
         this.speciesName = pokedexEntry.getSpeciesName();
-        this.types = pokedexEntry.getType2() == null
-            ? Set.of(pokedexEntry.getType1())
-            : Set.of(pokedexEntry.getType1(), pokedexEntry.getType2());
+
+        this.types = new HashSet<>();
+        this.types.add(pokedexEntry.getType1());
+        if (pokedexEntry.getType2() != null) {
+            this.types.add(pokedexEntry.getType2());
+        }
+
         this.happiness = Byte.MAX_VALUE;
         this.ev = effortValues;
 
@@ -140,19 +148,19 @@ public class Pokemon {
         this.currentHP = this.maxHP;
 
         this.attack =
-            ((((2 * pokedexEntry.getBaseAtk() + iv[ATK.ordinal()] + (ev[ATK.ordinal()] / 4) * level) / 100) + 5)
+            (((((2 * pokedexEntry.getBaseAtk() + iv[ATK.ordinal()] + (ev[ATK.ordinal()] / 4)) * level) / 100) + 5)
                 * nature.getMultiplier(ATK)) / 100;
         this.defense =
-            ((((2 * pokedexEntry.getBaseDef() + iv[DEF.ordinal()] + (ev[DEF.ordinal()] / 4) * level) / 100) + 5)
+            (((((2 * pokedexEntry.getBaseDef() + iv[DEF.ordinal()] + (ev[DEF.ordinal()] / 4)) * level) / 100) + 5)
                 * nature.getMultiplier(DEF)) / 100;
         this.specialAttack =
-            ((((2 * pokedexEntry.getBaseAtk() + iv[SPATK.ordinal()] + (ev[SPATK.ordinal()] / 4) * level) / 100) + 5)
+            (((((2 * pokedexEntry.getBaseAtk() + iv[SPATK.ordinal()] + (ev[SPATK.ordinal()] / 4)) * level) / 100) + 5)
                 * nature.getMultiplier(SPATK)) / 100;
         this.specialDefense =
-            ((((2 * pokedexEntry.getBaseDef() + iv[SPDEF.ordinal()] + (ev[SPDEF.ordinal()] / 4) * level) / 100) + 5)
+            (((((2 * pokedexEntry.getBaseDef() + iv[SPDEF.ordinal()] + (ev[SPDEF.ordinal()] / 4)) * level) / 100) + 5)
                 * nature.getMultiplier(SPDEF)) / 100;
         this.speed =
-            ((((2 * pokedexEntry.getBaseAtk() + iv[SPEED.ordinal()] + (ev[SPEED.ordinal()] / 4) * level) / 100) + 5)
+            (((((2 * pokedexEntry.getBaseAtk() + iv[SPEED.ordinal()] + (ev[SPEED.ordinal()] / 4)) * level) / 100) + 5)
                 * nature.getMultiplier(SPEED)) / 100;
     }
 
@@ -185,21 +193,28 @@ public class Pokemon {
         }
         if (stage == 6) {
             if (change > 0) {
-                return this.ability == CONTRARY;
+                return this.ability == CONTRARY && !this.hasVolatileStatus(ABILITY_IGNORED) && !this.hasVolatileStatus(
+                    ABILITY_SUPPRESSED);
             } else if (change < 0) {
-                return this.ability != CONTRARY;
+                return this.ability != CONTRARY || this.hasVolatileStatus(ABILITY_IGNORED) || this.hasVolatileStatus(
+                    ABILITY_SUPPRESSED);
             }
         } else if (stage == -6) {
             if (change < 0) {
-                return this.ability == CONTRARY;
+                return this.ability == CONTRARY && !this.hasVolatileStatus(ABILITY_IGNORED) && !this.hasVolatileStatus(
+                    ABILITY_SUPPRESSED);
             } else if (change > 0) {
-                return this.ability != CONTRARY;
+                return this.ability != CONTRARY || this.hasVolatileStatus(ABILITY_IGNORED) || this.hasVolatileStatus(
+                    ABILITY_SUPPRESSED);
             }
         }
         return true;
     }
 
     public void changeStat(int stages, StatEnum stat) {
+        if (this.getAbility() == CONTRARY) {
+            stages = stages * -1;
+        }
         switch (stat) {
             case ATK:
                 changeAttack(stages);
@@ -226,52 +241,66 @@ public class Pokemon {
         }
     }
 
-    public void changeAttack(int stages) {
+    private void changeAttack(int stages) {
         this.stageAttack += stages;
         if (this.stageAttack > 6) {
             this.stageAttack = 6;
+        } else if (this.stageAttack < -6) {
+            this.stageAttack = -6;
         }
     }
 
-    public void changeDefense(int stages) {
+    private void changeDefense(int stages) {
         this.stageDefense += stages;
         if (this.stageDefense > 6) {
             this.stageDefense = 6;
+        } else if (this.stageDefense < -6) {
+            this.stageDefense = -6;
         }
     }
 
-    public void changeSpecialAttack(int stages) {
+    private void changeSpecialAttack(int stages) {
         this.stageSpecialAttack += stages;
         if (this.stageSpecialAttack > 6) {
             this.stageSpecialAttack = 6;
+        } else if (this.stageSpecialAttack < -6) {
+            this.stageSpecialAttack = -6;
         }
     }
 
-    public void changeSpecialDefense(int stages) {
+    private void changeSpecialDefense(int stages) {
         this.stageSpecialDefense += stages;
         if (this.stageSpecialDefense > 6) {
             this.stageSpecialDefense = 6;
+        } else if (this.stageSpecialDefense < -6) {
+            this.stageSpecialDefense = -6;
         }
     }
 
-    public void changeSpeed(int stages) {
+    private void changeSpeed(int stages) {
         this.stageSpeed += stages;
         if (this.stageSpeed > 6) {
             this.stageSpeed = 6;
+        } else if (this.stageSpeed < -6) {
+            this.stageSpeed = -6;
         }
     }
 
-    public void changeAccuracy(int stages) {
+    private void changeAccuracy(int stages) {
         this.stageAccuracy += stages;
         if (this.stageAccuracy > 6) {
             this.stageAccuracy = 6;
+        } else if (this.stageAccuracy < -6) {
+            this.stageAccuracy = -6;
         }
     }
 
-    public void changeEvasion(int stages) {
+    private void changeEvasion(int stages) {
         this.stageEvasion += stages;
         if (this.stageEvasion > 6) {
             this.stageEvasion = 6;
+        } else if (this.stageEvasion < -6) {
+            this.stageEvasion = -6;
         }
     }
 
@@ -472,12 +501,14 @@ public class Pokemon {
     }
 
     public void heal(int health) {
-        if (health <= 0) {
-            throw new IllegalArgumentException("Health restored must be positive");
-        }
-        this.currentHP = currentHP + health;
-        if (this.currentHP > this.maxHP) {
-            this.currentHP = this.maxHP;
+        if (!this.hasVolatileStatus(HEAL_BLOCKED)) {
+            if (health <= 0) {
+                throw new IllegalArgumentException("Health restored must be positive");
+            }
+            this.currentHP = currentHP + health;
+            if (this.currentHP > this.maxHP) {
+                this.currentHP = this.maxHP;
+            }
         }
     }
 
@@ -642,10 +673,10 @@ public class Pokemon {
         }
 
         for (Pokemon opponent : opposingActivePokemon) {
-            if (battle.getPokemonWithinRange(opponent, opponent.getAbility().getRange()).contains(this)
-                && ((opponent.getAbility() == MAGNET_PULL && this.getTypes().contains(Type.STEEL))
-                || (opponent.getAbility() == ARENA_TRAP && this.isGrounded())
-                || (opponent.getAbility() == SHADOW_TAG && this.getAbility() != SHADOW_TAG))) {
+            if (battle.getPokemonWithinRange(opponent, opponent.getAbility().getRange()).contains(this) && (
+                (opponent.getAbility() == MAGNET_PULL && this.getTypes().contains(Type.STEEL)) || (
+                    opponent.getAbility() == ARENA_TRAP && this.isGrounded()) || (opponent.getAbility() == SHADOW_TAG
+                    && this.getAbility() != SHADOW_TAG))) {
                 return true;
             }
         }
@@ -718,21 +749,35 @@ public class Pokemon {
             opponent,
             battle,
             move) : 1;
-        return abilityMultiplier * heldItem.getMovePowerMultipliers(
-            this,
-            opponent,
-            battle,
-            move) * helpingHand;
+        return abilityMultiplier * heldItem.getMovePowerMultipliers(this, opponent, battle, move) * helpingHand;
     }
 
     public double getAttackMultipliersFromAbilityAndItem(Pokemon opponent, Battle battle, Move move) {
         final double abilityMultiplier = (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
-            || this.getAbility() instanceof UnsuppressableAbility)
-            ? ability.getAttackMultipliers(this, opponent, battle, move) : 1;
+            || this.getAbility() instanceof UnsuppressableAbility) ? ability.getAttackMultipliers(
+            this,
+            opponent,
+            battle,
+            move) : 1;
         if (abilityMultiplier == 0) {
             return 0;
         } else {
             return abilityMultiplier * heldItem.getAttackMultipliers(this, opponent, battle, move);
+        }
+        //Again, I don't want to consume an item if the ability's going to nullify the effect anyway.
+    }
+
+    public double getDefenseMultipliersFromAbilityAndItem(Pokemon opponent, Battle battle, Move move) {
+        final double abilityMultiplier = (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+            || this.getAbility() instanceof UnsuppressableAbility) ? ability.getDefenseMultipliers(
+            this,
+            opponent,
+            battle,
+            move) : 1;
+        if (abilityMultiplier == 0) {
+            return 0;
+        } else {
+            return abilityMultiplier * heldItem.getDefenseMultipliers(this, opponent, battle, move);
         }
         //Again, I don't want to consume an item if the ability's going to nullify the effect anyway.
     }
@@ -754,9 +799,12 @@ public class Pokemon {
     }
 
     public boolean isDropPossible(StatEnum stat) {
-        if (!(this.getAbility() instanceof IgnorableAbility && this.hasVolatileStatus(ABILITY_IGNORED))
-            && (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
-            || this.getAbility() instanceof UnsuppressableAbility)) {
+        if (!canChangeStat(-1, stat)) {
+            return false;
+        }
+        if (!(this.getAbility() instanceof IgnorableAbility && this.hasVolatileStatus(ABILITY_IGNORED)) && (
+            !this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+                || this.getAbility() instanceof UnsuppressableAbility)) {
             return ability.isDropPossible(stat) && heldItem.isDropPossible(stat);
         } else {
             return heldItem.isDropPossible(stat);
@@ -862,5 +910,36 @@ public class Pokemon {
             ability.onTerrainChange(this, battle);
         }
         heldItem.onTerrainChange(this, battle);
+    }
+
+    public double getWeight() {
+        //Weight calculations are rounded to nearest tenth of a kilogram, which we can do by multiplying the weight by 10 and treating it as an integer.
+        //This is why that CSV I found with the weight values had them all listed at 10x the values I was used to seeing.
+        final int baseWeight = (int) (pokedexEntry.getWeight() * 10);
+        final double floatStoneMultiplier = this.getHeldItem() == FLOAT_STONE ? .5 : 1;
+        final int autotomizedLevels = hasVolatileStatus(AUTOTOMIZED) ? ((AutotomizedStatus) getVolatileStatus(
+            AUTOTOMIZED)).getLevels() : 0;
+
+        final int weightAfterAutotomize = Math.max(1, baseWeight - (1000 * autotomizedLevels));
+        final int roundedWeight = (int) Math.max(
+            1,
+            weightAfterAutotomize * floatStoneMultiplier * ability.getWeightMultiplier());
+        return roundedWeight / 10d;
+    }
+
+    public void thaw() {
+        if (this.getStatus() == Status.FREEZE) {
+            System.out.println(this.getNickname() + " was thawed out!");
+            this.setStatus(Status.NONE);
+        }
+    }
+
+    public void maxPotion() {
+        this.setCurrentHP(this.maxHP);
+    }
+
+    public void fullRestore() {
+        this.setStatus(Status.NONE);
+        this.maxPotion();
     }
 }

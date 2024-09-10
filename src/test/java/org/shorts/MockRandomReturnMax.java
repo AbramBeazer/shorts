@@ -9,5 +9,8 @@ public class MockRandomReturnMax extends Random {
         return Integer.MAX_VALUE;
     }
 
+    private MockRandomReturnMax() {
+    }
+
     public static final MockRandomReturnMax MAX_RANDOM = new MockRandomReturnMax();
 }

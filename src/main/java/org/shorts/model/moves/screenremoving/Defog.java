@@ -3,13 +3,15 @@ package org.shorts.model.moves.screenremoving;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Terrain;
 import org.shorts.battle.Trainer;
+import org.shorts.model.StatEnum;
+import org.shorts.model.moves.AffectedByMagicBounce;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-public class Defog extends Move {
+public class Defog extends Move implements AffectedByMagicBounce {
 
     public Defog() {
         super("Defog", 0, -1, Type.FLYING, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 24, false, 100);
@@ -17,8 +19,10 @@ public class Defog extends Move {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (!target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
-            target.changeEvasion(-1);
+        if (!target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)
+            && !target.hasVolatileStatus(VolatileStatusType.SEMI_INVULNERABLE)
+            && target.isDropPossible(StatEnum.EVASION)) {
+            target.changeStat(-1, StatEnum.EVASION);
         }
         //        if(battle.getWeather() == Weather.FOG){
         //            battle.setWeather(Weather.NONE);

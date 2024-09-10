@@ -9,10 +9,13 @@ import org.shorts.battle.Battle;
 import org.shorts.battle.Trainer;
 import org.shorts.battle.Weather;
 import org.shorts.model.abilities.FullHealthHalfDamageAbility;
+import org.shorts.model.abilities.MagicBounce;
 import org.shorts.model.abilities.SuperEffectiveReducingAbility;
 import org.shorts.model.abilities.statpreserving.PreserveAccuracyIgnoreEvasionAbility;
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
+import org.shorts.model.moves.entryhazardsetter.EntryHazardSetter;
+import org.shorts.model.moves.thawing.ThawingMove;
 import org.shorts.model.moves.trapping.binding.Whirlpool;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.PumpedStatus;
@@ -22,6 +25,10 @@ import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.TooManyTypesException;
 import org.shorts.model.types.Type;
 
+import static org.shorts.Main.CRIT_RANDOM;
+import static org.shorts.Main.DAMAGE_RANDOM;
+import static org.shorts.Main.DECIMAL;
+import static org.shorts.Main.HIT_RANDOM;
 import static org.shorts.Main.RANDOM;
 import static org.shorts.MathUtils.roundHalfDown;
 import static org.shorts.MathUtils.roundHalfUp;
@@ -33,6 +40,8 @@ import static org.shorts.model.abilities.Guts.GUTS;
 import static org.shorts.model.abilities.Hustle.HUSTLE;
 import static org.shorts.model.abilities.IceScales.ICE_SCALES;
 import static org.shorts.model.abilities.Infiltrator.INFILTRATOR;
+import static org.shorts.model.abilities.MagicBounce.MAGIC_BOUNCE;
+import static org.shorts.model.abilities.MagicGuard.MAGIC_GUARD;
 import static org.shorts.model.abilities.Merciless.MERCILESS;
 import static org.shorts.model.abilities.Neuroforce.NEUROFORCE;
 import static org.shorts.model.abilities.Prankster.PRANKSTER;
@@ -52,6 +61,7 @@ import static org.shorts.model.abilities.TangledFeet.TANGLED_FEET;
 import static org.shorts.model.abilities.ThickFat.THICK_FAT;
 import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
 import static org.shorts.model.abilities.Triage.TRIAGE;
+import static org.shorts.model.abilities.UnseenFist.UNSEEN_FIST;
 import static org.shorts.model.items.BrightPowder.BRIGHT_POWDER;
 import static org.shorts.model.items.ExpertBelt.EXPERT_BELT;
 import static org.shorts.model.items.IronBall.IRON_BALL;
@@ -60,6 +70,7 @@ import static org.shorts.model.items.Leek.LEEK;
 import static org.shorts.model.items.LifeOrb.LIFE_ORB;
 import static org.shorts.model.items.LoadedDice.LOADED_DICE;
 import static org.shorts.model.items.LuckyPunch.LUCKY_PUNCH;
+import static org.shorts.model.items.NoItem.NO_ITEM;
 import static org.shorts.model.items.RazorClaw.RAZOR_CLAW;
 import static org.shorts.model.items.RingTarget.RING_TARGET;
 import static org.shorts.model.items.ScopeLens.SCOPE_LENS;
@@ -70,9 +81,9 @@ import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
 import static org.shorts.model.status.VolatileStatusType.CONFUSED;
 import static org.shorts.model.status.VolatileStatusType.IDENTIFIED;
 import static org.shorts.model.status.VolatileStatusType.LASER_FOCUS;
-import static org.shorts.model.status.VolatileStatusType.MAGIC_COAT;
 import static org.shorts.model.status.VolatileStatusType.MICLE_BERRY_EFFECT;
 import static org.shorts.model.status.VolatileStatusType.MINIMIZED;
+import static org.shorts.model.status.VolatileStatusType.PROTECTED;
 import static org.shorts.model.status.VolatileStatusType.PUMPED;
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
@@ -110,6 +121,7 @@ public abstract class Move {
 
     private final int secondaryEffectChance;
     private boolean disabled = false;
+    public static final double REGULAR_CRIT_MULTIPLIER = 1.5;
 
     protected Move(
         String name,
@@ -200,7 +212,7 @@ public abstract class Move {
     }
 
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (category == Category.STATUS || (user.getAbility() != SHEER_FORCE && secondaryEffectChance > 0)) {
+        if (!(user.getAbility() == SHEER_FORCE && this instanceof GetsSheerForceBoost) && secondaryEffectChance > 0) {
 
             final int chance = getSecondaryEffectChance() * (user.getAbility().equals(SERENE_GRACE) ? 2 : 1);
             if (RANDOM.nextInt(100) < chance) {
@@ -212,9 +224,6 @@ public abstract class Move {
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
     }
 
-    protected void onStartup(Pokemon user) {
-    }
-
     protected boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
         if (accuracy <= 0) {
             return true;
@@ -223,7 +232,11 @@ public abstract class Move {
         int threshold = (int) roundHalfDown(
             getModifiedAccuracy(user, target, battle) * getAccuracyEvasionStageModifier(user, target)
                 * (user.hasVolatileStatus(MICLE_BERRY_EFFECT) ? 1.2 : 1));
-        return RANDOM.nextInt(100) < threshold;
+        final boolean hit = HIT_RANDOM.nextInt(100) < threshold;
+        if (!hit) {
+            System.out.println(user.getDisplayName() + "'s attack missed!");
+        }
+        return hit;
     }
 
     private double getModifiedAccuracy(Pokemon user, Pokemon target, Battle battle) {
@@ -267,9 +280,9 @@ public abstract class Move {
 
     protected double getAccuracyEvasionStageModifier(Pokemon user, Pokemon target) {
         int evasionStage = target.getStageEvasion();
-        if (evasionStage > 0 && (target.hasVolatileStatus(IDENTIFIED)
-            || (user.getAbility() instanceof PreserveAccuracyIgnoreEvasionAbility && !user.hasVolatileStatus(
-            ABILITY_SUPPRESSED)))) {
+        if (evasionStage > 0 && (target.hasVolatileStatus(IDENTIFIED) || (
+            user.getAbility() instanceof PreserveAccuracyIgnoreEvasionAbility && !user.hasVolatileStatus(
+                ABILITY_SUPPRESSED)))) {
             evasionStage = 0;
         }
         int combinedStage = Math.max(-6, Math.min(user.getStageAccuracy() - evasionStage, 6));
@@ -302,46 +315,94 @@ public abstract class Move {
     public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setMovedThisTurn(true);
         this.decrementPP();
-        this.onStartup(user);
         for (Pokemon target : targets) {
-
-            //TODO: What if a random-target move targets a Pokemon that has fainted and hasn't been switched out yet?
-            //TODO: What if any move targets a Pokemon that's fainted? Does it just hit another available adjacent enemy?
-
-            //TODO: Move this Pressure logic to whatever method calls this one. Pressure shouldn't activate for Curse or Sticky Web but should activate for moves that target the whole field, like Rain Dance. I think it should only activate once in the case of Rain Dance, even if multiple opponents have it.
-            //  Should it affect moves that affect the enemy side? It affects all hazard moves except Sticky Web.
+            //TODO:
             //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
             //  Pressure increases the PP consumption of an opponent's Imprison and Snatch even though those are self-targeting moves; in Snatch's case the additional PP is consumed even if Snatch fails or snatches a move from a Pokémon other than the one with Pressure.
-            if (battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target)
-                && target.getAbility().equals(PRESSURE) && this.getCurrentPP() > 0 && pressureApplies(
-                user,
-                target)) {
+            if (pressureApplies(user, target, battle)) {
                 this.decrementPP();
             }
+        }
 
-            if (this.category == Category.STATUS && user != target && target.hasVolatileStatus(MAGIC_COAT)) {
-                target = user;
-            }
+        if (range == Range.BOTH_SIDES || range == Range.OWN_SIDE || range == Range.OWN_PARTY
+            || range == Range.OTHER_SIDE) {
+            executeOnSide(user, battle);
+        } else {
+            for (Pokemon target : targets) {
+                //TODO: Implement redirecting moves
 
-            executeOnTarget(user, target, battle);
-            user.setLastMoveUsed(this);
-            //if(userMon.getCurrentHP() == 0) {
-            //  //TODO: Handle fainting and subsequent switch-in.
-            //}
+                //TODO: What if a random-target move targets a Pokemon that has fainted and hasn't been switched out yet?
+                //TODO: What if any move targets a Pokemon that's fainted? Does it just hit another available adjacent enemy?
 
-            //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
-            if (target.getCurrentHP() == 0) {
-                //Or should I have this call in Pokemon.takeDamage()?
-                target.afterFaint(user, battle);
-                user.afterKO(target, battle);
-                //TODO: Handle fainting and subsequent switch-in.
+                //I'm pretty sure the bouncing happens before the hit roll. Each bounced attack has a chance to miss
+                ////TODO: Is the accuracy calculated using the original user's accuracy, or the bouncer's?
+                final boolean magicBounced =
+                    this instanceof AffectedByMagicBounce && target.getAbility() == MAGIC_BOUNCE
+                        && !target.hasVolatileStatus(SEMI_INVULNERABLE) && !target.hasVolatileStatus(ABILITY_SUPPRESSED)
+                        && !target.hasVolatileStatus(ABILITY_IGNORED);
 
+                if (magicBounced) {
+                    MagicBounce.printMessage(target, this);
+                    if (range.isPromptForTargetChoice() || range == Range.RANDOM_OPPONENT
+                        || range == Range.RANDOM_ADJACENT_OPPONENT) {
+                        executeOnTarget(user, user, battle);
+                    } else {
+                        //Range of the bounced attack is determined by the bouncer, not the user.
+                        for (Pokemon mon : battle.getPokemonWithinRange(target, range)) {
+                            executeOnTarget(user, mon, battle);
+                        }
+                    }
+                } else {
+                    executeOnTarget(user, target, battle);
+                }
+                //if(userMon.getCurrentHP() == 0) {
+                //  //TODO: Handle fainting and subsequent switch-in.
+                //}
+
+                //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
+                if (target.getCurrentHP() == 0) {
+                    //Or should I have this call in Pokemon.takeDamage()?
+                    target.afterFaint(user, battle);
+                    user.afterKO(target, battle);
+                    //TODO: Handle fainting and subsequent switch-in.
+
+                }
             }
         }
+
+        user.setLastMoveUsed(this);
+    }
+
+    protected void executeOnSide(Pokemon user, Battle battle) {
+        final Trainer side;
+        if (range == Range.OTHER_SIDE) {
+
+            Pokemon magicBouncer = this instanceof AffectedByMagicBounce ? battle.getOpposingActivePokemon(user)
+                .stream()
+                .filter(t -> t.getAbility() == MAGIC_BOUNCE && !t.hasVolatileStatus(SEMI_INVULNERABLE)
+                    && !t.hasVolatileStatus(ABILITY_SUPPRESSED) && !t.hasVolatileStatus(ABILITY_IGNORED))
+                .findFirst()
+                .orElse(null) : null;
+
+            if (magicBouncer == null) {
+                side = battle.getOpposingTrainer(user);
+            } else {
+                side = battle.getCorrespondingTrainer(user);
+                MagicBounce.printMessage(magicBouncer, this);
+            }
+
+        } else if (range == Range.OWN_SIDE || range == Range.BOTH_SIDES || range == Range.OWN_PARTY) {
+            side = battle.getCorrespondingTrainer(user);
+        } else {
+            throw new IllegalArgumentException(
+                "Specified range is not whole field, one side of field, or one player's party");
+        }
+        trySecondaryEffect(user, side.getActivePokemon().get(0), battle);
     }
 
     protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
-        if (rollToHit(user, target, battle)) {
+        if (rollToHit(user, target, battle) && !isTargetProtected(user, target, battle)) {
+
             if (this.category == Category.STATUS) {
                 //TODO: This may change -- Will-O-Wisp shouldn't burn Flash Fire mons, Thunder Wave won't affect ground-types, and poison moves won't affect steels, but I think other status moves might ignore types.
                 if (target.beforeHit(user, battle, this) > 0 && getTypeMultiplier(user, target, battle) > 0) {
@@ -349,16 +410,29 @@ public abstract class Move {
                 }
             } else {
 
+                if ((this.getType() == Type.FIRE || this instanceof ThawingMove)
+                    && target.getStatus() == Status.FREEZE) {
+                    //TODO: Should this thaw a Pokemon through substitute?
+                    target.thaw();
+                }
+
                 int hitNum = 0;
                 final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK, user.getHeldItem() == LOADED_DICE);
                 while (hitNum < maxHits && !user.hasFainted() && !target.hasFainted()) {
                     final int previousTargetHP = target.getCurrentHP();
 
                     int damage = calculateDamage(user, target, battle);
-                    if (target.hasVolatileStatus(SUBSTITUTE)) { //TODO: Handle moves and abilities that ignore substitute.
+
+                    final boolean hitSub = checkForHitSub(user, target);
+                    if (hitSub) {
+                        //TODO: Handle moves and abilities that ignore substitute.
                         ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
-                    } else {
+                    } else if (damage > 0) {
                         target.takeDamage(damage);
+                        System.out.println(
+                            target.getDisplayName() + " took " + DECIMAL.format(100d * damage / target.getMaxHP())
+                                + "% (" + damage + ")");
+
                     }
 
                     if (!user.hasFainted()) {
@@ -366,7 +440,7 @@ public abstract class Move {
                     }
 
                     //TODO: Verify which effects should happen after the attack hits the sub and which shouldn't.
-                    if (!target.hasVolatileStatus(SUBSTITUTE)) {
+                    if (!hitSub) {
                         target.afterHit(user, battle, previousTargetHP, this);
                     }
 
@@ -389,17 +463,43 @@ public abstract class Move {
         }
     }
 
+    protected boolean isTargetProtected(Pokemon user, Pokemon target, Battle battle) {
+        if (this instanceof IgnoresProtect) {
+            target.removeVolatileStatus(PROTECTED);
+            return false;
+        }
+        return target.hasVolatileStatus(PROTECTED) && !(this instanceof EntryHazardSetter) && this.range != Range.ALL
+            && this.range != Range.BOTH_SIDES && battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(
+            target) && !(user.getAbility() == UNSEEN_FIST && !user.hasVolatileStatus(ABILITY_SUPPRESSED)
+            && this.isContact());
+    }
+
+    protected void checkForLifeOrbRecoil(Pokemon user) {
+        if (user.getHeldItem() == LIFE_ORB && user.getAbility() != MAGIC_GUARD && !(user.getAbility() == SHEER_FORCE
+            && this instanceof GetsSheerForceBoost)) {
+            user.takeDamage(user.getMaxHP() / 10);
+        }
+    }
+
+    //TODO: Remember to override this in Transform and Sky Drop -- Infiltrator still can't get through a substitute when using those moves.
+    protected boolean checkForHitSub(Pokemon user, Pokemon target) {
+        return target.hasVolatileStatus(SUBSTITUTE) && (user.getAbility() != INFILTRATOR || user.hasVolatileStatus(
+            ABILITY_SUPPRESSED));
+    }
+
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
         double movePower = calculateMovePower(user, target, battle);
         double userAttackMultipliers = user.getAttackMultipliersFromAbilityAndItem(target, battle, this);
+        double targetDefenseMultipliers = target.getDefenseMultipliersFromAbilityAndItem(user, battle, this);
 
         //TODO: Critical hits should ignore attack drops and defense buffs.
-        double attackingStat = getAttackingStat(user, target) * userAttackMultipliers;
-        double defendingStat = getDefendingStat(user, target, battle);
+        double attackingStat = getAttackingStat(user, target, battle) * userAttackMultipliers;
+        double defendingStat = getDefendingStat(user, target, battle) * targetDefenseMultipliers;
         //TODO: Deal with multi-hit moves and the weirdness that is Beat Up.
 
         double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attackingStat / defendingStat) * 0.02) + 2;
-        return applyMultipliers(user, target, battle, baseDamage);
+        double realDamage = applyMultipliers(user, target, battle, baseDamage);
+        return realDamage == 0 ? 0 : (int) Math.max(1, realDamage);
     }
 
     private int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
@@ -422,7 +522,11 @@ public abstract class Move {
         baseDamage = roundHalfDown(baseDamage * getRandomMultiplier());
         baseDamage = roundHalfDown(baseDamage * stabMultiplier);
         baseDamage = roundHalfDown(baseDamage * typeMultiplier);
+        baseDamage = roundHalfDown(baseDamage * getBurnMultiplier(user));
         baseDamage = roundHalfDown(baseDamage * getOtherMultiplier(user, target, battle, isCritical, typeMultiplier));
+        if (isCritical) {
+            System.out.println("A Critical Hit!!");
+        }
         return (int) baseDamage;
     }
 
@@ -487,7 +591,7 @@ public abstract class Move {
     }
 
     private double getRandomMultiplier() {
-        return (RANDOM.nextInt(16) + 85) / 100d;
+        return (DAMAGE_RANDOM.nextInt(16) + 85) / 100d;
     }
 
     private double getNumTargetsMultiplier() {
@@ -545,7 +649,7 @@ public abstract class Move {
                 stage += ((PumpedStatus) user.getVolatileStatus(PUMPED)).getLevels();
             }
 
-            final int rand = RANDOM.nextInt(24);
+            final int rand = CRIT_RANDOM.nextInt(24);
             if (stage <= 0) {
                 return rand < 1;
             } else if (stage == 1) {
@@ -559,7 +663,7 @@ public abstract class Move {
     }
 
     private double getCriticalMultiplier(boolean isCritical) {
-        return isCritical ? 1.5 : 1;
+        return isCritical ? REGULAR_CRIT_MULTIPLIER : 1;
     }
 
     protected double getBurnMultiplier(Pokemon user) {
@@ -588,12 +692,14 @@ public abstract class Move {
 
         if (!critical && user.getAbility() != INFILTRATOR) {
             Trainer opposingTrainer = battle.getOpposingTrainer(user);
-            if (this.category == Category.PHYSICAL && (opposingTrainer.getReflectTurns() > 0
-                || opposingTrainer.getAuroraVeilTurns() > 0)) {
-                base = roundHalfUp(base * 0.5);
-            } else if (this.category == Category.SPECIAL && (opposingTrainer.getLightScreenTurns() > 0
-                || opposingTrainer.getAuroraVeilTurns() > 0)) {
-                base = roundHalfUp(base * 0.5);
+            double screenMultiplier = battle.getActiveMonsPerSide() == 1 ? 0.5 : (2732 / divisor);
+
+            if (opposingTrainer.getAuroraVeilTurns() > 0) {
+                base = roundHalfUp(base * screenMultiplier);
+            } else if (this.category == Category.PHYSICAL && opposingTrainer.getReflectTurns() > 0) {
+                base = roundHalfUp(base * screenMultiplier);
+            } else if (this.category == Category.SPECIAL && opposingTrainer.getLightScreenTurns() > 0) {
+                base = roundHalfUp(base * screenMultiplier);
             }
         }
 
@@ -617,7 +723,7 @@ public abstract class Move {
             base = roundHalfUp(base * 0.5);
         }
 
-        //Friend guard would go here, in double/triple battles.
+        //TODO: Friend Guard would go here, in double/triple battles.
 
         if (typeMultiplier > NEUTRAL && target.getAbility() instanceof SuperEffectiveReducingAbility) {
             base = roundHalfUp(base * 0.75);
@@ -637,9 +743,12 @@ public abstract class Move {
         if (target.getHeldItem() instanceof TypeResistBerry) {
             TypeResistBerry berry = (TypeResistBerry) target.getHeldItem();
             if (berry.getType() == this.type && (this.type == NORMAL || typeMultiplier > NEUTRAL)) {
-                final boolean ateBerry = berry.tryEatingBerry(user, battle);
+                final boolean ateBerry = berry.tryEatingOwnBerry(target, battle);
                 if (ateBerry) {
-                    double multiplier = target.getAbility() == RIPEN ? 0.25 : 0.5;
+                    target.setHeldItem(NO_ITEM);
+                    target.setConsumedItem(berry);
+                    double multiplier =
+                        target.getAbility() == RIPEN ? TypeResistBerry.MULTIPLIER * 0.5 : TypeResistBerry.MULTIPLIER;
                     base = roundHalfUp(base * multiplier);
                 }
             }
@@ -664,11 +773,12 @@ public abstract class Move {
         }
     }
 
-    protected boolean pressureApplies(Pokemon userMon, Pokemon targetMon) {
-        return userMon != targetMon;
+    protected boolean pressureApplies(Pokemon user, Pokemon target, Battle battle) {
+        return battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target) && target.getAbility()
+            .equals(PRESSURE) && this.getCurrentPP() > 0;
     }
 
-    protected double getAttackingStat(Pokemon attacker, Pokemon defender) {
+    protected double getAttackingStat(Pokemon attacker, Pokemon defender, Battle battle) {
         //WHY does Thick Fat apply to the attack calculation instead of just halving the damage like Heatproof does? This makes no sense! Why, GameFreak? Why?
         final double applyThickFat = defender.getAbility() == THICK_FAT && (this.type == ICE || this.type == FIRE)
             && !defender.hasVolatileStatus(ABILITY_IGNORED) && !defender.hasVolatileStatus(ABILITY_SUPPRESSED)

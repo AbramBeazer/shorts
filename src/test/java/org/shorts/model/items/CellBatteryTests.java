@@ -6,7 +6,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.ThunderFang;
 import org.shorts.model.moves.ThunderWave;
@@ -34,7 +34,7 @@ class CellBatteryTests {
         holder.setHeldItem(CELL_BATTERY);
         holder.setStageAttack(0);
         opponent = getDummyPokemon();
-        battle = new DummySingleBattle();
+        battle = new DummyBattle();
         move = new ThunderFang();
     }
 

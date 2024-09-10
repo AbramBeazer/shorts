@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 
-public class Bulldoze extends Move {
+public class Bulldoze extends Move implements GetsSheerForceBoost {
 
     public Bulldoze() {
         super("Bulldoze", 60, 100, Type.GROUND, Category.PHYSICAL, Range.ALL_ADJACENT, 32, false, 100);
@@ -23,7 +23,7 @@ public class Bulldoze extends Move {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeSpeed(-1);
+        target.changeStat(-1, StatEnum.SPEED);
     }
 
     @Override

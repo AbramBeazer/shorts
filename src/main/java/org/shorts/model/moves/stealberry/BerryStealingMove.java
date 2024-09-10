@@ -1,9 +1,11 @@
-package org.shorts.model.moves;
+package org.shorts.model.moves.stealberry;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.abilities.Pickup;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.berries.Berry;
+import org.shorts.model.moves.Move;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
@@ -11,10 +13,19 @@ import org.shorts.model.types.Type;
 import static org.shorts.model.abilities.StickyHold.STICKY_HOLD;
 import static org.shorts.model.items.NoItem.NO_ITEM;
 
-public class BugBite extends Move {
+public abstract class BerryStealingMove extends Move {
 
-    public BugBite() {
-        super("Bug Bite", 60, 100, Type.BUG, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 32, true, 100);
+    protected BerryStealingMove(
+        String name,
+        double power,
+        double accuracy,
+        Type type,
+        Category category,
+        Range range,
+        int maxPP,
+        boolean contact,
+        int secondaryEffectChance) {
+        super(name, power, accuracy, type, category, range, maxPP, contact, secondaryEffectChance);
     }
 
     @Override
@@ -29,16 +40,22 @@ public class BugBite extends Move {
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         HeldItem originalItem = user.getHeldItem();
         HeldItem originalConsumedItem = user.getConsumedItem();
+        int originalIndex = Pickup.getConsumedItemsIndexForUser(user);
 
         Berry berry = (Berry) target.getHeldItem();
         target.setHeldItem(NO_ITEM);
         System.out.println(user.getNickname() + " stole " + target.getNickname() + "'s " + berry.getName() + "!");
 
-        berry.tryEatingBerry(user, battle);
+        berry.doEffect(user);
+    }
 
-        //This is necessary because eating a berry sets the user's item to NO_ITEM.
-        user.setHeldItem(originalItem);
-        user.setConsumedItem(originalConsumedItem);
-        Pickup.removeFromConsumedItems(user);
+    @Override
+    protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
+        return super.calculateDamage(user, target, battle);
+    }
+
+    @Override
+    protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
+        super.executeOnTarget(user, target, battle);
     }
 }

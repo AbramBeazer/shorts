@@ -37,7 +37,7 @@ public class Trainer {
     private int mistTurns = 0;
 
     public Trainer(String name, List<Pokemon> team) {
-        this(name, team, 1);
+        this(name, team, team.size());
     }
 
     public Trainer(String name, List<Pokemon> team, int activeMonsPerSide) {
@@ -171,8 +171,7 @@ public class Trainer {
 
             System.out.println(
                 (i + 1) + ")" + "\t" + teammate.getDisplayName() + "\t\tAbility: " + teammate.getAbility()
-                    + "\t\tItem: "
-                    + teammate.getHeldItem());
+                    + "\t\tItem: " + teammate.getHeldItem());
         }
         System.out.println("\nLEADS:");
 
@@ -186,8 +185,8 @@ public class Trainer {
             leadIndexes.add(choice - 1);
             final Pokemon mon = team.get(choice - 1);
             System.out.println(
-                (leadIndexes.size()) + ")" + "\t" + mon.getDisplayName() + "\tability: " + mon.getAbility()
-                    + "\titem: " + mon.getHeldItem());
+                (leadIndexes.size()) + ")" + "\t" + mon.getDisplayName() + "\tability: " + mon.getAbility() + "\titem: "
+                    + mon.getHeldItem());
         }
 
         team.sort(Comparator.comparingInt((Pokemon p) -> {
@@ -246,13 +245,20 @@ public class Trainer {
                 }
                 if (toxicSpikes > 0) {
                     if (pokemon.getTypes().contains(Type.POISON)) {
-                        toxicSpikes = 0;
+                        absorbToxicSpikes(pokemon);
                     } else if (!pokemon.getTypes().contains(Type.STEEL)) {
-                        pokemon.setStatus(toxicSpikes == 2 ? Status.TOXIC_POISON : Status.POISON);
+                        if (toxicSpikes == 2) {
+                            System.out.println(pokemon.getDisplayName() + " is badly poisoned by the Toxic Spikes!");
+                            pokemon.setStatus(Status.TOXIC_POISON);
+                        } else if (toxicSpikes == 1) {
+                            System.out.println(pokemon.getDisplayName() + " is poisoned by the Toxic Spikes!");
+                            pokemon.setStatus(Status.POISON);
+                        }
                     }
                 }
                 if (stickyWeb && pokemon.isDropPossible(StatEnum.SPEED)) {
-                    pokemon.changeSpeed(-1);
+                    System.out.println(pokemon.getDisplayName() + " is slowed by the Sticky Web!");
+                    pokemon.changeStat(-1, StatEnum.SPEED);
                 }
             }
         } else { //A Grounded Poison-type Pokémon with Heavy-Duty Boots should still absorb Toxic Spikes
@@ -271,21 +277,26 @@ public class Trainer {
         }
         int damage = (int) (multiplier * pokemon.getMaxHP());
         pokemon.takeDamage(damage);
+        System.out.println("Pointed stones dug into " + pokemon.getDisplayName() + ".");
         return pokemon.hasFainted();
     }
 
     private boolean faintedFromSpikes(Pokemon pokemon) {
-        if (spikes == 1) {
-            int damage = pokemon.getMaxHP() / 8;
-            pokemon.takeDamage(damage);
-        }
-        if (spikes == 2) {
-            int damage = pokemon.getMaxHP() / 6;
-            pokemon.takeDamage(damage);
-        }
-        if (spikes == 3) {
-            int damage = pokemon.getMaxHP() / 4;
-            pokemon.takeDamage(damage);
+        if (spikes > 0) {
+            System.out.println("Spikes dug into " + pokemon.getDisplayName() + ".");
+            switch (spikes) {
+                case 1:
+                    pokemon.takeDamage(pokemon.getMaxHP() / 8);
+                    break;
+                case 2:
+                    pokemon.takeDamage(pokemon.getMaxHP() / 6);
+                    break;
+                case 3:
+                    pokemon.takeDamage(pokemon.getMaxHP() / 4);
+                    break;
+                default:
+                    break;
+            }
         }
         return pokemon.hasFainted();
     }
@@ -306,7 +317,7 @@ public class Trainer {
 
     public void absorbToxicSpikes(Pokemon pokemon) {
         toxicSpikes = 0;
-        System.out.println(pokemon.getSpeciesName() + " absorbed the toxic spikes!");
+        System.out.println(pokemon.getDisplayName() + " absorbed the Toxic Spikes!");
     }
 
     public void removeEntryHazards() {
@@ -314,5 +325,68 @@ public class Trainer {
         this.spikes = 0;
         this.toxicSpikes = 0;
         this.stickyWeb = false;
+    }
+
+    public void decrementAllCounters() {
+        countDownSafeguard();
+        countDownReflect();
+        countDownLightScreen();
+        countDownAuroraVeil();
+        countDownLuckyChant();
+        countDownMist();
+    }
+
+    private void countDownSafeguard() {
+        if (safeguardTurns > 0) {
+            safeguardTurns--;
+            if (safeguardTurns == 0) {
+                System.out.println("Safeguard ended for " + getName() + "'s team.");
+            }
+        }
+    }
+
+    private void countDownReflect() {
+        if (reflectTurns > 0) {
+            reflectTurns--;
+            if (reflectTurns == 0) {
+                System.out.println("Reflect ended for " + getName() + "'s team.");
+            }
+        }
+    }
+
+    private void countDownLightScreen() {
+        if (lightScreenTurns > 0) {
+            lightScreenTurns--;
+            if (lightScreenTurns == 0) {
+                System.out.println("Light Screen ended for " + getName() + "'s team.");
+            }
+        }
+    }
+
+    private void countDownAuroraVeil() {
+        if (auroraVeilTurns > 0) {
+            auroraVeilTurns--;
+            if (auroraVeilTurns == 0) {
+                System.out.println("Aurora Veil ended for " + getName() + "'s team.");
+            }
+        }
+    }
+
+    private void countDownLuckyChant() {
+        if (luckyChantTurns > 0) {
+            luckyChantTurns--;
+            if (luckyChantTurns == 0) {
+                System.out.println("Lucky Chant ended for " + getName() + "'s team.");
+            }
+        }
+    }
+
+    private void countDownMist() {
+        if (mistTurns > 0) {
+            mistTurns--;
+            if (mistTurns == 0) {
+                System.out.println("Mist ended for " + getName() + "'s team.");
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class EnergyBall extends Move implements BallBombMove {
+public class EnergyBall extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public EnergyBall() {
         super("Energy Ball", 90, 100, Type.GRASS, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 10);
@@ -20,6 +20,6 @@ public class EnergyBall extends Move implements BallBombMove {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeSpecialDefense(-1);
+        target.changeStat(-1, StatEnum.SPDEF);
     }
 }

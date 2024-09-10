@@ -7,7 +7,7 @@ import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class ScreenRemovingMove extends Move {
+public abstract class ScreenRemovingMove extends Move {
 
     protected ScreenRemovingMove(
         String name,

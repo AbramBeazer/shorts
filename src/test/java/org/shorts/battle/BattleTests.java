@@ -49,7 +49,7 @@ class BattleTests {
     void testPrintFieldSingleBattle() {
         final Pokemon user = getDummyPokemon();
         final Pokemon target = getDummyPokemon();
-        final Battle battle = new DummySingleBattle(user, target);
+        final Battle battle = new DummyBattle(user, target);
 
         battle.printField(battle.getPlayerOne());
     }

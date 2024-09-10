@@ -1,6 +1,7 @@
 package org.shorts.model.moves;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
@@ -12,8 +13,8 @@ public class CloseCombat extends Move {
 
     @Override
     public void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        user.changeDefense(-1);
-        user.changeSpecialDefense(-1);
+        user.changeStat(-1, StatEnum.DEF);
+        user.changeStat(-1, StatEnum.SPDEF);
         user.afterDrop(target, battle);
     }
 

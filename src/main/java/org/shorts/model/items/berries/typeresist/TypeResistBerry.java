@@ -1,14 +1,16 @@
 package org.shorts.model.items.berries.typeresist;
 
 import org.shorts.model.items.berries.Berry;
+import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
 public class TypeResistBerry extends Berry {
 
     private final Type type;
+    public static final double MULTIPLIER = 0.5;
 
     public TypeResistBerry(String name, Type type) {
-        super(name);
+        super(name, 100);
         this.type = type;
     }
 
@@ -33,4 +35,9 @@ public class TypeResistBerry extends Berry {
     public static final TypeResistBerry BABIRI_BERRY = new TypeResistBerry("Babiri", Type.STEEL);
     public static final TypeResistBerry CHILAN_BERRY = new TypeResistBerry("Chilan", Type.NORMAL);
     public static final TypeResistBerry ROSELI_BERRY = new TypeResistBerry("Roseli", Type.FAIRY);
+
+    @Override
+    public void doEffect(Pokemon user) {
+
+    }
 }

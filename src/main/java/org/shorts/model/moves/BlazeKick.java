@@ -6,7 +6,7 @@ import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class BlazeKick extends Move implements HighCritChanceMove {
+public class BlazeKick extends Move implements HighCritChanceMove, GetsSheerForceBoost {
 
     public BlazeKick() {
         super("Blaze Kick", 85, 90, Type.FIRE, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, true, 10);
@@ -14,10 +14,6 @@ public class BlazeKick extends Move implements HighCritChanceMove {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.getStatus().getType().equals(StatusType.FREEZE)) {
-            System.out.println(target.getNickname() + " was thawed out!");
-            target.setStatus(Status.NONE);
-        }
         if (StatusType.BURN.isStatusPossible(target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }

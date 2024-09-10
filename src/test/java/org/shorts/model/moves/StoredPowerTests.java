@@ -3,7 +3,7 @@ package org.shorts.model.moves;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
-import org.shorts.battle.DummySingleBattle;
+import org.shorts.battle.DummyBattle;
 import org.shorts.model.pokemon.Pokemon;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,7 +13,7 @@ class StoredPowerTests {
 
     private Pokemon user;
     private Pokemon target;
-    private final Battle battle = new DummySingleBattle();
+    private final Battle battle = new DummyBattle();
     private StoredPower storedPower;
 
     @BeforeEach

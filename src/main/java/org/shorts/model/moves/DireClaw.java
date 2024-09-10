@@ -6,7 +6,7 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
-public class DireClaw extends Move {
+public class DireClaw extends Move implements GetsSheerForceBoost {
 
     private Status currentStatus;
 

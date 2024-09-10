@@ -32,7 +32,9 @@ public class TripleAxel extends Move {
 
                 hitNum++;
                 int damage = calculateDamage(user, target, battle);
-                if (target.hasVolatileStatus(SUBSTITUTE)) { //TODO: Handle moves and abilities that ignore substitute.
+
+                final boolean hitSub = checkForHitSub(user, target);
+                if (hitSub) {
                     ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
                 } else {
                     target.takeDamage(damage);
@@ -41,7 +43,7 @@ public class TripleAxel extends Move {
                     this.inflictRecoil(user, damage);
                 }
 
-                if (!target.hasVolatileStatus(SUBSTITUTE)) {
+                if (!hitSub) {
                     target.afterHit(user, battle, previousTargetHP, this);
                 }
                 if (target.hasVolatileStatus(SUBSTITUTE)

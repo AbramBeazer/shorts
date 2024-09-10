@@ -5,7 +5,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class Crunch extends Move implements BitingMove {
+public class Crunch extends Move implements BitingMove, GetsSheerForceBoost {
 
     public Crunch() {
         super("Crunch", 80, 100, Type.DARK, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 20);
@@ -20,6 +20,6 @@ public class Crunch extends Move implements BitingMove {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeDefense(-1);
+        target.changeStat(-1, StatEnum.DEF);
     }
 }

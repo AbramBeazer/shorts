@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
-public class Spore extends Move implements PowderSporeEffect {
+public class Spore extends Move implements PowderSporeEffect, AffectedByMagicBounce {
 
     public Spore() {
         super("Spore", 0, -1, Type.GRASS, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 24, false, 100);
@@ -16,7 +16,6 @@ public class Spore extends Move implements PowderSporeEffect {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        //TODO: Make sure that this method gets called after we know that the move hits. I know this move always hits, but in general, I want the hit check to happen first.
         //TODO: Maybe the check for substitute and semi-invulnerable should be in the parent method.
         if (target.hasVolatileStatus(SUBSTITUTE) || target.hasVolatileStatus(SEMI_INVULNERABLE)
             || !this.asPowderSporeEffectData().canActivate(target)) {

@@ -5,7 +5,7 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class AcidSpray extends Move implements BallBombMove {
+public class AcidSpray extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public AcidSpray() {
         super("Acid Spray", 40, 100, Type.POISON, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 32, false, 100);
@@ -20,6 +20,6 @@ public class AcidSpray extends Move implements BallBombMove {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeSpecialDefense(-2);
+        target.changeStat(-2, StatEnum.SPDEF);
     }
 }

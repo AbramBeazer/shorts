@@ -17,6 +17,7 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.types.Type;
 
+import static org.shorts.Main.DECIMAL;
 import static org.shorts.Main.RANDOM;
 import static org.shorts.model.abilities.MagicGuard.MAGIC_GUARD;
 import static org.shorts.model.abilities.PoisonHeal.POISON_HEAL;
@@ -129,38 +130,48 @@ public class Battle {
     public void countDownWeather() {
         if (weatherTurns > 0) {
             weatherTurns--;
-        }
-        if (weatherTurns == 0) {
-            System.out.println(weather.getDeactivationMessage());
-            setWeather(Weather.NONE, Weather.INFINITE_WEATHER_DURATION);
+            if (weatherTurns == 0) {
+                System.out.println(weather.getDeactivationMessage());
+                setWeather(Weather.NONE, Weather.INFINITE_WEATHER_DURATION);
+            }
         }
     }
 
     public void countDownTerrain() {
         if (terrainTurns > 0) {
             terrainTurns--;
+            if (terrainTurns == 0) {
+                //            System.out.println(terrain.getDeactivationMessage());
+                setTerrain(Terrain.NONE, Terrain.INFINITE_TERRAIN_DURATION);
+            }
         }
-        if (terrainTurns == 0) {
-            //            System.out.println(terrain.getDeactivationMessage());
-            setTerrain(Terrain.NONE, Terrain.INFINITE_TERRAIN_DURATION);
-        }
+
     }
 
     public void countDownFairyLock() {
         if (fairyLockTurns > 0) {
             fairyLockTurns--;
+            if (fairyLockTurns == 0) {
+                System.out.println("The effects of Fairy Lock ended.");
+            }
         }
     }
 
     public void countDownGravity() {
         if (gravityTurns > 0) {
             gravityTurns--;
+            if (gravityTurns == 0) {
+                System.out.println("The effects of Gravity ended.");
+            }
         }
     }
 
     public void countDownMagicRoom() {
         if (magicRoomTurns > 0) {
             magicRoomTurns--;
+            if (magicRoomTurns == 0) {
+                System.out.println("The effects of Magic Room ended.");
+            }
         }
     }
 
@@ -258,11 +269,18 @@ public class Battle {
         turns.addAll(pollPlayerInput(playerOne));
         turns.addAll(pollPlayerInput(playerTwo));
 
-        turns.sort(Comparator.comparing(turn -> turn.getMove().getPriority(turn.getUser(), this) + turn.getMove()
-            .getAbilityPriorityBonus(turn.getUser()), (a, b) -> Integer.compare(b, a)));
+        turns.sort((t1, t2) -> {
+            int priority = Integer.compare(t2.getPriority(this), t1.getPriority(this));
+            if (priority == 0) {
+                return Double.compare(t2.getUser().calculateSpeed(), t1.getUser().calculateSpeed());
+            } else {
+                return priority;
+            }
+        });
 
-        Move moveOne = null;
-        Move moveTwo = null;
+        for (Turn turn : turns) {
+            turn.takeTurn(this);
+        }
 
         //PRIORITY 6
 
@@ -273,11 +291,6 @@ public class Battle {
         //        if (choiceTwo <= 4) {
         //            moveTwo = playerTwo.getLead().getMoves()[choiceTwo - 1];
         //        }
-
-        int priorityOne = moveOne.getPriority(playerOne.getLead(), this);
-        int abilityPriorityBonusOne = moveOne.getAbilityPriorityBonus(playerOne.getLead());
-        int priorityTwo = moveTwo.getPriority(playerTwo.getLead(), this);
-        int abilityPriorityBonusTwo = moveTwo.getAbilityPriorityBonus(playerTwo.getLead());
 
         // TODO:
         //  Dark-type Pokémon are now immune to opposing Pokémon's moves that gain priority due to Prankster, including moves called by another move.
@@ -368,6 +381,9 @@ public class Battle {
 
             Set<Move> movesToUse;
             System.out.println("\n\nWhat will " + pokemon.getDisplayName() + " do?");
+            System.out.println(
+                DECIMAL.format(100d * pokemon.getCurrentHP() / pokemon.getMaxHP()) + " % HP (" + pokemon.getCurrentHP()
+                    + "/" + pokemon.getMaxHP() + ")");
             System.out.println("~~~MOVES~~~");
             if (invalidMoves.size() == pokemon.getMoves().length) {
                 System.out.println("1. Struggle");
@@ -390,7 +406,7 @@ public class Battle {
             printBench(trainer);
 
             int choice;
-            boolean choiceValid;
+            boolean choiceValid = true;
             //Choice is invalid if that Pokémon has fainted or if the move has no PP.
             do {
                 choice = Integer.parseInt(scanner.nextLine());
@@ -400,7 +416,7 @@ public class Battle {
                     choiceValid = false;
                 } else if (choice > 4 && (trainer.getTeam().get(choice - 4).hasFainted() || pokemon.isTrapped(this))) {
                     choiceValid = false;
-                } else {
+                } else if (choice < 4 + activeMonsPerSide) {
                     choiceValid = true;
 
                     final Move move = pokemon.getMoves()[choice - 1];
@@ -426,7 +442,6 @@ public class Battle {
     }
 
     public List<Pokemon> getPokemonWithinRange(Pokemon user, Range range) {
-        final int activeMonsPerSide = getActiveMonsPerSide();
         final Trainer player = getCorrespondingTrainer(user);
         final Trainer opponent = getOpposingTrainer(user);
         final int userIndex = player.getTeam().indexOf(user);
@@ -457,33 +472,40 @@ public class Battle {
                 return allies;
             case ALL_ADJACENT_OPPONENTS:
             case SINGLE_ADJACENT_OPPONENT:
-                for (int i = 0; i < activeMonsPerSide; i++) {
-                    if (Math.abs(i - userIndex) <= 1) {
-                        possibleTargets.add(opponent.getTeam().get(i));
-                    }
+                if (activeMonsPerSide < 3 || userIndex == 1) {
+                    return opponent.getActivePokemon();
+                } else if (userIndex == 0) {
+                    return opponent.getActivePokemon().subList(1, 3);
+                } else if (userIndex == 2) {
+                    return opponent.getActivePokemon().subList(0, 2);
                 }
-                return possibleTargets;
             case RANDOM_ADJACENT_OPPONENT:
-                for (int i = 0; i < activeMonsPerSide; i++) {
-                    if (Math.abs(i - userIndex) <= 1) {
-                        possibleTargets.add(opponent.getTeam().get(i));
-                    }
+                if (activeMonsPerSide < 3 || userIndex == 1) {
+                    possibleTargets.addAll(opponent.getActivePokemon());
+                } else if (userIndex == 0) {
+                    possibleTargets.addAll(opponent.getActivePokemon().subList(1, 3));
+                } else if (userIndex == 2) {
+                    possibleTargets.addAll(opponent.getActivePokemon().subList(0, 2));
                 }
                 return List.of(possibleTargets.get(RANDOM.nextInt(possibleTargets.size())));
             case ALL_ADJACENT:
             case SINGLE_ADJACENT_ANY:
                 for (int i = 0; i < activeMonsPerSide; i++) {
-                    if (Math.abs(i - userIndex) <= 1) {
-                        possibleTargets.add(opponent.getTeam().get(i));
-                        if (i != userIndex) {
-                            possibleTargets.add(player.getTeam().get(i));
-                        }
+                    if (Math.abs(i - userIndex) == 1) {
+                        possibleTargets.add(player.getActivePokemon().get(i));
                     }
+                }
+                if (activeMonsPerSide < 3 || userIndex == 1) {
+                    possibleTargets.addAll(opponent.getActivePokemon());
+                } else if (userIndex == 0) {
+                    possibleTargets.addAll(opponent.getActivePokemon().subList(1, 3));
+                } else if (userIndex == 2) {
+                    possibleTargets.addAll(opponent.getActivePokemon().subList(0, 2));
                 }
                 return possibleTargets;
             case SINGLE_ANY:
+                possibleTargets.addAll(opponent.getActivePokemon());
                 for (int i = 0; i < activeMonsPerSide; i++) {
-                    possibleTargets.add(opponent.getTeam().get(i));
                     if (i != userIndex) {
                         possibleTargets.add(player.getTeam().get(i));
                     }
@@ -491,7 +513,7 @@ public class Battle {
                 return possibleTargets;
             case SINGLE_ADJACENT_ALLY:
                 for (int i = 0; i < activeMonsPerSide; i++) {
-                    if (Math.abs(i - userIndex) <= 1 && i != userIndex) {
+                    if (Math.abs(i - userIndex) == 1) {
                         possibleTargets.add(player.getTeam().get(i));
                     }
                 }
@@ -519,16 +541,16 @@ public class Battle {
             } else {
                 final String selfOrAlly = pokemon == possibleTarget ? " (self) " : " (ally) ";
                 final int index = selfAndAllies.indexOf(possibleTarget);
-                System.out.println((index + 3) + ") " + possibleTarget.getDisplayName() + selfOrAlly);
+                System.out.println((index + activeMonsPerSide) + ") " + possibleTarget.getDisplayName() + selfOrAlly);
             }
         }
 
-        System.out.println("6) Back");
+        System.out.println(activeMonsPerSide * 2 + ") Back");
 
         int choice;
         do {
             choice = Integer.parseInt(scanner.nextLine());
-        } while (choice < 0 || choice >= 7);
+        } while (choice < 0 || choice > activeMonsPerSide * 2);
 
         return choice;
     }
@@ -536,7 +558,7 @@ public class Battle {
     public void promptSwitchCausedByUserMove(Trainer trainer) {
         if (trainer.hasAvailableSwitch()) {
             printBench(trainer);
-            int choice = 0;
+            int choice;
             //Choice is invalid if that Pokémon has fainted or is already in battle
             do {
                 choice = Integer.parseInt(scanner.nextLine());
@@ -556,7 +578,7 @@ public class Battle {
 
             String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().getType().name();
             System.out.println(
-                (i + 4) + ")" + "\t(" + teammate.getPokedexEntry().getSpeciesName() + "\t(" + teammate.getCurrentHP()
+                (i + 4) + ")" + "\t" + teammate.getPokedexEntry().getSpeciesName() + "\t(" + teammate.getCurrentHP()
                     + "/" + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
         }
     }
@@ -573,14 +595,14 @@ public class Battle {
             .append("\n\n")
             .append("|");
 
-        for (int i = 0; i < getActiveMonsPerSide(); i++) {
+        for (int i = getActiveMonsPerSide() - 1; i >= 0; i--) {
             final Pokemon mon = opponent.getTeam().get(i);
             field.append("\t\t").append(mon.getDisplayName());
             field.append("\t\t").append("|");
         }
 
         field.append("\n").append("|");
-        for (int i = 0; i < getActiveMonsPerSide(); i++) {
+        for (int i = getActiveMonsPerSide() - 1; i >= 0; i--) {
             final Pokemon mon = opponent.getTeam().get(i);
             field.append("\t\t").append("HP: ").append(mon.getCurrentHP()).append("/").append(mon.getMaxHP());
             field.append("\t\t\t\t").append("|");
@@ -620,9 +642,9 @@ public class Battle {
         for (Pokemon mon : activeMons) {
             if (!isWeatherSuppressed() && mon.getHeldItem() != SAFETY_GOGGLES && (
                 (weather == Weather.SAND && !mon.getTypes().contains(Type.ROCK) && !mon.getTypes().contains(Type.GROUND)
-                    && !mon.getTypes().contains(Type.STEEL) && !(mon.getAbility() instanceof SandImmuneAbility))
-                    || (weather == Weather.HAIL && !mon.getTypes().contains(Type.ICE)
-                    && !(mon.getAbility() instanceof HailImmuneAbility)))) {
+                    && !mon.getTypes().contains(Type.STEEL) && !(mon.getAbility() instanceof SandImmuneAbility)) || (
+                    weather == Weather.HAIL && !mon.getTypes().contains(Type.ICE)
+                        && !(mon.getAbility() instanceof HailImmuneAbility)))) {
 
                 mon.takeDamage(mon.getMaxHP() / 16);
             }
@@ -659,5 +681,19 @@ public class Battle {
             }
             mon.decrementVolatileStatusTurns();
         }
+
+        //TODO: Check if weather stopping happens before or after taking hail/sand damage
+        decrementAllCounters();
+
+    }
+
+    public void decrementAllCounters() {
+        this.countDownWeather();
+        this.countDownTerrain();
+        this.countDownFairyLock();
+        this.countDownGravity();
+        this.countDownMagicRoom();
+        playerOne.decrementAllCounters();
+        playerTwo.decrementAllCounters();
     }
 }

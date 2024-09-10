@@ -17,6 +17,7 @@ import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
 import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.abilities.Intimidate.INTIMIDATE;
 import static org.shorts.model.abilities.PinchTypeBoostAbility.OVERGROW;
@@ -34,6 +35,9 @@ class FreezeDryTests {
     @BeforeEach
     void setup() {
         Main.RANDOM = ZERO_RANDOM;
+        Main.HIT_RANDOM = ZERO_RANDOM;
+        Main.DAMAGE_RANDOM = ZERO_RANDOM;
+        Main.CRIT_RANDOM = MAX_RANDOM;
         battle = new Battle(new Trainer("Red", List.of(squirtle)), new Trainer("Green", List.of(bulbasaur)), 1);
     }
 

@@ -6,7 +6,7 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
 
-public class GastroAcid extends Move {
+public class GastroAcid extends Move implements AffectedByMagicBounce {
 
     public GastroAcid() {
         super("Gastro Acid", 0, 100, Type.POISON, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 16, false, 100);

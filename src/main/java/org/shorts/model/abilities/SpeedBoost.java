@@ -1,6 +1,7 @@
 package org.shorts.model.abilities;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
 
 public class SpeedBoost extends Ability {
@@ -13,6 +14,6 @@ public class SpeedBoost extends Ability {
 
     @Override
     public void afterTurn(Pokemon self, Battle battle) {
-        self.changeSpeed(1);
+        self.changeStat(1, StatEnum.SPEED);
     }
 }

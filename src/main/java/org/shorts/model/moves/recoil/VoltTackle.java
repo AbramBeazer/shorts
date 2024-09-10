@@ -1,13 +1,14 @@
 package org.shorts.model.moves.recoil;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.GetsSheerForceBoost;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class VoltTackle extends RecoilAttack {
+public class VoltTackle extends RecoilAttack implements GetsSheerForceBoost {
 
     public VoltTackle() {
         super(

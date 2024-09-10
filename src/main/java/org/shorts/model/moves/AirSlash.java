@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.FLINCH;
 
-public class AirSlash extends Move implements SlicingMove {
+public class AirSlash extends Move implements SlicingMove, GetsSheerForceBoost {
 
     public AirSlash() {
         super("Air Slash", 75, 95, Type.FLYING, Category.SPECIAL, Range.SINGLE_ANY, 24, false, 30);

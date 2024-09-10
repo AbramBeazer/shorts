@@ -1,8 +1,8 @@
 package org.shorts.model.abilities;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.GetsSheerForceBoost;
 import org.shorts.model.moves.Move;
-import org.shorts.model.moves.trapping.ThousandWaves;
 import org.shorts.model.pokemon.Pokemon;
 
 public class SheerForce extends Ability {
@@ -17,10 +17,10 @@ public class SheerForce extends Ability {
 
     @Override
     public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        if (move instanceof ThousandWaves || move.getSecondaryEffectChance() <= 0) {
-            return 1;
-        } else {
+        if (move instanceof GetsSheerForceBoost) {
             return 5325d / 4096d;
+        } else {
+            return 1;
         }
     }
 }

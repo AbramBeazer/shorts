@@ -45,6 +45,10 @@ public abstract class Ability {
         return 1;
     }
 
+    public double getDefenseMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+        return 1;
+    }
+
     public void beforeAttack(Pokemon self, Pokemon opponent) {
     }
 
@@ -103,6 +107,10 @@ public abstract class Ability {
 
     public void onTerrainChange(Pokemon self, Battle battle) {
 
+    }
+
+    public double getWeightMultiplier() {
+        return 1;
     }
 
     public double onCalculateAttack(Pokemon self) {

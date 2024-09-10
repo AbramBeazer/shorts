@@ -1,6 +1,7 @@
 package org.shorts.model.moves.trapping;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.StatEnum;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
@@ -25,11 +26,11 @@ public class NoRetreat extends Move {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        user.changeAttack(1);
-        user.changeDefense(1);
-        user.changeSpecialAttack(1);
-        user.changeSpecialDefense(1);
-        user.changeSpeed(1);
+        user.changeStat(1, StatEnum.ATK);
+        user.changeStat(1, StatEnum.DEF);
+        user.changeStat(1, StatEnum.SPATK);
+        user.changeStat(1, StatEnum.SPDEF);
+        user.changeStat(1, StatEnum.SPEED);
         if (!user.hasVolatileStatus(CANT_ESCAPE)) {
             user.addVolatileStatus(new VolatileStatus(NO_RETREAT, -1));
         }

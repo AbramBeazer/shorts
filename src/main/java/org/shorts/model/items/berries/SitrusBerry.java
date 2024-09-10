@@ -1,6 +1,5 @@
 package org.shorts.model.items.berries;
 
-import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatusType;
 
@@ -9,15 +8,14 @@ import static org.shorts.model.abilities.Ripen.RIPEN;
 public class SitrusBerry extends Berry {
 
     private SitrusBerry() {
-        super("Sitrus");
+        super("Sitrus", .5);
     }
 
+    public static final SitrusBerry SITRUS_BERRY = new SitrusBerry();
+
     @Override
-    public boolean tryEatingBerry(Pokemon user, Battle battle) {
-        if (!user.hasVolatileStatus(VolatileStatusType.HEAL_BLOCKED)) {
-            return super.tryEatingBerry(user, battle);
-        }
-        return false;
+    public boolean canDoEffect(Pokemon user) {
+        return user.getCurrentHP() < user.getMaxHP() && !user.hasVolatileStatus(VolatileStatusType.HEAL_BLOCKED);
     }
 
     @Override

@@ -6,7 +6,7 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-public class SyrupBomb extends Move implements BallBombMove {
+public class SyrupBomb extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public SyrupBomb() {
         super("Syrup Bomb", 60, 85, Type.GRASS, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 100);

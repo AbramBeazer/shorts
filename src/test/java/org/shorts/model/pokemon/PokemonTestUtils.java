@@ -14,7 +14,7 @@ public final class PokemonTestUtils {
         PokedexEntry.PokedexEntryBuilder builder = PokedexEntry.PokedexEntryBuilder.createNewInstance();
         builder.setSpeciesName("TEST MON");
         builder.setHeight(1);
-        builder.setWeight(1);
+        builder.setWeight(100);
         builder.setBaseHP(300);
         builder.setBaseAtk(100);
         builder.setBaseDef(100);
@@ -38,6 +38,10 @@ public final class PokemonTestUtils {
         mon.setSpecialDefense(stats);
         mon.setSpeed(stats);
         return mon;
+    }
+
+    public static Pokemon getDummyPokemonFromEntry(PokedexEntry entry) {
+        return new Pokemon(entry, 100, new int[] { 0, 0, 0, 0, 0, 0 }, Nature.SERIOUS, DUMMY_ABILITY);
     }
 
     public static Pokemon getDummyPokemon() {
