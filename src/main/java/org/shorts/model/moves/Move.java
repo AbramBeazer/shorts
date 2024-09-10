@@ -422,34 +422,35 @@ public abstract class Move {
                     final int previousTargetHP = target.getCurrentHP();
 
                     int damage = calculateDamage(user, target, battle);
-                    if (damage > 0) {
+                    if (damage <= 0) {
+                        break;
+                    }
 
-                        final boolean hitSub = checkForHitSub(user, target);
-                        if (hitSub) {
-                            //TODO: Handle moves and abilities that ignore substitute.
-                            ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
-                        } else {
-                            target.takeDamage(damage);
-                            System.out.println(
-                                target.getDisplayName() + " took " + DECIMAL.format(100d * damage / target.getMaxHP())
-                                    + "% (" + damage + ")");
+                    final boolean hitSub = checkForHitSub(user, target);
+                    if (hitSub) {
+                        //TODO: Handle moves and abilities that ignore substitute.
+                        ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
+                    } else {
+                        target.takeDamage(damage);
+                        System.out.println(
+                            target.getDisplayName() + " took " + DECIMAL.format(100d * damage / target.getMaxHP())
+                                + "% (" + damage + ")");
 
-                        }
+                    }
 
-                        if (!user.hasFainted()) {
-                            this.inflictRecoil(user, damage);
-                        }
+                    if (!user.hasFainted()) {
+                        this.inflictRecoil(user, damage);
+                    }
 
-                        //TODO: Verify which effects should happen after the attack hits the sub and which shouldn't.
-                        if (!hitSub) {
-                            target.afterHit(user, battle, previousTargetHP, this);
-                        }
+                    //TODO: Verify which effects should happen after the attack hits the sub and which shouldn't.
+                    if (!hitSub) {
+                        target.afterHit(user, battle, previousTargetHP, this);
+                    }
 
-                        this.trySecondaryEffect(user, target, battle);
-                        if (target.hasVolatileStatus(SUBSTITUTE)
-                            && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
-                            target.removeVolatileStatus(SUBSTITUTE);
-                        }
+                    this.trySecondaryEffect(user, target, battle);
+                    if (target.hasVolatileStatus(SUBSTITUTE)
+                        && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
+                        target.removeVolatileStatus(SUBSTITUTE);
                     }
 
                     hitNum++;
