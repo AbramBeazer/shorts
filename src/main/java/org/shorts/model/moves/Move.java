@@ -111,7 +111,7 @@ public abstract class Move {
     private final String name;
     private final double power;
     private final double accuracy;
-    private final Type type;
+    private Type type;
     private final Category category;
     private final Range range;
     private int currentPP;
@@ -159,6 +159,10 @@ public abstract class Move {
 
     public Type getType() {
         return this.type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public Category getCategory() {

@@ -33,7 +33,7 @@ public abstract class Berry extends HeldItem {
         return this.threshold;
     }
 
-    protected boolean isWithinThreshold(Pokemon user) {
+    public boolean isWithinThreshold(Pokemon user) {
         return !user.hasFainted() && user.getCurrentHP() < user.getMaxHP() * computeThreshold(user);
     }
 
