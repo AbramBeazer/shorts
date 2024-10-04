@@ -23,6 +23,6 @@ public class Teatime extends Move {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        ((Berry) target.getHeldItem()).eatOwnBerry(user);
+        ((Berry) target.getHeldItem()).eatOwnBerry(target);
     }
 }
