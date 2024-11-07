@@ -35,7 +35,7 @@ public final class Pokedex {
     private static final int SEX = 15;
 
     public static void create() throws Exception {
-        if (DEX.size() == 0) {
+        if (DEX.isEmpty()) {
             try (InputStream stream = Pokedex.class.getClassLoader().getResourceAsStream("pokedex.csv")) {
                 Objects.requireNonNull(stream, "Input stream cannot be null!");
                 final String text = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
