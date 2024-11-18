@@ -6,7 +6,7 @@ public class Status extends AbstractStatus {
 
     private final StatusType type;
 
-    private Status(StatusType type, int turnsRemaining) {
+    Status(StatusType type, int turnsRemaining) {
         super(turnsRemaining);
         this.type = type;
     }
@@ -26,12 +26,15 @@ public class Status extends AbstractStatus {
         return new Status(StatusType.SLEEP, turnsRemaining);
     }
 
+    public static Status createToxic() {
+        return new Status(StatusType.TOXIC_POISON, -1);
+    }
+
     public static final Status NONE = new Status(StatusType.NONE, -1);
     public static final Status PARALYZE = new Status(StatusType.PARALYZE, -1);
     public static final Status BURN = new Status(StatusType.BURN, -1);
     public static final Status FREEZE = new Status(StatusType.FREEZE, -1);
     public static final Status POISON = new Status(StatusType.POISON, -1);
-    public static final Status TOXIC_POISON = new Status(StatusType.TOXIC_POISON, -1);
 
     @Override
     public boolean equals(Object obj) {

@@ -18,9 +18,5 @@ public abstract class AbstractStatus {
         }
     }
 
-    public void incrementTurns() {
-        turnsRemaining++;
-    }
-
     public abstract AbstractStatusType getType();
 }

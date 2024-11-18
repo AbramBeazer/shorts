@@ -22,6 +22,7 @@ import org.shorts.model.moves.Move;
 import org.shorts.model.status.AutotomizedStatus;
 import org.shorts.model.status.HelpingHandStatus;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
@@ -728,6 +729,9 @@ public class Pokemon {
 
     public void afterEntry(Battle battle) {
         setTurnsInBattle(0);
+        if (this.getStatus().getType() == StatusType.TOXIC_POISON) {
+            this.setStatus(Status.createToxic());
+        }
         //TODO: If Neutralizing Gas is active, give this mon the AbilitySuppressed volatile status.
         if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
             || this.getAbility() instanceof UnsuppressableAbility) {

@@ -15,6 +15,7 @@ import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
 import static org.shorts.Main.DECIMAL;
@@ -663,28 +664,23 @@ public class Battle {
                 } else if (mon.getAbility() != POISON_HEAL) {
                     if (mon.getStatus() == Status.POISON) {
                         mon.takeDamage(mon.getMaxHP() / 8);
-                    } else if (mon.getStatus() == Status.TOXIC_POISON) {
-                        mon.takeDamage((mon.getMaxHP() / 16) * mon.getStatus().getTurnsRemaining());
+                    } else if (mon.getStatus().getType() == StatusType.TOXIC_POISON) {
+                        mon.takeDamage((mon.getMaxHP() / 16) * Math.abs(mon.getStatus().getTurnsRemaining()));
                     }
                 } else if (mon.getAbility() == POISON_HEAL && mon.getStatus() == Status.POISON
-                    || mon.getStatus() == Status.TOXIC_POISON && !mon.hasVolatileStatus(HEAL_BLOCKED)) {
+                    || mon.getStatus().getType() == StatusType.TOXIC_POISON && !mon.hasVolatileStatus(HEAL_BLOCKED)) {
                     mon.heal(mon.getMaxHP() / 8);
                 }
             }
         }
 
         for (Pokemon mon : activeMons) {
-            if (mon.getStatus() == Status.TOXIC_POISON) {
-                mon.getStatus().incrementTurns();
-            } else {
-                mon.getStatus().decrementTurns();
-            }
+            mon.getStatus().decrementTurns();
             mon.decrementVolatileStatusTurns();
         }
 
         //TODO: Check if weather stopping happens before or after taking hail/sand damage
         decrementAllCounters();
-
     }
 
     public void decrementAllCounters() {

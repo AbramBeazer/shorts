@@ -13,6 +13,14 @@ public class Toxic extends Move {
     }
 
     @Override
+    protected boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
+        if (user.getTypes().contains(Type.POISON)) {
+            return true;
+        }
+        return super.rollToHit(user, target, battle);
+    }
+
+    @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         if (StatusType.TOXIC_POISON.isStatusPossible(target, battle)) {
             super.trySecondaryEffect(user, target, battle);
@@ -21,6 +29,6 @@ public class Toxic extends Move {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.setStatus(Status.TOXIC_POISON);
+        target.setStatus(Status.createToxic());
     }
 }
