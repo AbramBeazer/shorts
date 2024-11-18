@@ -3,6 +3,7 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
 public class Facade extends Move {
@@ -21,7 +22,7 @@ public class Facade extends Move {
     @Override
     protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
         if (user.getStatus() == Status.BURN || user.getStatus() == Status.PARALYZE || user.getStatus() == Status.POISON
-            || user.getStatus() == Status.TOXIC_POISON) {
+            || user.getStatus().getType() == StatusType.TOXIC_POISON) {
             return MULTIPLIER * super.getPowerMultipliers(user, target, battle);
         }
         return super.getPowerMultipliers(user, target, battle);

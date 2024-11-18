@@ -28,7 +28,7 @@ public class TripleArrows extends Move implements HighCritChanceMove, GetsSheerF
                 target.changeStat(-1, StatEnum.DEF);
             }
             if (RANDOM.nextInt(100) < FLINCH_CHANCE * (user.getAbility().equals(SERENE_GRACE) ? 2 : 1)
-                && FLINCH.isStatusPossible(target, battle)) {
+                && FLINCH.isStatusPossible(user, target, battle)) {
                 target.addVolatileStatus(new VolatileStatus(FLINCH, 1));
             }
         }

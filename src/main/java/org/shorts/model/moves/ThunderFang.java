@@ -20,12 +20,12 @@ public class ThunderFang extends Move implements BitingMove, GetsSheerForceBoost
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         calculatingParalyze = true;
-        if (PARALYZE.isStatusPossible(target, battle)) {
+        if (PARALYZE.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
 
         calculatingParalyze = false;
-        if (FLINCH.isStatusPossible(target, battle)) {
+        if (FLINCH.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

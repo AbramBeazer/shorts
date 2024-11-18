@@ -15,8 +15,8 @@ public class ToxicOrb extends HeldItem {
 
     @Override
     public void afterTurn(Pokemon user, Battle battle) {
-        if (StatusType.TOXIC_POISON.isStatusPossible(user, battle)) {
-            user.setStatus(Status.TOXIC_POISON);
+        if (StatusType.TOXIC_POISON.isStatusPossible(user, user, battle)) {
+            user.setStatus(Status.createToxic());
         }
     }
 }

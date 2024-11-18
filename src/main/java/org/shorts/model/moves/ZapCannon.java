@@ -15,7 +15,7 @@ public class ZapCannon extends Move implements BallBombMove, GetsSheerForceBoost
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (PARALYZE.isStatusPossible(target, battle)) {
+        if (PARALYZE.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

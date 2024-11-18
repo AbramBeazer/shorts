@@ -119,17 +119,16 @@ public class Fling extends Move {
             if (item instanceof Berry) {
                 ((Berry) item).tryEatingOtherBerry(target);
                 //TODO: Does this become the consumed item for the both the user and target?
-            } else if (item == FLAME_ORB && StatusType.BURN.isStatusPossible(target, battle)) {
+            } else if (item == FLAME_ORB && StatusType.BURN.isStatusPossible(user, target, battle)) {
                 target.setStatus(Status.BURN);
-            } else if (item == LIGHT_BALL && StatusType.PARALYZE.isStatusPossible(target, battle)) {
+            } else if (item == LIGHT_BALL && StatusType.PARALYZE.isStatusPossible(user, target, battle)) {
                 target.setStatus(Status.PARALYZE);
-            } else if (item == TOXIC_ORB && StatusType.TOXIC_POISON.isStatusPossible(target, battle)) {
-                target.setStatus(Status.TOXIC_POISON);
-            } else if (item == POISON_BARB && StatusType.POISON.isStatusPossible(target, battle)) {
+            } else if (item == TOXIC_ORB && StatusType.TOXIC_POISON.isStatusPossible(user, target, battle)) {
+                target.setStatus(Status.createToxic());
+            } else if (item == POISON_BARB && StatusType.POISON.isStatusPossible(user, target, battle)) {
                 target.setStatus(Status.POISON);
-            } else if ((item == RAZOR_FANG || item == KINGS_ROCK) && VolatileStatusType.FLINCH.isStatusPossible(
-                target,
-                battle)) {
+            } else if ((item == RAZOR_FANG || item == KINGS_ROCK) && VolatileStatusType.FLINCH.isStatusPossible(user,
+                target, battle)) {
                 target.addVolatileStatus(new VolatileStatus(VolatileStatusType.FLINCH, 1));
             } else if (item == MENTAL_HERB) {
                 item.onGainItem(target, battle);

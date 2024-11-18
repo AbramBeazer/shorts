@@ -29,7 +29,7 @@ public abstract class BindingMove extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (VolatileStatusType.BOUND.isStatusPossible(target, battle)) {
+        if (VolatileStatusType.BOUND.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

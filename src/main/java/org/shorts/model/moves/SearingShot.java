@@ -15,7 +15,7 @@ public class SearingShot extends Move implements BallBombMove, GetsSheerForceBoo
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (BURN.isStatusPossible(target, battle)) {
+        if (BURN.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

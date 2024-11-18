@@ -48,7 +48,7 @@ import static org.shorts.model.items.berries.SitrusBerry.SITRUS_BERRY;
 import static org.shorts.model.status.Status.BURN;
 import static org.shorts.model.status.Status.NONE;
 import static org.shorts.model.status.Status.PARALYZE;
-import static org.shorts.model.status.Status.TOXIC_POISON;
+import static org.shorts.model.status.StatusType.*;
 
 class FlingTests {
 
@@ -321,7 +321,7 @@ class FlingTests {
         fling.executeOnTarget(user, target, battle);
 
         assertThat(target.getCurrentHP()).isLessThan(target.getMaxHP());
-        assertThat(target.getStatus()).isEqualTo(TOXIC_POISON);
+        assertThat(target.getStatus().getType()).isEqualTo(TOXIC_POISON);
         assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(TOXIC_ORB);

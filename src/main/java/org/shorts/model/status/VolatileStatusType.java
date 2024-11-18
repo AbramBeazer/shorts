@@ -78,7 +78,7 @@ public enum VolatileStatusType implements AbstractStatusType {
     SYRUP_BOMBED;
 
     @Override
-    public boolean isStatusPossible(Pokemon target, Battle battle) {
+    public boolean isStatusPossible(Pokemon user, Pokemon target, Battle battle) {
         //TODO: Should the volatile status be applied if the target already has it?
         if (!(target.getAbility() instanceof StatusImmuneAbility
             && ((StatusImmuneAbility) target.getAbility()).getImmunities().contains(this))

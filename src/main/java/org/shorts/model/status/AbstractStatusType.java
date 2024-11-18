@@ -5,5 +5,5 @@ import org.shorts.model.pokemon.Pokemon;
 
 public interface AbstractStatusType {
 
-    boolean isStatusPossible(Pokemon target, Battle battle);
+    boolean isStatusPossible(Pokemon user, Pokemon target, Battle battle);
 }

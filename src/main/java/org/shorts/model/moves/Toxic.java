@@ -22,7 +22,7 @@ public class Toxic extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (StatusType.TOXIC_POISON.isStatusPossible(target, battle)) {
+        if (StatusType.TOXIC_POISON.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

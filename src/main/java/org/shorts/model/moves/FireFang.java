@@ -20,12 +20,12 @@ public class FireFang extends Move implements BitingMove, GetsSheerForceBoost {
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         calculatingBurn = true;
-        if (BURN.isStatusPossible(target, battle)) {
+        if (BURN.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
 
         calculatingBurn = false;
-        if (FLINCH.isStatusPossible(target, battle)) {
+        if (FLINCH.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

@@ -26,7 +26,7 @@ public class VoltTackle extends RecoilAttack implements GetsSheerForceBoost {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (StatusType.PARALYZE.isStatusPossible(target, battle)) {
+        if (StatusType.PARALYZE.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

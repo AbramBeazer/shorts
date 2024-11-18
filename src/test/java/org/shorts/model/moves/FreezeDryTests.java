@@ -69,7 +69,7 @@ class FreezeDryTests {
         Pokemon attacker = squirtle;
         Pokemon defender = bulbasaur;
         assertThat(defender.getStatus()).isNotEqualTo(Status.FREEZE);
-        assertThat(StatusType.FREEZE.isStatusPossible(defender, battle)).isTrue();
+        assertThat(StatusType.FREEZE.isStatusPossible(attacker, defender, battle)).isTrue();
         new FreezeDry().trySecondaryEffect(attacker, defender, battle);
         assertThat(defender.getStatus()).isEqualTo(Status.FREEZE);
     }

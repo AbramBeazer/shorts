@@ -17,7 +17,7 @@ public class JawLock extends TrappingMove implements BitingMove {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (CANT_ESCAPE.isStatusPossible(user, battle) && CANT_ESCAPE.isStatusPossible(target, battle)) {
+        if (CANT_ESCAPE.isStatusPossible(user, user, battle) && CANT_ESCAPE.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

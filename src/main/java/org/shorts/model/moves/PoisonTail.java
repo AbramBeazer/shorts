@@ -14,7 +14,7 @@ public class PoisonTail extends Move implements HighCritChanceMove, GetsSheerFor
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (StatusType.POISON.isStatusPossible(target, battle)) {
+        if (StatusType.POISON.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

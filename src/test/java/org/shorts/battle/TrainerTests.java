@@ -9,6 +9,7 @@ import org.shorts.model.items.HeavyDutyBoots;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.Squirtle;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -77,7 +78,7 @@ class TrainerTests {
     void testToxicSpikesTwoLayers() {
         trainer.setToxicSpikes(2);
         trainer.applyEntryHazards(pokemon);
-        assertThat(pokemon.getStatus()).isEqualTo(Status.TOXIC_POISON);
+        assertThat(pokemon.getStatus().getType()).isEqualTo(StatusType.TOXIC_POISON);
     }
 
     @Test
@@ -96,7 +97,7 @@ class TrainerTests {
         trainer.applyEntryHazards(pokemon);
         assertThat(pokemon.getStageSpeed()).isEqualTo(-1);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() * 3 / 8));
-        assertThat(pokemon.getStatus()).isEqualTo(Status.TOXIC_POISON);
+        assertThat(pokemon.getStatus().getType()).isEqualTo(StatusType.TOXIC_POISON);
     }
 
     @Test

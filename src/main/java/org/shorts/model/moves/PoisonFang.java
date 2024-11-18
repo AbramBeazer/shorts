@@ -15,13 +15,13 @@ public class PoisonFang extends Move implements BitingMove, GetsSheerForceBoost 
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (TOXIC_POISON.isStatusPossible(target, battle)) {
+        if (TOXIC_POISON.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.setStatus(Status.TOXIC_POISON);
+        target.setStatus(Status.createToxic());
     }
 }

@@ -19,7 +19,7 @@ public class NoRetreat extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (NO_RETREAT.isStatusPossible(user, battle)) {
+        if (NO_RETREAT.isStatusPossible(user, user, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

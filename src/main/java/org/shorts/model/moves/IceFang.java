@@ -20,12 +20,12 @@ public class IceFang extends Move implements BitingMove, GetsSheerForceBoost {
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         calculatingFreeze = true;
-        if (FREEZE.isStatusPossible(target, battle)) {
+        if (FREEZE.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
 
         calculatingFreeze = false;
-        if (FLINCH.isStatusPossible(target, battle)) {
+        if (FLINCH.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

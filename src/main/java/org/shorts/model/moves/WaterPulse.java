@@ -15,7 +15,7 @@ public class WaterPulse extends Move implements PulseEffect, GetsSheerForceBoost
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (CONFUSED.isStatusPossible(target, battle)) {
+        if (CONFUSED.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

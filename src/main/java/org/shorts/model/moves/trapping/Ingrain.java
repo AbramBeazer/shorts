@@ -16,7 +16,7 @@ public class Ingrain extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (VolatileStatusType.ROOTED.isStatusPossible(user, battle)) {
+        if (VolatileStatusType.ROOTED.isStatusPossible(user, user, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

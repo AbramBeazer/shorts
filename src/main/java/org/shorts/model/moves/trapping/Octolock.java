@@ -17,7 +17,7 @@ public class Octolock extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (OCTOLOCKED.isStatusPossible(target, battle)) {
+        if (OCTOLOCKED.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

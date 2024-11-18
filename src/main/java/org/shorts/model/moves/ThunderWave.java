@@ -16,7 +16,7 @@ public class ThunderWave extends Move implements AffectedByMagicBounce {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (PARALYZE.isStatusPossible(target, battle) && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
+        if (PARALYZE.isStatusPossible(user, target, battle) && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

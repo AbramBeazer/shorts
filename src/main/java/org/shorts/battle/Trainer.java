@@ -249,7 +249,7 @@ public class Trainer {
                     } else if (!pokemon.getTypes().contains(Type.STEEL)) {
                         if (toxicSpikes == 2) {
                             System.out.println(pokemon.getDisplayName() + " is badly poisoned by the Toxic Spikes!");
-                            pokemon.setStatus(Status.TOXIC_POISON);
+                            pokemon.setStatus(Status.createToxic());
                         } else if (toxicSpikes == 1) {
                             System.out.println(pokemon.getDisplayName() + " is poisoned by the Toxic Spikes!");
                             pokemon.setStatus(Status.POISON);

@@ -17,7 +17,7 @@ public class MatchaGotcha extends ThawingMove implements HealingMove, GetsSheerF
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (StatusType.BURN.isStatusPossible(target, battle)) {
+        if (StatusType.BURN.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

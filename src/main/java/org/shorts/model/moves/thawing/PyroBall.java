@@ -18,7 +18,7 @@ public class PyroBall extends ThawingMove implements BallBombMove, GetsSheerForc
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (BURN.isStatusPossible(target, battle)) {
+        if (BURN.isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

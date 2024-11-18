@@ -31,7 +31,7 @@ class FacadeTests {
         assertThat(facade.getPowerMultipliers(user, target, battle)).isEqualTo(1);
         user.setStatus(Status.createSleep());
         assertThat(facade.getPowerMultipliers(user, target, battle)).isEqualTo(1);
-        user.setStatus(Status.TOXIC_POISON);
+        user.setStatus(Status.createToxic());
         assertThat(facade.getPowerMultipliers(user, target, battle)).isEqualTo(Facade.MULTIPLIER);
         user.setStatus(Status.POISON);
         assertThat(facade.getPowerMultipliers(user, target, battle)).isEqualTo(Facade.MULTIPLIER);

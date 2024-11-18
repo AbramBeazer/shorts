@@ -25,7 +25,7 @@ public class DireClaw extends Move implements GetsSheerForceBoost {
             currentStatus = Status.createSleep();
         }
 
-        if (currentStatus != null && currentStatus.getType().isStatusPossible(target, battle)) {
+        if (currentStatus != null && currentStatus.getType().isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

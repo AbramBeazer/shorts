@@ -20,6 +20,7 @@ import org.shorts.model.moves.trapping.binding.Whirlpool;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.PumpedStatus;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.status.SubstituteStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.TooManyTypesException;
@@ -633,7 +634,7 @@ public abstract class Move {
             || battle.getCorrespondingTrainer(target).getLuckyChantTurns() > 0) {
             return false;
         } else if (user.getAbility() == MERCILESS && (target.getStatus() == Status.POISON
-            || target.getStatus() == Status.TOXIC_POISON)) {
+            || target.getStatus().getType() == StatusType.TOXIC_POISON)) {
             return true;
         } else if (user.hasVolatileStatus(LASER_FOCUS) || this instanceof AlwaysCritMove) {
             return true;

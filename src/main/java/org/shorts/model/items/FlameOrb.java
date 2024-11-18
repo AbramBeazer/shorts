@@ -15,7 +15,7 @@ public class FlameOrb extends HeldItem {
 
     @Override
     public void afterTurn(Pokemon user, Battle battle) {
-        if (StatusType.BURN.isStatusPossible(user, battle)) {
+        if (StatusType.BURN.isStatusPossible(user, user, battle)) {
             user.setStatus(Status.BURN);
         }
     }
