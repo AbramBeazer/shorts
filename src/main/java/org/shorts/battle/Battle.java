@@ -13,6 +13,7 @@ import org.shorts.model.abilities.SandImmuneAbility;
 import org.shorts.model.moves.MeFirst;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
+import org.shorts.model.moves.floating.FloatingMove;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
@@ -45,6 +46,8 @@ public class Battle {
     protected int fairyLockTurns;
     protected int gravityTurns;
     protected int magicRoomTurns;
+
+    private List<FloatingMove> floatingMoves;
 
     public Battle(Trainer player1, Trainer player2, int activeMonsPerSide) {
         this.playerOne = player1;
@@ -126,6 +129,10 @@ public class Battle {
         } else {
             this.magicRoomTurns = magicRoomTurns;
         }
+    }
+
+    public List<FloatingMove> getFloatingMoves() {
+        return floatingMoves;
     }
 
     public void countDownWeather() {
@@ -638,6 +645,10 @@ public class Battle {
     }
 
     private void endOfTurn() {
+        handleFloatingMoves();
+
+        switchInReplacements();
+
         List<Pokemon> activeMons = getAllActivePokemon();
         activeMons.sort(Comparator.comparing(Pokemon::calculateSpeed, Double::compareTo));
         for (Pokemon mon : activeMons) {
@@ -681,6 +692,41 @@ public class Battle {
 
         //TODO: Check if weather stopping happens before or after taking hail/sand damage
         decrementAllCounters();
+    }
+
+    private void handleFloatingMoves() {
+        for (FloatingMove move : floatingMoves) {
+
+            move.decrementTurnsRemaining();
+
+            if (move.getTurnsRemaining() == 0) {
+
+                int targetIndex = move.getTargetIndex() < activeMonsPerSide
+                    ? move.getTargetIndex()
+                    : move.getTargetIndex() - activeMonsPerSide;
+                List<Pokemon> potentialTargets = move.getTargetIndex() < activeMonsPerSide
+                    ? getOpposingTrainer(move.getUser()).getActivePokemon()
+                    : getCorrespondingTrainer(move.getUser()).getActivePokemon();
+
+                Pokemon target = potentialTargets.get(targetIndex);
+
+                int i = 0;
+                while (i < activeMonsPerSide && (target == null || target.hasFainted())) {
+                    if (move.getTargetIndex() != i) {
+                        target = potentialTargets.get(i);
+                    }
+                    i++;
+                }
+
+                if (target != null && !target.hasFainted()) {
+                    move.executeOnTarget(move.getUser(), target, this);
+                }
+            }
+        }
+    }
+
+    private void switchInReplacements(){
+        //TOOD: If a Pokémon has fainted, leaving a slot empty, have them enter and apply entry hazards.
     }
 
     public void decrementAllCounters() {

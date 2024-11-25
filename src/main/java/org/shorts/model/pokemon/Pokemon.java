@@ -492,6 +492,7 @@ public class Pokemon {
     }
 
     public void takeDamage(int damage) {
+        //TODO: Move Sturdy/Endure here
         if (damage <= 0) {
             throw new IllegalArgumentException("Damage must be positive");
         }

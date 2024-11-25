@@ -405,7 +405,7 @@ public abstract class Move {
         trySecondaryEffect(user, side.getActivePokemon().get(0), battle);
     }
 
-    protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
+    public void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         if (rollToHit(user, target, battle) && !isTargetProtected(user, target, battle)) {
 
             if (this.category == Category.STATUS) {
@@ -775,7 +775,7 @@ public abstract class Move {
         return base / divisor;
     }
 
-    private void decrementPP() {
+    protected void decrementPP() {
         if (this.currentPP > 0) {
             this.currentPP--;
         }
