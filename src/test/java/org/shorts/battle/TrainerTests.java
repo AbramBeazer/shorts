@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.model.items.HeavyDutyBoots;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.pokemon.PokemonTestUtils;
 import org.shorts.model.pokemon.Squirtle;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
@@ -23,7 +24,7 @@ class TrainerTests {
 
     @BeforeEach
     void setup() {
-        pokemon = new Squirtle(TORRENT);
+        pokemon = PokemonTestUtils.getDummyPokemon();
         pokemon.setMaxHP(100);
         pokemon.setCurrentHP(100);
         pokemon.setAbility(TORRENT);
