@@ -3,6 +3,7 @@ package org.shorts.model.moves.floating;
 import java.util.List;
 
 import org.shorts.battle.Battle;
+import org.shorts.battle.Trainer;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
@@ -10,9 +11,7 @@ import org.shorts.model.types.Type;
 
 public class FloatingMove extends Move {
 
-    private Pokemon user;
-    private int targetIndex;
-    private int turnsRemaining;
+    private int duration;
 
     protected FloatingMove(
         String name,
@@ -23,28 +22,14 @@ public class FloatingMove extends Move {
         Range range,
         int maxPP,
         boolean contact,
-        int secondaryEffectChance, Pokemon user, int targetIndex, int turnsRemaining) {
+        int secondaryEffectChance, int duration) {
 
         super(name, power, accuracy, type, category, range, maxPP, contact, secondaryEffectChance);
-        this.user = user;
-        this.targetIndex = targetIndex;
-        this.turnsRemaining = turnsRemaining;
+        this.duration = duration;
     }
 
-    public Pokemon getUser() {
-        return user;
-    }
-
-    public int getTargetIndex() {
-        return targetIndex;
-    }
-
-    public int getTurnsRemaining() {
-        return turnsRemaining;
-    }
-
-    public void decrementTurnsRemaining() {
-        turnsRemaining--;
+    public int getDuration() {
+        return duration;
     }
 
     @Override
@@ -60,5 +45,19 @@ public class FloatingMove extends Move {
             }
         }
 
+        Pokemon target = targets.get(0);
+        Trainer targetTrainer = battle.getCorrespondingTrainer(target);
+        int targetIndex;
+        if (battle.getCorrespondingTrainer(user) == targetTrainer) {
+            targetIndex = targetTrainer.getActivePokemon().indexOf(target) + battle.getActiveMonsPerSide();
+        } else {
+            targetIndex = targetTrainer.getActivePokemon().indexOf(target);
+        }
+
+        battle.getFloatingEffects().add(new FloatingEffect(this, user, targetIndex, duration));
+    }
+
+    public void triggerFloatingEffect(Pokemon user, Pokemon target, Battle battle) {
+        this.executeOnTarget(user, target, battle);
     }
 }

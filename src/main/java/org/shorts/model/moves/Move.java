@@ -405,7 +405,7 @@ public abstract class Move {
         trySecondaryEffect(user, side.getActivePokemon().get(0), battle);
     }
 
-    public void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
+    protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         if (rollToHit(user, target, battle) && !isTargetProtected(user, target, battle)) {
 
             if (this.category == Category.STATUS) {

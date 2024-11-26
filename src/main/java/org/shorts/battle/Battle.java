@@ -13,7 +13,7 @@ import org.shorts.model.abilities.SandImmuneAbility;
 import org.shorts.model.moves.MeFirst;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
-import org.shorts.model.moves.floating.FloatingMove;
+import org.shorts.model.moves.floating.FloatingEffect;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
@@ -32,7 +32,7 @@ import static org.shorts.model.status.VolatileStatusType.HEAL_BLOCKED;
 
 public class Battle {
 
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     private final int activeMonsPerSide;
 
     protected final Trainer playerOne;
@@ -47,7 +47,7 @@ public class Battle {
     protected int gravityTurns;
     protected int magicRoomTurns;
 
-    private List<FloatingMove> floatingMoves;
+    private List<FloatingEffect> floatingEffects;
 
     public Battle(Trainer player1, Trainer player2, int activeMonsPerSide) {
         this.playerOne = player1;
@@ -131,8 +131,8 @@ public class Battle {
         }
     }
 
-    public List<FloatingMove> getFloatingMoves() {
-        return floatingMoves;
+    public List<FloatingEffect> getFloatingEffects() {
+        return floatingEffects;
     }
 
     public void countDownWeather() {
@@ -645,7 +645,7 @@ public class Battle {
     }
 
     private void endOfTurn() {
-        handleFloatingMoves();
+        handleFloatingEffects();
 
         switchInReplacements();
 
@@ -694,38 +694,38 @@ public class Battle {
         decrementAllCounters();
     }
 
-    private void handleFloatingMoves() {
-        for (FloatingMove move : floatingMoves) {
+    private void handleFloatingEffects() {
+        for (FloatingEffect effect : floatingEffects) {
 
-            move.decrementTurnsRemaining();
+            effect.decrementTurnsRemaining();
 
-            if (move.getTurnsRemaining() == 0) {
+            if (effect.getTurnsRemaining() == 0) {
 
-                int targetIndex = move.getTargetIndex() < activeMonsPerSide
-                    ? move.getTargetIndex()
-                    : move.getTargetIndex() - activeMonsPerSide;
-                List<Pokemon> potentialTargets = move.getTargetIndex() < activeMonsPerSide
-                    ? getOpposingTrainer(move.getUser()).getActivePokemon()
-                    : getCorrespondingTrainer(move.getUser()).getActivePokemon();
+                int targetIndex = effect.getTargetIndex() < activeMonsPerSide
+                    ? effect.getTargetIndex()
+                    : effect.getTargetIndex() - activeMonsPerSide;
+                List<Pokemon> potentialTargets = effect.getTargetIndex() < activeMonsPerSide
+                    ? getOpposingTrainer(effect.getUser()).getActivePokemon()
+                    : getCorrespondingTrainer(effect.getUser()).getActivePokemon();
 
                 Pokemon target = potentialTargets.get(targetIndex);
 
                 int i = 0;
                 while (i < activeMonsPerSide && (target == null || target.hasFainted())) {
-                    if (move.getTargetIndex() != i) {
+                    if (effect.getTargetIndex() != i) {
                         target = potentialTargets.get(i);
                     }
                     i++;
                 }
 
                 if (target != null && !target.hasFainted()) {
-                    move.executeOnTarget(move.getUser(), target, this);
+                    effect.getMove().triggerFloatingEffect(effect.getUser(), target, this);
                 }
             }
         }
     }
 
-    private void switchInReplacements(){
+    private void switchInReplacements() {
         //TOOD: If a Pokémon has fainted, leaving a slot empty, have them enter and apply entry hazards.
     }
 

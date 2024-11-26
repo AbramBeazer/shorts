@@ -17,7 +17,6 @@ public class DoomDesire extends FloatingMove {
             8,
             false,
             0,
-            user,
-            targetIndex, 3);
+            3);
     }
 }

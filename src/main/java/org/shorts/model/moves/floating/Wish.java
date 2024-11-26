@@ -21,8 +21,6 @@ public class Wish extends FloatingMove {
             16,
             false,
             100,
-            user,
-            targetIndex,
             2);
     }
 
