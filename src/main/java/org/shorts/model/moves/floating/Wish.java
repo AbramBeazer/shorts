@@ -10,7 +10,7 @@ import org.shorts.model.types.Type;
 
 public class Wish extends FloatingMove {
 
-    public Wish(Pokemon user, int targetIndex) {
+    public Wish() {
         super(
             "Wish",
             0,

@@ -1,12 +1,12 @@
 package org.shorts.model.moves.floating;
 
 import org.shorts.model.moves.Range;
-import org.shorts.model.pokemon.Pokemon;
+
 import org.shorts.model.types.Type;
 
 public class DoomDesire extends FloatingMove {
 
-    public DoomDesire(Pokemon user, int targetIndex) {
+    public DoomDesire() {
         super(
             "Doom Desire",
             140,

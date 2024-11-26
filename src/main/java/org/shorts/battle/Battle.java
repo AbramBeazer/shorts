@@ -132,6 +132,9 @@ public class Battle {
     }
 
     public List<FloatingEffect> getFloatingEffects() {
+        if (floatingEffects == null) {
+            floatingEffects = new ArrayList<>();
+        }
         return floatingEffects;
     }
 
@@ -644,7 +647,7 @@ public class Battle {
         return allActiveMons;
     }
 
-    private void endOfTurn() {
+    void endOfTurn() {
         handleFloatingEffects();
 
         switchInReplacements();
@@ -695,7 +698,7 @@ public class Battle {
     }
 
     private void handleFloatingEffects() {
-        for (FloatingEffect effect : floatingEffects) {
+        for (FloatingEffect effect : getFloatingEffects()) {
 
             effect.decrementTurnsRemaining();
 

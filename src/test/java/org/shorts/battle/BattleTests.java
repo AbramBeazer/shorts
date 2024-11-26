@@ -14,6 +14,7 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.Scizor;
 import org.shorts.model.pokemon.Squirtle;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.abilities.AttackDoublingAbility.PURE_POWER;
 import static org.shorts.model.abilities.ContactStatusAbility.STATIC_ABILITY;
 import static org.shorts.model.abilities.Intimidate.INTIMIDATE;
@@ -54,4 +55,15 @@ class BattleTests {
         battle.printField(battle.getPlayerOne());
     }
 
+
+    @Test
+    void testFloatingEffects() {
+        final Pokemon user = getDummyPokemon();
+        final Pokemon target = getDummyPokemon();
+        final Battle battle = new DummyBattle(user, target);
+
+        battle.endOfTurn();
+
+        assertThat(false).isTrue();
+    }
 }
