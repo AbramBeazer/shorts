@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 public class EnergyBall extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public EnergyBall() {
-        super("Energy Ball", 90, 100, Type.GRASS, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 10);
+        super("Energy Ball", 90, 100, Type.GRASS, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 10);
     }
 
     @Override

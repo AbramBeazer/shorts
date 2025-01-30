@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class SuperFang extends Move {
 
     public SuperFang() {
-        super("Super Fang", -1, 90, Type.NORMAL, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, true, 0);
+        super("Super Fang", -1, 90, Type.NORMAL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 0);
     }
 
     @Override

@@ -7,6 +7,6 @@ import org.shorts.model.types.Type;
 public class SpiritShackle extends TrappingMove implements GetsSheerForceBoost {
 
     public SpiritShackle() {
-        super("Spirit Shackle", 80, 100, Type.GHOST, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, false, 100);
+        super("Spirit Shackle", 80, 100, Type.GHOST, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 100);
     }
 }

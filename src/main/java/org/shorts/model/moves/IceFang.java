@@ -14,7 +14,7 @@ public class IceFang extends Move implements BitingMove, GetsSheerForceBoost {
     private boolean calculatingFreeze;
 
     public IceFang() {
-        super("Ice Fang", 65, 95, Type.ICE, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 10);
+        super("Ice Fang", 65, 95, Type.ICE, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 10);
     }
 
     @Override

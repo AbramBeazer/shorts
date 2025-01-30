@@ -17,7 +17,7 @@ public class TripleArrows extends Move implements HighCritChanceMove, GetsSheerF
     private static final int FLINCH_CHANCE = 30;
 
     public TripleArrows() {
-        super("Triple Arrows", 90, 100, Type.FIGHTING, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, false, 50);
+        super("Triple Arrows", 90, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 50);
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class Thunderclap extends Move {
 
     public Thunderclap() {
-        super("Thunderclap", 70, 100, Type.ELECTRIC, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 8, false, 0);
+        super("Thunderclap", 70, 100, Type.ELECTRIC, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, false, 0);
     }
 
     @Override

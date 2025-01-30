@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 public class AcidSpray extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public AcidSpray() {
-        super("Acid Spray", 40, 100, Type.POISON, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 32, false, 100);
+        super("Acid Spray", 40, 100, Type.POISON, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, false, 100);
     }
 
     @Override

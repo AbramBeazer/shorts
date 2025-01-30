@@ -14,7 +14,7 @@ import org.shorts.model.types.Type;
 public class Defog extends Move implements AffectedByMagicBounce {
 
     public Defog() {
-        super("Defog", 0, -1, Type.FLYING, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 24, false, 100);
+        super("Defog", 0, -1, Type.FLYING, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, false, 100);
     }
 
     @Override

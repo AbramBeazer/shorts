@@ -5,7 +5,7 @@ import org.shorts.model.types.Type;
 public class LeafBlade extends Move implements SlicingMove, HighCritChanceMove {
 
     public LeafBlade() {
-        super("Leaf Blade", 90, 100, Type.GRASS, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 0);
+        super("Leaf Blade", 90, 100, Type.GRASS, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 0);
     }
 }
 

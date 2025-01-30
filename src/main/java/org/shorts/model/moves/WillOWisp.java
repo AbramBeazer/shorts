@@ -10,7 +10,7 @@ import static org.shorts.model.status.StatusType.BURN;
 public class WillOWisp extends Move implements AffectedByMagicBounce {
 
     public WillOWisp() {
-        super("Will-O-Wisp", 0, 85, Type.FIRE, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 24, false, 100);
+        super("Will-O-Wisp", 0, 85, Type.FIRE, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, false, 100);
     }
 
     @Override

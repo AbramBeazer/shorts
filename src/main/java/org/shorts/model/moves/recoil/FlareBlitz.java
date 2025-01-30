@@ -19,7 +19,7 @@ public class FlareBlitz extends RecoilAttack implements GetsSheerForceBoost {
             100,
             Type.FIRE,
             Category.PHYSICAL,
-            Range.SINGLE_ADJACENT_ANY,
+            Range.NORMAL_SINGLE_ADJACENT_ANY,
             24,
             true,
             10,

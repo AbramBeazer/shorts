@@ -31,7 +31,7 @@ import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 public class Covet extends Move {
 
     public Covet() {
-        super("Covet", 60, 100, Type.NORMAL, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 40, true, 100);
+        super("Covet", 60, 100, Type.NORMAL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 40, true, 100);
     }
 
     @Override

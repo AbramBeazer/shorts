@@ -7,6 +7,6 @@ import org.shorts.model.types.Type;
 public class MeanLook extends TrappingMove implements AffectedByMagicBounce {
 
     public MeanLook() {
-        super("Mean Look", 0, -1, Type.NORMAL, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 8, false, 100);
+        super("Mean Look", 0, -1, Type.NORMAL, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, false, 100);
     }
 }

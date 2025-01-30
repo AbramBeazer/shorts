@@ -7,6 +7,6 @@ import org.shorts.model.types.Type;
 public class SurgingStrikes extends FixedMultiHitMove implements AlwaysCritMove {
 
     public SurgingStrikes() {
-        super("Surging Strikes", 25, 100, Type.WATER, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 8, true, 0, 2);
+        super("Surging Strikes", 25, 100, Type.WATER, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, true, 0, 2);
     }
 }

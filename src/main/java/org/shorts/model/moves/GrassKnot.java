@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class GrassKnot extends Move {
 
     public GrassKnot() {
-        super("Grass Knot", 0, 100, Type.GRASS, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 32, true, 0);
+        super("Grass Knot", 0, 100, Type.GRASS, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, true, 0);
     }
 
     @Override

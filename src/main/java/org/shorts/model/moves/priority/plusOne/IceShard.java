@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class IceShard extends Move {
 
     public IceShard() {
-        super("Ice Shard", 40, 100, Type.ICE, Move.Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 48, false, 0);
+        super("Ice Shard", 40, 100, Type.ICE, Move.Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 48, false, 0);
     }
 
     @Override

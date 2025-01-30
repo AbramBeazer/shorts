@@ -11,7 +11,7 @@ import org.shorts.model.types.Type;
 public class SacredFire extends ThawingMove implements GetsSheerForceBoost {
 
     public SacredFire() {
-        super("Sacred Fire", 100, 95, Type.FIRE, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 8, false, 50);
+        super("Sacred Fire", 100, 95, Type.FIRE, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, false, 50);
     }
 
     @Override

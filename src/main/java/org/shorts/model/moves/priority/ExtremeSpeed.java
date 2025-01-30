@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class ExtremeSpeed extends Move {
 
     public ExtremeSpeed() {
-        super("Extreme Speed", 80, 100, Type.NORMAL, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 8, true, 0);
+        super("Extreme Speed", 80, 100, Type.NORMAL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, true, 0);
     }
 
     @Override

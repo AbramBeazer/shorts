@@ -12,7 +12,7 @@ import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 public class Roar extends SwitchTargetMove implements AffectedByMagicBounce {
 
     public Roar() {
-        super("Roar", 0, -1, Type.NORMAL, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 32, false, 100);
+        super("Roar", 0, -1, Type.NORMAL, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, false, 100);
     }
 
     @Override

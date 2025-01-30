@@ -11,7 +11,7 @@ import static org.shorts.model.status.VolatileStatusType.MINIMIZED;
 public class BodySlam extends Move implements HitsMinimize, GetsSheerForceBoost {
 
     public BodySlam() {
-        super("Body Slam", 85, 100, Type.NORMAL, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 30);
+        super("Body Slam", 85, 100, Type.NORMAL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 30);
     }
 
     @Override

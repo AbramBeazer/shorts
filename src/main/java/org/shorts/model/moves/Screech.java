@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 public class Screech extends Move implements AffectedByMagicBounce, SoundEffect {
 
     public Screech() {
-        super("Screech", 0, 85, Type.NORMAL, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 64, false, 100);
+        super("Screech", 0, 85, Type.NORMAL, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 64, false, 100);
     }
 
     @Override

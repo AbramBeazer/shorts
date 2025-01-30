@@ -9,7 +9,7 @@ import static org.shorts.model.abilities.MagicGuard.MAGIC_GUARD;
 public class Chloroblast extends RecoilAttack {
 
     public Chloroblast() {
-        super("Chlorolast", 150, 95, Type.GRASS, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 8, false, 0, 0.5);
+        super("Chlorolast", 150, 95, Type.GRASS, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, false, 0, 0.5);
     }
 
     @Override

@@ -12,7 +12,7 @@ import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 public class Whirlwind extends SwitchTargetMove implements AffectedByMagicBounce {
 
     public Whirlwind() {
-        super("Whirlwind", 0, -1, Type.NORMAL, Move.Category.STATUS, Range.SINGLE_ADJACENT_ANY, 32, false, 100);
+        super("Whirlwind", 0, -1, Type.NORMAL, Move.Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, false, 100);
     }
 
     @Override

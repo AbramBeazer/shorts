@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 public class WaterShuriken extends MultiHitMove {
 
     public WaterShuriken() {
-        super("Water Shuriken", 15, 100, Type.WATER, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 32, false, 0, 2, 5);
+        super("Water Shuriken", 15, 100, Type.WATER, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, false, 0, 2, 5);
     }
 
     @Override
