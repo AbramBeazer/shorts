@@ -12,7 +12,7 @@ public class DoubleEdge extends RecoilAttack {
             100,
             Type.NORMAL,
             Category.PHYSICAL,
-            Range.SINGLE_ADJACENT_ANY,
+            Range.NORMAL_SINGLE_ADJACENT_ANY,
             24,
             true,
             0,

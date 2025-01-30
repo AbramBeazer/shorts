@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class HeavySlam extends Move implements HitsMinimize {
 
     public HeavySlam() {
-        super("Heavy Slam", 0, 100, Type.STEEL, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, true, 0);
+        super("Heavy Slam", 0, 100, Type.STEEL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 0);
     }
 
     @Override

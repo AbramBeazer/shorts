@@ -3,6 +3,7 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 public class Growl extends Move implements AffectedByMagicBounce, SoundEffect {
@@ -13,7 +14,8 @@ public class Growl extends Move implements AffectedByMagicBounce, SoundEffect {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.isDropPossible(StatEnum.ATK) && !SoundEffect.super.soundproofApplies(target)) {
+        if (target.isDropPossible(StatEnum.ATK) && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)
+            && !SoundEffect.super.soundproofApplies(target)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

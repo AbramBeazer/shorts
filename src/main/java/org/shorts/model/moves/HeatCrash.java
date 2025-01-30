@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class HeatCrash extends Move implements HitsMinimize {
 
     public HeatCrash() {
-        super("Heat Crash", 0, 100, Type.FIRE, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, true, 0);
+        super("Heat Crash", 0, 100, Type.FIRE, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 0);
     }
 
     @Override

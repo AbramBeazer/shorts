@@ -11,7 +11,7 @@ public class Facade extends Move {
     static final double MULTIPLIER = 2;
 
     public Facade() {
-        super("Facade", 70, 100, Type.NORMAL, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 32, true, 0);
+        super("Facade", 70, 100, Type.NORMAL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, true, 0);
     }
 
     @Override

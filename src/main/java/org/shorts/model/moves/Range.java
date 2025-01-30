@@ -1,7 +1,7 @@
 package org.shorts.model.moves;
 
 public enum Range {
-    SINGLE_ADJACENT_ANY(true),
+    NORMAL_SINGLE_ADJACENT_ANY(true),
     SINGLE_ANY(true),
     SINGLE_ADJACENT_OPPONENT(true),
     SINGLE_ADJACENT_ALLY(true),

@@ -12,7 +12,7 @@ import static org.shorts.model.status.VolatileStatusType.CANT_ESCAPE;
 public class JawLock extends TrappingMove implements BitingMove {
 
     public JawLock() {
-        super("Jaw Lock", 80, 100, Type.DARK, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, true, 100);
+        super("Jaw Lock", 80, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 100);
     }
 
     @Override

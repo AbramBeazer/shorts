@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class StoneAxe extends Move implements SlicingMove, GetsSheerForceBoost {
 
     public StoneAxe() {
-        super("Stone Axe", 65, 90, Type.ROCK, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 100);
+        super("Stone Axe", 65, 90, Type.ROCK, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 100);
     }
 
     @Override

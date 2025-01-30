@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class NightShade extends Move {
 
     public NightShade() {
-        super("Night Shade", 0, 100, Type.GHOST, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 24, false, 0);
+        super("Night Shade", 0, 100, Type.GHOST, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, false, 0);
     }
 
     @Override

@@ -10,7 +10,7 @@ import static org.shorts.model.status.StatusType.TOXIC_POISON;
 public class PoisonFang extends Move implements BitingMove, GetsSheerForceBoost {
 
     public PoisonFang() {
-        super("Poison Fang", 50, 100, Type.POISON, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 50);
+        super("Poison Fang", 50, 100, Type.POISON, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 50);
     }
 
     @Override

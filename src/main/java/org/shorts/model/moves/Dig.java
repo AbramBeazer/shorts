@@ -8,7 +8,7 @@ public class Dig extends Move implements MultiTurnMove {
 
     //TODO: Verify that contact is correct
     public Dig() {
-        super("Dig", 80, 100, Type.GROUND, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, false, 100);
+        super("Dig", 80, 100, Type.GROUND, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 100);
     }
 
     @Override

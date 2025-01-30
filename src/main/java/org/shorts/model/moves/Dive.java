@@ -8,7 +8,7 @@ public class Dive extends Move implements MultiTurnMove {
 
     //TODO: Verify that power, contact, and PP are correct.
     public Dive() {
-        super("Dive", 80, 100, Type.WATER, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, false, 100);
+        super("Dive", 80, 100, Type.WATER, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 100);
     }
 
     @Override

@@ -6,12 +6,13 @@ import org.shorts.model.moves.AffectedByMagicBounce;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 public class BabyDollEyes extends Move implements AffectedByMagicBounce {
 
     public BabyDollEyes() {
-        super("Baby-Doll Eyes", 0, -1, Type.FAIRY, Category.STATUS, Range.SINGLE_ADJACENT_ANY, 48, false, 100);
+        super("Baby-Doll Eyes", 0, -1, Type.FAIRY, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 48, false, 100);
     }
 
     @Override
@@ -21,7 +22,7 @@ public class BabyDollEyes extends Move implements AffectedByMagicBounce {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.isDropPossible(StatEnum.ATK)) {
+        if (target.isDropPossible(StatEnum.ATK) && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

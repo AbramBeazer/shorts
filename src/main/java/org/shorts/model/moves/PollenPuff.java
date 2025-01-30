@@ -10,7 +10,7 @@ import static org.shorts.model.abilities.Telepathy.TELEPATHY;
 public class PollenPuff extends Move implements BallBombMove {
 
     public PollenPuff() {
-        super("Pollen Puff", 90, 100, Type.BUG, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 24, false, 0);
+        super("Pollen Puff", 90, 100, Type.BUG, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, false, 0);
     }
 
     @Override

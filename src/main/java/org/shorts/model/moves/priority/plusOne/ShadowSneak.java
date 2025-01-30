@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class ShadowSneak extends Move {
 
     public ShadowSneak() {
-        super("Shadow Sneak", 40, 100, Type.GHOST, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 48, true, 0);
+        super("Shadow Sneak", 40, 100, Type.GHOST, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 48, true, 0);
     }
 
     @Override

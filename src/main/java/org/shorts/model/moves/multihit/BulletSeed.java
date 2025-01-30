@@ -7,6 +7,6 @@ import org.shorts.model.types.Type;
 public class BulletSeed extends MultiHitMove implements BallBombMove {
 
     public BulletSeed() {
-        super("Bullet Seed", 25, 100, Type.GRASS, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 48, false, 0, 2, 5);
+        super("Bullet Seed", 25, 100, Type.GRASS, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 48, false, 0, 2, 5);
     }
 }

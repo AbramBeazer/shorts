@@ -4,6 +4,7 @@ import org.shorts.battle.Battle;
 import org.shorts.battle.Terrain;
 import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
@@ -16,7 +17,7 @@ public class Bulldoze extends Move implements GetsSheerForceBoost {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.isDropPossible(StatEnum.SPEED)) {
+        if (target.isDropPossible(StatEnum.SPEED) && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

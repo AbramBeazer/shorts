@@ -11,7 +11,7 @@ public class DragonRage extends Move {
     static final int FIXED_DAMAGE = 40;
 
     public DragonRage() {
-        super("Dragon Rage", 0, 100, Type.DRAGON, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 0);
+        super("Dragon Rage", 0, 100, Type.DRAGON, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 0);
     }
 
     @Override

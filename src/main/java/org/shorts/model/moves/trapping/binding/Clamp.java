@@ -6,6 +6,6 @@ import org.shorts.model.types.Type;
 public class Clamp extends BindingMove {
 
     public Clamp() {
-        super("Clamp", 35, 85, Type.WATER, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 24, true, 100);
+        super("Clamp", 35, 85, Type.WATER, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 100);
     }
 }

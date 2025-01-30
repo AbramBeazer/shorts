@@ -10,7 +10,7 @@ import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 public class DragonTail extends SwitchTargetMove {
 
     public DragonTail() {
-        super("Dragon Tail", 60, 90, Type.DRAGON, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 16, true, 100);
+        super("Dragon Tail", 60, 90, Type.DRAGON, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 100);
     }
 
     @Override

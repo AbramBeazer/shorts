@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class RockWrecker extends Move implements BallBombMove {
 
     public RockWrecker() {
-        super("Rock Wrecker", 150, 90, Type.ROCK, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 8, false, 100);
+        super("Rock Wrecker", 150, 90, Type.ROCK, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, false, 100);
     }
 
     @Override

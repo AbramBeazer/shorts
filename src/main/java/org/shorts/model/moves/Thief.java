@@ -31,7 +31,7 @@ import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 public class Thief extends Move {
 
     public Thief() {
-        super("Thief", 60, 100, Type.DARK, Category.PHYSICAL, Range.SINGLE_ADJACENT_ANY, 40, true, 100);
+        super("Thief", 60, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 40, true, 100);
     }
 
     @Override

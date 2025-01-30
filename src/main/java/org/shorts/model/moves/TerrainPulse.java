@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 public class TerrainPulse extends Move implements PulseEffect {
 
     public TerrainPulse() {
-        super("Terrain Pulse", 50, 100, Type.NORMAL, Category.SPECIAL, Range.SINGLE_ADJACENT_ANY, 16, false, 0);
+        super("Terrain Pulse", 50, 100, Type.NORMAL, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 0);
     }
 
     @Override
