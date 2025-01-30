@@ -3,6 +3,7 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 public class EnergyBall extends Move implements BallBombMove, GetsSheerForceBoost {
@@ -13,7 +14,7 @@ public class EnergyBall extends Move implements BallBombMove, GetsSheerForceBoos
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.isDropPossible(StatEnum.SPDEF)) {
+        if (target.isDropPossible(StatEnum.SPDEF)&& !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

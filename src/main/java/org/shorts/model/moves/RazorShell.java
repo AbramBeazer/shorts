@@ -3,6 +3,7 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 public class RazorShell extends Move implements SlicingMove, GetsSheerForceBoost {
@@ -13,7 +14,7 @@ public class RazorShell extends Move implements SlicingMove, GetsSheerForceBoost
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.isDropPossible(StatEnum.DEF)) {
+        if (target.isDropPossible(StatEnum.DEF) && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }
