@@ -12,7 +12,7 @@ public class FutureSight extends FloatingMove {
             100,
             Type.PSYCHIC,
             Category.SPECIAL,
-            Range.SINGLE_ADJACENT_ANY,
+            Range.NORMAL,
             16,
             false,
             0,

@@ -13,7 +13,7 @@ public class DoomDesire extends FloatingMove {
             100,
             Type.STEEL,
             Category.SPECIAL,
-            Range.SINGLE_ADJACENT_ANY,
+            Range.NORMAL,
             8,
             false,
             0,
