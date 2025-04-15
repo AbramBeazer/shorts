@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class Thunder extends Move implements GetsSheerForceBoost {
 
     public Thunder() {
-        super("Thunder", 110, 70, Type.ELECTRIC, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 30);
+        super("Thunder", 110, 70, Type.ELECTRIC, Category.SPECIAL, Range.NORMAL, 16, false, 30);
     }
 
     @Override

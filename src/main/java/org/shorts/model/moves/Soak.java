@@ -14,7 +14,7 @@ import static org.shorts.model.types.Type.WATER;
 public class Soak extends Move {
 
     public Soak() {
-        super("Soak", 0, 100, WATER, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, false, 100);
+        super("Soak", 0, 100, WATER, Category.STATUS, Range.NORMAL, 32, false, 100);
     }
 
     @Override

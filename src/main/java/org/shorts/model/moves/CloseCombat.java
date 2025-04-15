@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 public class CloseCombat extends Move {
 
     public CloseCombat() {
-        super("Close Combat", 120, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, true, 100);
+        super("Close Combat", 120, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL, 8, true, 100);
     }
 
     @Override

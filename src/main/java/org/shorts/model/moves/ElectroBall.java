@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class ElectroBall extends Move implements BallBombMove {
 
     public ElectroBall() {
-        super("Electro Ball", 40, 100, Type.ELECTRIC, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 0);
+        super("Electro Ball", 40, 100, Type.ELECTRIC, Category.SPECIAL, Range.NORMAL, 16, false, 0);
     }
 
     @Override

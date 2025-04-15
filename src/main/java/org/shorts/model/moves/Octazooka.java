@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class Octazooka extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public Octazooka() {
-        super("Octazooka", 65, 85, Type.WATER, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 50);
+        super("Octazooka", 65, 85, Type.WATER, Category.SPECIAL, Range.NORMAL, 16, false, 50);
     }
 
     @Override

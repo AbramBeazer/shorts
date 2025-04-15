@@ -11,7 +11,7 @@ import org.shorts.model.types.Type;
 public class ScorchingSands extends ThawingMove implements GetsSheerForceBoost {
 
     public ScorchingSands() {
-        super("Scorching Sands", 70, 100, Type.GROUND, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 30);
+        super("Scorching Sands", 70, 100, Type.GROUND, Category.SPECIAL, Range.NORMAL, 16, false, 30);
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class MachPunch extends Move {
 
     public MachPunch() {
-        super("Mach Punch", 40, 100, Type.FIGHTING, Move.Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 48, true, 0);
+        super("Mach Punch", 40, 100, Type.FIGHTING, Move.Category.PHYSICAL, Range.NORMAL, 48, true, 0);
     }
 
     @Override

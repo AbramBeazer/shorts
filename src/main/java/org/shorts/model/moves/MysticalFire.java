@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class MysticalFire extends Move {
 
     public MysticalFire() {
-        super("Mystical Fire", 75, 100, Type.FIRE, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 100);
+        super("Mystical Fire", 75, 100, Type.FIRE, Category.SPECIAL, Range.NORMAL, 16, false, 100);
     }
 
     @Override

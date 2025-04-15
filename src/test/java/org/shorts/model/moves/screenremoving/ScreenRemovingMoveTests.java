@@ -38,7 +38,7 @@ class ScreenRemovingMoveTests {
             100,
             Type.NORMAL,
             Move.Category.PHYSICAL,
-            Range.NORMAL_SINGLE_ADJACENT_ANY,
+            Range.NORMAL,
             10,
             true,
             0) {

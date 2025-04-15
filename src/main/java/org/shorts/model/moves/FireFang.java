@@ -14,7 +14,7 @@ public class FireFang extends Move implements BitingMove, GetsSheerForceBoost {
     private boolean calculatingBurn;
 
     public FireFang() {
-        super("Fire Fang", 65, 95, Type.FIRE, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 10);
+        super("Fire Fang", 65, 95, Type.FIRE, Category.PHYSICAL, Range.NORMAL, 24, true, 10);
     }
 
     @Override

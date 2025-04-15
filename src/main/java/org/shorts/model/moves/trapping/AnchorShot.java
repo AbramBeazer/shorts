@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class AnchorShot extends TrappingMove implements GetsSheerForceBoost {
 
     public AnchorShot() {
-        super("Anchor Shot", 80, 100, Type.STEEL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, true, 100);
+        super("Anchor Shot", 80, 100, Type.STEEL, Category.PHYSICAL, Range.NORMAL, 32, true, 100);
     }
 
 }

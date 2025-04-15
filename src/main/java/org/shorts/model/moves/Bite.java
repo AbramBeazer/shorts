@@ -10,7 +10,7 @@ import static org.shorts.model.status.VolatileStatusType.FLINCH;
 public class Bite extends Move implements BitingMove, GetsSheerForceBoost {
 
     public Bite() {
-        super("Bite", 60, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 40, true, 30);
+        super("Bite", 60, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL, 40, true, 30);
     }
 
     @Override

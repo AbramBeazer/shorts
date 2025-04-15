@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class Crunch extends Move implements BitingMove, GetsSheerForceBoost {
 
     public Crunch() {
-        super("Crunch", 80, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 20);
+        super("Crunch", 80, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL, 24, true, 20);
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class RapidSpin extends Move implements GetsSheerForceBoost {
 
     public RapidSpin() {
-        super("Rapid Spin", 50, 100, Type.NORMAL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 64, true, 100);
+        super("Rapid Spin", 50, 100, Type.NORMAL, Category.PHYSICAL, Range.NORMAL, 64, true, 100);
     }
 
     @Override

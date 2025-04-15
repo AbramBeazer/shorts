@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class LowKick extends Move {
 
     public LowKick() {
-        super("Low Kick", 0, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, true, 0);
+        super("Low Kick", 0, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL, 32, true, 0);
     }
 
     @Override

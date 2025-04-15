@@ -7,6 +7,6 @@ import org.shorts.model.types.Type;
 public class DoubleIronBash extends FixedMultiHitMove implements GetsSheerForceBoost {
 
     public DoubleIronBash() {
-        super("Double Iron Bash", 60, 100, Type.STEEL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, true, 0, 2);
+        super("Double Iron Bash", 60, 100, Type.STEEL, Category.PHYSICAL, Range.NORMAL, 8, true, 0, 2);
     }
 }

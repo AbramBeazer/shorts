@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class Block extends TrappingMove implements AffectedByMagicBounce {
 
     public Block() {
-        super("Block", 0, -1, Type.NORMAL, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, false, 100);
+        super("Block", 0, -1, Type.NORMAL, Category.STATUS, Range.NORMAL, 8, false, 100);
     }
 
 }

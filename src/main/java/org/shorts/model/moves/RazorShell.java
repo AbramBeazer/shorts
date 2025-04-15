@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class RazorShell extends Move implements SlicingMove, GetsSheerForceBoost {
 
     public RazorShell() {
-        super("Razor Shell", 75, 95, Type.WATER, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 50);
+        super("Razor Shell", 75, 95, Type.WATER, Category.PHYSICAL, Range.NORMAL, 16, true, 50);
     }
 
     @Override

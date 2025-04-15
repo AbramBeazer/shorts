@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class AquaJet extends Move {
 
     public AquaJet() {
-        super("Aqua Jet", 40, 100, Type.WATER, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, true, 0);
+        super("Aqua Jet", 40, 100, Type.WATER, Category.PHYSICAL, Range.NORMAL, 32, true, 0);
     }
 
     @Override

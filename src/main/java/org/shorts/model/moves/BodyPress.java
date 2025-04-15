@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class BodyPress extends Move {
 
     public BodyPress() {
-        super("Body Press", 80, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 0);
+        super("Body Press", 80, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL, 16, true, 0);
     }
 
     @Override

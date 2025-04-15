@@ -11,7 +11,7 @@ import static org.shorts.model.status.StatusType.PARALYZE;
 public class ThunderWave extends Move implements AffectedByMagicBounce {
 
     public ThunderWave() {
-        super("Thunder Wave", 0, 90, Type.ELECTRIC, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, false, 100);
+        super("Thunder Wave", 0, 90, Type.ELECTRIC, Category.STATUS, Range.NORMAL, 32, false, 100);
     }
 
     @Override

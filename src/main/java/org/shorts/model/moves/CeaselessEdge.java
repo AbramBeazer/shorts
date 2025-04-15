@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class CeaselessEdge extends Move implements SlicingMove, GetsSheerForceBoost {
 
     public CeaselessEdge() {
-        super("Ceaseless Edge", 65, 90, Type.DARK, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 100);
+        super("Ceaseless Edge", 65, 90, Type.DARK, Category.PHYSICAL, Range.NORMAL, 24, true, 100);
     }
 
     @Override

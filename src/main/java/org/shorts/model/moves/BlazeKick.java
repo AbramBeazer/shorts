@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class BlazeKick extends Move implements HighCritChanceMove, GetsSheerForceBoost {
 
     public BlazeKick() {
-        super("Blaze Kick", 85, 90, Type.FIRE, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 10);
+        super("Blaze Kick", 85, 90, Type.FIRE, Category.PHYSICAL, Range.NORMAL, 16, true, 10);
     }
 
     @Override

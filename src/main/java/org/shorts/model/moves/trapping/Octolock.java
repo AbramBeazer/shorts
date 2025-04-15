@@ -12,7 +12,7 @@ import static org.shorts.model.status.VolatileStatusType.OCTOLOCKED;
 public class Octolock extends Move {
 
     public Octolock() {
-        super("Octolock", 0, 100, Type.FIGHTING, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, false, 100);
+        super("Octolock", 0, 100, Type.FIGHTING, Category.STATUS, Range.NORMAL, 24, false, 100);
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class JetPunch extends Move {
 
     public JetPunch() {
-        super("Jet Punch", 60, 100, Type.WATER, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 0);
+        super("Jet Punch", 60, 100, Type.WATER, Category.PHYSICAL, Range.NORMAL, 24, true, 0);
     }
 
     @Override

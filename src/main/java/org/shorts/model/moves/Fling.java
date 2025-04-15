@@ -39,7 +39,7 @@ import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 public class Fling extends Move {
 
     public Fling() {
-        super("Fling", 0, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 100);
+        super("Fling", 0, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL, 16, false, 100);
     }
 
     @Override

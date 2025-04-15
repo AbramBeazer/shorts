@@ -12,7 +12,7 @@ import org.shorts.model.types.Type;
 public class BabyDollEyes extends Move implements AffectedByMagicBounce {
 
     public BabyDollEyes() {
-        super("Baby-Doll Eyes", 0, -1, Type.FAIRY, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 48, false, 100);
+        super("Baby-Doll Eyes", 0, -1, Type.FAIRY, Category.STATUS, Range.NORMAL, 48, false, 100);
     }
 
     @Override

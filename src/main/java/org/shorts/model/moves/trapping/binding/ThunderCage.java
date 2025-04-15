@@ -6,6 +6,6 @@ import org.shorts.model.types.Type;
 public class ThunderCage extends BindingMove {
 
     public ThunderCage() {
-        super("Thunder Cage", 80, 90, Type.ELECTRIC, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, false, 100);
+        super("Thunder Cage", 80, 90, Type.ELECTRIC, Category.SPECIAL, Range.NORMAL, 24, false, 100);
     }
 }

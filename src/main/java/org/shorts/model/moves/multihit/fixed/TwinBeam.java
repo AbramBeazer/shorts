@@ -6,6 +6,6 @@ import org.shorts.model.types.Type;
 public class TwinBeam extends FixedMultiHitMove {
 
     public TwinBeam() {
-        super("Twin Beam", 40, 100, Type.PSYCHIC, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 0, 2);
+        super("Twin Beam", 40, 100, Type.PSYCHIC, Category.SPECIAL, Range.NORMAL, 16, false, 0, 2);
     }
 }

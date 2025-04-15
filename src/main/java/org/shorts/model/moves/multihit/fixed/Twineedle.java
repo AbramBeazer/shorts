@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class Twineedle extends FixedMultiHitMove implements GetsSheerForceBoost {
 
     public Twineedle() {
-        super("Twineedle", 25, 100, Type.BUG, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, false, 0, 2);
+        super("Twineedle", 25, 100, Type.BUG, Category.PHYSICAL, Range.NORMAL, 32, false, 0, 2);
     }
 
     //Not in Gen 8 or 9.

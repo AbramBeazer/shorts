@@ -6,6 +6,6 @@ import org.shorts.model.types.Type;
 public class SpikeCannon extends MultiHitMove {
 
     public SpikeCannon() {
-        super("Spike Cannon", 20, 100, Type.NORMAL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, false, 0, 2, 5);
+        super("Spike Cannon", 20, 100, Type.NORMAL, Category.PHYSICAL, Range.NORMAL, 24, false, 0, 2, 5);
     }
 }

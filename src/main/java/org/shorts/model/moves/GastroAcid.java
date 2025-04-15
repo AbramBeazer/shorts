@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class GastroAcid extends Move implements AffectedByMagicBounce {
 
     public GastroAcid() {
-        super("Gastro Acid", 0, 100, Type.POISON, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 100);
+        super("Gastro Acid", 0, 100, Type.POISON, Category.STATUS, Range.NORMAL, 16, false, 100);
     }
 
     @Override

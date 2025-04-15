@@ -13,7 +13,7 @@ import static org.shorts.model.status.StatusType.BURN;
 public class PyroBall extends ThawingMove implements BallBombMove, GetsSheerForceBoost {
 
     public PyroBall() {
-        super("Pyro Ball", 120, 90, Type.FIRE, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, false, 10);
+        super("Pyro Ball", 120, 90, Type.FIRE, Category.SPECIAL, Range.NORMAL, 8, false, 10);
     }
 
     @Override

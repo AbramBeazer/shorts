@@ -11,7 +11,7 @@ import org.shorts.model.types.Type;
 public class Scald extends ThawingMove implements GetsSheerForceBoost {
 
     public Scald() {
-        super("Scald", 80, 100, Type.WATER, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, false, 30);
+        super("Scald", 80, 100, Type.WATER, Category.SPECIAL, Range.NORMAL, 24, false, 30);
     }
 
     @Override

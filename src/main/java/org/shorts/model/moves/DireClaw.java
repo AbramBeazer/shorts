@@ -11,7 +11,7 @@ public class DireClaw extends Move implements GetsSheerForceBoost {
     private Status currentStatus;
 
     public DireClaw() {
-        super("Dire Claw", 80, 100, Type.POISON, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 50);
+        super("Dire Claw", 80, 100, Type.POISON, Category.PHYSICAL, Range.NORMAL, 24, true, 50);
     }
 
     @Override

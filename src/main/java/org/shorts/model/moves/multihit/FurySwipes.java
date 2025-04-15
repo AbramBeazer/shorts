@@ -6,6 +6,6 @@ import org.shorts.model.types.Type;
 public class FurySwipes extends MultiHitMove {
 
     public FurySwipes() {
-        super("Fury Swipes", 18, 80, Type.NORMAL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 0, 2, 5);
+        super("Fury Swipes", 18, 80, Type.NORMAL, Category.PHYSICAL, Range.NORMAL, 24, true, 0, 2, 5);
     }
 }

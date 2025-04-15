@@ -17,7 +17,7 @@ public class VoltTackle extends RecoilAttack implements GetsSheerForceBoost {
             100,
             Type.ELECTRIC,
             Category.PHYSICAL,
-            Range.NORMAL_SINGLE_ADJACENT_ANY,
+            Range.NORMAL,
             24,
             true,
             10,

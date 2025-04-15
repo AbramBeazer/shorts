@@ -6,6 +6,6 @@ import org.shorts.model.types.Type;
 public class Whirlpool extends BindingMove {
 
     public Whirlpool() {
-        super("Whirlpool", 35, 85, Type.WATER, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, false, 100);
+        super("Whirlpool", 35, 85, Type.WATER, Category.SPECIAL, Range.NORMAL, 24, false, 100);
     }
 }

@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class Accelerock extends Move {
 
     public Accelerock() {
-        super("Accelerock", 40, 100, Type.ROCK, Move.Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, true, 0);
+        super("Accelerock", 40, 100, Type.ROCK, Move.Category.PHYSICAL, Range.NORMAL, 32, true, 0);
     }
 
     @Override

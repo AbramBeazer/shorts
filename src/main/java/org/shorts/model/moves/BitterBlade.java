@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class BitterBlade extends Move implements SlicingMove, HealingMove {
 
     public BitterBlade() {
-        super("Bitter Blade", 90, 100, Type.FIRE, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 100);
+        super("Bitter Blade", 90, 100, Type.FIRE, Category.PHYSICAL, Range.NORMAL, 16, true, 100);
     }
 
     @Override

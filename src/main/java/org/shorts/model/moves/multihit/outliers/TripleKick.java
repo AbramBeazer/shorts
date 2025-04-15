@@ -17,7 +17,7 @@ public class TripleKick extends Move {
     private int hitNum;
 
     public TripleKick() {
-        super("Triple Kick", 10, 90, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 0);
+        super("Triple Kick", 10, 90, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL, 16, true, 0);
     }
 
     @Override

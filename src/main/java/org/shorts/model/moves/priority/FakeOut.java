@@ -13,7 +13,7 @@ import static org.shorts.model.status.VolatileStatusType.FLINCH;
 public class FakeOut extends Move implements GetsSheerForceBoost {
 
     public FakeOut() {
-        super("Fake Out", 40, 100, Type.NORMAL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 100);
+        super("Fake Out", 40, 100, Type.NORMAL, Category.PHYSICAL, Range.NORMAL, 16, true, 100);
     }
 
     @Override

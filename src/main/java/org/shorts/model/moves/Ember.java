@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class Ember extends Move implements GetsSheerForceBoost {
 
     public Ember() {
-        super("Ember", 40, 100, Type.FIRE, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 40, false, 10);
+        super("Ember", 40, 100, Type.FIRE, Category.SPECIAL, Range.NORMAL, 40, false, 10);
     }
 
     @Override

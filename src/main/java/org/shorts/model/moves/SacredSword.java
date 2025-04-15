@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class SacredSword extends Move implements SlicingMove {
 
     public SacredSword() {
-        super("Sacred Sword", 90, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 0);
+        super("Sacred Sword", 90, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL, 24, true, 0);
     }
 
     @Override

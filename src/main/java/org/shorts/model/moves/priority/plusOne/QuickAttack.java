@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class QuickAttack extends Move {
 
     public QuickAttack() {
-        super("Quick Attack", 40, 100, Type.NORMAL, Move.Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 48, true, 0);
+        super("Quick Attack", 40, 100, Type.NORMAL, Move.Category.PHYSICAL, Range.NORMAL, 48, true, 0);
     }
 
     @Override

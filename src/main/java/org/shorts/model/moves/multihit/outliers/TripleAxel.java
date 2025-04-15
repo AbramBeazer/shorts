@@ -17,7 +17,7 @@ public class TripleAxel extends Move {
     private int hitNum;
 
     public TripleAxel() {
-        super("Triple Axel", 20, 90, Type.ICE, Move.Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 0);
+        super("Triple Axel", 20, 90, Type.ICE, Move.Category.PHYSICAL, Range.NORMAL, 16, true, 0);
     }
 
     @Override

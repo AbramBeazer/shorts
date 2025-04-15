@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class SuckerPunch extends Move {
 
     public SuckerPunch() {
-        super("Sucker Punch", 70, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, true, 0);
+        super("Sucker Punch", 70, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL, 8, true, 0);
     }
 
     @Override

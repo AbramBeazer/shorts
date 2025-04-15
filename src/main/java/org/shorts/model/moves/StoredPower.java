@@ -9,7 +9,7 @@ public class StoredPower extends Move {
     protected static final int MAX_BOOSTS = 42;
 
     public StoredPower() {
-        super("Stored Power", 20, 100, Type.PSYCHIC, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 0);
+        super("Stored Power", 20, 100, Type.PSYCHIC, Category.SPECIAL, Range.NORMAL, 16, false, 0);
     }
 
     @Override

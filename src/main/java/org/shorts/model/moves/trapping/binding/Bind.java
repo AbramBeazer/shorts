@@ -6,6 +6,6 @@ import org.shorts.model.types.Type;
 public class Bind extends BindingMove {
 
     public Bind() {
-        super("Bind", 15, 85, Type.NORMAL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, true, 100);
+        super("Bind", 15, 85, Type.NORMAL, Category.PHYSICAL, Range.NORMAL, 32, true, 100);
     }
 }

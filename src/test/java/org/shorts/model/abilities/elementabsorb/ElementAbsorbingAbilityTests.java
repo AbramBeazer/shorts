@@ -68,7 +68,7 @@ class ElementAbsorbingAbilityTests {
             100,
             Type.ELECTRIC,
             Move.Category.SPECIAL,
-            Range.NORMAL_SINGLE_ADJACENT_ANY,
+            Range.NORMAL,
             24,
             false,
             0,

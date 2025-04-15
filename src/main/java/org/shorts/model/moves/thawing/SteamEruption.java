@@ -11,7 +11,7 @@ import org.shorts.model.types.Type;
 public class SteamEruption extends ThawingMove implements GetsSheerForceBoost {
 
     public SteamEruption() {
-        super("Steam Eruption", 110, 95, Type.WATER, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, false, 30);
+        super("Steam Eruption", 110, 95, Type.WATER, Category.SPECIAL, Range.NORMAL, 8, false, 30);
     }
 
     @Override

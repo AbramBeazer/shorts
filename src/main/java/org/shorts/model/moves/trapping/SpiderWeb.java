@@ -7,6 +7,6 @@ import org.shorts.model.types.Type;
 public class SpiderWeb extends TrappingMove implements AffectedByMagicBounce {
 
     public SpiderWeb() {
-        super("Spider Web", 0, -1, Type.BUG, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 100);
+        super("Spider Web", 0, -1, Type.BUG, Category.STATUS, Range.NORMAL, 16, false, 100);
     }
 }
