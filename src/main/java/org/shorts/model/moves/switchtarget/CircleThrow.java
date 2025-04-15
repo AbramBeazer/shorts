@@ -10,7 +10,7 @@ import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 public class CircleThrow extends SwitchTargetMove {
 
     public CircleThrow() {
-        super("Circle Throw", 60, 90, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 100);
+        super("Circle Throw", 60, 90, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL, 16, true, 100);
     }
 
     @Override

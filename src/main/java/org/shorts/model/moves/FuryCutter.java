@@ -12,7 +12,7 @@ public class FuryCutter extends Move implements SlicingMove {
     private static final double MAX_MULTIPLIER = 4;
 
     public FuryCutter() {
-        super("Fury Cutter", BASE_POWER, 95, Type.BUG, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, true, 0);
+        super("Fury Cutter", BASE_POWER, 95, Type.BUG, Category.PHYSICAL, Range.NORMAL, 32, true, 0);
     }
 
     @Override

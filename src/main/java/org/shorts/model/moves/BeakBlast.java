@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class BeakBlast extends Move implements BallBombMove {
 
     public BeakBlast() {
-        super("Beak Blast", 100, 100, Type.FLYING, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, false, 0);
+        super("Beak Blast", 100, 100, Type.FLYING, Category.PHYSICAL, Range.NORMAL, 24, false, 0);
     }
 
     @Override

@@ -11,7 +11,7 @@ import org.shorts.model.types.Type;
 public class FlameWheel extends ThawingMove implements GetsSheerForceBoost {
 
     public FlameWheel() {
-        super("Flame Wheel", 60, 100, Type.FIRE, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 40, true, 10);
+        super("Flame Wheel", 60, 100, Type.FIRE, Category.PHYSICAL, Range.NORMAL, 40, true, 10);
     }
 
     @Override

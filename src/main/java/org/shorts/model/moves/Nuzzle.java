@@ -11,7 +11,7 @@ import static org.shorts.model.status.StatusType.*;
 public class Nuzzle extends Move {
 
     public Nuzzle(){
-        super("Nuzzle", 20, 100, Type.ELECTRIC, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, true, 100);
+        super("Nuzzle", 20, 100, Type.ELECTRIC, Category.PHYSICAL, Range.NORMAL, 32, true, 100);
     }
 
 

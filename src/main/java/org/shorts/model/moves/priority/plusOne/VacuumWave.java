@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class VacuumWave extends Move {
 
     public VacuumWave() {
-        super("Vacuum Wave", 40, 100, Type.FIGHTING, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 48, false, 0);
+        super("Vacuum Wave", 40, 100, Type.FIGHTING, Category.SPECIAL, Range.NORMAL, 48, false, 0);
     }
 
     @Override

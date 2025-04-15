@@ -10,7 +10,7 @@ public class Psyblade extends Move implements SlicingMove {
     protected static final double PSYBLADE_MULTIPLIER = 1.5;
 
     public Psyblade() {
-        super("Psyblade", 80, 100, Type.PSYCHIC, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 0);
+        super("Psyblade", 80, 100, Type.PSYCHIC, Category.PHYSICAL, Range.NORMAL, 24, true, 0);
     }
 
     @Override

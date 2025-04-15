@@ -13,7 +13,7 @@ public class SonicBoom extends Move {
     static final int FIXED_DAMAGE = 20;
 
     public SonicBoom() {
-        super("Sonic Boom", 0, 90, Type.NORMAL, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, false, 0);
+        super("Sonic Boom", 0, 90, Type.NORMAL, Category.SPECIAL, Range.NORMAL, 32, false, 0);
     }
 
     @Override

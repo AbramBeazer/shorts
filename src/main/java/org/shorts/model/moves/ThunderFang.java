@@ -14,7 +14,7 @@ public class ThunderFang extends Move implements BitingMove, GetsSheerForceBoost
     private boolean calculatingParalyze;
 
     public ThunderFang() {
-        super("Thunder Fang", 65, 95, Type.ELECTRIC, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 10);
+        super("Thunder Fang", 65, 95, Type.ELECTRIC, Category.PHYSICAL, Range.NORMAL, 24, true, 10);
     }
 
     @Override

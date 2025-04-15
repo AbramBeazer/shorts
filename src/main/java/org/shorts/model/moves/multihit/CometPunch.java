@@ -6,6 +6,6 @@ import org.shorts.model.types.Type;
 public class CometPunch extends MultiHitMove {
 
     public CometPunch() {
-        super("Comet Punch", 18, 85, Type.NORMAL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, true, 0, 2, 5);
+        super("Comet Punch", 18, 85, Type.NORMAL, Category.PHYSICAL, Range.NORMAL, 24, true, 0, 2, 5);
     }
 }

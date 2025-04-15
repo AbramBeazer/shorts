@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class Toxic extends Move {
 
     public Toxic() {
-        super("Toxic", 0, 90, Type.POISON, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 100);
+        super("Toxic", 0, 90, Type.POISON, Category.STATUS, Range.NORMAL, 16, false, 100);
     }
 
     @Override

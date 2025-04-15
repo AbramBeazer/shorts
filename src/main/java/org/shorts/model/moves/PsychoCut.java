@@ -5,7 +5,7 @@ import org.shorts.model.types.Type;
 public class PsychoCut extends Move implements SlicingMove, HighCritChanceMove {
 
     public PsychoCut() {
-        super("Psycho Cut", 70, 100, Type.PSYCHIC, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, false, 0);
+        super("Psycho Cut", 70, 100, Type.PSYCHIC, Category.PHYSICAL, Range.NORMAL, 32, false, 0);
     }
 }
 

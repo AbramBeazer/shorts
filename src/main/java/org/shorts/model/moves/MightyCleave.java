@@ -5,6 +5,6 @@ import org.shorts.model.types.Type;
 public class MightyCleave extends Move implements SlicingMove, GoesThroughProtect {
 
     public MightyCleave() {
-        super("Mighty Cleave", 95, 100, Type.ROCK, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, true, 0);
+        super("Mighty Cleave", 95, 100, Type.ROCK, Category.PHYSICAL, Range.NORMAL, 8, true, 0);
     }
 }

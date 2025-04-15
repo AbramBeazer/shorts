@@ -18,7 +18,7 @@ public class PopulationBomb extends Move implements SlicingMove {
     private static final int MAX_HITS = 10;
 
     public PopulationBomb() {
-        super("Population Bomb", 20, 90, Type.NORMAL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 0);
+        super("Population Bomb", 20, 90, Type.NORMAL, Category.PHYSICAL, Range.NORMAL, 16, true, 0);
     }
 
     @Override

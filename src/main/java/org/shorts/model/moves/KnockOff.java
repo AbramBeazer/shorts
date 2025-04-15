@@ -29,7 +29,7 @@ public class KnockOff extends Move {
     static final double MULTIPLIER = 1.5;
 
     public KnockOff() {
-        super("Knock Off", 65, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, true, 100);
+        super("Knock Off", 65, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL, 32, true, 100);
     }
 
     @Override

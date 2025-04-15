@@ -10,7 +10,7 @@ import org.shorts.model.types.Type;
 public class BurnUp extends ThawingMove {
 
     public BurnUp() {
-        super("Burn Up", 130, 100, Type.FIRE, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, false, 0);
+        super("Burn Up", 130, 100, Type.FIRE, Category.SPECIAL, Range.NORMAL, 8, false, 0);
     }
 
     @Override

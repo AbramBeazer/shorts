@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class SludgeBomb extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public SludgeBomb() {
-        super("Sludge Bomb", 90, 100, Type.POISON, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 30);
+        super("Sludge Bomb", 90, 100, Type.POISON, Category.SPECIAL, Range.NORMAL, 16, false, 30);
     }
 
     @Override

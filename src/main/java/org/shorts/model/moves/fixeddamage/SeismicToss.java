@@ -11,7 +11,7 @@ import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 public class SeismicToss extends Move {
 
     public SeismicToss() {
-        super("Seismic Toss", 0, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, true, 0);
+        super("Seismic Toss", 0, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL, 32, true, 0);
     }
 
     @Override

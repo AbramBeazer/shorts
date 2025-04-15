@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class ShadowBall extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public ShadowBall() {
-        super("Shadow Ball", 80, 100, Type.GHOST, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, false, 20);
+        super("Shadow Ball", 80, 100, Type.GHOST, Category.SPECIAL, Range.NORMAL, 24, false, 20);
     }
 
     @Override

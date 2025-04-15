@@ -24,7 +24,7 @@ public class TripleArrows extends Move implements HighCritChanceMove, GetsSheerF
             100,
             Type.FIGHTING,
             Category.PHYSICAL,
-            Range.NORMAL_SINGLE_ADJACENT_ANY,
+            Range.NORMAL,
             16,
             false,
             50);

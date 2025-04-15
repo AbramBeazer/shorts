@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class MudBomb extends Move implements BallBombMove, GetsSheerForceBoost {
 
     public MudBomb() {
-        super("Mud Bomb", 65, 85, Type.GROUND, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 30);
+        super("Mud Bomb", 65, 85, Type.GROUND, Category.SPECIAL, Range.NORMAL, 16, false, 30);
     }
 
     @Override

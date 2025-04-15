@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class SecretSword extends Move implements SlicingMove {
 
     public SecretSword() {
-        super("Secret Sword", 85, 100, Type.FIGHTING, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 0);
+        super("Secret Sword", 85, 100, Type.FIGHTING, Category.SPECIAL, Range.NORMAL, 16, false, 0);
     }
 
     @Override

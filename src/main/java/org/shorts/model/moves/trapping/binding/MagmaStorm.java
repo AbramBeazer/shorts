@@ -6,6 +6,6 @@ import org.shorts.model.types.Type;
 public class MagmaStorm extends BindingMove {
 
     public MagmaStorm() {
-        super("Magma Storm", 100, 75, Type.FIRE, Category.SPECIAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, false, 100);
+        super("Magma Storm", 100, 75, Type.FIRE, Category.SPECIAL, Range.NORMAL, 8, false, 100);
     }
 }

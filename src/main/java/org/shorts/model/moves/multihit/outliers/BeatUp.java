@@ -19,7 +19,7 @@ public class BeatUp extends Move {
     private List<Pokemon> viableAttackers;
 
     public BeatUp() {
-        super("Beat Up", -1, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, false, 0);
+        super("Beat Up", -1, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL, 16, false, 0);
     }
 
     @Override

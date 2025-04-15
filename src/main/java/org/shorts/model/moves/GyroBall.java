@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 public class GyroBall extends Move implements BallBombMove {
 
     public GyroBall() {
-        super("Gyro Ball", 25, 100, Type.STEEL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 8, true, 0);
+        super("Gyro Ball", 25, 100, Type.STEEL, Category.PHYSICAL, Range.NORMAL, 8, true, 0);
     }
 
     @Override

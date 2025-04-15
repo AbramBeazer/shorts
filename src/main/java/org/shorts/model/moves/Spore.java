@@ -11,7 +11,7 @@ import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 public class Spore extends Move implements PowderSporeEffect, AffectedByMagicBounce {
 
     public Spore() {
-        super("Spore", 0, -1, Type.GRASS, Category.STATUS, Range.NORMAL_SINGLE_ADJACENT_ANY, 24, false, 100);
+        super("Spore", 0, -1, Type.GRASS, Category.STATUS, Range.NORMAL, 24, false, 100);
     }
 
     @Override

@@ -5,6 +5,6 @@ import org.shorts.model.types.Type;
 public class AquaCutter extends Move implements SlicingMove, HighCritChanceMove {
 
     public AquaCutter() {
-        super("Aqua Cutter", 70, 100, Type.WATER, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, false, 0);
+        super("Aqua Cutter", 70, 100, Type.WATER, Category.PHYSICAL, Range.NORMAL, 32, false, 0);
     }
 }

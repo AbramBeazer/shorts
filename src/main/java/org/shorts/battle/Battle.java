@@ -490,7 +490,7 @@ public class Battle {
                 }
                 return List.of(possibleTargets.get(RANDOM.nextInt(possibleTargets.size())));
             case ALL_ADJACENT:
-            case NORMAL_SINGLE_ADJACENT_ANY:
+            case NORMAL:
                 for (int i = 0; i < activeMonsPerSide; i++) {
                     if (Math.abs(i - userIndex) == 1) {
                         possibleTargets.add(player.getActivePokemon().get(i));

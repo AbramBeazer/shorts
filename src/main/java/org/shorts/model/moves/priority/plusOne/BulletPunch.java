@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class BulletPunch extends Move {
 
     public BulletPunch() {
-        super("Bullet Punch", 40, 100, Type.STEEL, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 48, true, 0);
+        super("Bullet Punch", 40, 100, Type.STEEL, Category.PHYSICAL, Range.NORMAL, 48, true, 0);
     }
 
     @Override

@@ -10,7 +10,7 @@ import org.shorts.model.types.Type;
 public class GrassyGlide extends Move {
 
     public GrassyGlide() {
-        super("Grassy Glide", 55, 100, Type.GRASS, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 32, true, 0);
+        super("Grassy Glide", 55, 100, Type.GRASS, Category.PHYSICAL, Range.NORMAL, 32, true, 0);
     }
 
     @Override

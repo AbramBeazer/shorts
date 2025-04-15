@@ -6,6 +6,6 @@ import org.shorts.model.types.Type;
 public class DualWingbeat extends FixedMultiHitMove {
 
     public DualWingbeat() {
-        super("Dual Wingbeat", 40, 90, Type.FLYING, Category.PHYSICAL, Range.NORMAL_SINGLE_ADJACENT_ANY, 16, true, 0, 2);
+        super("Dual Wingbeat", 40, 90, Type.FLYING, Category.PHYSICAL, Range.NORMAL, 16, true, 0, 2);
     }
 }
