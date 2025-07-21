@@ -122,7 +122,7 @@ public class Battle {
 
     public void setMagicRoomTurns(int magicRoomTurns) {
         if (this.magicRoomTurns > 0) {
-            magicRoomTurns = 0;
+            this.magicRoomTurns = 0;
         } else {
             this.magicRoomTurns = magicRoomTurns;
         }
