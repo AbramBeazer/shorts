@@ -18,9 +18,9 @@ public class ChillyReception extends WeatherMove implements SwitchSelfMove {
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         super.applySecondaryEffect(user, target, battle);
         final Trainer trainer =
-            battle.getPlayerOne().getLead() == user ? battle.getPlayerOne() : battle.getPlayerTwo();
+            battle.getCorrespondingTrainer(user);
 
-        battle.promptSwitchCausedByUserMove(trainer);
+        battle.promptSwitchCausedByUserMove(user, trainer);
         //TODO: Remove this
     }
 }

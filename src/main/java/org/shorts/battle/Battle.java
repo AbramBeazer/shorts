@@ -558,8 +558,9 @@ public class Battle {
         return choice;
     }
 
-    public void promptSwitchCausedByUserMove(Trainer trainer) {
+    public void promptSwitchCausedByUserMove(Pokemon user, Trainer trainer) {
         if (trainer.hasAvailableSwitch()) {
+            final int index = trainer.getTeam().indexOf(user);
             printBench(trainer);
             int choice;
             //Choice is invalid if that Pokémon has fainted or is already in battle
@@ -570,7 +571,7 @@ public class Battle {
 
             //TODO: Is this the right place to do this? At the beginning of a turn, if both trainers switch, the abilities don't trigger until both new Pokemon are in.
             //      This is probably fine if only one switch happens, but what if the attacker uses U-Turn and activates the opponent's Eject Button? Which switch happens first?
-            trainer.getLead().afterEntry(this);
+            trainer.getTeam().get(index).afterEntry(this);
         }
     }
 

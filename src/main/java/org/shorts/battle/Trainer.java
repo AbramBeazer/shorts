@@ -148,11 +148,6 @@ public class Trainer {
         return team;
     }
 
-    @Deprecated
-    public Pokemon getLead() {
-        return team.get(0);
-    }
-
     public List<Pokemon> getActivePokemon() {
         return team.subList(0, activeMonsPerSide);
     }
