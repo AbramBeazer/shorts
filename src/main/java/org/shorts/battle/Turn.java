@@ -54,13 +54,13 @@ public class Turn {
             } else {
                 targets = battle.getPokemonWithinRange(user, move.getRange(user));
             }
-            System.out.println(user.getDisplayName() + " used " + move.getName() + "!");
+            System.out.println(user.toString() + " used " + move.getName() + "!");
             move.execute(user, targets, battle);
         } else {
-            System.out.println(player.getName() + " recalled " + user.getDisplayName() + "!");
+            System.out.println(player.getName() + " recalled " + user.toString() + "!");
             final int index = player.getTeam().indexOf(user);
             player.switchPokemon(index, singleTargetIndex - 4);
-            System.out.println(player.getName() + " sent out " + player.getTeam().get(index).getDisplayName() + "!");
+            System.out.println(player.getName() + " sent out " + player.getTeam().get(index).toString() + "!");
             player.applyEntryHazards(player.getTeam().get(index));
         }
     }

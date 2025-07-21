@@ -10,7 +10,7 @@ public class MagicBounce extends Ability implements IgnorableAbility {
     }
 
     public static void printMessage(Pokemon bouncer, Move move) {
-        System.out.println(bouncer.getDisplayName() + "'s Magic Bounce reflected the " + move.getName() + "!");
+        System.out.println(bouncer.toString() + "'s Magic Bounce reflected the " + move.getName() + "!");
     }
 
     public static final MagicBounce MAGIC_BOUNCE = new MagicBounce();

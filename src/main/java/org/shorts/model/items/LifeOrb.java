@@ -24,7 +24,7 @@ public class LifeOrb extends HeldItem {
             || user.getAbility() == MAGIC_GUARD)) {
             user.takeDamage(
                 user.getMaxHP() / 10,
-                String.format("%s took damage from the Life Orb!", user.getDisplayName()));
+                String.format("%s took damage from the Life Orb!", user));
         }
     }
 }

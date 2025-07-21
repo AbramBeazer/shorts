@@ -31,7 +31,7 @@ import static org.shorts.model.status.VolatileStatusType.HEAL_BLOCKED;
 
 public class Battle {
 
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     private final int activeMonsPerSide;
 
     protected final Trainer playerOne;
@@ -235,14 +235,14 @@ public class Battle {
         System.out.println("\n" + playerOne.getName() + "'s team:");
         StringBuilder teamOne = new StringBuilder();
         for (Pokemon mon : playerOne.getTeam()) {
-            teamOne.append(mon.getDisplayName()).append("\t");
+            teamOne.append(mon).append("\t");
         }
         System.out.println(teamOne);
 
         System.out.println("\n" + playerTwo.getName() + "'s team:");
         StringBuilder teamTwo = new StringBuilder();
         for (Pokemon mon : playerTwo.getTeam()) {
-            teamTwo.append(mon.getDisplayName()).append("\t");
+            teamTwo.append(mon).append("\t");
         }
         System.out.println(teamTwo);
 
@@ -381,7 +381,7 @@ public class Battle {
             int option = 1;
 
             Set<Move> movesToUse;
-            System.out.println("\n\nWhat will " + pokemon.getDisplayName() + " do?");
+            System.out.println("\n\nWhat will " + pokemon + " do?");
             System.out.println(
                 DECIMAL.format(100d * pokemon.getCurrentHP() / pokemon.getMaxHP()) + " % HP (" + pokemon.getCurrentHP()
                     + "/" + pokemon.getMaxHP() + ")");
@@ -538,11 +538,11 @@ public class Battle {
         for (Pokemon possibleTarget : pokemonInRange) {
             if (opponents.contains(possibleTarget)) {
                 final int index = opponents.indexOf(possibleTarget);
-                System.out.println(index + ") " + possibleTarget.getDisplayName() + " (opponent) ");
+                System.out.println(index + ") " + possibleTarget + " (opponent) ");
             } else {
                 final String selfOrAlly = pokemon == possibleTarget ? " (self) " : " (ally) ";
                 final int index = selfAndAllies.indexOf(possibleTarget);
-                System.out.println((index + activeMonsPerSide) + ") " + possibleTarget.getDisplayName() + selfOrAlly);
+                System.out.println((index + activeMonsPerSide) + ") " + possibleTarget + selfOrAlly);
             }
         }
 
@@ -579,7 +579,7 @@ public class Battle {
 
             String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().getType().name();
             System.out.println(
-                (i + 4) + ")" + "\t" + teammate.getPokedexEntry().getSpeciesName() + "\t(" + teammate.getCurrentHP()
+                (i + 4) + ")" + "\t" + teammate + "\t(" + teammate.getCurrentHP()
                     + "/" + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
         }
     }
@@ -660,16 +660,16 @@ public class Battle {
         for (Pokemon mon : activeMons) {
             if (mon.getAbility() != MAGIC_GUARD) {
                 if (mon.getStatus() == Status.BURN) {
-                    mon.takeDamage(mon.getMaxHP() / 16, String.format("%s is hurt by its burn!", mon.getDisplayName()));
+                    mon.takeDamage(mon.getMaxHP() / 16, String.format("%s is hurt by its burn!", mon));
                 } else if (mon.getAbility() != POISON_HEAL) {
                     if (mon.getStatus() == Status.POISON) {
                         mon.takeDamage(
                             mon.getMaxHP() / 8,
-                            String.format("%s is hurt by poison!", mon.getDisplayName()));
+                            String.format("%s is hurt by poison!", mon));
                     } else if (mon.getStatus().getType() == StatusType.TOXIC_POISON) {
                         mon.takeDamage(
                             (mon.getMaxHP() / 16) * Math.abs(mon.getStatus().getTurnsRemaining()),
-                            String.format("%s is hurt by its burn!", mon.getDisplayName()));
+                            String.format("%s is hurt by its burn!", mon));
                     }
                 } else if (mon.getAbility() == POISON_HEAL && mon.getStatus() == Status.POISON
                     || mon.getStatus().getType() == StatusType.TOXIC_POISON && !mon.hasVolatileStatus(HEAL_BLOCKED)) {

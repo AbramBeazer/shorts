@@ -28,7 +28,7 @@ public class Struggle extends RecoilAttack {
     public void inflictRecoil(Pokemon user, int damageDealt) {
         user.takeDamage(
             (int) MathUtils.roundHalfUp(user.getMaxHP() * this.recoilPercentage),
-            String.format("%s was damaged by the recoil!", user.getDisplayName()));
+            String.format("%s was damaged by the recoil!", user.toString()));
     }
 
     public static final Struggle STRUGGLE = new Struggle();

@@ -170,7 +170,7 @@ public class Trainer {
             Pokemon teammate = team.get(i);
 
             System.out.println(
-                (i + 1) + ")" + "\t" + teammate.getDisplayName() + "\t\tAbility: " + teammate.getAbility()
+                (i + 1) + ")" + "\t" + teammate + "\t\tAbility: " + teammate.getAbility()
                     + "\t\tItem: " + teammate.getHeldItem());
         }
         System.out.println("\nLEADS:");
@@ -185,7 +185,7 @@ public class Trainer {
             leadIndexes.add(choice - 1);
             final Pokemon mon = team.get(choice - 1);
             System.out.println(
-                (leadIndexes.size()) + ")" + "\t" + mon.getDisplayName() + "\tability: " + mon.getAbility() + "\titem: "
+                (leadIndexes.size()) + ")" + "\t" + mon + "\tability: " + mon.getAbility() + "\titem: "
                     + mon.getHeldItem());
         }
 
@@ -248,16 +248,16 @@ public class Trainer {
                         absorbToxicSpikes(pokemon);
                     } else if (!pokemon.getTypes().contains(Type.STEEL)) {
                         if (toxicSpikes == 2) {
-                            System.out.println(pokemon.getDisplayName() + " is badly poisoned by the Toxic Spikes!");
+                            System.out.println(pokemon + " is badly poisoned by the Toxic Spikes!");
                             pokemon.setStatus(Status.createToxic());
                         } else if (toxicSpikes == 1) {
-                            System.out.println(pokemon.getDisplayName() + " is poisoned by the Toxic Spikes!");
+                            System.out.println(pokemon + " is poisoned by the Toxic Spikes!");
                             pokemon.setStatus(Status.POISON);
                         }
                     }
                 }
                 if (stickyWeb && pokemon.isDropPossible(StatEnum.SPEED)) {
-                    System.out.println(pokemon.getDisplayName() + " is slowed by the Sticky Web!");
+                    System.out.println(pokemon + " is slowed by the Sticky Web!");
                     pokemon.changeStat(-1, StatEnum.SPEED);
                 }
             }
@@ -276,13 +276,13 @@ public class Trainer {
             throw new IllegalArgumentException("Couldn't calculate Stealth Rock multiplier; see root exception.");
         }
         int damage = (int) (multiplier * pokemon.getMaxHP());
-        pokemon.takeDamage(damage, String.format("Pointed stones dug into %s.", pokemon.getDisplayName()));
+        pokemon.takeDamage(damage, String.format("Pointed stones dug into %s.", pokemon.toString()));
         return pokemon.hasFainted();
     }
 
     private boolean faintedFromSpikes(Pokemon pokemon) {
         if (spikes > 0) {
-            final String message = String.format("Spikes dug into %s.", pokemon.getDisplayName());
+            final String message = String.format("Spikes dug into %s.", pokemon.toString());
             switch (spikes) {
                 case 1:
                     pokemon.takeDamage(pokemon.getMaxHP() / 8);
@@ -316,7 +316,7 @@ public class Trainer {
 
     public void absorbToxicSpikes(Pokemon pokemon) {
         toxicSpikes = 0;
-        System.out.println(pokemon.getDisplayName() + " absorbed the Toxic Spikes!");
+        System.out.println(pokemon.toString() + " absorbed the Toxic Spikes!");
     }
 
     public void removeEntryHazards() {

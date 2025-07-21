@@ -339,7 +339,8 @@ public class Pokemon {
         this.nickname = nickname;
     }
 
-    public String getDisplayName() {
+    @Override
+    public String toString() {
         if (nickname == null) {
             return pokedexEntry.getSpeciesName();
         } else {
@@ -499,7 +500,7 @@ public class Pokemon {
         if (message == null) {
             double percent = Math.min(100d, 100d * damage / getMaxHP());
             System.out.println(
-                getDisplayName() + " took " + DECIMAL.format(percent)
+                this + " took " + DECIMAL.format(percent)
                     + "% (" + Math.min(currentHP, damage) + ")");
         } else {
             System.out.println(message);
@@ -959,10 +960,5 @@ public class Pokemon {
     public void fullRestore() {
         this.setStatus(Status.NONE);
         this.maxPotion();
-    }
-
-    @Override
-    public String toString() {
-        return getDisplayName();
     }
 }

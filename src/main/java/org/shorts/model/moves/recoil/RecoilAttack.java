@@ -35,7 +35,7 @@ public abstract class RecoilAttack extends Move {
         if (user.getAbility() != ROCK_HEAD && user.getAbility() != MAGIC_GUARD) {
             user.takeDamage(
                 (int) Math.ceil(damageDealt * this.recoilPercentage),
-                String.format("%s was damaged by the recoil!", user.getDisplayName()));
+                String.format("%s was damaged by the recoil!", user.toString()));
         }
     }
 }

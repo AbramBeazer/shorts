@@ -28,7 +28,6 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.Main.CRIT_RANDOM;
 import static org.shorts.Main.DAMAGE_RANDOM;
-import static org.shorts.Main.DECIMAL;
 import static org.shorts.Main.HIT_RANDOM;
 import static org.shorts.Main.RANDOM;
 import static org.shorts.MathUtils.roundHalfDown;
@@ -239,7 +238,7 @@ public abstract class Move {
                 * (user.hasVolatileStatus(MICLE_BERRY_EFFECT) ? 1.2 : 1));
         final boolean hit = HIT_RANDOM.nextInt(100) < threshold;
         if (!hit) {
-            System.out.println(user.getDisplayName() + "'s attack missed!");
+            System.out.println(user.toString() + "'s attack missed!");
         }
         return hit;
     }

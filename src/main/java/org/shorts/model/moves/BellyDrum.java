@@ -21,7 +21,7 @@ public class BellyDrum extends Move {
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         user.takeDamage(
             user.getMaxHP() / 2,
-            String.format("%s sacrificed its HP to maximize Attack!", user.getDisplayName()));
+            String.format("%s sacrificed its HP to maximize Attack!", user.toString()));
         user.setStageAttack(6);
     }
 }
