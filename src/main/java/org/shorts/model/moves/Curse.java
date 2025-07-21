@@ -26,7 +26,7 @@ public class Curse extends Move {
     public void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         if (user.getTypes().contains(GHOST)) {
             final int previousHP = user.getCurrentHP();
-            user.takeDamage(user.getMaxHP() / 2);
+            user.takeDamage(user.getMaxHP() / 2, String.format("%s cut its own HP to put a curse on %s!", user, target));
 
             //TODO: Should this be afterHit, or should I have another listener for self-inflicted damage?
             //TODO: Should this only activate if the user hasn't fainted?

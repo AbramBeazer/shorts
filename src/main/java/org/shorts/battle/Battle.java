@@ -598,7 +598,7 @@ public class Battle {
 
         for (int i = getActiveMonsPerSide() - 1; i >= 0; i--) {
             final Pokemon mon = opponent.getTeam().get(i);
-            field.append("\t\t").append(mon.getDisplayName());
+            field.append("\t\t").append(mon);
             field.append("\t\t").append("|");
         }
 
@@ -614,7 +614,7 @@ public class Battle {
         field.append("\n").append("|");
         for (int i = 0; i < getActiveMonsPerSide(); i++) {
             final Pokemon mon = player.getTeam().get(i);
-            field.append("\t\t").append(mon.getDisplayName());
+            field.append("\t\t").append(mon);
             field.append("\t\t").append("|");
         }
 
@@ -660,12 +660,16 @@ public class Battle {
         for (Pokemon mon : activeMons) {
             if (mon.getAbility() != MAGIC_GUARD) {
                 if (mon.getStatus() == Status.BURN) {
-                    mon.takeDamage(mon.getMaxHP() / 16);
+                    mon.takeDamage(mon.getMaxHP() / 16, String.format("%s is hurt by its burn!", mon.getDisplayName()));
                 } else if (mon.getAbility() != POISON_HEAL) {
                     if (mon.getStatus() == Status.POISON) {
-                        mon.takeDamage(mon.getMaxHP() / 8);
+                        mon.takeDamage(
+                            mon.getMaxHP() / 8,
+                            String.format("%s is hurt by poison!", mon.getDisplayName()));
                     } else if (mon.getStatus().getType() == StatusType.TOXIC_POISON) {
-                        mon.takeDamage((mon.getMaxHP() / 16) * Math.abs(mon.getStatus().getTurnsRemaining()));
+                        mon.takeDamage(
+                            (mon.getMaxHP() / 16) * Math.abs(mon.getStatus().getTurnsRemaining()),
+                            String.format("%s is hurt by its burn!", mon.getDisplayName()));
                     }
                 } else if (mon.getAbility() == POISON_HEAL && mon.getStatus() == Status.POISON
                     || mon.getStatus().getType() == StatusType.TOXIC_POISON && !mon.hasVolatileStatus(HEAL_BLOCKED)) {

@@ -33,8 +33,9 @@ public abstract class RecoilAttack extends Move {
     @Override
     public void inflictRecoil(Pokemon user, int damageDealt) {
         if (user.getAbility() != ROCK_HEAD && user.getAbility() != MAGIC_GUARD) {
-            user.takeDamage((int) Math.ceil(damageDealt * this.recoilPercentage));
-            System.out.println(user.getNickname() + " was hurt by the recoil!");
+            user.takeDamage(
+                (int) Math.ceil(damageDealt * this.recoilPercentage),
+                String.format("%s was damaged by the recoil!", user.getDisplayName()));
         }
     }
 }

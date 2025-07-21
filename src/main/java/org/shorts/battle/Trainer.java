@@ -276,14 +276,13 @@ public class Trainer {
             throw new IllegalArgumentException("Couldn't calculate Stealth Rock multiplier; see root exception.");
         }
         int damage = (int) (multiplier * pokemon.getMaxHP());
-        pokemon.takeDamage(damage);
-        System.out.println("Pointed stones dug into " + pokemon.getDisplayName() + ".");
+        pokemon.takeDamage(damage, String.format("Pointed stones dug into %s.", pokemon.getDisplayName()));
         return pokemon.hasFainted();
     }
 
     private boolean faintedFromSpikes(Pokemon pokemon) {
         if (spikes > 0) {
-            System.out.println("Spikes dug into " + pokemon.getDisplayName() + ".");
+            final String message = String.format("Spikes dug into %s.", pokemon.getDisplayName());
             switch (spikes) {
                 case 1:
                     pokemon.takeDamage(pokemon.getMaxHP() / 8);

@@ -437,10 +437,6 @@ public abstract class Move {
                         ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
                     } else {
                         target.takeDamage(damage);
-                        System.out.println(
-                            target.getDisplayName() + " took " + DECIMAL.format(100d * damage / target.getMaxHP())
-                                + "% (" + damage + ")");
-
                     }
 
                     if (!user.hasFainted()) {

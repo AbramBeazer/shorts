@@ -27,7 +27,7 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-import static org.shorts.Main.RANDOM;
+import static org.shorts.Main.*;
 import static org.shorts.model.StatEnum.ATK;
 import static org.shorts.model.StatEnum.DEF;
 import static org.shorts.model.StatEnum.HP;
@@ -491,14 +491,28 @@ public class Pokemon {
         return level;
     }
 
-    public void takeDamage(int damage) {
+    public void takeDamage(int damage, String message) {
         if (damage <= 0) {
             throw new IllegalArgumentException("Damage must be positive");
         }
+
+        if (message == null) {
+            double percent = Math.min(100d, 100d * damage / getMaxHP());
+            System.out.println(
+                getDisplayName() + " took " + DECIMAL.format(percent)
+                    + "% (" + Math.min(currentHP, damage) + ")");
+        } else {
+            System.out.println(message);
+        }
+
         this.currentHP = currentHP - damage;
         if (this.currentHP < 0) {
             this.currentHP = 0;
         }
+    }
+
+    public void takeDamage(int damage) {
+        takeDamage(damage, null);
     }
 
     public void heal(int health) {
@@ -945,5 +959,10 @@ public class Pokemon {
     public void fullRestore() {
         this.setStatus(Status.NONE);
         this.maxPotion();
+    }
+
+    @Override
+    public String toString() {
+        return getDisplayName();
     }
 }
