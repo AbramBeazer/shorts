@@ -404,7 +404,9 @@ public class Battle {
                 }
             }
 
-            printBench(trainer);
+            if (trainer.hasAvailableSwitch()) {
+                printBench(trainer);
+            }
 
             int choice;
             boolean choiceValid = true;
