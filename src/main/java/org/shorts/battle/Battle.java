@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.shorts.model.abilities.HailImmuneAbility;
 import org.shorts.model.abilities.SandImmuneAbility;
@@ -25,9 +26,7 @@ import static org.shorts.model.abilities.PoisonHeal.POISON_HEAL;
 import static org.shorts.model.abilities.VictoryStar.VICTORY_STAR;
 import static org.shorts.model.items.AssaultVest.ASSAULT_VEST;
 import static org.shorts.model.items.SafetyGoggles.SAFETY_GOGGLES;
-import static org.shorts.model.status.VolatileStatusType.CHOICE_LOCKED;
-import static org.shorts.model.status.VolatileStatusType.DISABLED;
-import static org.shorts.model.status.VolatileStatusType.HEAL_BLOCKED;
+import static org.shorts.model.status.VolatileStatusType.*;
 
 public class Battle {
 
@@ -255,7 +254,20 @@ public class Battle {
 
         while (!(playerOne.hasLost() || playerTwo.hasLost())) {
             takeTurns();
-            endOfTurn();
+            if (!(playerOne.hasLost() || playerTwo.hasLost())) {
+                replaceFaintedMons();
+            }
+            if (!(playerOne.hasLost() || playerTwo.hasLost())) {
+                endOfTurn();
+            }
+        }
+
+        if (playerOne.hasLost() && playerTwo.hasLost()) {
+            System.out.println("Battle ended in a draw.");
+        } else if (playerOne.hasLost()) {
+            System.out.println(playerTwo.getName() + " wins!");
+        } else if (playerTwo.hasLost()) {
+            System.out.println(playerOne.getName() + " wins!");
         }
     }
 
@@ -569,7 +581,7 @@ public class Battle {
             do {
                 choice = Integer.parseInt(scanner.nextLine());
             } while (choice <= 4 || choice > 9 || trainer.getTeam().get(choice - 4).hasFainted());
-            trainer.switchPokemon(0, choice - 4);
+            trainer.switchPokemon(index, choice - 4);
 
             //TODO: Is this the right place to do this? At the beginning of a turn, if both trainers switch, the abilities don't trigger until both new Pokemon are in.
             //      This is probably fine if only one switch happens, but what if the attacker uses U-Turn and activates the opponent's Eject Button? Which switch happens first?
@@ -635,17 +647,82 @@ public class Battle {
         System.out.println(field);
     }
 
+    private void replaceFaintedMons() {
+        boolean redo = false;
+        do {
+            List<Integer> switchingInP1 = new ArrayList<>();
+            List<Integer> switchingInP2 = new ArrayList<>();
+            for (int i = 0; i < activeMonsPerSide; i++) {
+                Pokemon mon = playerOne.getTeam().get(i);
+                if (mon.hasFainted() && playerOne.hasAvailableSwitch()) {
+                    switchingInP1.add(i);
+                    printBench(playerOne);
+                    int choice;
+                    //Choice is invalid if that Pokémon has fainted or is already in battle
+                    do {
+                        choice = Integer.parseInt(scanner.nextLine());
+                    } while (choice <= 4 || choice > 9 || playerOne.getTeam().get(choice - 4).hasFainted());
+                    playerOne.switchPokemon(i, choice - 4);
+                }
+            }
+            for (int i = 0; i < activeMonsPerSide; i++) {
+                Pokemon mon = playerTwo.getTeam().get(i);
+                if (mon.hasFainted() && playerTwo.hasAvailableSwitch()) {
+                    switchingInP2.add(i);
+                    printBench(playerTwo);
+                    int choice;
+                    //Choice is invalid if that Pokémon has fainted or is already in battle
+                    do {
+                        choice = Integer.parseInt(scanner.nextLine());
+                    } while (choice <= 4 || choice > 9 || playerTwo.getTeam().get(choice - 4).hasFainted());
+                    playerTwo.switchPokemon(i, choice - 4);
+                }
+            }
+
+            //TODO: How the heck is this supposed to work if we have, say, a Levitate user switching in at the same time as
+            // a Neutralizing Gas user while spikes are present? Does the Levitate user take spikes damage? What about if
+            // a Drizzle user switches in on hazards? Does it set up rain before stepping on the hazards, or after, if it survives?
+            for (Integer index : switchingInP1) {
+                playerOne.getTeam().get(index).afterEntry(this);
+            }
+            for (Integer index : switchingInP2) {
+                playerTwo.getTeam().get(index).afterEntry(this);
+            }
+
+            for (Integer index : switchingInP1) {
+                playerOne.applyEntryHazards(playerOne.getTeam().get(index));
+            }
+            for (Integer index : switchingInP2) {
+                playerTwo.applyEntryHazards(playerTwo.getTeam().get(index));
+            }
+
+            redo = false;
+            for (Integer index : switchingInP1) {
+                if (playerOne.getTeam().get(index).hasFainted()) {
+                    redo = true;
+                }
+            }
+            for (Integer index : switchingInP2) {
+                if (playerTwo.getTeam().get(index).hasFainted()) {
+                    redo = true;
+                }
+            }
+        } while (redo);
+    }
+
     private List<Pokemon> getAllActivePokemon() {
         List<Pokemon> allActiveMons = new ArrayList<>();
         allActiveMons.addAll(playerOne.getActivePokemon());
         allActiveMons.addAll(playerTwo.getActivePokemon());
-        return allActiveMons;
+        return allActiveMons.stream()
+            .filter(pokemon -> !pokemon.hasFainted())
+            .sorted(Comparator.comparing(Pokemon::calculateSpeed, Double::compareTo))
+            .collect(Collectors.toList());
     }
 
     private void endOfTurn() {
-        List<Pokemon> activeMons = getAllActivePokemon();
-        activeMons.sort(Comparator.comparing(Pokemon::calculateSpeed, Double::compareTo));
-        for (Pokemon mon : activeMons) {
+
+        for (Pokemon mon : getAllActivePokemon()) {
             if (!isWeatherSuppressed() && mon.getHeldItem() != SAFETY_GOGGLES && (
                 (weather == Weather.SAND && !mon.getTypes().contains(Type.ROCK) && !mon.getTypes().contains(Type.GROUND)
                     && !mon.getTypes().contains(Type.STEEL) && !(mon.getAbility() instanceof SandImmuneAbility)) || (
@@ -653,16 +730,22 @@ public class Battle {
                         && !(mon.getAbility() instanceof HailImmuneAbility)))) {
 
                 mon.takeDamage(mon.getMaxHP() / 16);
+                if(mon.hasFainted()) {
+                    System.out.println(mon + " fainted!");
+                }
             }
         }
 
-        for (Pokemon mon : activeMons) {
+        for (Pokemon mon : getAllActivePokemon()) {
             mon.afterTurn(this);
+            if(mon.hasFainted()) {
+                System.out.println(mon + " fainted!");
+            }
         }
 
         //TODO: Where do I put LeechSeed, Curse, etc?
 
-        for (Pokemon mon : activeMons) {
+        for (Pokemon mon : getAllActivePokemon()) {
             if (mon.getAbility() != MAGIC_GUARD) {
                 if (mon.getStatus() == Status.BURN) {
                     mon.takeDamage(mon.getMaxHP() / 16, String.format("%s is hurt by its burn!", mon));
@@ -681,11 +764,21 @@ public class Battle {
                     mon.heal(mon.getMaxHP() / 8);
                 }
             }
+            if(mon.hasFainted()) {
+                System.out.println(mon + " fainted!");
+            }
         }
 
-        for (Pokemon mon : activeMons) {
+        for (Pokemon mon : getAllActivePokemon()) {
             mon.getStatus().decrementTurns();
             mon.decrementVolatileStatusTurns();
+            if(mon.getVolatileStatus(PERISH).getTurnsRemaining() == 0){
+                mon.setCurrentHP(0);
+                mon.afterFaint(this);
+            }
+            if(mon.hasFainted()) {
+                System.out.println(mon + " fainted!");
+            }
         }
 
         //TODO: Check if weather stopping happens before or after taking hail/sand damage

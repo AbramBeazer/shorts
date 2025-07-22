@@ -371,7 +371,7 @@ public abstract class Move {
                 if (target.getCurrentHP() == 0) {
                     //Or should I have this call in Pokemon.takeDamage()?
                     System.out.println(target + " fainted!");
-                    target.afterFaint(user, battle);
+                    target.afterFaint(battle);
                     user.afterKO(target, battle);
                     //TODO: Handle fainting and subsequent switch-in.
 
