@@ -280,7 +280,9 @@ public class Battle {
         });
 
         for (Turn turn : turns) {
-            turn.takeTurn(this);
+            if (!turn.getUser().hasFainted()) {
+                turn.takeTurn(this);
+            }
         }
 
         //PRIORITY 6

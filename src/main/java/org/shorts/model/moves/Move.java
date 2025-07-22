@@ -319,6 +319,10 @@ public abstract class Move {
     public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setMovedThisTurn(true);
         this.decrementPP();
+        if (targets.isEmpty()) {
+            System.out.println("But there was no target...");
+            return;
+        }
         for (Pokemon target : targets) {
             //TODO:
             //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
@@ -366,6 +370,7 @@ public abstract class Move {
                 //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
                 if (target.getCurrentHP() == 0) {
                     //Or should I have this call in Pokemon.takeDamage()?
+                    System.out.println(target + " fainted!");
                     target.afterFaint(user, battle);
                     user.afterKO(target, battle);
                     //TODO: Handle fainting and subsequent switch-in.
