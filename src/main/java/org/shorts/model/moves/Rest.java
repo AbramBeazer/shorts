@@ -40,5 +40,6 @@ public class Rest extends Move {
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         user.setStatus(Status.createSleepForTurns(TURNS_OF_SLEEP));
         user.setCurrentHP(user.getMaxHP());
+        System.out.println(String.format("%s went to sleep and restored HP!", user));
     }
 }
