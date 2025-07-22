@@ -1,0 +1,93 @@
+package org.shorts.model.moves;
+
+import java.util.List;
+import java.util.Set;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.shorts.battle.Battle;
+import org.shorts.battle.DummyBattle;
+import org.shorts.model.abilities.Damp;
+import org.shorts.model.moves.selfdestruct.SelfDestruct;
+import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.types.Type;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import static org.shorts.model.pokemon.PokemonTestUtils.*;
+
+class SelfDestructTests {
+
+    private Pokemon boomer;
+    private Pokemon teammate;
+    private Pokemon opp1;
+    private Pokemon opp2;
+    private Battle battle;
+    private Move move;
+
+    @BeforeEach
+    void setUp() {
+        battle = new DummyBattle();
+        boomer = getDummyPokemon();
+        teammate = getDummyPokemon();
+        opp1 = getDummyPokemon();
+        opp2 = getDummyPokemon();
+        move = new SelfDestruct();
+    }
+
+    @Test
+    void testFailsWhenDampIsPresent() {
+        opp1.setAbility(Damp.DAMP);
+
+        move.execute(boomer, List.of(teammate, opp1, opp2), battle);
+
+        assertThat(boomer.hasFainted()).isFalse();
+        assertThat(teammate.isAtFullHP()).isTrue();
+        assertThat(opp1.isAtFullHP()).isTrue();
+        assertThat(opp2.isAtFullHP()).isTrue();
+        assertThat(move.getCurrentPP()).isLessThan(move.getMaxPP());
+        assertThat(boomer.getLastMoveUsed()).isEqualTo(move);
+    }
+
+    @Test
+    void testFailsWhenAllTargetsAreImmune() {
+        Set<Type> types = Set.of(Type.GHOST);
+        teammate.setTypes(types);
+        opp1.setTypes(types);
+        opp2.setTypes(types);
+
+        move.execute(boomer, List.of(teammate, opp1, opp2), battle);
+
+        assertThat(boomer.hasFainted()).isFalse();
+        assertThat(teammate.isAtFullHP()).isTrue();
+        assertThat(opp1.isAtFullHP()).isTrue();
+        assertThat(opp2.isAtFullHP()).isTrue();
+        assertThat(move.getCurrentPP()).isLessThan(move.getMaxPP());
+        assertThat(boomer.getLastMoveUsed()).isEqualTo(move);
+    }
+
+    @Test
+    void testSucceedsWhenAtLeastOneTargetIsNotImmune() {
+        Set<Type> types = Set.of(Type.GHOST);
+        opp1.setTypes(types);
+        opp2.setTypes(types);
+
+        move.execute(boomer, List.of(teammate, opp1, opp2), battle);
+
+        assertThat(boomer.hasFainted()).isTrue();
+        assertThat(teammate.isAtFullHP()).isFalse();
+        assertThat(opp1.isAtFullHP()).isTrue();
+        assertThat(opp2.isAtFullHP()).isTrue();
+        assertThat(move.getCurrentPP()).isLessThan(move.getMaxPP());
+        assertThat(boomer.getLastMoveUsed()).isEqualTo(move);
+    }
+
+    @Test
+    void testUserFaintsWithNoTargets() {
+        move.execute(boomer, List.of(), battle);
+
+        assertThat(boomer.hasFainted()).isTrue();
+        assertThat(move.getCurrentPP()).isLessThan(move.getMaxPP());
+        assertThat(boomer.getLastMoveUsed()).isEqualTo(move);
+    }
+}

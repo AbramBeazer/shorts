@@ -238,7 +238,7 @@ public abstract class Move {
                 * (user.hasVolatileStatus(MICLE_BERRY_EFFECT) ? 1.2 : 1));
         final boolean hit = HIT_RANDOM.nextInt(100) < threshold;
         if (!hit) {
-            System.out.println(user.toString() + "'s attack missed!");
+            System.out.println(user + "'s attack missed!");
         }
         return hit;
     }
@@ -775,7 +775,7 @@ public abstract class Move {
         return base / divisor;
     }
 
-    private void decrementPP() {
+    protected void decrementPP() {
         if (this.currentPP > 0) {
             this.currentPP--;
         }
@@ -783,7 +783,7 @@ public abstract class Move {
 
     protected boolean pressureApplies(Pokemon user, Pokemon target, Battle battle) {
         return battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target) && target.getAbility()
-            .equals(PRESSURE) && this.getCurrentPP() > 0;
+            .equals(PRESSURE) && this.getCurrentPP() > 0 && !target.hasFainted();
     }
 
     protected double getAttackingStat(Pokemon attacker, Pokemon defender, Battle battle) {
