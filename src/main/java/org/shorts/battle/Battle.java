@@ -259,6 +259,11 @@ public class Battle {
             }
             if (!(playerOne.hasLost() || playerTwo.hasLost())) {
                 endOfTurn();
+                //TODO: Do we need to redo endOfTurn if a Pokémon faints?
+                //  If X dies to sand and is replaced by Y,
+                //  does Y also take sand damage,
+                //  or does it go to the next check (poison/burn),
+                //  or does it skip the endOfTurn process entirely?
             }
         }
 
