@@ -50,12 +50,12 @@ public class SelfDestruct extends Move {
                 if (target.getCurrentHP() == 0) {
                     //TODO: Or should I have this call in Pokemon.takeDamage()?
                     System.out.println(target + " fainted!");
-                    target.afterFaint(user, battle);
+                    target.afterFaint(battle);
                     user.afterKO(target, battle);
                 }
             }
 
-            if(hits > 0) {
+            if (hits > 0) {
                 user.setCurrentHP(0);
                 System.out.println(user + " fainted!");
             }
