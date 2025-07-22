@@ -5,6 +5,9 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.shorts.Main;
+import org.shorts.MockRandomReturnMax;
+import org.shorts.MockRandomReturnZero;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
 import org.shorts.model.abilities.Damp;
@@ -27,6 +30,7 @@ class SelfDestructTests {
 
     @BeforeEach
     void setUp() {
+        Main.HIT_RANDOM = MockRandomReturnZero.ZERO_RANDOM;
         battle = new DummyBattle();
         boomer = getDummyPokemon();
         teammate = getDummyPokemon();
@@ -87,6 +91,20 @@ class SelfDestructTests {
         move.execute(boomer, List.of(), battle);
 
         assertThat(boomer.hasFainted()).isTrue();
+        assertThat(move.getCurrentPP()).isLessThan(move.getMaxPP());
+        assertThat(boomer.getLastMoveUsed()).isEqualTo(move);
+    }
+
+    @Test
+    void testUserDoesNotFaintIfMoveMisses() {
+        Main.HIT_RANDOM = MockRandomReturnMax.MAX_RANDOM;
+
+        move.execute(boomer, List.of(teammate, opp1, opp2), battle);
+
+        assertThat(boomer.hasFainted()).isFalse();
+        assertThat(teammate.isAtFullHP()).isTrue();
+        assertThat(opp1.isAtFullHP()).isTrue();
+        assertThat(opp2.isAtFullHP()).isTrue();
         assertThat(move.getCurrentPP()).isLessThan(move.getMaxPP());
         assertThat(boomer.getLastMoveUsed()).isEqualTo(move);
     }

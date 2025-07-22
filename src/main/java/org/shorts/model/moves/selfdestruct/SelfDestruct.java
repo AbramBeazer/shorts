@@ -3,7 +3,6 @@ package org.shorts.model.moves.selfdestruct;
 import java.util.List;
 
 import org.shorts.battle.Battle;
-import org.shorts.model.abilities.Damp;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
@@ -19,20 +18,21 @@ public class SelfDestruct extends Move {
 
     private int hits;
 
-    //TODO: User deals damage, then faints.
-    //TODO: Nothing happens if the move misses, if the target is immune, or if Damp is present.
-
     @Override
     public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setMovedThisTurn(true);
         this.decrementPP();
-        if (targets.stream()
-            .allMatch(target -> Type.getTypeMultiplier(this.getType(), target.getTypes()) == Type.IMMUNE)
-            || targets.stream().anyMatch(target -> target.getAbility() == DAMP)) {
-            System.out.println("But it failed!");
-        } else if (targets.isEmpty()) {
+
+        if (targets.isEmpty()) {
             user.setCurrentHP(0);
             System.out.println(user + " fainted!");
+
+        } else if (targets.stream().anyMatch(target -> target.getAbility() == DAMP)
+            || targets.stream()
+            .allMatch(target -> Type.getTypeMultiplier(this.getType(), target.getTypes()) == Type.IMMUNE)) {
+
+            System.out.println("But it failed!");
+
         } else {
             for (Pokemon target : targets) {
                 //TODO:
