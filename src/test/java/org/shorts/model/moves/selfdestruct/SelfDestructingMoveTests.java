@@ -1,4 +1,4 @@
-package org.shorts.model.moves;
+package org.shorts.model.moves.selfdestruct;
 
 import java.util.List;
 import java.util.Set;
@@ -10,8 +10,9 @@ import org.shorts.MockRandomReturnMax;
 import org.shorts.MockRandomReturnZero;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
+import org.shorts.battle.Terrain;
 import org.shorts.model.abilities.Damp;
-import org.shorts.model.moves.selfdestruct.SelfDestruct;
+import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
@@ -19,14 +20,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.shorts.model.pokemon.PokemonTestUtils.*;
 
-class SelfDestructTests {
+class SelfDestructingMoveTests {
 
     private Pokemon boomer;
     private Pokemon teammate;
     private Pokemon opp1;
     private Pokemon opp2;
     private Battle battle;
-    private Move move;
+    private SelfDestructingMove move;
 
     @BeforeEach
     void setUp() {
@@ -36,7 +37,9 @@ class SelfDestructTests {
         teammate = getDummyPokemon();
         opp1 = getDummyPokemon();
         opp2 = getDummyPokemon();
-        move = new SelfDestruct();
+        move = new SelfDestructingMove("TEST BOOM", 200, Type.NORMAL, Move.Category.PHYSICAL) {
+
+        };
     }
 
     @Test
@@ -107,5 +110,17 @@ class SelfDestructTests {
         assertThat(opp2.isAtFullHP()).isTrue();
         assertThat(move.getCurrentPP()).isLessThan(move.getMaxPP());
         assertThat(boomer.getLastMoveUsed()).isEqualTo(move);
+    }
+
+    @Test
+    void testMistyExplosionPowerBoostOnMistyTerrain() {
+        assertThat(boomer.isGrounded()).isTrue();
+        MistyExplosion mistyExplosion = new MistyExplosion();
+
+        assertThat(mistyExplosion.getPowerMultipliers(boomer, opp1, battle)).isOne();
+
+        battle.setTerrain(Terrain.MISTY, 5);
+
+        assertThat(mistyExplosion.getPowerMultipliers(boomer, opp1, battle)).isEqualTo(MistyExplosion.MULTIPLIER);
     }
 }
