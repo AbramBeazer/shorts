@@ -153,7 +153,7 @@ public abstract class Move {
         return this.power;
     }
 
-    public double getAccuracy() {
+    public double getAccuracy(Battle battle) {
         return this.accuracy;
     }
 
@@ -229,7 +229,7 @@ public abstract class Move {
     }
 
     protected boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
-        if (accuracy <= 0) {
+        if (getAccuracy(battle) <= 0) {
             return true;
         }
 
@@ -279,7 +279,7 @@ public abstract class Move {
             mod = roundHalfUp(mod * (4915 / divisor));
         }
 
-        return roundHalfDown((this.accuracy * mod) / divisor);
+        return roundHalfDown((getAccuracy(battle) * mod) / divisor);
     }
 
     protected double getAccuracyEvasionStageModifier(Pokemon user, Pokemon target) {
