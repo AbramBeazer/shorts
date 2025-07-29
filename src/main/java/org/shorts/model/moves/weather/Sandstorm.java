@@ -4,7 +4,7 @@ import org.shorts.battle.Weather;
 import org.shorts.model.moves.WindMove;
 import org.shorts.model.types.Type;
 
-public class Sandstorm extends WeatherMove implements WindMove {
+public class Sandstorm extends WeatherMove {
 
     public Sandstorm() {
         super("Sandstorm", Weather.SAND, Type.ROCK, 16);
