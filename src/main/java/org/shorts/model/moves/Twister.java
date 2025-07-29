@@ -6,7 +6,7 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-public class Twister extends Move implements WindMove {
+public class Twister extends Move implements CanHitFly, WindMove {
 
     public Twister() {
         super("Twister", 40, 100, Type.DRAGON, Category.SPECIAL, Range.ALL_ADJACENT_OPPONENTS, 32, false, 20);
