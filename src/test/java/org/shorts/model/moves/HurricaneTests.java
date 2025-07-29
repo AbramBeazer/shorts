@@ -1,7 +1,5 @@
 package org.shorts.model.moves;
 
-import java.util.Set;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.Main;
@@ -18,18 +16,19 @@ import static org.shorts.MockRandomReturnMax.*;
 import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 
-public class WildboltStormTests {
+public class HurricaneTests {
+
     private Pokemon user;
     private Pokemon target;
     private Battle battle;
-    private WildboltStorm move;
+    private Hurricane move;
 
     @BeforeEach
     void setup() {
         user = getDummyPokemon();
         target = getDummyPokemon();
         battle = new DummyBattle(user, target);
-        move = new WildboltStorm();
+        move = new Hurricane();
         Main.HIT_RANDOM = ZERO_RANDOM;
         Main.DAMAGE_RANDOM = ZERO_RANDOM;
         Main.CRIT_RANDOM = MAX_RANDOM;
@@ -37,11 +36,20 @@ public class WildboltStormTests {
     }
 
     @Test
-    void testParalyzesTarget() {
+    void testConfusesTarget() {
         move.executeOnTarget(user, target, battle);
 
-        assertThat(target.getStatus()).isEqualTo(Status.PARALYZE);
+        assertThat(target.hasVolatileStatus(VolatileStatusType.CONFUSED)).isTrue();
         assertThat(target.isAtFullHP()).isFalse();
+    }
+
+    @Test
+    void test50AccuracyDuringSun() {
+        assertThat(move.getAccuracy(battle)).isEqualTo(70);
+        battle.setWeather(Weather.SUN, 5);
+        assertThat(move.getAccuracy(battle)).isEqualTo(50);
+        battle.setWeather(Weather.EXTREME_SUN, 5);
+        assertThat(move.getAccuracy(battle)).isEqualTo(50);
     }
 
     @Test
