@@ -1,5 +1,6 @@
 package org.shorts.model.abilities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,7 @@ public class WindRiderTests {
 
     private Pokemon user;
     private Pokemon target;
+    private Pokemon targetTeammate;
     private Battle battle;
     private Move move;
 
@@ -31,8 +33,13 @@ public class WindRiderTests {
     void setup() {
         user = getDummyPokemon();
         target = getDummyPokemon();
+        targetTeammate = getDummyPokemon();
+        targetTeammate.setNickname("teammate");
+        List<Pokemon> opponents = new ArrayList<>();
+        opponents.add(target);
+        opponents.add(targetTeammate);
         target.setAbility(WindRider.WIND_RIDER);
-        battle = new DummyBattle(user, target);
+        battle = new DummyBattle(List.of(user), opponents, 1);
         Main.HIT_RANDOM = ZERO_RANDOM;
         Main.DAMAGE_RANDOM = ZERO_RANDOM;
         Main.CRIT_RANDOM = MAX_RANDOM;
@@ -51,12 +58,12 @@ public class WindRiderTests {
     @Test
     void testActivatedByWhirlwind() {
         move = new Whirlwind();
-        move.execute(user, List.of(target), battle);
-        //TODO: Does the switch get forced?
-        assertThat(false).isTrue();
-    }
 
-    //TODO: What happens if the target has this ability, uses Ingrain, and then gets hit by Whirlwind?
+        move.execute(user, List.of(target), battle);
+
+        assertThat(target.getStageAttack()).isOne();
+        assertThat(target).isEqualTo(battle.getCorrespondingTrainer(target).getTeam().get(0));
+    }
 
     @Test
     void testActivatedByTailwind() {

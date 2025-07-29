@@ -1,5 +1,6 @@
 package org.shorts.model.abilities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,7 @@ public class WindPowerTests {
 
     private Pokemon user;
     private Pokemon target;
+    private Pokemon targetTeammate;
     private Battle battle;
     private Move move;
 
@@ -32,8 +34,13 @@ public class WindPowerTests {
     void setup() {
         user = getDummyPokemon();
         target = getDummyPokemon();
+        targetTeammate = getDummyPokemon();
+        targetTeammate.setNickname("teammate");
+        List<Pokemon> opponents = new ArrayList<>();
+        opponents.add(target);
+        opponents.add(targetTeammate);
         target.setAbility(WindPower.WIND_POWER);
-        battle = new DummyBattle(user, target);
+        battle = new DummyBattle(List.of(user), opponents, 1);
         Main.HIT_RANDOM = ZERO_RANDOM;
         Main.DAMAGE_RANDOM = ZERO_RANDOM;
         Main.CRIT_RANDOM = MAX_RANDOM;
@@ -50,14 +57,14 @@ public class WindPowerTests {
     }
 
     @Test
-    void testActivatedByWhirlwind() {
+    void testNotActivatedByWhirlwind() {
         move = new Whirlwind();
-        move.execute(user, List.of(target), battle);
-        //TODO: Does the switch get forced?
-        assertThat(false).isTrue();
-    }
 
-    //TODO: What happens if the target has this ability, uses Ingrain, and then gets hit by Whirlwind?
+        move.execute(user, List.of(target), battle);
+
+        assertThat(target.hasVolatileStatus(VolatileStatusType.CHARGED)).isFalse();
+        assertThat(targetTeammate).isEqualTo(battle.getCorrespondingTrainer(target).getTeam().get(0));
+    }
 
     @Test
     void testActivatedByTailwind() {
