@@ -290,7 +290,7 @@ public class Battle {
         turns.sort((t1, t2) -> {
             int priority = Integer.compare(t2.getPriority(this), t1.getPriority(this));
             if (priority == 0) {
-                return Double.compare(t2.getUser().calculateSpeed(), t1.getUser().calculateSpeed());
+                return Double.compare(t2.getUser().calculateSpeed(this), t1.getUser().calculateSpeed(this));
             } else {
                 return priority;
             }
@@ -721,8 +721,9 @@ public class Battle {
         allActiveMons.addAll(playerTwo.getActivePokemon());
         return allActiveMons.stream()
             .filter(pokemon -> !pokemon.hasFainted())
-            .sorted(Comparator.comparing(Pokemon::calculateSpeed, Double::compareTo))
+            .sorted(Comparator.comparing(poke -> poke.calculateSpeed(this), Double::compareTo))
             .collect(Collectors.toList());
+        //TODO: Does Tailwind change the order in which end-of-turn effects apply?
     }
 
     private void endOfTurn() {
@@ -735,7 +736,7 @@ public class Battle {
                         && !(mon.getAbility() instanceof HailImmuneAbility)))) {
 
                 mon.takeDamage(mon.getMaxHP() / 16);
-                if(mon.hasFainted()) {
+                if (mon.hasFainted()) {
                     System.out.println(mon + " fainted!");
                 }
             }
@@ -743,7 +744,7 @@ public class Battle {
 
         for (Pokemon mon : getAllActivePokemon()) {
             mon.afterTurn(this);
-            if(mon.hasFainted()) {
+            if (mon.hasFainted()) {
                 System.out.println(mon + " fainted!");
             }
         }
@@ -769,7 +770,7 @@ public class Battle {
                     mon.heal(mon.getMaxHP() / 8);
                 }
             }
-            if(mon.hasFainted()) {
+            if (mon.hasFainted()) {
                 System.out.println(mon + " fainted!");
             }
         }
@@ -777,11 +778,11 @@ public class Battle {
         for (Pokemon mon : getAllActivePokemon()) {
             mon.getStatus().decrementTurns();
             mon.decrementVolatileStatusTurns();
-            if(mon.getVolatileStatus(PERISH).getTurnsRemaining() == 0){
+            if (mon.getVolatileStatus(PERISH).getTurnsRemaining() == 0) {
                 mon.setCurrentHP(0);
                 mon.afterFaint(this);
             }
-            if(mon.hasFainted()) {
+            if (mon.hasFainted()) {
                 System.out.println(mon + " fainted!");
             }
         }

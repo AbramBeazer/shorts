@@ -35,6 +35,7 @@ public class Trainer {
     private int auroraVeilTurns = 0;
     private int luckyChantTurns = 0;
     private int mistTurns = 0;
+    private int tailwindTurns = 0;
 
     public Trainer(String name, List<Pokemon> team) {
         this(name, team, team.size());
@@ -138,6 +139,14 @@ public class Trainer {
 
     public void setMistTurns(int mistTurns) {
         this.mistTurns = mistTurns;
+    }
+
+    public int getTailwindTurns() {
+        return tailwindTurns;
+    }
+
+    public void setTailwindTurns(int tailwindTurns) {
+        this.tailwindTurns = tailwindTurns;
     }
 
     public String getName() {
@@ -328,6 +337,7 @@ public class Trainer {
         countDownAuroraVeil();
         countDownLuckyChant();
         countDownMist();
+        countDownTailwind();
     }
 
     private void countDownSafeguard() {
@@ -380,6 +390,15 @@ public class Trainer {
             mistTurns--;
             if (mistTurns == 0) {
                 System.out.println("Mist ended for " + getName() + "'s team.");
+            }
+        }
+    }
+
+    private void countDownTailwind() {
+        if (tailwindTurns > 0) {
+            tailwindTurns--;
+            if (tailwindTurns == 0) {
+                System.out.println("Tailwind ended for " + getName() + "'s team.");
             }
         }
     }

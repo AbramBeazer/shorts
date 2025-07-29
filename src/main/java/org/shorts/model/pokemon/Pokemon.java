@@ -438,10 +438,13 @@ public class Pokemon {
         this.specialDefense = specialDefense;
     }
 
-    public double calculateSpeed() {
+    public double calculateSpeed(Battle battle) {
         double multiplier = ability.onCalculateSpeed(this) * heldItem.onCalculateSpeed(this);
         if (this.getStatus() == Status.PARALYZE) {
             multiplier *= 0.5;
+        }
+        if (battle.getCorrespondingTrainer(this).getTailwindTurns() > 0) {
+            multiplier *= 2;
         }
         //Verify in which order these calculations should take place.
         return this.speed * getStageMultiplier(stageSpeed) * multiplier;

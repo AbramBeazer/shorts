@@ -148,7 +148,7 @@ class QuarkDriveTests {
 
         assertThat(quarkDrive.getBoostedStat()).isEqualTo(StatEnum.SPEED);
         assertThat(quarkDrive.onCalculateAttack(user)).isEqualTo(QuarkDrive.SPEED_MULTIPLIER);
-        assertThat(user.calculateSpeed()).isEqualTo(
+        assertThat(user.calculateSpeed(battle)).isEqualTo(
             user.getStatApplyStage(StatEnum.SPEED) * QuarkDrive.SPEED_MULTIPLIER);
     }
 
@@ -171,7 +171,7 @@ class QuarkDriveTests {
 
         assertThat(quarkDrive.getBoostedStat()).isEqualTo(StatEnum.SPEED);
         assertThat(quarkDrive.onCalculateAttack(user)).isEqualTo(QuarkDrive.SPEED_MULTIPLIER);
-        assertThat(user.calculateSpeed()).isEqualTo(
+        assertThat(user.calculateSpeed(battle)).isEqualTo(
             user.getStatApplyStage(StatEnum.SPEED) * QuarkDrive.SPEED_MULTIPLIER);
     }
 

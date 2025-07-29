@@ -232,7 +232,7 @@ public abstract class Move {
         if (accuracy <= 0) {
             return true;
         }
-        //TODO: Implement semi-invulnerable
+
         int threshold = (int) roundHalfDown(
             getModifiedAccuracy(user, target, battle) * getAccuracyEvasionStageModifier(user, target)
                 * (user.hasVolatileStatus(MICLE_BERRY_EFFECT) ? 1.2 : 1));
@@ -410,6 +410,7 @@ public abstract class Move {
     }
 
     protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
+        //TODO: Implement semi-invulnerable
         if (rollToHit(user, target, battle) && !isTargetProtected(user, target, battle)) {
 
             if (this.category == Category.STATUS) {
@@ -689,15 +690,24 @@ public abstract class Move {
         if (this instanceof HitsMinimize && target.hasVolatileStatus(MINIMIZED)) {
             base = roundHalfUp(base * 2);
         }
-        if ((this instanceof Earthquake || this instanceof Magnitude) && (target.hasVolatileStatus(SEMI_INVULNERABLE)
-            && target.getVolatileStatus(SEMI_INVULNERABLE).getMove() instanceof Dig)) {
-            base = roundHalfUp(base * 2);
-        }
-        if ((this instanceof Surf || this instanceof Whirlpool) && (target.hasVolatileStatus(SEMI_INVULNERABLE)
-            && target.getVolatileStatus(SEMI_INVULNERABLE).getMove() instanceof Dive)) {
-            base = roundHalfUp(base * 2);
-        }
 
+        if (target.hasVolatileStatus(SEMI_INVULNERABLE)) {
+            Move semiInvulnerableMove = target.getVolatileStatus(SEMI_INVULNERABLE).getMove();
+            if ((this instanceof Earthquake || this instanceof Magnitude)
+                && semiInvulnerableMove instanceof Dig) {
+                base = roundHalfUp(base * 2);
+            }
+            if ((this instanceof Surf || this instanceof Whirlpool)
+                && semiInvulnerableMove instanceof Dive) {
+                base = roundHalfUp(base * 2);
+            }
+            //TODO: Implement
+            //            if ((this instanceof Gust || this instanceof Twister)
+            //                && (semiInvulnerableMove instanceof Fly || semiInvulnerableMove instanceof Bounce
+            //                || semiInvulnerableMove instanceof SkyDrop)) {
+            //                base = roundHalfUp(base * 2);
+            //            }
+        }
         if (!critical && user.getAbility() != INFILTRATOR) {
             Trainer opposingTrainer = battle.getOpposingTrainer(user);
             double screenMultiplier = battle.getActiveMonsPerSide() == 1 ? 0.5 : (2732 / divisor);
