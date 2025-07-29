@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 
-public class Magnitude extends Move {
+public class Magnitude extends Move implements CanHitDig {
 
     public Magnitude() {
         super("Magnitude", 0, 100, Type.GROUND, Category.PHYSICAL, Range.ALL_ADJACENT, 48, false, 0);
