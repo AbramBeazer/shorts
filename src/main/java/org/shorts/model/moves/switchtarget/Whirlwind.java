@@ -20,7 +20,9 @@ public class Whirlwind extends SwitchTargetMove implements AffectedByMagicBounce
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         //TODO: Should fail if target is protected by Crafty Shield.
-        if (!target.hasVolatileStatus(SEMI_INVULNERABLE)) {
+        if (target.hasVolatileStatus(SEMI_INVULNERABLE)) {
+            //TODO: Add failure message
+        } else {
             super.trySecondaryEffect(user, target, battle);
         }
     }
