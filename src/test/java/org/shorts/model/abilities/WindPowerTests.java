@@ -7,21 +7,22 @@ import org.junit.jupiter.api.Test;
 import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
+import org.shorts.battle.Weather;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.PetalBlizzard;
 import org.shorts.model.moves.Tailwind;
-import org.shorts.model.moves.WindMove;
 import org.shorts.model.moves.switchtarget.Whirlwind;
+import org.shorts.model.moves.weather.Sandstorm;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatusType;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.MockRandomReturnMax.*;
 import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
 
 public class WindPowerTests {
+
     private Pokemon user;
     private Pokemon target;
     private Battle battle;
@@ -31,7 +32,7 @@ public class WindPowerTests {
     void setup() {
         user = getDummyPokemon();
         target = getDummyPokemon();
-        target.setAbility(WindRider.WIND_RIDER);
+        target.setAbility(WindPower.WIND_POWER);
         battle = new DummyBattle(user, target);
         Main.HIT_RANDOM = ZERO_RANDOM;
         Main.DAMAGE_RANDOM = ZERO_RANDOM;
@@ -40,31 +41,40 @@ public class WindPowerTests {
     }
 
     @Test
-    void testImmuneToWindMoves() {
+    void testNotImmuneToWindMoves() {
         move = new PetalBlizzard();
         move.execute(user, List.of(target), battle);
 
-        assertThat(target.isAtFullHP()).isTrue();
+        assertThat(target.isAtFullHP()).isFalse();
         assertThat(target.hasVolatileStatus(VolatileStatusType.CHARGED)).isTrue();
     }
 
     @Test
-    void testWhirlwind() {
+    void testActivatedByWhirlwind() {
         move = new Whirlwind();
         move.execute(user, List.of(target), battle);
-//TODO: Does the switch get forced?
+        //TODO: Does the switch get forced?
         assertThat(false).isTrue();
     }
 
     //TODO: What happens if the target has this ability, uses Ingrain, and then gets hit by Whirlwind?
 
     @Test
-    void testTailwind() {
+    void testActivatedByTailwind() {
         double regularSpeed = target.calculateSpeed(battle);
         move = new Tailwind();
         move.execute(target, List.of(target), battle);
 
         assertThat(target.hasVolatileStatus(VolatileStatusType.CHARGED)).isTrue();
         assertThat(target.calculateSpeed(battle)).isEqualTo(2 * regularSpeed);
+    }
+
+    @Test
+    void testNotActivatedBySandstorm() {
+        move = new Sandstorm();
+        move.execute(user, List.of(user, target), battle);
+
+        assertThat(battle.getWeather()).isEqualTo(Weather.SAND);
+        assertThat(target.hasVolatileStatus(VolatileStatusType.CHARGED)).isFalse();
     }
 }

@@ -415,6 +415,7 @@ public abstract class Move {
 
             if (this.category == Category.STATUS) {
                 //TODO: This may change -- Will-O-Wisp shouldn't burn Flash Fire mons, Thunder Wave won't affect ground-types, and poison moves won't affect steels, but I think other status moves might ignore types.
+                //TODO: REFACTOR THIS! getTypeMultiplier calls target.beforeHit!
                 if (target.beforeHit(user, battle, this) > 0 && getTypeMultiplier(user, target, battle) > 0) {
                     this.trySecondaryEffect(user, target, battle);
                 }
@@ -824,4 +825,8 @@ public abstract class Move {
     protected void inflictRecoil(Pokemon user, int damageDealt) {
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

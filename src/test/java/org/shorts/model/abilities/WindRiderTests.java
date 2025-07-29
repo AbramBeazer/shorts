@@ -7,11 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
+import org.shorts.battle.Weather;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.PetalBlizzard;
 import org.shorts.model.moves.Tailwind;
-import org.shorts.model.moves.WindMove;
 import org.shorts.model.moves.switchtarget.Whirlwind;
+import org.shorts.model.moves.weather.Sandstorm;
 import org.shorts.model.pokemon.Pokemon;
 
 import static org.assertj.core.api.Assertions.*;
@@ -48,22 +49,31 @@ public class WindRiderTests {
     }
 
     @Test
-    void testWhirlwind() {
+    void testActivatedByWhirlwind() {
         move = new Whirlwind();
         move.execute(user, List.of(target), battle);
-//TODO: Does the switch get forced?
+        //TODO: Does the switch get forced?
         assertThat(false).isTrue();
     }
 
     //TODO: What happens if the target has this ability, uses Ingrain, and then gets hit by Whirlwind?
 
     @Test
-    void testTailwind() {
+    void testActivatedByTailwind() {
         double regularSpeed = target.calculateSpeed(battle);
         move = new Tailwind();
         move.execute(target, List.of(target), battle);
 
         assertThat(target.getStageAttack()).isOne();
         assertThat(target.calculateSpeed(battle)).isEqualTo(2 * regularSpeed);
+    }
+
+    @Test
+    void testNotActivatedBySandstorm() {
+        move = new Sandstorm();
+        move.execute(user, List.of(user, target), battle);
+
+        assertThat(battle.getWeather()).isEqualTo(Weather.SAND);
+        assertThat(target.getStageAttack()).isZero();
     }
 }
