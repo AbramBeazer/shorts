@@ -793,8 +793,9 @@ public abstract class Move {
     }
 
     protected boolean pressureApplies(Pokemon user, Pokemon target, Battle battle) {
-        return battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target) && target.getAbility()
-            .equals(PRESSURE) && this.getCurrentPP() > 0 && !target.hasFainted();
+        return battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target)
+            && target.getAbility().equals(PRESSURE) && !target.hasVolatileStatus(ABILITY_SUPPRESSED)
+            && this.getCurrentPP() > 0 && !target.hasFainted();
     }
 
     protected double getAttackingStat(Pokemon attacker, Pokemon defender, Battle battle) {
