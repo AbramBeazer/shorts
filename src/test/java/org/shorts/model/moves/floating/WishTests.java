@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.Status;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 
@@ -59,5 +60,18 @@ class WishTests {
 
         new Wish().executeOnTarget(user, receiver, battle);
         assertThat(receiver.getCurrentHP()).isOne();
+    }
+
+    @Test
+    void testFailsIfReceiverHasFainted() {
+        Pokemon user = getDummyPokemon();
+        Pokemon receiver = getDummyPokemon();
+        receiver.setCurrentHP(0);
+        receiver.setStatus(Status.FAINTED);
+        Battle battle = new DummyBattle(user, getDummyPokemon());
+
+        new Wish().executeOnTarget(user, receiver, battle);
+        assertThat(receiver.getCurrentHP()).isZero();
+        assertThat(receiver.getStatus()).isEqualTo(Status.FAINTED);
     }
 }
