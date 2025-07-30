@@ -736,7 +736,7 @@ public class Battle {
         //TODO: Does Tailwind change the order in which end-of-turn effects apply?
     }
 
-    private void endOfTurn() {
+    void endOfTurn() {
         handleFloatingEffects();
 
         for (Pokemon mon : getAllActivePokemon()) {
