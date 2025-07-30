@@ -36,6 +36,10 @@ public class FloatingMove extends Move {
     public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setMovedThisTurn(true);
         this.decrementPP();
+        if (targets.isEmpty()) {
+            System.out.println("But there was no target...");
+            return;
+        }
         for (Pokemon target : targets) {
             //TODO:
             //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
@@ -59,5 +63,19 @@ public class FloatingMove extends Move {
 
     public void triggerFloatingEffect(Pokemon user, Pokemon target, Battle battle) {
         this.executeOnTarget(user, target, battle);
+
+        if (user.getCurrentHP() == 0) {
+            user.afterFaint(battle);
+        }
+
+        //TODO: Handle Endure, Destiny Bond, etc.
+        if (target.getCurrentHP() == 0) {
+            //Or should I have this call in Pokemon.takeDamage()?
+            System.out.println(target + " fainted!");
+            target.afterFaint(battle);
+            if (!user.hasFainted()) {
+                user.afterKO(target, battle);
+            }
+        }
     }
 }
