@@ -264,6 +264,7 @@ public class Battle {
 
         while (!(playerOne.hasLost() || playerTwo.hasLost())) {
             takeTurns();
+            handleFloatingEffects();
             if (!(playerOne.hasLost() || playerTwo.hasLost())) {
                 replaceFaintedMons();
             }
@@ -737,7 +738,6 @@ public class Battle {
     }
 
     void endOfTurn() {
-        handleFloatingEffects();
 
         for (Pokemon mon : getAllActivePokemon()) {
             if (!isWeatherSuppressed() && mon.getHeldItem() != SAFETY_GOGGLES && (
@@ -809,32 +809,16 @@ public class Battle {
 
             if (effect.getTurnsRemaining() == 0) {
 
-                int targetIndex = effect.getTargetIndex() < activeMonsPerSide
-                    ? effect.getTargetIndex()
-                    : effect.getTargetIndex() - activeMonsPerSide;
-                List<Pokemon> potentialTargets = effect.getTargetIndex() < activeMonsPerSide
-                    ? getOpposingTrainer(effect.getUser()).getActivePokemon()
-                    : getCorrespondingTrainer(effect.getUser()).getActivePokemon();
-
-                Pokemon target = potentialTargets.get(targetIndex);
-
-                int i = 0;
-                while (i < activeMonsPerSide && (target == null || target.hasFainted())) {
-                    if (effect.getTargetIndex() != i) {
-                        target = potentialTargets.get(i);
-                    }
-                    i++;
-                }
+                final Pokemon target = effect.getTargetIndex() < activeMonsPerSide
+                    ? getOpposingTrainer(effect.getUser()).getActivePokemon().get(effect.getTargetIndex())
+                    : getCorrespondingTrainer(effect.getUser()).getActivePokemon()
+                        .get(effect.getTargetIndex() - activeMonsPerSide);
 
                 if (target != null && !target.hasFainted()) {
                     effect.getMove().triggerFloatingEffect(effect.getUser(), target, this);
                 }
             }
         }
-    }
-
-    private void switchInReplacements() {
-        //TOOD: If a Pokémon has fainted, leaving a slot empty, have them enter and apply entry hazards.
     }
 
     public void decrementAllCounters() {
