@@ -802,7 +802,7 @@ public class Battle {
         decrementAllCounters();
     }
 
-    private void handleFloatingEffects() {
+    void handleFloatingEffects() {
         for (FloatingEffect effect : getFloatingEffects()) {
 
             effect.decrementTurnsRemaining();

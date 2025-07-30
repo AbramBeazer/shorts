@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.shorts.model.moves.floating.DoomDesire;
 import org.shorts.model.pokemon.Axew;
 import org.shorts.model.pokemon.Bulbasaur;
 import org.shorts.model.pokemon.Charmander;
@@ -53,17 +54,5 @@ class BattleTests {
         final Battle battle = new DummyBattle(user, target);
 
         battle.printField(battle.getPlayerOne());
-    }
-
-
-    @Test
-    void testFloatingEffects() {
-        final Pokemon user = getDummyPokemon();
-        final Pokemon target = getDummyPokemon();
-        final Battle battle = new DummyBattle(user, target);
-
-        battle.endOfTurn();
-
-        assertThat(false).isTrue();
     }
 }
