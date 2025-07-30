@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Weather;
 import org.shorts.model.Nature;
@@ -27,7 +28,7 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-import static org.shorts.Main.RANDOM;
+import static org.shorts.Main.*;
 import static org.shorts.model.StatEnum.ATK;
 import static org.shorts.model.StatEnum.DEF;
 import static org.shorts.model.StatEnum.HP;
