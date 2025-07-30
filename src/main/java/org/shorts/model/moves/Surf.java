@@ -2,7 +2,7 @@ package org.shorts.model.moves;
 
 import org.shorts.model.types.Type;
 
-public class Surf extends Move {
+public class Surf extends Move implements CanHitDive {
 
     //TODO: Verify power, PP, etc.
     public Surf() {

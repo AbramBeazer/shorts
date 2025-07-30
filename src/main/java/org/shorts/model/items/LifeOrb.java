@@ -22,7 +22,9 @@ public class LifeOrb extends HeldItem {
     public void afterAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {
         if (!(user.hasFainted() || (move instanceof GetsSheerForceBoost && user.getAbility() == SHEER_FORCE)
             || user.getAbility() == MAGIC_GUARD)) {
-            user.takeDamage(user.getMaxHP() / 10);
+            user.takeDamage(
+                user.getMaxHP() / 10,
+                String.format("%s took damage from the Life Orb!", user));
         }
     }
 }

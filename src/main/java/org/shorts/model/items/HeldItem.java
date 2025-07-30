@@ -74,7 +74,7 @@ public abstract class HeldItem {
     public void afterTurn(Pokemon user, Battle battle) {
     }
 
-    public void afterFaint(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterFaint(Pokemon self, Battle battle) {
     }
 
     public void afterKO(Pokemon self, Pokemon opponent, Battle battle) {

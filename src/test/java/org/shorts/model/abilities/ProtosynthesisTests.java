@@ -168,7 +168,7 @@ class ProtosynthesisTests {
 
         assertThat(protosynthesis.getBoostedStat()).isEqualTo(StatEnum.SPEED);
         assertThat(protosynthesis.onCalculateAttack(user)).isEqualTo(Protosynthesis.SPEED_MULTIPLIER);
-        assertThat(user.calculateSpeed()).isEqualTo(
+        assertThat(user.calculateSpeed(battle)).isEqualTo(
             user.getStatApplyStage(StatEnum.SPEED) * Protosynthesis.SPEED_MULTIPLIER);
     }
 
@@ -191,7 +191,7 @@ class ProtosynthesisTests {
 
         assertThat(protosynthesis.getBoostedStat()).isEqualTo(StatEnum.SPEED);
         assertThat(protosynthesis.onCalculateAttack(user)).isEqualTo(Protosynthesis.SPEED_MULTIPLIER);
-        assertThat(user.calculateSpeed()).isEqualTo(
+        assertThat(user.calculateSpeed(battle)).isEqualTo(
             user.getStatApplyStage(StatEnum.SPEED) * Protosynthesis.SPEED_MULTIPLIER);
     }
 

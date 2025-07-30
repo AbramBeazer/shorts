@@ -42,17 +42,7 @@ import static org.shorts.model.abilities.trapping.ShadowTag.SHADOW_TAG;
 import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
 import static org.shorts.model.items.FloatStone.FLOAT_STONE;
 import static org.shorts.model.items.ShedShell.SHED_SHELL;
-import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
-import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
-import static org.shorts.model.status.VolatileStatusType.AUTOTOMIZED;
-import static org.shorts.model.status.VolatileStatusType.CANT_ESCAPE;
-import static org.shorts.model.status.VolatileStatusType.GROUNDED;
-import static org.shorts.model.status.VolatileStatusType.HEAL_BLOCKED;
-import static org.shorts.model.status.VolatileStatusType.HELPING_HAND;
-import static org.shorts.model.status.VolatileStatusType.MAGNET_LEVITATION;
-import static org.shorts.model.status.VolatileStatusType.NO_RETREAT;
-import static org.shorts.model.status.VolatileStatusType.OCTOLOCKED;
-import static org.shorts.model.status.VolatileStatusType.ROOTED;
+import static org.shorts.model.status.VolatileStatusType.*;
 
 public class Pokemon {
 
@@ -339,7 +329,8 @@ public class Pokemon {
         this.nickname = nickname;
     }
 
-    public String getDisplayName() {
+    @Override
+    public String toString() {
         if (nickname == null) {
             return pokedexEntry.getSpeciesName();
         } else {
@@ -447,10 +438,13 @@ public class Pokemon {
         this.specialDefense = specialDefense;
     }
 
-    public double calculateSpeed() {
+    public double calculateSpeed(Battle battle) {
         double multiplier = ability.onCalculateSpeed(this) * heldItem.onCalculateSpeed(this);
         if (this.getStatus() == Status.PARALYZE) {
             multiplier *= 0.5;
+        }
+        if (battle.getCorrespondingTrainer(this).getTailwindTurns() > 0) {
+            multiplier *= 2;
         }
         //Verify in which order these calculations should take place.
         return this.speed * getStageMultiplier(stageSpeed) * multiplier;
@@ -491,15 +485,29 @@ public class Pokemon {
         return level;
     }
 
-    public void takeDamage(int damage) {
+    public void takeDamage(int damage, String message) {
         //TODO: Move Sturdy/Endure here
         if (damage <= 0) {
             throw new IllegalArgumentException("Damage must be positive");
         }
+
+        if (message == null) {
+            double percent = Math.min(100d, 100d * damage / getMaxHP());
+            System.out.println(
+                this + " took " + DECIMAL.format(percent)
+                    + "% (" + Math.min(currentHP, damage) + ")");
+        } else {
+            System.out.println(message);
+        }
+
         this.currentHP = currentHP - damage;
         if (this.currentHP < 0) {
             this.currentHP = 0;
         }
+    }
+
+    public void takeDamage(int damage) {
+        takeDamage(damage, null);
     }
 
     public void heal(int health) {
@@ -707,7 +715,9 @@ public class Pokemon {
     public void decrementVolatileStatusTurns() {
         volatileStatuses.forEach((key, value) -> value.decrementTurns());
         volatileStatuses.entrySet()
-            .removeIf(entry -> entry.getValue() != null && entry.getValue().getTurnsRemaining() == 0);
+            .removeIf(entry ->
+                entry.getValue() != null && entry.getValue().getTurnsRemaining() == 0
+                    && !entry.getKey().equals(PERISH));
     }
 
     public boolean isAtFullHP() {
@@ -873,12 +883,15 @@ public class Pokemon {
         heldItem.afterTurn(this, battle);
     }
 
-    public void afterFaint(Pokemon opponent, Battle battle) {
+    public void afterFaint(Battle battle) {
         if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
             || this.getAbility() instanceof UnsuppressableAbility) {
-            ability.afterFaint(this, opponent, battle);
+            ability.afterFaint(this, battle);
         }
-        heldItem.afterFaint(this, opponent, battle);
+        heldItem.afterFaint(this, battle);
+
+        this.setStatus(Status.FAINTED);
+        this.volatileStatuses.clear();
 
         Pickup.removeFromConsumedItems(this);
     }

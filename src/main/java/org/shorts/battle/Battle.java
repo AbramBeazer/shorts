@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.shorts.model.abilities.HailImmuneAbility;
 import org.shorts.model.abilities.SandImmuneAbility;
@@ -26,9 +27,7 @@ import static org.shorts.model.abilities.PoisonHeal.POISON_HEAL;
 import static org.shorts.model.abilities.VictoryStar.VICTORY_STAR;
 import static org.shorts.model.items.AssaultVest.ASSAULT_VEST;
 import static org.shorts.model.items.SafetyGoggles.SAFETY_GOGGLES;
-import static org.shorts.model.status.VolatileStatusType.CHOICE_LOCKED;
-import static org.shorts.model.status.VolatileStatusType.DISABLED;
-import static org.shorts.model.status.VolatileStatusType.HEAL_BLOCKED;
+import static org.shorts.model.status.VolatileStatusType.*;
 
 public class Battle {
 
@@ -125,7 +124,7 @@ public class Battle {
 
     public void setMagicRoomTurns(int magicRoomTurns) {
         if (this.magicRoomTurns > 0) {
-            magicRoomTurns = 0;
+            this.magicRoomTurns = 0;
         } else {
             this.magicRoomTurns = magicRoomTurns;
         }
@@ -245,14 +244,14 @@ public class Battle {
         System.out.println("\n" + playerOne.getName() + "'s team:");
         StringBuilder teamOne = new StringBuilder();
         for (Pokemon mon : playerOne.getTeam()) {
-            teamOne.append(mon.getDisplayName()).append("\t");
+            teamOne.append(mon).append("\t");
         }
         System.out.println(teamOne);
 
         System.out.println("\n" + playerTwo.getName() + "'s team:");
         StringBuilder teamTwo = new StringBuilder();
         for (Pokemon mon : playerTwo.getTeam()) {
-            teamTwo.append(mon.getDisplayName()).append("\t");
+            teamTwo.append(mon).append("\t");
         }
         System.out.println(teamTwo);
 
@@ -265,7 +264,25 @@ public class Battle {
 
         while (!(playerOne.hasLost() || playerTwo.hasLost())) {
             takeTurns();
-            endOfTurn();
+            if (!(playerOne.hasLost() || playerTwo.hasLost())) {
+                replaceFaintedMons();
+            }
+            if (!(playerOne.hasLost() || playerTwo.hasLost())) {
+                endOfTurn();
+                //TODO: Do we need to redo endOfTurn if a Pokémon faints?
+                //  If X dies to sand and is replaced by Y,
+                //  does Y also take sand damage,
+                //  or does it go to the next check (poison/burn),
+                //  or does it skip the endOfTurn process entirely?
+            }
+        }
+
+        if (playerOne.hasLost() && playerTwo.hasLost()) {
+            System.out.println("Battle ended in a draw.");
+        } else if (playerOne.hasLost()) {
+            System.out.println(playerTwo.getName() + " wins!");
+        } else if (playerTwo.hasLost()) {
+            System.out.println(playerOne.getName() + " wins!");
         }
     }
 
@@ -283,14 +300,16 @@ public class Battle {
         turns.sort((t1, t2) -> {
             int priority = Integer.compare(t2.getPriority(this), t1.getPriority(this));
             if (priority == 0) {
-                return Double.compare(t2.getUser().calculateSpeed(), t1.getUser().calculateSpeed());
+                return Double.compare(t2.getUser().calculateSpeed(this), t1.getUser().calculateSpeed(this));
             } else {
                 return priority;
             }
         });
 
         for (Turn turn : turns) {
-            turn.takeTurn(this);
+            if (!turn.getUser().hasFainted()) {
+                turn.takeTurn(this);
+            }
         }
 
         //PRIORITY 6
@@ -391,7 +410,7 @@ public class Battle {
             int option = 1;
 
             Set<Move> movesToUse;
-            System.out.println("\n\nWhat will " + pokemon.getDisplayName() + " do?");
+            System.out.println("\n\nWhat will " + pokemon + " do?");
             System.out.println(
                 DECIMAL.format(100d * pokemon.getCurrentHP() / pokemon.getMaxHP()) + " % HP (" + pokemon.getCurrentHP()
                     + "/" + pokemon.getMaxHP() + ")");
@@ -414,7 +433,9 @@ public class Battle {
                 }
             }
 
-            printBench(trainer);
+            if (trainer.hasAvailableSwitch()) {
+                printBench(trainer);
+            }
 
             int choice;
             boolean choiceValid = true;
@@ -548,11 +569,11 @@ public class Battle {
         for (Pokemon possibleTarget : pokemonInRange) {
             if (opponents.contains(possibleTarget)) {
                 final int index = opponents.indexOf(possibleTarget);
-                System.out.println(index + ") " + possibleTarget.getDisplayName() + " (opponent) ");
+                System.out.println(index + ") " + possibleTarget + " (opponent) ");
             } else {
                 final String selfOrAlly = pokemon == possibleTarget ? " (self) " : " (ally) ";
                 final int index = selfAndAllies.indexOf(possibleTarget);
-                System.out.println((index + activeMonsPerSide) + ") " + possibleTarget.getDisplayName() + selfOrAlly);
+                System.out.println((index + activeMonsPerSide) + ") " + possibleTarget + selfOrAlly);
             }
         }
 
@@ -566,19 +587,20 @@ public class Battle {
         return choice;
     }
 
-    public void promptSwitchCausedByUserMove(Trainer trainer) {
+    public void promptSwitchCausedByUserMove(Pokemon user, Trainer trainer) {
         if (trainer.hasAvailableSwitch()) {
+            final int index = trainer.getTeam().indexOf(user);
             printBench(trainer);
             int choice;
             //Choice is invalid if that Pokémon has fainted or is already in battle
             do {
                 choice = Integer.parseInt(scanner.nextLine());
             } while (choice <= 4 || choice > 9 || trainer.getTeam().get(choice - 4).hasFainted());
-            trainer.switchPokemon(0, choice - 4);
+            trainer.switchPokemon(index, choice - 4);
 
             //TODO: Is this the right place to do this? At the beginning of a turn, if both trainers switch, the abilities don't trigger until both new Pokemon are in.
             //      This is probably fine if only one switch happens, but what if the attacker uses U-Turn and activates the opponent's Eject Button? Which switch happens first?
-            trainer.getLead().afterEntry(this);
+            trainer.getTeam().get(index).afterEntry(this);
         }
     }
 
@@ -589,7 +611,7 @@ public class Battle {
 
             String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().getType().name();
             System.out.println(
-                (i + 4) + ")" + "\t" + teammate.getPokedexEntry().getSpeciesName() + "\t(" + teammate.getCurrentHP()
+                (i + 4) + ")" + "\t" + teammate + "\t(" + teammate.getCurrentHP()
                     + "/" + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
         }
     }
@@ -608,7 +630,7 @@ public class Battle {
 
         for (int i = getActiveMonsPerSide() - 1; i >= 0; i--) {
             final Pokemon mon = opponent.getTeam().get(i);
-            field.append("\t\t").append(mon.getDisplayName());
+            field.append("\t\t").append(mon);
             field.append("\t\t").append("|");
         }
 
@@ -624,7 +646,7 @@ public class Battle {
         field.append("\n").append("|");
         for (int i = 0; i < getActiveMonsPerSide(); i++) {
             final Pokemon mon = player.getTeam().get(i);
-            field.append("\t\t").append(mon.getDisplayName());
+            field.append("\t\t").append(mon);
             field.append("\t\t").append("|");
         }
 
@@ -640,21 +662,84 @@ public class Battle {
         System.out.println(field);
     }
 
+    private void replaceFaintedMons() {
+        boolean redo = false;
+        do {
+            List<Integer> switchingInP1 = new ArrayList<>();
+            List<Integer> switchingInP2 = new ArrayList<>();
+            for (int i = 0; i < activeMonsPerSide; i++) {
+                Pokemon mon = playerOne.getTeam().get(i);
+                if (mon.hasFainted() && playerOne.hasAvailableSwitch()) {
+                    switchingInP1.add(i);
+                    printBench(playerOne);
+                    int choice;
+                    //Choice is invalid if that Pokémon has fainted or is already in battle
+                    do {
+                        choice = Integer.parseInt(scanner.nextLine());
+                    } while (choice <= 4 || choice > 9 || playerOne.getTeam().get(choice - 4).hasFainted());
+                    playerOne.switchPokemon(i, choice - 4);
+                }
+            }
+            for (int i = 0; i < activeMonsPerSide; i++) {
+                Pokemon mon = playerTwo.getTeam().get(i);
+                if (mon.hasFainted() && playerTwo.hasAvailableSwitch()) {
+                    switchingInP2.add(i);
+                    printBench(playerTwo);
+                    int choice;
+                    //Choice is invalid if that Pokémon has fainted or is already in battle
+                    do {
+                        choice = Integer.parseInt(scanner.nextLine());
+                    } while (choice <= 4 || choice > 9 || playerTwo.getTeam().get(choice - 4).hasFainted());
+                    playerTwo.switchPokemon(i, choice - 4);
+                }
+            }
+
+            //TODO: How the heck is this supposed to work if we have, say, a Levitate user switching in at the same time as
+            // a Neutralizing Gas user while spikes are present? Does the Levitate user take spikes damage? What about if
+            // a Drizzle user switches in on hazards? Does it set up rain before stepping on the hazards, or after, if it survives?
+            for (Integer index : switchingInP1) {
+                playerOne.getTeam().get(index).afterEntry(this);
+            }
+            for (Integer index : switchingInP2) {
+                playerTwo.getTeam().get(index).afterEntry(this);
+            }
+
+            for (Integer index : switchingInP1) {
+                playerOne.applyEntryHazards(playerOne.getTeam().get(index));
+            }
+            for (Integer index : switchingInP2) {
+                playerTwo.applyEntryHazards(playerTwo.getTeam().get(index));
+            }
+
+            redo = false;
+            for (Integer index : switchingInP1) {
+                if (playerOne.getTeam().get(index).hasFainted()) {
+                    redo = true;
+                }
+            }
+            for (Integer index : switchingInP2) {
+                if (playerTwo.getTeam().get(index).hasFainted()) {
+                    redo = true;
+                }
+            }
+        } while (redo);
+    }
+
     private List<Pokemon> getAllActivePokemon() {
         List<Pokemon> allActiveMons = new ArrayList<>();
         allActiveMons.addAll(playerOne.getActivePokemon());
         allActiveMons.addAll(playerTwo.getActivePokemon());
-        return allActiveMons;
+        return allActiveMons.stream()
+            .filter(pokemon -> !pokemon.hasFainted())
+            .sorted(Comparator.comparing(poke -> poke.calculateSpeed(this), Double::compareTo))
+            .collect(Collectors.toList());
+        //TODO: Does Tailwind change the order in which end-of-turn effects apply?
     }
 
-    void endOfTurn() {
+    private void endOfTurn() {
         handleFloatingEffects();
 
-        switchInReplacements();
-
-        List<Pokemon> activeMons = getAllActivePokemon();
-        activeMons.sort(Comparator.comparing(Pokemon::calculateSpeed, Double::compareTo));
-        for (Pokemon mon : activeMons) {
+        for (Pokemon mon : getAllActivePokemon()) {
             if (!isWeatherSuppressed() && mon.getHeldItem() != SAFETY_GOGGLES && (
                 (weather == Weather.SAND && !mon.getTypes().contains(Type.ROCK) && !mon.getTypes().contains(Type.GROUND)
                     && !mon.getTypes().contains(Type.STEEL) && !(mon.getAbility() instanceof SandImmuneAbility)) || (
@@ -662,35 +747,55 @@ public class Battle {
                         && !(mon.getAbility() instanceof HailImmuneAbility)))) {
 
                 mon.takeDamage(mon.getMaxHP() / 16);
+                if (mon.hasFainted()) {
+                    System.out.println(mon + " fainted!");
+                }
             }
         }
 
-        for (Pokemon mon : activeMons) {
+        for (Pokemon mon : getAllActivePokemon()) {
             mon.afterTurn(this);
+            if (mon.hasFainted()) {
+                System.out.println(mon + " fainted!");
+            }
         }
 
         //TODO: Where do I put LeechSeed, Curse, etc?
 
-        for (Pokemon mon : activeMons) {
+        for (Pokemon mon : getAllActivePokemon()) {
             if (mon.getAbility() != MAGIC_GUARD) {
                 if (mon.getStatus() == Status.BURN) {
-                    mon.takeDamage(mon.getMaxHP() / 16);
+                    mon.takeDamage(mon.getMaxHP() / 16, String.format("%s is hurt by its burn!", mon));
                 } else if (mon.getAbility() != POISON_HEAL) {
                     if (mon.getStatus() == Status.POISON) {
-                        mon.takeDamage(mon.getMaxHP() / 8);
+                        mon.takeDamage(
+                            mon.getMaxHP() / 8,
+                            String.format("%s is hurt by poison!", mon));
                     } else if (mon.getStatus().getType() == StatusType.TOXIC_POISON) {
-                        mon.takeDamage((mon.getMaxHP() / 16) * Math.abs(mon.getStatus().getTurnsRemaining()));
+                        mon.takeDamage(
+                            (mon.getMaxHP() / 16) * Math.abs(mon.getStatus().getTurnsRemaining()),
+                            String.format("%s is hurt by its burn!", mon));
                     }
                 } else if (mon.getAbility() == POISON_HEAL && mon.getStatus() == Status.POISON
                     || mon.getStatus().getType() == StatusType.TOXIC_POISON && !mon.hasVolatileStatus(HEAL_BLOCKED)) {
                     mon.heal(mon.getMaxHP() / 8);
                 }
             }
+            if (mon.hasFainted()) {
+                System.out.println(mon + " fainted!");
+            }
         }
 
-        for (Pokemon mon : activeMons) {
+        for (Pokemon mon : getAllActivePokemon()) {
             mon.getStatus().decrementTurns();
             mon.decrementVolatileStatusTurns();
+            if (mon.getVolatileStatus(PERISH).getTurnsRemaining() == 0) {
+                mon.setCurrentHP(0);
+                mon.afterFaint(this);
+            }
+            if (mon.hasFainted()) {
+                System.out.println(mon + " fainted!");
+            }
         }
 
         //TODO: Check if weather stopping happens before or after taking hail/sand damage

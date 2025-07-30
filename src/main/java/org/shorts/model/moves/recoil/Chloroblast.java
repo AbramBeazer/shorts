@@ -15,7 +15,9 @@ public class Chloroblast extends RecoilAttack {
     @Override
     public void inflictRecoil(Pokemon user, int damageDealt) {
         if (user.getAbility() != MAGIC_GUARD) {
-            user.takeDamage((int) Math.ceil(user.getMaxHP() * this.recoilPercentage));
+            user.takeDamage(
+                (int) Math.ceil(user.getMaxHP() * this.recoilPercentage),
+                String.format("%s was damaged by the recoil!", user));
         }
     }
 }

@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 
-public class Earthquake extends Move {
+public class Earthquake extends Move implements CanHitDig {
 
     public Earthquake() {
         super("Earthquake", 100, 100, Type.GROUND, Category.PHYSICAL, Range.ALL_ADJACENT, 16, false, 0);

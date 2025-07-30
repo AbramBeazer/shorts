@@ -35,6 +35,7 @@ public class Status extends AbstractStatus {
     public static final Status BURN = new Status(StatusType.BURN, -1);
     public static final Status FREEZE = new Status(StatusType.FREEZE, -1);
     public static final Status POISON = new Status(StatusType.POISON, -1);
+    public static final Status FAINTED = new Status(StatusType.FAINTED, -1);
 
     @Override
     public boolean equals(Object obj) {

@@ -76,9 +76,6 @@ public class Fling extends Move {
                         ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
                     } else if (damage > 0) {
                         target.takeDamage(damage);
-                        System.out.println(
-                            target.getDisplayName() + " took " + DECIMAL.format(100d * damage / target.getMaxHP())
-                                + "% (" + damage + ")");
                     }
 
                     if (!hitSub) {
@@ -127,7 +124,8 @@ public class Fling extends Move {
                 target.setStatus(Status.createToxic());
             } else if (item == POISON_BARB && StatusType.POISON.isStatusPossible(user, target, battle)) {
                 target.setStatus(Status.POISON);
-            } else if ((item == RAZOR_FANG || item == KINGS_ROCK) && VolatileStatusType.FLINCH.isStatusPossible(user,
+            } else if ((item == RAZOR_FANG || item == KINGS_ROCK) && VolatileStatusType.FLINCH.isStatusPossible(
+                user,
                 target, battle)) {
                 target.addVolatileStatus(new VolatileStatus(VolatileStatusType.FLINCH, 1));
             } else if (item == MENTAL_HERB) {

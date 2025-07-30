@@ -28,7 +28,6 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.Main.CRIT_RANDOM;
 import static org.shorts.Main.DAMAGE_RANDOM;
-import static org.shorts.Main.DECIMAL;
 import static org.shorts.Main.HIT_RANDOM;
 import static org.shorts.Main.RANDOM;
 import static org.shorts.MathUtils.roundHalfDown;
@@ -154,7 +153,7 @@ public abstract class Move {
         return this.power;
     }
 
-    public double getAccuracy() {
+    public double getAccuracy(Battle battle) {
         return this.accuracy;
     }
 
@@ -230,16 +229,16 @@ public abstract class Move {
     }
 
     protected boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
-        if (accuracy <= 0) {
+        if (getAccuracy(battle) <= 0) {
             return true;
         }
-        //TODO: Implement semi-invulnerable
+
         int threshold = (int) roundHalfDown(
             getModifiedAccuracy(user, target, battle) * getAccuracyEvasionStageModifier(user, target)
                 * (user.hasVolatileStatus(MICLE_BERRY_EFFECT) ? 1.2 : 1));
         final boolean hit = HIT_RANDOM.nextInt(100) < threshold;
         if (!hit) {
-            System.out.println(user.getDisplayName() + "'s attack missed!");
+            System.out.println(user + "'s attack missed!");
         }
         return hit;
     }
@@ -280,7 +279,7 @@ public abstract class Move {
             mod = roundHalfUp(mod * (4915 / divisor));
         }
 
-        return roundHalfDown((this.accuracy * mod) / divisor);
+        return roundHalfDown((getAccuracy(battle) * mod) / divisor);
     }
 
     protected double getAccuracyEvasionStageModifier(Pokemon user, Pokemon target) {
@@ -320,6 +319,10 @@ public abstract class Move {
     public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setMovedThisTurn(true);
         this.decrementPP();
+        if (targets.isEmpty()) {
+            System.out.println("But there was no target...");
+            return;
+        }
         for (Pokemon target : targets) {
             //TODO:
             //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
@@ -367,7 +370,8 @@ public abstract class Move {
                 //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
                 if (target.getCurrentHP() == 0) {
                     //Or should I have this call in Pokemon.takeDamage()?
-                    target.afterFaint(user, battle);
+                    System.out.println(target + " fainted!");
+                    target.afterFaint(battle);
                     user.afterKO(target, battle);
                     //TODO: Handle fainting and subsequent switch-in.
 
@@ -406,10 +410,12 @@ public abstract class Move {
     }
 
     protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
+        //TODO: Implement semi-invulnerable
         if (rollToHit(user, target, battle) && !isTargetProtected(user, target, battle)) {
 
             if (this.category == Category.STATUS) {
                 //TODO: This may change -- Will-O-Wisp shouldn't burn Flash Fire mons, Thunder Wave won't affect ground-types, and poison moves won't affect steels, but I think other status moves might ignore types.
+                //TODO: REFACTOR THIS! getTypeMultiplier calls target.beforeHit!
                 if (target.beforeHit(user, battle, this) > 0 && getTypeMultiplier(user, target, battle) > 0) {
                     this.trySecondaryEffect(user, target, battle);
                 }
@@ -437,10 +443,6 @@ public abstract class Move {
                         ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
                     } else {
                         target.takeDamage(damage);
-                        System.out.println(
-                            target.getDisplayName() + " took " + DECIMAL.format(100d * damage / target.getMaxHP())
-                                + "% (" + damage + ")");
-
                     }
 
                     if (!user.hasFainted()) {
@@ -689,15 +691,24 @@ public abstract class Move {
         if (this instanceof HitsMinimize && target.hasVolatileStatus(MINIMIZED)) {
             base = roundHalfUp(base * 2);
         }
-        if ((this instanceof Earthquake || this instanceof Magnitude) && (target.hasVolatileStatus(SEMI_INVULNERABLE)
-            && target.getVolatileStatus(SEMI_INVULNERABLE).getMove() instanceof Dig)) {
-            base = roundHalfUp(base * 2);
-        }
-        if ((this instanceof Surf || this instanceof Whirlpool) && (target.hasVolatileStatus(SEMI_INVULNERABLE)
-            && target.getVolatileStatus(SEMI_INVULNERABLE).getMove() instanceof Dive)) {
-            base = roundHalfUp(base * 2);
-        }
 
+        if (target.hasVolatileStatus(SEMI_INVULNERABLE)) {
+            Move semiInvulnerableMove = target.getVolatileStatus(SEMI_INVULNERABLE).getMove();
+            if ((this instanceof Earthquake || this instanceof Magnitude)
+                && semiInvulnerableMove instanceof Dig) {
+                base = roundHalfUp(base * 2);
+            }
+            if ((this instanceof Surf || this instanceof Whirlpool)
+                && semiInvulnerableMove instanceof Dive) {
+                base = roundHalfUp(base * 2);
+            }
+            //TODO: Implement
+            //            if ((this instanceof Gust || this instanceof Twister)
+            //                && (semiInvulnerableMove instanceof Fly || semiInvulnerableMove instanceof Bounce
+            //                || semiInvulnerableMove instanceof SkyDrop)) {
+            //                base = roundHalfUp(base * 2);
+            //            }
+        }
         if (!critical && user.getAbility() != INFILTRATOR) {
             Trainer opposingTrainer = battle.getOpposingTrainer(user);
             double screenMultiplier = battle.getActiveMonsPerSide() == 1 ? 0.5 : (2732 / divisor);
@@ -783,7 +794,7 @@ public abstract class Move {
 
     protected boolean pressureApplies(Pokemon user, Pokemon target, Battle battle) {
         return battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(target) && target.getAbility()
-            .equals(PRESSURE) && this.getCurrentPP() > 0;
+            .equals(PRESSURE) && this.getCurrentPP() > 0 && !target.hasFainted();
     }
 
     protected double getAttackingStat(Pokemon attacker, Pokemon defender, Battle battle) {
@@ -814,4 +825,8 @@ public abstract class Move {
     protected void inflictRecoil(Pokemon user, int damageDealt) {
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

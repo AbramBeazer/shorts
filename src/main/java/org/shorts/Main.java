@@ -42,7 +42,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         Pokedex.create();
-        final int activeMonsPerSide = 1;
+        final int activeMonsPerSide = 2;
 
         Pokemon bulbasaur = new Pokemon(
             Pokedex.get("Bulbasaur"),

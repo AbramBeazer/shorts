@@ -23,7 +23,7 @@ public enum StatusType implements AbstractStatusType {
     PARALYZE,
     POISON,
     TOXIC_POISON,
-    FAINT;
+    FAINTED;
 
     @Override
     public boolean isStatusPossible(Pokemon user, Pokemon target, Battle battle) {

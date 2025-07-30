@@ -49,6 +49,13 @@ class PressureAppliesTests {
     }
 
     @Test
+    void testReturnsFalseForFaintedTarget() {
+        defender.setCurrentHP(0);
+        Move move = new Earthquake();
+        assertThat(move.pressureApplies(attacker, defender, battle)).isFalse();
+    }
+
+    @Test
     void testReturnsFalseForStatusMoveThatOnlyTargetsSelf() {
         Move move = new Rest();
         move.execute(attacker, allTargets, battle);
