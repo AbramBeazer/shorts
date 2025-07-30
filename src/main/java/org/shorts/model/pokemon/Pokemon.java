@@ -885,16 +885,17 @@ public class Pokemon {
     }
 
     public void afterFaint(Battle battle) {
-        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
-            || this.getAbility() instanceof UnsuppressableAbility) {
-            ability.afterFaint(this, battle);
+        if (!this.getStatus().equals(Status.FAINTED)) {
+            if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+                || this.getAbility() instanceof UnsuppressableAbility) {
+                ability.afterFaint(this, battle);
+            }
+            heldItem.afterFaint(this, battle);
+            this.volatileStatuses.clear();
+            Pickup.removeFromConsumedItems(this);
+
+            this.setStatus(Status.FAINTED);
         }
-        heldItem.afterFaint(this, battle);
-
-        this.setStatus(Status.FAINTED);
-        this.volatileStatuses.clear();
-
-        Pickup.removeFromConsumedItems(this);
     }
 
     public void afterKO(Pokemon opponent, Battle battle) {
