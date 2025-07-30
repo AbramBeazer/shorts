@@ -512,7 +512,7 @@ public class Pokemon {
     }
 
     public void heal(int health) {
-        if (!this.hasVolatileStatus(HEAL_BLOCKED)) {
+        if (!this.hasFainted() && !this.hasVolatileStatus(HEAL_BLOCKED)) {
             if (health <= 0) {
                 throw new IllegalArgumentException("Health restored must be positive");
             }
