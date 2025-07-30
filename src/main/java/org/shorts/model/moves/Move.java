@@ -363,18 +363,19 @@ public abstract class Move {
                 } else {
                     executeOnTarget(user, target, battle);
                 }
-                //if(userMon.getCurrentHP() == 0) {
-                //  //TODO: Handle fainting and subsequent switch-in.
-                //}
+                if (user.getCurrentHP() == 0) {
+                    user.afterFaint(battle);
+                }
 
-                //TODO: Handle Endure, Destiny Bond, Perish Song, etc.
+                //TODO: Should I do takeDamage -> afterFaint for each target, or takeDamage for each, then afterFaint for each?
+                //TODO: Handle Endure, Destiny Bond, etc.
                 if (target.getCurrentHP() == 0) {
                     //Or should I have this call in Pokemon.takeDamage()?
                     System.out.println(target + " fainted!");
                     target.afterFaint(battle);
-                    user.afterKO(target, battle);
-                    //TODO: Handle fainting and subsequent switch-in.
-
+                    if (!user.hasFainted()) {
+                        user.afterKO(target, battle);
+                    }
                 }
             }
         }
