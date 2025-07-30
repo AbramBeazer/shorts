@@ -6,6 +6,6 @@ public class Pressure extends Ability {
         super("Pressure");
     }
 
-    public static Pressure PRESSURE = new Pressure();
+    public static final Pressure PRESSURE = new Pressure();
 
 }
