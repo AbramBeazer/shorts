@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Weather;
 import org.shorts.model.Nature;
@@ -486,6 +487,7 @@ public class Pokemon {
     }
 
     public void takeDamage(int damage, String message) {
+        //TODO: Move Sturdy/Endure here
         if (damage <= 0) {
             throw new IllegalArgumentException("Damage must be positive");
         }
@@ -510,7 +512,7 @@ public class Pokemon {
     }
 
     public void heal(int health) {
-        if (!this.hasVolatileStatus(HEAL_BLOCKED)) {
+        if (!this.hasFainted() && !this.hasVolatileStatus(HEAL_BLOCKED)) {
             if (health <= 0) {
                 throw new IllegalArgumentException("Health restored must be positive");
             }
@@ -883,16 +885,17 @@ public class Pokemon {
     }
 
     public void afterFaint(Battle battle) {
-        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
-            || this.getAbility() instanceof UnsuppressableAbility) {
-            ability.afterFaint(this, battle);
+        if (!this.getStatus().equals(Status.FAINTED)) {
+            if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+                || this.getAbility() instanceof UnsuppressableAbility) {
+                ability.afterFaint(this, battle);
+            }
+            heldItem.afterFaint(this, battle);
+            this.volatileStatuses.clear();
+            Pickup.removeFromConsumedItems(this);
+
+            this.setStatus(Status.FAINTED);
         }
-        heldItem.afterFaint(this, battle);
-
-        this.setStatus(Status.FAINTED);
-        this.volatileStatuses.clear();
-
-        Pickup.removeFromConsumedItems(this);
     }
 
     public void afterKO(Pokemon opponent, Battle battle) {

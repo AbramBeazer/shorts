@@ -14,6 +14,7 @@ import org.shorts.model.abilities.SandImmuneAbility;
 import org.shorts.model.moves.MeFirst;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
+import org.shorts.model.moves.floating.FloatingEffect;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
@@ -44,6 +45,8 @@ public class Battle {
     protected int fairyLockTurns;
     protected int gravityTurns;
     protected int magicRoomTurns;
+
+    private List<FloatingEffect> floatingEffects;
 
     public Battle(Trainer player1, Trainer player2, int activeMonsPerSide) {
         this.playerOne = player1;
@@ -125,6 +128,13 @@ public class Battle {
         } else {
             this.magicRoomTurns = magicRoomTurns;
         }
+    }
+
+    public List<FloatingEffect> getFloatingEffects() {
+        if (floatingEffects == null) {
+            floatingEffects = new ArrayList<>();
+        }
+        return floatingEffects;
     }
 
     public void countDownWeather() {
@@ -254,6 +264,7 @@ public class Battle {
 
         while (!(playerOne.hasLost() || playerTwo.hasLost())) {
             takeTurns();
+            handleFloatingEffects();
             if (!(playerOne.hasLost() || playerTwo.hasLost())) {
                 replaceFaintedMons();
             }
@@ -726,7 +737,7 @@ public class Battle {
         //TODO: Does Tailwind change the order in which end-of-turn effects apply?
     }
 
-    private void endOfTurn() {
+    void endOfTurn() {
 
         for (Pokemon mon : getAllActivePokemon()) {
             if (!isWeatherSuppressed() && mon.getHeldItem() != SAFETY_GOGGLES && (
@@ -789,6 +800,25 @@ public class Battle {
 
         //TODO: Check if weather stopping happens before or after taking hail/sand damage
         decrementAllCounters();
+    }
+
+    void handleFloatingEffects() {
+        for (FloatingEffect effect : getFloatingEffects()) {
+
+            effect.decrementTurnsRemaining();
+
+            if (effect.getTurnsRemaining() == 0) {
+
+                final Pokemon target = effect.getTargetIndex() < activeMonsPerSide
+                    ? getOpposingTrainer(effect.getUser()).getActivePokemon().get(effect.getTargetIndex())
+                    : getCorrespondingTrainer(effect.getUser()).getActivePokemon()
+                        .get(effect.getTargetIndex() - activeMonsPerSide);
+
+                if (target != null && !target.hasFainted()) {
+                    effect.getMove().triggerFloatingEffect(effect.getUser(), target, this);
+                }
+            }
+        }
     }
 
     public void decrementAllCounters() {
