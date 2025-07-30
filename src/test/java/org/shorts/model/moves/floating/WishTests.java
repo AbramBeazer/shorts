@@ -12,7 +12,7 @@ import org.shorts.model.status.VolatileStatusType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.pokemon.PokemonTestUtils.*;
 
-public class WishTests {
+class WishTests {
 
     @Test
     void testUsesHalfOfUsersHPAndNotReceivers() {
