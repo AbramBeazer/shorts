@@ -262,6 +262,7 @@ public class Battle {
             playerTwo.chooseLeads();
         }
 
+        //TODO: Not sure how this works, but if a player uses U-Turn to score the winning KO, no switch is prompted even if one is available.
         while (!(playerOne.hasLost() || playerTwo.hasLost())) {
             takeTurns();
             handleFloatingEffects();
