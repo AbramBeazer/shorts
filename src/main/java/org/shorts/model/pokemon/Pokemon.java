@@ -815,6 +815,9 @@ public class Pokemon {
     }
 
     public boolean isDropPossible(StatEnum stat) {
+        if (this.hasVolatileStatus(SUBSTITUTE)) {
+            return false;
+        }
         if (!canChangeStat(-1, stat)) {
             return false;
         }
