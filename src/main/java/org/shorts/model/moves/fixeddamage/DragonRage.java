@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 
 public class DragonRage extends Move {
 
-    static final int FIXED_DAMAGE = 40;
+    public static final int FIXED_DAMAGE = 40;
 
     public DragonRage() {
         super("Dragon Rage", 0, 100, Type.DRAGON, Category.SPECIAL, Range.NORMAL, 16, false, 0);
