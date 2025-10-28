@@ -95,6 +95,8 @@ public enum VolatileStatusType implements AbstractStatusType {
                     return !target.hasVolatileStatus(SUBSTITUTE);
                 case CONFUSED:
                     return !target.hasVolatileStatus(SUBSTITUTE); //TODO: Make sure that this blocks only Confuse Ray, but not self-inflicted confusion from Outrage or Thrash.
+                case SEEDED:
+                    return !target.hasVolatileStatus(SUBSTITUTE);
                 default:
                     return true;
             }

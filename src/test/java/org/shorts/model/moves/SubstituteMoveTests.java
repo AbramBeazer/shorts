@@ -11,7 +11,9 @@ import org.shorts.battle.DummyBattle;
 import org.shorts.model.moves.fixeddamage.DragonRage;
 import org.shorts.model.moves.fixeddamage.SeismicToss;
 import org.shorts.model.moves.multihit.IcicleSpear;
+import org.shorts.model.moves.trapping.MeanLook;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.Status;
 import org.shorts.model.status.SubstituteStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
@@ -122,4 +124,48 @@ class SubstituteMoveTests {
         assertThat(subber.getCurrentHP()).isLessThan(subber.getMaxHP() - subHp);
     }
 
+    @Test
+    void testSubBlockStatus() {
+        assertThat(subber.isAtFullHP()).isTrue();
+        substituteMove.executeOnTarget(subber, subber, battle);
+        assertThat(subber.getCurrentHP()).isEqualTo(subber.getMaxHP() - subHp);
+        SubstituteStatus sub = (SubstituteStatus) subber.getVolatileStatus(VolatileStatusType.SUBSTITUTE);
+
+        new Spore().executeOnTarget(attacker, subber, battle);
+        assertThat(subber.getStatus()).isEqualTo(Status.NONE);
+    }
+
+    @Test
+    void testSubBlocksStatDrop() {
+        assertThat(subber.getStageDefense()).isZero();
+        assertThat(subber.isAtFullHP()).isTrue();
+        substituteMove.executeOnTarget(subber, subber, battle);
+        assertThat(subber.getCurrentHP()).isEqualTo(subber.getMaxHP() - subHp);
+        SubstituteStatus sub = (SubstituteStatus) subber.getVolatileStatus(VolatileStatusType.SUBSTITUTE);
+
+        new Crunch().executeOnTarget(attacker, subber, battle);
+        assertThat(subber.getStageDefense()).isZero();
+    }
+
+    @Test
+    void testSubPreventsFlinching() {
+        assertThat(subber.isAtFullHP()).isTrue();
+        substituteMove.executeOnTarget(subber, subber, battle);
+        assertThat(subber.getCurrentHP()).isEqualTo(subber.getMaxHP() - subHp);
+        SubstituteStatus sub = (SubstituteStatus) subber.getVolatileStatus(VolatileStatusType.SUBSTITUTE);
+
+        new Bite().executeOnTarget(attacker, subber, battle);
+        assertThat(subber.hasVolatileStatus(VolatileStatusType.FLINCH)).isFalse();
+    }
+
+    @Test
+    void testSubBlocksCantEscapeStatus() {
+        assertThat(subber.isAtFullHP()).isTrue();
+        substituteMove.executeOnTarget(subber, subber, battle);
+        assertThat(subber.getCurrentHP()).isEqualTo(subber.getMaxHP() - subHp);
+        SubstituteStatus sub = (SubstituteStatus) subber.getVolatileStatus(VolatileStatusType.SUBSTITUTE);
+
+        new MeanLook().executeOnTarget(attacker, subber, battle);
+        assertThat(subber.hasVolatileStatus(VolatileStatusType.CANT_ESCAPE)).isFalse();
+    }
 }
