@@ -15,7 +15,6 @@ import org.shorts.model.abilities.statpreserving.PreserveAccuracyIgnoreEvasionAb
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
 import org.shorts.model.moves.entryhazardsetter.EntryHazardSetter;
-import org.shorts.model.moves.punching.PunchingMove;
 import org.shorts.model.moves.thawing.ThawingMove;
 import org.shorts.model.moves.trapping.binding.Whirlpool;
 import org.shorts.model.pokemon.Pokemon;

@@ -2,7 +2,7 @@ package org.shorts.model.abilities;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.moves.Move;
-import org.shorts.model.moves.punching.PunchingMove;
+import org.shorts.model.moves.PunchingMove;
 import org.shorts.model.pokemon.Pokemon;
 
 public class IronFist extends Ability {
