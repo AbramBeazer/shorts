@@ -6,7 +6,7 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-public class DynamicPunch extends Move implements PunchingMove {
+public class DynamicPunch extends Move implements PunchingMove, GetsSheerForceBoost {
 
     public DynamicPunch() {
         super("Dynamic Punch", 100, 50, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL, 8, true, 100);

@@ -6,7 +6,7 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-public class DizzyPunch extends Move implements PunchingMove {
+public class DizzyPunch extends Move implements PunchingMove, GetsSheerForceBoost {
 
     public DizzyPunch() {
         super("Dizzy Punch", 70, 100, Type.NORMAL, Category.PHYSICAL, Range.NORMAL, 16, true, 20);
