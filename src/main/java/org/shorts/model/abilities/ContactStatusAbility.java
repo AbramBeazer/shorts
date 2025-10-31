@@ -2,12 +2,14 @@ package org.shorts.model.abilities;
 
 import org.shorts.Main;
 import org.shorts.battle.Battle;
+import org.shorts.model.items.ProtectivePads;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.AbstractStatus;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.VolatileStatus;
 
+import static org.shorts.model.items.ProtectivePads.*;
 import static org.shorts.model.status.VolatileStatus.INFATUATED;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
@@ -28,8 +30,10 @@ public class ContactStatusAbility extends Ability {
 
     @Override
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
-        if (move.isContact(opponent) && Main.RANDOM.nextInt(100) < ACTIVATION_CHANCE && !self.hasVolatileStatus(SUBSTITUTE)
+        if (move.isContact(opponent) && opponent.getHeldItem() != PROTECTIVE_PADS
+            && Main.RANDOM.nextInt(100) < ACTIVATION_CHANCE && !self.hasVolatileStatus(SUBSTITUTE)
             && status.getType().isStatusPossible(self, opponent, battle)) {
+
             //TODO: Test this. I'm pretty sure there aren't any problems here. Status.isStatusPossible won't have to worry about nullified abilities since this Pokemon clearly doesn't have Mold Breaker, but rather Cute Charm or something.
             if (status instanceof VolatileStatus) {
                 opponent.addVolatileStatus((VolatileStatus) status);

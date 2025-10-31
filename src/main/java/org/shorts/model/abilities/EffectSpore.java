@@ -7,15 +7,21 @@ import org.shorts.model.moves.PowderSporeEffect;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 
+import static org.shorts.model.items.ProtectivePads.*;
+
 public class EffectSpore extends Ability implements PowderSporeEffect {
 
     private EffectSpore() {
         super("Effect Spore");
     }
 
+    public static final EffectSpore EFFECT_SPORE = new EffectSpore();
+
     @Override
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
-        if (move.isContact(opponent) && this.asPowderSporeEffectData().canActivate(opponent)) {
+        if (move.isContact(opponent) && opponent.getHeldItem() != PROTECTIVE_PADS
+            && this.asPowderSporeEffectData().canActivate(opponent)) {
+
             final int chance = Main.RANDOM.nextInt(30);
             Status status; //9% chance of poison, 10% chance of paralyze, 11% chance of sleep
             if (chance < 9) {

@@ -4,6 +4,8 @@ import org.shorts.battle.Battle;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 
+import static org.shorts.model.items.ProtectivePads.*;
+
 public class DamageOnContactAbility extends Ability {
 
     private DamageOnContactAbility() {
@@ -15,7 +17,7 @@ public class DamageOnContactAbility extends Ability {
 
     @Override
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
-        if (move.isContact(opponent)) {
+        if (move.isContact(opponent) && opponent.getHeldItem() != PROTECTIVE_PADS) {
             opponent.takeDamage(opponent.getMaxHP() / 8);
         }
     }
