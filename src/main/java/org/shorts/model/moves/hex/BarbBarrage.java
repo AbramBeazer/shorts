@@ -18,13 +18,11 @@ public class BarbBarrage extends Move {
     }
 
     @Override
-    public double getPower(Pokemon user, Pokemon target, Battle battle) {
-        if (target.getStatus().getType() == StatusType.POISON
-            || target.getStatus().getType().equals(StatusType.TOXIC_POISON)) {
-
-            return MULTIPLIER * super.getPower(user, target, battle);
-        }
-        return super.getPower(user, target, battle);
+    protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
+        final double base = super.getPowerMultipliers(user, target, battle);
+        return (target.getStatus().getType() == StatusType.POISON
+            || target.getStatus().getType() == StatusType.TOXIC_POISON)
+            ? MULTIPLIER * base : base;
     }
 
     @Override

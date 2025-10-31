@@ -18,11 +18,11 @@ public class InfernalParade extends Move {
     }
 
     @Override
-    public double getPower(Pokemon user, Pokemon target, Battle battle) {
-        if (target.getStatus() != null && target.getStatus().getType() != StatusType.NONE) {
-            return MULTIPLIER * super.getPower(user, target, battle);
-        }
-        return super.getPower(user, target, battle);
+    public double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
+        final double base = super.getPowerMultipliers(user, target, battle);
+        return (target.getStatus() != null && target.getStatus().getType() != StatusType.NONE)
+            ? base * MULTIPLIER
+            : base;
     }
 
     @Override
