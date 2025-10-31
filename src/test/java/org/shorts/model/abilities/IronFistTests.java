@@ -1,12 +1,9 @@
 package org.shorts.model.abilities;
 
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
-import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Tackle;
 import org.shorts.model.moves.multihit.CometPunch;
 import org.shorts.model.pokemon.Pokemon;

@@ -15,7 +15,7 @@ public class DamageOnContactAbility extends Ability {
 
     @Override
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
-        if (move.isContact()) {
+        if (move.isContact(opponent)) {
             opponent.takeDamage(opponent.getMaxHP() / 8);
         }
     }

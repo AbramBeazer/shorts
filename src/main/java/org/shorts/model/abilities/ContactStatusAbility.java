@@ -28,7 +28,7 @@ public class ContactStatusAbility extends Ability {
 
     @Override
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
-        if (move.isContact() && Main.RANDOM.nextInt(100) < ACTIVATION_CHANCE && !self.hasVolatileStatus(SUBSTITUTE)
+        if (move.isContact(opponent) && Main.RANDOM.nextInt(100) < ACTIVATION_CHANCE && !self.hasVolatileStatus(SUBSTITUTE)
             && status.getType().isStatusPossible(self, opponent, battle)) {
             //TODO: Test this. I'm pretty sure there aren't any problems here. Status.isStatusPossible won't have to worry about nullified abilities since this Pokemon clearly doesn't have Mold Breaker, but rather Cute Charm or something.
             if (status instanceof VolatileStatus) {

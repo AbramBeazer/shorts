@@ -15,6 +15,7 @@ import org.shorts.model.abilities.statpreserving.PreserveAccuracyIgnoreEvasionAb
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
 import org.shorts.model.moves.entryhazardsetter.EntryHazardSetter;
+import org.shorts.model.moves.punching.PunchingMove;
 import org.shorts.model.moves.thawing.ThawingMove;
 import org.shorts.model.moves.trapping.binding.Whirlpool;
 import org.shorts.model.pokemon.Pokemon;
@@ -71,6 +72,7 @@ import static org.shorts.model.items.LifeOrb.LIFE_ORB;
 import static org.shorts.model.items.LoadedDice.LOADED_DICE;
 import static org.shorts.model.items.LuckyPunch.LUCKY_PUNCH;
 import static org.shorts.model.items.NoItem.NO_ITEM;
+import static org.shorts.model.items.PunchingGlove.*;
 import static org.shorts.model.items.RazorClaw.RAZOR_CLAW;
 import static org.shorts.model.items.RingTarget.RING_TARGET;
 import static org.shorts.model.items.ScopeLens.SCOPE_LENS;
@@ -181,7 +183,10 @@ public abstract class Move {
         return this.maxPP;
     }
 
-    public boolean isContact() {
+    public boolean isContact(Pokemon user) {
+        if (user != null && this instanceof PunchingMove) {
+            return contact && user.getHeldItem() != PUNCHING_GLOVE;
+        }
         return contact;
     }
 
@@ -482,7 +487,7 @@ public abstract class Move {
         return target.hasVolatileStatus(PROTECTED) && !(this instanceof EntryHazardSetter) && this.range != Range.ALL
             && this.range != Range.BOTH_SIDES && battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(
             target) && !(user.getAbility() == UNSEEN_FIST && !user.hasVolatileStatus(ABILITY_SUPPRESSED)
-            && this.isContact());
+            && this.isContact(user));
     }
 
     protected void checkForLifeOrbRecoil(Pokemon user) {
@@ -731,7 +736,7 @@ public abstract class Move {
             base = roundHalfUp(base * 0.5);
         }
 
-        if (target.getAbility() == FLUFFY && this.isContact()) {
+        if (target.getAbility() == FLUFFY && this.isContact(user)) {
             base = roundHalfUp(base * 0.5);
         }
 
