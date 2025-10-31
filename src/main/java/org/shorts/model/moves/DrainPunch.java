@@ -7,7 +7,7 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-public class DrainPunch extends Move implements PunchingMove {
+public class DrainPunch extends Move implements PunchingMove, HealingMove, DrainingMove {
     public DrainPunch() {
         super("Drain Punch", 75, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL, 16, true, 100);
     }
@@ -18,4 +18,6 @@ public class DrainPunch extends Move implements PunchingMove {
             super.execute(user, targets, battle);
         }
     }
+
+    //TODO: Implement DrainingMove
 }
