@@ -83,7 +83,7 @@ class CrashDamageMoveTests {
     @Test
     void testAxeKickConfusesTarget() {
         move = new AxeKick();
-        move.executeOnTarget(target, user, battle);
+        move.executeOnTarget(user, target, battle);
         assertThat(target.isAtFullHP()).isFalse();
         assertThat(user.isAtFullHP()).isTrue();
         assertThat(target.hasVolatileStatus(VolatileStatusType.CONFUSED)).isTrue();
@@ -94,6 +94,7 @@ class CrashDamageMoveTests {
         move = new SupercellSlam();
         Main.HIT_RANDOM = MAX_RANDOM;
         target.addVolatileStatus(new VolatileStatus(VolatileStatusType.MINIMIZED, 1));
+        move.executeOnTarget(user, target, battle);
         assertThat(target.isAtFullHP()).isFalse();
         assertThat(user.isAtFullHP()).isTrue();
     }
@@ -104,6 +105,7 @@ class CrashDamageMoveTests {
         Main.HIT_RANDOM = MAX_RANDOM;
         target.addVolatileStatus(new VolatileStatus(VolatileStatusType.MINIMIZED, 1));
         target.addVolatileStatus(new VolatileStatus(VolatileStatusType.PROTECTED, 1));
+        move.executeOnTarget(user, target, battle);
         assertThat(target.isAtFullHP()).isTrue();
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP() - (user.getMaxHP() / 2));
     }
@@ -114,6 +116,7 @@ class CrashDamageMoveTests {
         Main.HIT_RANDOM = MAX_RANDOM;
         target.setTypes(Set.of(GROUND));
         target.addVolatileStatus(new VolatileStatus(VolatileStatusType.MINIMIZED, 1));
+        move.executeOnTarget(user, target, battle);
         assertThat(target.isAtFullHP()).isTrue();
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP() - (user.getMaxHP() / 2));
     }
@@ -124,6 +127,7 @@ class CrashDamageMoveTests {
         Main.HIT_RANDOM = MAX_RANDOM;
         target.setAbility(ElementAbsorbingAbility.VOLT_ABSORB);
         target.addVolatileStatus(new VolatileStatus(VolatileStatusType.MINIMIZED, 1));
+        move.executeOnTarget(user, target, battle);
         assertThat(target.isAtFullHP()).isTrue();
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP() - (user.getMaxHP() / 2));
     }
