@@ -1,6 +1,7 @@
 package org.shorts.model.moves.multihit.outliers;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.KickingMove;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
@@ -11,7 +12,7 @@ import static org.shorts.model.abilities.SkillLink.SKILL_LINK;
 import static org.shorts.model.items.LoadedDice.LOADED_DICE;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
-public class TripleKick extends Move {
+public class TripleKick extends Move implements KickingMove {
 
     private static final int MAX_HITS = 3;
     private int hitNum;

@@ -6,7 +6,7 @@ import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class BlazeKick extends Move implements HighCritChanceMove, GetsSheerForceBoost {
+public class BlazeKick extends Move implements HighCritChanceMove, GetsSheerForceBoost, KickingMove {
 
     public BlazeKick() {
         super("Blaze Kick", 85, 90, Type.FIRE, Category.PHYSICAL, Range.NORMAL, 16, true, 10);

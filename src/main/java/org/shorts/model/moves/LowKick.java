@@ -4,7 +4,7 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class LowKick extends Move {
+public class LowKick extends Move implements KickingMove {
 
     public LowKick() {
         super("Low Kick", 0, 100, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL, 32, true, 0);
