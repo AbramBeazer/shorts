@@ -1,5 +1,5 @@
 package org.shorts.model.moves;
 
-public interface WindMove {
+public interface WindMove extends IMove {
 
 }

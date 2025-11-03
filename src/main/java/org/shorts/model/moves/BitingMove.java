@@ -1,5 +1,5 @@
 package org.shorts.model.moves;
 
-public interface BitingMove {
+public interface BitingMove extends IMove {
 
 }

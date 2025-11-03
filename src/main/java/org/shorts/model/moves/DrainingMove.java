@@ -1,5 +1,5 @@
 package org.shorts.model.moves;
 
-public interface DrainingMove {
+public interface DrainingMove extends IMove {
 
 }

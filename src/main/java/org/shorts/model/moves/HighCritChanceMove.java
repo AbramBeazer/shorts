@@ -1,5 +1,5 @@
 package org.shorts.model.moves;
 
-public interface HighCritChanceMove {
+public interface HighCritChanceMove extends IMove {
 
 }

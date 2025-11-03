@@ -17,6 +17,6 @@ public class Sharpness extends Ability {
 
     @Override
     public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        return move instanceof SlicingMove ? SHARPNESS_BOOST : 1;
+        return move.isSlicingMove() ? SHARPNESS_BOOST : 1;
     }
 }

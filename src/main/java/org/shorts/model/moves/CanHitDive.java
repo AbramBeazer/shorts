@@ -1,5 +1,5 @@
 package org.shorts.model.moves;
 
-public interface CanHitDive {
+public interface CanHitDive extends IMove {
 
 }

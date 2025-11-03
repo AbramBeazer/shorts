@@ -1,5 +1,5 @@
 package org.shorts.model.moves;
 
-public interface MultiTurnMove {
+public interface MultiTurnMove extends IMove {
 
 }

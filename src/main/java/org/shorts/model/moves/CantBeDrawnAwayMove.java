@@ -1,5 +1,5 @@
 package org.shorts.model.moves;
 
-public interface CantBeDrawnAwayMove {
+public interface CantBeDrawnAwayMove extends IMove {
 
 }

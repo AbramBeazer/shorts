@@ -1,5 +1,5 @@
 package org.shorts.model.moves;
 
-public interface AffectedByMagicBounce {
+public interface AffectedByMagicBounce extends IMove {
 
 }

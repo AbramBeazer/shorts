@@ -101,7 +101,7 @@ import static org.shorts.model.types.Type.NORMAL;
 import static org.shorts.model.types.Type.SUPER_EFFECTIVE;
 import static org.shorts.model.types.Type.WATER;
 
-public abstract class Move {
+public abstract class Move implements IMove {
 
     public enum Category {
         PHYSICAL,
@@ -482,8 +482,7 @@ public abstract class Move {
     }
 
     protected boolean isTargetProtected(Pokemon user, Pokemon target, Battle battle) {
-        if (this instanceof IgnoresProtect) {
-            target.removeVolatileStatus(PROTECTED);
+        if (this.bypassesProtection(target)) {
             return false;
         }
         return target.hasVolatileStatus(PROTECTED) && !(this instanceof EntryHazardSetter) && this.range != Range.ALL
@@ -646,7 +645,7 @@ public abstract class Move {
         } else if (user.getAbility() == MERCILESS && (target.getStatus() == Status.POISON
             || target.getStatus().getType() == StatusType.TOXIC_POISON)) {
             return true;
-        } else if (user.hasVolatileStatus(LASER_FOCUS) || this instanceof AlwaysCritMove) {
+        } else if (user.hasVolatileStatus(LASER_FOCUS) || this.alwaysCrits()) {
             return true;
         } else {
             int stage = 0;
@@ -696,7 +695,7 @@ public abstract class Move {
         Pokemon user, Pokemon target, Battle battle, boolean critical, double typeMultiplier) {
         final double divisor = 4096d;
         double base = divisor;
-        if (this instanceof HitsMinimize && target.hasVolatileStatus(MINIMIZED)) {
+        if (this.alwaysHitsMinimize() && target.hasVolatileStatus(MINIMIZED)) {
             base = roundHalfUp(base * 2);
         }
 
