@@ -37,6 +37,7 @@ import static org.shorts.model.StatEnum.SPDEF;
 import static org.shorts.model.StatEnum.SPEED;
 import static org.shorts.model.abilities.Contrary.CONTRARY;
 import static org.shorts.model.abilities.Levitate.LEVITATE;
+import static org.shorts.model.abilities.MagicBounce.*;
 import static org.shorts.model.abilities.trapping.ArenaTrap.ARENA_TRAP;
 import static org.shorts.model.abilities.trapping.MagnetPull.MAGNET_PULL;
 import static org.shorts.model.abilities.trapping.ShadowTag.SHADOW_TAG;
@@ -964,5 +965,11 @@ public class Pokemon {
     public void fullRestore() {
         this.setStatus(Status.NONE);
         this.maxPotion();
+    }
+
+    public boolean isUnderMagicCoat() {
+        return (this.getAbility() == MAGIC_BOUNCE
+            && !this.hasVolatileStatus(SEMI_INVULNERABLE) && !this.hasVolatileStatus(ABILITY_SUPPRESSED)
+            && !this.hasVolatileStatus(ABILITY_IGNORED)) || this.hasVolatileStatus(MAGIC_COAT);
     }
 }

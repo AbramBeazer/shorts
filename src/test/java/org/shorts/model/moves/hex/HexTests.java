@@ -39,9 +39,9 @@ class HexTests {
 
     @Test
     void testDoublePowerToStatusedTarget() {
-        final double powerNoStatus = hex.getPower(user, target, battle);
+        final double powerNoStatus = hex.getPowerMultipliers(user, target, battle);
         target.setStatus(Status.PARALYZE);
-        final double powerStatused = hex.getPower(user, target, battle);
+        final double powerStatused = hex.getPowerMultipliers(user, target, battle);
         assertThat(powerStatused).isEqualTo(powerNoStatus * Hex.MULTIPLIER);
     }
 }

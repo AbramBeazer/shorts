@@ -36,17 +36,17 @@ class BarbBarrageTests {
 
     @Test
     void testDoublePowerToPoisonedTarget() {
-        final double powerNoStatus = barbBarrage.getPower(user, target, battle);
+        final double powerNoStatus = barbBarrage.getPowerMultipliers(user, target, battle);
         target.setStatus(Status.POISON);
-        final double powerStatused = barbBarrage.getPower(user, target, battle);
+        final double powerStatused = barbBarrage.getPowerMultipliers(user, target, battle);
         assertThat(powerStatused).isEqualTo(powerNoStatus * BarbBarrage.MULTIPLIER);
     }
 
     @Test
     void testDoublePowerToToxicTarget() {
-        final double powerNoStatus = barbBarrage.getPower(user, target, battle);
+        final double powerNoStatus = barbBarrage.getPowerMultipliers(user, target, battle);
         target.setStatus(Status.createToxic());
-        final double powerStatused = barbBarrage.getPower(user, target, battle);
+        final double powerStatused = barbBarrage.getPowerMultipliers(user, target, battle);
         assertThat(powerStatused).isEqualTo(powerNoStatus * BarbBarrage.MULTIPLIER);
     }
 

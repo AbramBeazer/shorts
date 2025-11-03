@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.VolatileStatus;
+import org.shorts.model.status.VolatileStatusType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.model.abilities.Comatose.COMATOSE;
@@ -47,7 +49,6 @@ class GastroAcidTests {
 
     @Test
     void testReflectedByMagicBounce() {
-        user.setAbility(TORRENT);
         target.setAbility(MAGIC_BOUNCE);
         move.execute(user, List.of(target), battle);
         assertThat(target.hasVolatileStatus(ABILITY_SUPPRESSED)).isFalse();
@@ -56,8 +57,7 @@ class GastroAcidTests {
 
     @Test
     void testReflectedByMagicCoat() {
-        user.setAbility(TORRENT);
-        target.setAbility(MAGIC_BOUNCE);
+        target.addVolatileStatus(new VolatileStatus(VolatileStatusType.MAGIC_COAT, 1));
         move.execute(user, List.of(target), battle);
         assertThat(target.hasVolatileStatus(ABILITY_SUPPRESSED)).isFalse();
         assertThat(user.hasVolatileStatus(ABILITY_SUPPRESSED)).isTrue();

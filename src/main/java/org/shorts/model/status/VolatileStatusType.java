@@ -75,7 +75,8 @@ public enum VolatileStatusType implements AbstractStatusType {
     PROTECTED,
     HELPING_HAND,
     MICLE_BERRY_EFFECT,
-    SYRUP_BOMBED;
+    SYRUP_BOMBED,
+    MAGIC_COAT;
 
     @Override
     public boolean isStatusPossible(Pokemon user, Pokemon target, Battle battle) {

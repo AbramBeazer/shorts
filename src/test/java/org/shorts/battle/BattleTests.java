@@ -34,25 +34,24 @@ class BattleTests {
 
     @BeforeEach
     void setup() {
+        final int activeMonsPerSide = 1;
         playerOne = new Trainer(
             "Red",
             List.of(
                 new Bulbasaur(OVERGROW),
                 new Charmander(BLAZE),
                 new Squirtle(TORRENT),
-                new Pikachu(STATIC_ABILITY)));
+                new Pikachu(STATIC_ABILITY)),
+            activeMonsPerSide);
         playerTwo = new Trainer(
             "Green",
-            List.of(new Axew(RIVALRY), new Gyarados(INTIMIDATE), new Medicham(PURE_POWER), new Scizor(SWARM)));
-        battle = new Battle(playerOne, playerTwo, 1);
+            List.of(new Axew(RIVALRY), new Gyarados(INTIMIDATE), new Medicham(PURE_POWER), new Scizor(SWARM)),
+            activeMonsPerSide);
+        battle = new Battle(playerOne, playerTwo, activeMonsPerSide);
     }
 
     @Test
     void testPrintFieldSingleBattle() {
-        final Pokemon user = getDummyPokemon();
-        final Pokemon target = getDummyPokemon();
-        final Battle battle = new DummyBattle(user, target);
-
         battle.printField(battle.getPlayerOne());
     }
 }

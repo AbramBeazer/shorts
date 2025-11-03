@@ -328,6 +328,8 @@ public abstract class Move implements IMove {
             return;
         }
         for (Pokemon target : targets) {
+            user.beforeAttack(target); //TODO: Is this correct?
+
             //TODO:
             //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
             //  Pressure increases the PP consumption of an opponent's Imprison and Snatch even though those are self-targeting moves; in Snatch's case the additional PP is consumed even if Snatch fails or snatches a move from a Pokémon other than the one with Pressure.
@@ -348,10 +350,7 @@ public abstract class Move implements IMove {
 
                 //I'm pretty sure the bouncing happens before the hit roll. Each bounced attack has a chance to miss
                 ////TODO: Is the accuracy calculated using the original user's accuracy, or the bouncer's?
-                final boolean magicBounced =
-                    this.isAffectedByMagicBounce() && target.getAbility() == MAGIC_BOUNCE
-                        && !target.hasVolatileStatus(SEMI_INVULNERABLE) && !target.hasVolatileStatus(ABILITY_SUPPRESSED)
-                        && !target.hasVolatileStatus(ABILITY_IGNORED);
+                final boolean magicBounced = this.isAffectedByMagicBounce() && target.isUnderMagicCoat();
 
                 if (magicBounced) {
                     MagicBounce.printMessage(target, this);
