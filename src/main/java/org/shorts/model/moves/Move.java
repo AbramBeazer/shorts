@@ -517,12 +517,12 @@ public abstract class Move {
         return realDamage == 0 ? 0 : (int) Math.max(1, realDamage);
     }
 
-    private int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
+    protected int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
         boolean isCritical = rollForCrit(user, target, battle);
         double typeMultiplier = this.getTypeMultiplier(user, target, battle);
 
         if (typeMultiplier == IMMUNE) {
-            //TODO: LOGGER.info("It didn't affect {}", target.getLead().getNickname());
+            System.out.println("It didn't affect " + target);
             return 0;
         }
 
@@ -718,11 +718,10 @@ public abstract class Move {
             Trainer opposingTrainer = battle.getOpposingTrainer(user);
             double screenMultiplier = battle.getActiveMonsPerSide() == 1 ? 0.5 : (2732 / divisor);
 
-            if (opposingTrainer.getAuroraVeilTurns() > 0) {
-                base = roundHalfUp(base * screenMultiplier);
-            } else if (this.category == Category.PHYSICAL && opposingTrainer.getReflectTurns() > 0) {
-                base = roundHalfUp(base * screenMultiplier);
-            } else if (this.category == Category.SPECIAL && opposingTrainer.getLightScreenTurns() > 0) {
+            if (opposingTrainer.getAuroraVeilTurns() > 0
+                || (this.category == Category.PHYSICAL && opposingTrainer.getReflectTurns() > 0)
+                || (this.category == Category.SPECIAL && opposingTrainer.getLightScreenTurns() > 0)) {
+
                 base = roundHalfUp(base * screenMultiplier);
             }
         }
