@@ -417,63 +417,66 @@ public abstract class Move {
     protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         //TODO: Implement semi-invulnerable
         if (rollToHit(user, target, battle) && !isTargetProtected(user, target, battle)) {
+            doHit(user, target, battle);
+        }
+    }
 
-            if (this.category == Category.STATUS) {
-                //TODO: This may change -- Will-O-Wisp shouldn't burn Flash Fire mons, Thunder Wave won't affect ground-types, and poison moves won't affect steels, but I think other status moves might ignore types.
-                //TODO: REFACTOR THIS! getTypeMultiplier calls target.beforeHit!
-                if (target.beforeHit(user, battle, this) > 0 && getTypeMultiplier(user, target, battle) > 0) {
-                    this.trySecondaryEffect(user, target, battle);
+    protected void doHit(Pokemon user, Pokemon target, Battle battle) {
+        if (this.category == Category.STATUS) {
+            //TODO: This may change -- Will-O-Wisp shouldn't burn Flash Fire mons, Thunder Wave won't affect ground-types, and poison moves won't affect steels, but I think other status moves might ignore types.
+            //TODO: REFACTOR THIS! getTypeMultiplier calls target.beforeHit!
+            if (target.beforeHit(user, battle, this) > 0 && getTypeMultiplier(user, target, battle) > 0) {
+                this.trySecondaryEffect(user, target, battle);
+            }
+        } else {
+
+            if ((this.getType() == Type.FIRE || this instanceof ThawingMove)
+                && target.getStatus() == Status.FREEZE) {
+                //TODO: Should this thaw a Pokemon through substitute?
+                target.thaw();
+            }
+
+            int hitNum = 0;
+            final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK, user.getHeldItem() == LOADED_DICE);
+            while (hitNum < maxHits && !user.hasFainted() && !target.hasFainted()) {
+                final int previousTargetHP = target.getCurrentHP();
+
+                int damage = calculateDamage(user, target, battle);
+                if (damage <= 0) {
+                    break;
                 }
-            } else {
 
-                if ((this.getType() == Type.FIRE || this instanceof ThawingMove)
-                    && target.getStatus() == Status.FREEZE) {
-                    //TODO: Should this thaw a Pokemon through substitute?
-                    target.thaw();
-                }
-
-                int hitNum = 0;
-                final int maxHits = this.getNumHits(user.getAbility() == SKILL_LINK, user.getHeldItem() == LOADED_DICE);
-                while (hitNum < maxHits && !user.hasFainted() && !target.hasFainted()) {
-                    final int previousTargetHP = target.getCurrentHP();
-
-                    int damage = calculateDamage(user, target, battle);
-                    if (damage <= 0) {
-                        break;
-                    }
-
-                    final boolean hitSub = checkForHitSub(user, target);
-                    if (hitSub) {
-                        //TODO: Handle moves and abilities that ignore substitute.
-                        ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
-                    } else {
-                        target.takeDamage(damage);
-                    }
-
-                    if (!user.hasFainted()) {
-                        this.inflictRecoil(user, damage);
-                    }
-
-                    //TODO: Verify which effects should happen after the attack hits the sub and which shouldn't.
-                    if (!hitSub) {
-                        target.afterHit(user, battle, previousTargetHP, this);
-                    }
-
-                    this.trySecondaryEffect(user, target, battle);
-                    if (target.hasVolatileStatus(SUBSTITUTE)
-                        && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
-                        target.removeVolatileStatus(SUBSTITUTE);
-                    }
-
-                    hitNum++;
-                }
-                if (hitNum > 1) {
-                    System.out.println("Hit " + hitNum + " times!");
+                final boolean hitSub = checkForHitSub(user, target);
+                if (hitSub) {
+                    //TODO: Handle moves and abilities that ignore substitute.
+                    ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).takeDamage(damage);
+                } else {
+                    target.takeDamage(damage);
                 }
 
                 if (!user.hasFainted()) {
-                    user.afterAttack(target, battle, this);
+                    this.inflictRecoil(user, damage);
                 }
+
+                //TODO: Verify which effects should happen after the attack hits the sub and which shouldn't.
+                if (!hitSub) {
+                    target.afterHit(user, battle, previousTargetHP, this);
+                }
+
+                this.trySecondaryEffect(user, target, battle);
+                if (target.hasVolatileStatus(SUBSTITUTE)
+                    && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
+                    target.removeVolatileStatus(SUBSTITUTE);
+                }
+
+                hitNum++;
+            }
+            if (hitNum > 1) {
+                System.out.println("Hit " + hitNum + " times!");
+            }
+
+            if (!user.hasFainted()) {
+                user.afterAttack(target, battle, this);
             }
         }
     }
