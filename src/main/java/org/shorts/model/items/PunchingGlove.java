@@ -18,6 +18,6 @@ public class PunchingGlove extends HeldItem {
     @Override
     public double getMovePowerMultipliers(Pokemon user, Pokemon opponent, Battle battle, Move move) {
         final double base = super.getMovePowerMultipliers(user, opponent, battle, move);
-        return move instanceof PunchingMove ? base * MULTIPLIER : base;
+        return move.isPunchingMove() ? base * MULTIPLIER : base;
     }
 }

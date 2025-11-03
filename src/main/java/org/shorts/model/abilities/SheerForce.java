@@ -17,7 +17,7 @@ public class SheerForce extends Ability {
 
     @Override
     public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        if (move instanceof GetsSheerForceBoost) {
+        if (move.getsSheerForceBoost()) {
             return 5325d / 4096d;
         } else {
             return 1;

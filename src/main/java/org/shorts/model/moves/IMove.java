@@ -19,4 +19,28 @@ public interface IMove {
     default boolean isSlicingMove() {
         return false;
     }
+
+    default boolean isPunchingMove() {
+        return false;
+    }
+
+    default boolean isKickingMove() {
+        return false;
+    }
+
+    default boolean isBitingMove() {
+        return false;
+    }
+
+    default boolean getsSheerForceBoost() {
+        return false;
+    }
+
+    default boolean isAffectedByMagicBounce() {
+        return false;
+    }
+
+    default boolean setsEntryHazards() {
+        return false;
+    }
 }

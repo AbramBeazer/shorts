@@ -220,7 +220,7 @@ public abstract class Move implements IMove {
     }
 
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (!(user.getAbility() == SHEER_FORCE && this instanceof GetsSheerForceBoost) && secondaryEffectChance > 0) {
+        if (!(user.getAbility() == SHEER_FORCE && this.getsSheerForceBoost()) && secondaryEffectChance > 0) {
 
             final int chance = getSecondaryEffectChance() * (user.getAbility().equals(SERENE_GRACE) ? 2 : 1);
             if (RANDOM.nextInt(100) < chance) {
@@ -493,7 +493,7 @@ public abstract class Move implements IMove {
 
     protected void checkForLifeOrbRecoil(Pokemon user) {
         if (user.getHeldItem() == LIFE_ORB && user.getAbility() != MAGIC_GUARD && !(user.getAbility() == SHEER_FORCE
-            && this instanceof GetsSheerForceBoost)) {
+            && this.getsSheerForceBoost())) {
             user.takeDamage(user.getMaxHP() / 10);
         }
     }
