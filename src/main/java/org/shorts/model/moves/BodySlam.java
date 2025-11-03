@@ -25,9 +25,4 @@ public class BodySlam extends Move implements HitsMinimize, GetsSheerForceBoost 
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         target.setStatus(Status.PARALYZE);
     }
-
-    @Override
-    public boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
-        return target.hasVolatileStatus(MINIMIZED) || super.rollToHit(user, target, battle);
-    }
 }

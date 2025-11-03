@@ -20,9 +20,4 @@ public class FlyingPress extends Move implements HitsMinimize {
     public double getBaseTypeMultiplier(Set<Type> defenderTypes) {
         return super.getBaseTypeMultiplier(defenderTypes) * Type.getTypeMultiplier(FLYING, defenderTypes);
     }
-
-    @Override
-    public boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
-        return target.hasVolatileStatus(MINIMIZED) || super.rollToHit(user, target, battle);
-    }
 }

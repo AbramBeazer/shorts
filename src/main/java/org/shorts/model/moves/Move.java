@@ -233,7 +233,7 @@ public abstract class Move implements IMove {
     }
 
     protected boolean rollToHit(Pokemon user, Pokemon target, Battle battle) {
-        if (getAccuracy(battle) <= 0) {
+        if (getAccuracy(battle) <= 0 || this.alwaysHitsMinimize() && target.hasVolatileStatus(MINIMIZED)) {
             return true;
         }
 
