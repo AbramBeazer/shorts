@@ -32,6 +32,14 @@ public interface IMove {
         return false;
     }
 
+    default boolean isBallBombMove() {
+        return false;
+    }
+
+    default boolean isWindMove() {
+        return false;
+    }
+
     default boolean getsSheerForceBoost() {
         return false;
     }
