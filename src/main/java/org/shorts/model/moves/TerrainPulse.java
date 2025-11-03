@@ -5,7 +5,7 @@ import org.shorts.battle.Terrain;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class TerrainPulse extends Move implements PulseEffect {
+public class TerrainPulse extends Move implements PulseMove {
 
     public TerrainPulse() {
         super("Terrain Pulse", 50, 100, Type.NORMAL, Category.SPECIAL, Range.NORMAL, 16, false, 0);

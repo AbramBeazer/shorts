@@ -17,6 +17,6 @@ public class StrongJaw extends Ability {
 
     @Override
     public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        return move instanceof BitingMove ? MULTIPLIER : 1;
+        return move.isBitingMove() ? MULTIPLIER : 1;
     }
 }

@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.abilities.MegaLauncher.MEGA_LAUNCHER;
 
-public class HealPulse extends Move implements PulseEffect, HealingMove, AffectedByMagicBounce {
+public class HealPulse extends Move implements PulseMove, HealingMove, AffectedByMagicBounce {
 
     public HealPulse() {
         super("Heal Pulse", 0, -1, Type.PSYCHIC, Category.STATUS, Range.SINGLE_ANY, 16, false, 100);

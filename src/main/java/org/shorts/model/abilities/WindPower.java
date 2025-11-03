@@ -17,7 +17,7 @@ public class WindPower extends Ability {
 
     @Override
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
-        if (move instanceof WindMove) {
+        if (move.isWindMove()) {
             System.out.printf("Being hit by %s charged %s with power!%n", move, self);
             self.addVolatileStatus(new VolatileStatus(VolatileStatusType.CHARGED, -1));
         }

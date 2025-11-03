@@ -7,7 +7,7 @@ import org.shorts.model.types.Type;
 
 import static org.shorts.model.status.VolatileStatusType.CONFUSED;
 
-public class WaterPulse extends Move implements PulseEffect, GetsSheerForceBoost {
+public class WaterPulse extends Move implements PulseMove, GetsSheerForceBoost {
 
     public WaterPulse() {
         super("Water Pulse", 60, 100, Type.WATER, Category.SPECIAL, Range.SINGLE_ANY, 32, false, 20);

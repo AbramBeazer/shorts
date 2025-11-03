@@ -8,6 +8,14 @@ public interface IMove {
         return false;
     }
 
+    default boolean hasHighCritChance() {
+        return false;
+    }
+
+    default boolean dealsExtraSuperEffectiveDamage() {
+        return false;
+    }
+
     default boolean alwaysHitsMinimize() {
         return false;
     }
@@ -16,7 +24,19 @@ public interface IMove {
         return false;
     }
 
-    default boolean isSlicingMove() {
+    default boolean isHealingMove() {
+        return false;
+    }
+
+    default boolean isDrainingMove() {
+        return false;
+    }
+
+    default boolean isThawingMove() {
+        return false;
+    }
+
+    default boolean isBitingMove() {
         return false;
     }
 
@@ -28,11 +48,15 @@ public interface IMove {
         return false;
     }
 
-    default boolean isBitingMove() {
+    default boolean isBallBombMove() {
         return false;
     }
 
-    default boolean isBallBombMove() {
+    default boolean isPulseMove() {
+        return false;
+    }
+
+    default boolean isSlicingMove() {
         return false;
     }
 
@@ -49,6 +73,22 @@ public interface IMove {
     }
 
     default boolean setsEntryHazards() {
+        return false;
+    }
+
+    default boolean canHitDig() {
+        return false;
+    }
+
+    default boolean canHitDive() {
+        return false;
+    }
+
+    default boolean canHitFly() {
+        return false;
+    }
+
+    default boolean doubleDamageToFly() {
         return false;
     }
 }

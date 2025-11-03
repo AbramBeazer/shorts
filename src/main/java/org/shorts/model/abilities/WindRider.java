@@ -16,7 +16,7 @@ public class WindRider extends Ability {
 
     @Override
     public double beforeHit(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        if (move instanceof WindMove) {
+        if (move.isWindMove()) {
             self.changeStat(1, StatEnum.ATK);
             return 0;
         } else {

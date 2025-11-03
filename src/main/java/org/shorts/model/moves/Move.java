@@ -183,7 +183,7 @@ public abstract class Move implements IMove {
     }
 
     public boolean isContact(Pokemon user) {
-        if (user != null && this instanceof PunchingMove) {
+        if (user != null && this.isPunchingMove()) {
             return contact && user.getHeldItem() != PUNCHING_GLOVE;
         }
         return contact;
@@ -200,7 +200,7 @@ public abstract class Move implements IMove {
             return 1;
         } else if (user.getAbility() == GALE_WINGS && user.isAtFullHP() && this.type == FLYING) {
             return 1;
-        } else if (user.getAbility() == TRIAGE && this instanceof HealingMove) {
+        } else if (user.getAbility() == TRIAGE && this.isHealingMove()) {
             return 3;
         } else {
             return 0;
@@ -349,7 +349,7 @@ public abstract class Move implements IMove {
                 //I'm pretty sure the bouncing happens before the hit roll. Each bounced attack has a chance to miss
                 ////TODO: Is the accuracy calculated using the original user's accuracy, or the bouncer's?
                 final boolean magicBounced =
-                    this instanceof AffectedByMagicBounce && target.getAbility() == MAGIC_BOUNCE
+                    this.isAffectedByMagicBounce() && target.getAbility() == MAGIC_BOUNCE
                         && !target.hasVolatileStatus(SEMI_INVULNERABLE) && !target.hasVolatileStatus(ABILITY_SUPPRESSED)
                         && !target.hasVolatileStatus(ABILITY_IGNORED);
 
@@ -391,7 +391,7 @@ public abstract class Move implements IMove {
         final Trainer side;
         if (range == Range.OTHER_SIDE) {
 
-            Pokemon magicBouncer = this instanceof AffectedByMagicBounce ? battle.getOpposingActivePokemon(user)
+            Pokemon magicBouncer = this.isAffectedByMagicBounce() ? battle.getOpposingActivePokemon(user)
                 .stream()
                 .filter(t -> t.getAbility() == MAGIC_BOUNCE && !t.hasVolatileStatus(SEMI_INVULNERABLE)
                     && !t.hasVolatileStatus(ABILITY_SUPPRESSED) && !t.hasVolatileStatus(ABILITY_IGNORED))
@@ -430,8 +430,7 @@ public abstract class Move implements IMove {
             }
         } else {
 
-            if ((this.getType() == Type.FIRE || this instanceof ThawingMove)
-                && target.getStatus() == Status.FREEZE) {
+            if ((this.getType() == Type.FIRE || this.isThawingMove()) && target.getStatus() == Status.FREEZE) {
                 //TODO: Should this thaw a Pokemon through substitute?
                 target.thaw();
             }
@@ -485,7 +484,7 @@ public abstract class Move implements IMove {
         if (this.bypassesProtection(target)) {
             return false;
         }
-        return target.hasVolatileStatus(PROTECTED) && !(this instanceof EntryHazardSetter) && this.range != Range.ALL
+        return target.hasVolatileStatus(PROTECTED) && !(this.setsEntryHazards()) && this.range != Range.ALL
             && this.range != Range.BOTH_SIDES && battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(
             target) && !(user.getAbility() == UNSEEN_FIST && !user.hasVolatileStatus(ABILITY_SUPPRESSED)
             && this.isContact(user));
@@ -649,7 +648,7 @@ public abstract class Move implements IMove {
             return true;
         } else {
             int stage = 0;
-            if (this instanceof HighCritChanceMove) {
+            if (this.hasHighCritChance()) {
                 stage++;
             }
             if (user.getAbility() == SUPER_LUCK) {
@@ -701,16 +700,14 @@ public abstract class Move implements IMove {
 
         if (target.hasVolatileStatus(SEMI_INVULNERABLE)) {
             Move semiInvulnerableMove = target.getVolatileStatus(SEMI_INVULNERABLE).getMove();
-            if ((this instanceof Earthquake || this instanceof Magnitude)
-                && semiInvulnerableMove instanceof Dig) {
+            if (this.canHitDig() && semiInvulnerableMove instanceof Dig) {
                 base = roundHalfUp(base * 2);
             }
-            if ((this instanceof Surf || this instanceof Whirlpool)
-                && semiInvulnerableMove instanceof Dive) {
+            if (this.canHitDive() && semiInvulnerableMove instanceof Dive) {
                 base = roundHalfUp(base * 2);
             }
             //TODO: Implement
-            //            if ((this instanceof Gust || this instanceof Twister)
+            //            if (this.doubleDamageToFly()
             //                && (semiInvulnerableMove instanceof Fly || semiInvulnerableMove instanceof Bounce
             //                || semiInvulnerableMove instanceof SkyDrop)) {
             //                base = roundHalfUp(base * 2);
@@ -728,7 +725,7 @@ public abstract class Move implements IMove {
             }
         }
 
-        if (this instanceof ExtraSuperEffectiveDamageAttack && typeMultiplier > NEUTRAL) {
+        if (this.dealsExtraSuperEffectiveDamage() && typeMultiplier > NEUTRAL) {
             base = roundHalfUp(base * 5461d / divisor);
         }
 

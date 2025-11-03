@@ -2,7 +2,7 @@ package org.shorts.model.moves;
 
 import org.shorts.model.types.Type;
 
-public class SkyUppercut extends Move implements PunchingMove {
+public class SkyUppercut extends Move implements PunchingMove, CanHitFly {
 
     public SkyUppercut() {
         super("Sky Uppercut", 85, 90, Type.FIGHTING, Category.PHYSICAL, Range.NORMAL, 24, true, 0);

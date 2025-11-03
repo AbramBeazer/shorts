@@ -28,4 +28,9 @@ public abstract class ThawingMove extends Move {
         user.thaw();
         super.execute(user, targets, battle);
     }
+
+    @Override
+    public boolean isThawingMove() {
+        return true;
+    }
 }

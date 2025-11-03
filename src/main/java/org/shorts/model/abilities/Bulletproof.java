@@ -16,7 +16,7 @@ public class Bulletproof extends Ability implements IgnorableAbility {
 
     @Override
     public double beforeHit(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        if (move instanceof BallBombMove && !self.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+        if (move.isBallBombMove() && !self.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
             && !self.hasVolatileStatus(VolatileStatusType.ABILITY_IGNORED)) {
             return 0;
         } else {
