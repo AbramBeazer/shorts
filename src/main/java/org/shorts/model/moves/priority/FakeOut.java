@@ -20,6 +20,8 @@ public class FakeOut extends Move implements GetsSheerForceBoost {
     public void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         if (user.getTurnsInBattle() == 1) {
             super.executeOnTarget(user, target, battle);
+        } else {
+            System.out.println("But it failed!");
         }
     }
 
@@ -33,5 +35,10 @@ public class FakeOut extends Move implements GetsSheerForceBoost {
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         target.addVolatileStatus(new VolatileStatus(FLINCH, 1));
+    }
+
+    @Override
+    public int getPriority(Pokemon attacker, Battle battle) {
+        return 3;
     }
 }
