@@ -12,7 +12,7 @@ public class ToughClaws extends Ability {
 
     public static final ToughClaws TOUGH_CLAWS = new ToughClaws();
 
-    public static final double MULTIPLIER = 1.5;
+    public static final double MULTIPLIER = 5325/4096d;
 
     @Override
     public double getMovePowerMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
