@@ -8,10 +8,12 @@ import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.SubstituteStatus;
+import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.shorts.model.abilities.Infiltrator.*;
+import static org.shorts.model.abilities.NullifyingAbility.*;
 import static org.shorts.model.abilities.Soundproof.*;
 import static org.shorts.model.pokemon.PokemonTestUtils.*;
 
@@ -58,6 +60,20 @@ class HowlTests {
         howl.execute(user, battle.getPlayerOne().getActivePokemon(), battle);
         assertThat(user.getStageAttack()).isOne();
         assertThat(ally.getStageAttack()).isZero();
+
+        ally.addVolatileStatus(VolatileStatus.ABILITY_SUPPRESSED);
+        assertThat(howl.affectsTarget(user, ally)).isTrue();
+        howl.execute(user, battle.getPlayerOne().getActivePokemon(), battle);
+        assertThat(user.getStageAttack()).isEqualTo(2);
+        assertThat(ally.getStageAttack()).isOne();
+
+        ally.removeVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED);
+        ally.addVolatileStatus(VolatileStatus.ABILITY_IGNORED);
+        assertThat(howl.affectsTarget(user, ally)).isTrue();
+        howl.execute(user, battle.getPlayerOne().getActivePokemon(), battle);
+        assertThat(user.getStageAttack()).isEqualTo(3);
+        assertThat(ally.getStageAttack()).isEqualTo(2);
+
     }
 
     @Test
@@ -72,6 +88,12 @@ class HowlTests {
         assertThat(howl.affectsTarget(user, ally)).isTrue();
         howl.execute(user, battle.getPlayerOne().getActivePokemon(), battle);
         assertThat(user.getStageAttack()).isEqualTo(2);
+        assertThat(ally.getStageAttack()).isOne();
+
+        user.addVolatileStatus(VolatileStatus.ABILITY_SUPPRESSED);
+        assertThat(howl.affectsTarget(user, ally)).isFalse();
+        howl.execute(user, battle.getPlayerOne().getActivePokemon(), battle);
+        assertThat(user.getStageAttack()).isEqualTo(3);
         assertThat(ally.getStageAttack()).isOne();
     }
 }

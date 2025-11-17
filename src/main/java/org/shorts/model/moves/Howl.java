@@ -28,19 +28,19 @@ public class Howl extends Move implements SoundEffect {
     }
 
     protected boolean affectsTarget(Pokemon user, Pokemon target) {
-        boolean canAffect = true;
+        boolean canAffect = target.canChangeStat(1, StatEnum.ATK);
         if (user != target) {
             if (target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
-                canAffect =
+                canAffect &=
                     user.getAbility() == INFILTRATOR && !user.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
                         && target.canChangeStat(1, StatEnum.ATK);
-            } else if (target.getAbility() == SOUNDPROOF) {
-                canAffect =
-                    !target.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED) && !target.hasVolatileStatus(
-                        VolatileStatusType.ABILITY_IGNORED);
+            }
+            if (target.getAbility() == SOUNDPROOF) {
+                canAffect &= target.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+                        || target.hasVolatileStatus(VolatileStatusType.ABILITY_IGNORED);
             }
         }
 
-        return canAffect && target.canChangeStat(1, StatEnum.ATK);
+        return canAffect;
     }
 }
