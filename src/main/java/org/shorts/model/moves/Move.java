@@ -338,8 +338,7 @@ public abstract class Move implements IMove {
             }
         }
 
-        if (range == Range.BOTH_SIDES || range == Range.OWN_SIDE || range == Range.OWN_PARTY
-            || range == Range.OTHER_SIDE) {
+        if (range == Range.BOTH_SIDES || range == Range.OWN_SIDE || range == Range.OTHER_SIDE) {
             executeOnSide(user, battle);
         } else {
             for (Pokemon target : targets) {
@@ -404,7 +403,7 @@ public abstract class Move implements IMove {
                 MagicBounce.printMessage(magicBouncer, this);
             }
 
-        } else if (range == Range.OWN_SIDE || range == Range.BOTH_SIDES || range == Range.OWN_PARTY) {
+        } else if (range == Range.OWN_SIDE || range == Range.BOTH_SIDES) {
             side = battle.getCorrespondingTrainer(user);
         } else {
             throw new IllegalArgumentException(
