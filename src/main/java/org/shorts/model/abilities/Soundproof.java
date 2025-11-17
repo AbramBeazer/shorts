@@ -1,6 +1,7 @@
 package org.shorts.model.abilities;
 
-public class Soundproof extends Ability {
+public class Soundproof extends Ability implements IgnorableAbility {
+
     private Soundproof() {
         super("Soundproof");
     }
