@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
+import org.shorts.model.moves.Haze;
 import org.shorts.model.moves.Howl;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.entryhazardsetter.StealthRock;
@@ -73,8 +74,12 @@ class GoodAsGoldTests {
 
     @Test
     void testDoesNotBlockMoveWhereTargetIsAll() {
-        //        move = new Haze();
-        assertThat(false).isTrue();
+        gholdengo.setStageSpeed(4);
+        attacker.setStageSpeed(4);
+        move = new Haze();
+        move.execute(attacker, List.of(attacker, gholdengo), battle);
+        assertThat(gholdengo.getStageSpeed()).isZero();
+        assertThat(attacker.getStageSpeed()).isZero();
     }
 
     @Test
