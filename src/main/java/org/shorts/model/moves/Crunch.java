@@ -14,6 +14,7 @@ public class Crunch extends Move implements BitingMove, GetsSheerForceBoost {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        //TODO: Should I be checking to see if Mist is in effect?
         if (target.isDropPossible(StatEnum.DEF) && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
             super.trySecondaryEffect(user, target, battle);
         }
