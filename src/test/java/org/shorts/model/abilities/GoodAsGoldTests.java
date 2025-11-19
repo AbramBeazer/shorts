@@ -6,12 +6,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
+import org.shorts.model.moves.Howl;
 import org.shorts.model.moves.Move;
-import org.shorts.model.moves.Rest;
 import org.shorts.model.moves.entryhazardsetter.StealthRock;
 import org.shorts.model.moves.priority.HelpingHandMove;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.status.StatusType;
 import org.shorts.model.status.VolatileStatusType;
 
 import static org.assertj.core.api.Assertions.*;
@@ -29,6 +28,7 @@ class GoodAsGoldTests {
         attacker = getDummyPokemon();
         gholdengo = getDummyPokemon();
         battle = new DummyBattle(attacker, gholdengo);
+        gholdengo.setAbility(GoodAsGold.GOOD_AS_GOLD);
     }
 
     @Test
@@ -93,7 +93,9 @@ class GoodAsGoldTests {
 
     @Test
     void testBlocksHelpfulTargetAllAlliesMove() {
-        //        move = new Howl();
-        assertThat(false).isTrue();
+        move = new Howl();
+        move.execute(attacker, List.of(attacker, gholdengo), battle);
+        assertThat(attacker.getStageAttack()).isOne();
+        assertThat(gholdengo.getStageAttack()).isZero();
     }
 }
