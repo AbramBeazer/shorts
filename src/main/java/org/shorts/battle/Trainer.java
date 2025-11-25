@@ -204,7 +204,11 @@ public class Trainer {
     }
 
     public boolean hasAvailableSwitch() {
-        for (int i = activeMonsPerSide; i < team.size(); i++) {
+        return hasAvailableSwitch(0);
+    }
+
+    public boolean hasAvailableSwitch(int switchesSelected) {
+        for (int i = activeMonsPerSide + switchesSelected; i < team.size(); i++) {
             if (!team.get(i).hasFainted()) {
                 return true;
             }

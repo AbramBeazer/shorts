@@ -1,10 +1,13 @@
 package org.shorts.battle;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,6 +16,7 @@ import org.shorts.model.abilities.HailImmuneAbility;
 import org.shorts.model.abilities.SandImmuneAbility;
 import org.shorts.model.moves.MeFirst;
 import org.shorts.model.moves.Move;
+import org.shorts.model.moves.Pursuit;
 import org.shorts.model.moves.Range;
 import org.shorts.model.moves.floating.FloatingEffect;
 import org.shorts.model.pokemon.Pokemon;
@@ -281,7 +285,7 @@ public class Battle {
         }
 
         if (playerOne.hasLost() && playerTwo.hasLost()) {
-            System.out.println("Battle ended in a draw.");
+            System.out.println("Battle ended in a draw."); //TODO: I don't think later gens allow ties.
         } else if (playerOne.hasLost()) {
             System.out.println(playerTwo.getName() + " wins!");
         } else if (playerTwo.hasLost()) {
@@ -289,16 +293,11 @@ public class Battle {
         }
     }
 
-    public List<Turn> pollTurns() {
+    public Queue<Turn> pollTurns() {
         //take player input
         final List<Turn> turns = new ArrayList<>();
         turns.addAll(pollPlayerInput(playerOne));
         turns.addAll(pollPlayerInput(playerTwo));
-        return turns;
-    }
-
-    public void takeTurns(List<Turn> turns) {
-
         turns.sort((t1, t2) -> {
             int priority = Integer.compare(t2.getPriority(this), t1.getPriority(this));
             if (priority == 0) {
@@ -307,10 +306,26 @@ public class Battle {
                 return priority;
             }
         });
+        return new ArrayDeque<>(turns);
+    }
 
-        for (Turn turn : turns) {
+    public void takeTurns(Queue<Turn> turns) {
+
+        while (!turns.isEmpty()) {
+            final Turn turn = turns.remove();
             if (!turn.getUser().hasFainted()) {
-                turn.takeTurn(this);
+                if (turn.getMove() == null) {
+                    //target index being less than activeMonsPerSide indicates the target is an opponent.
+                    final List<Turn> pursuitTurns = turns.stream()
+                        .filter(t -> t.getMove() instanceof Pursuit && t.getSingleTargetIndex() < activeMonsPerSide)
+                        .collect(
+                            Collectors.toList());
+
+                    turns.removeAll(pursuitTurns);
+                    turn.switchWithPursuit(this, pursuitTurns);
+                } else {
+                    turn.takeTurn(this);
+                }
             }
         }
 
@@ -434,46 +449,47 @@ public class Battle {
                 }
             }
 
-            if (trainer.hasAvailableSwitch()) {
-                printBench(trainer);
+            //Make sure the player can't choose two switches that send in the same mon.
+            List<Integer> indexesAlreadyBeingSwitched = turns.stream()
+                .filter(t -> t.getMove() == null)
+                .map(Turn::getSingleTargetIndex)
+                .collect(Collectors.toList());
+
+            if (trainer.hasAvailableSwitch(indexesAlreadyBeingSwitched.size())) {
+                printBench(trainer, indexesAlreadyBeingSwitched);
             }
 
-            int choice;
-            boolean choiceValid = true;
+            boolean choiceValid = false;
             //Choice is invalid if that Pokémon has fainted or if the move has no PP.
-            do {
-                choice = Integer.parseInt(scanner.nextLine());
-                if (choice <= 0 || choice > 9) {
-                    choiceValid = false;
-                } else if (choice <= 4) {
-                    if (invalidMoves.contains(pokemon.getMoves()[choice - 1])) {
-                        choiceValid = false;
-                    } else {
-                        choiceValid = true;
+            while (!choiceValid) {
+                final int choice = Integer.parseInt(scanner.nextLine());
 
-                        final Move move = pokemon.getMoves()[choice - 1];
-                        final Range range = move.getRange(pokemon);
-                        final List<Pokemon> possibleTargets = getPokemonWithinRange(pokemon, move.getRange(pokemon));
-                        if (possibleTargets.size() > 1 && range.isPromptForTargetChoice()) {
-                            int singleTargetIndex = promptChoiceOfTarget(pokemon, trainer, possibleTargets);
-                            if (singleTargetIndex == 6) {
-                                continue;
-                            }
-                            turns.add(new Turn(pokemon, move, singleTargetIndex));
-                        } else {
-                            turns.add(new Turn(pokemon, move));
+                if (choice >= 1 && choice <= 4 && choice <= pokemon.getMoves().length
+                    && !invalidMoves.contains(pokemon.getMoves()[choice - 1])) {
+
+                    final Move move = pokemon.getMoves()[choice - 1];
+                    final Range range = move.getRange(pokemon);
+                    final List<Pokemon> possibleTargets = getPokemonWithinRange(pokemon, move.getRange(pokemon));
+                    if (possibleTargets.size() > 1 && range.isPromptForTargetChoice()) {
+                        int singleTargetIndex = promptChoiceOfTarget(pokemon, trainer, possibleTargets);
+                        if (singleTargetIndex == 6) {
+                            continue; // this means the user selected "back"
                         }
-                    }
-                } else if (choice >= 4 + activeMonsPerSide) {
-                    if (trainer.getTeam().get(choice - 4).hasFainted() || pokemon.isTrapped(this)) {
-                        choiceValid = false;
+                        turns.add(new Turn(pokemon, move, singleTargetIndex));
                     } else {
-                        choiceValid = true;
-                        turns.add(new Turn(pokemon, null, choice - 4));
+                        turns.add(new Turn(pokemon, move));
                     }
-                }
 
-            } while (!choiceValid);
+                    choiceValid = true;
+
+                } else if (choice >= 4 + activeMonsPerSide && choice <= 9
+                    && !indexesAlreadyBeingSwitched.contains(choice - 4)
+                    && !trainer.getTeam().get(choice - 4).hasFainted() && !pokemon.isTrapped(this)) {
+
+                    choiceValid = true;
+                    turns.add(new Turn(pokemon, null, choice - 4));
+                }
+            }
         }
         return turns;
     }
@@ -610,14 +626,21 @@ public class Battle {
     }
 
     private void printBench(Trainer trainer) {
+        printBench(trainer, Collections.emptyList());
+    }
+
+    private void printBench(Trainer trainer, List<Integer> indexesAlreadyBeingSwitched) {
         System.out.println("\n~~~SWITCH POKÉMON~~~");
         for (int i = activeMonsPerSide; i < trainer.getTeam().size(); i++) {
-            Pokemon teammate = trainer.getTeam().get(i);
+            final Pokemon teammate = trainer.getTeam().get(i);
 
-            String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().getType().name();
-            System.out.println(
-                (i + 4) + ")" + "\t" + teammate + "\t(" + teammate.getCurrentHP()
-                    + "/" + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
+            if (!indexesAlreadyBeingSwitched.contains(i)) {
+
+                final String status = teammate.getStatus() == Status.NONE ? "" : teammate.getStatus().getType().name();
+                System.out.println(
+                    (i + 4) + ")" + "\t" + teammate + "\t(" + teammate.getCurrentHP()
+                        + "/" + teammate.getMaxHP() + ")\t" + status + "\t" + teammate.getHeldItem());
+            }
         }
     }
 

@@ -68,10 +68,20 @@ public class Turn {
                 battle);
         } else {
             System.out.println(player.getName() + " recalled " + user.toString() + "!");
-            final int index = player.getTeam().indexOf(user);
-            player.switchPokemon(index, singleTargetIndex);
-            System.out.println(player.getName() + " sent out " + player.getTeam().get(index).toString() + "!");
-            player.applyEntryHazards(player.getTeam().get(index));
+            final int userIndex = player.getTeam().indexOf(user);
+            player.switchPokemon(userIndex, singleTargetIndex);
+            System.out.println(player.getName() + " sent out " + player.getTeam().get(userIndex).toString() + "!");
+            player.applyEntryHazards(player.getTeam().get(userIndex));
         }
+    }
+
+    public void switchWithPursuit(Battle battle, List<Turn> pursuitTurns) {
+        final Trainer player = battle.getCorrespondingTrainer(user);
+        System.out.println(player.getName() + " recalled " + user.toString() + "!");
+        final int userIndex = player.getTeam().indexOf(user);
+        pursuitTurns.forEach(t -> new Turn(t.getUser(), t.getMove(), userIndex).takeTurn(battle));
+        player.switchPokemon(userIndex, singleTargetIndex);
+        System.out.println(player.getName() + " sent out " + player.getTeam().get(userIndex).toString() + "!");
+        player.applyEntryHazards(player.getTeam().get(userIndex));
     }
 }

@@ -1,7 +1,9 @@
 package org.shorts.model.moves;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,9 +11,7 @@ import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
 import org.shorts.battle.Turn;
-import org.shorts.model.abilities.Prankster;
 import org.shorts.model.moves.fixeddamage.SonicBoom;
-import org.shorts.model.moves.switchtarget.DragonTail;
 import org.shorts.model.moves.switchtarget.SwitchTargetMove;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
@@ -73,6 +73,21 @@ class PursuitTests {
         //        final Move pivot = new UTurn();
         //        pivot.execute(target, user, battle);
         HIT_RANDOM = MAX_RANDOM;
+        final Queue<Turn> turns = new ArrayDeque<>();
+        turns.add(new Turn(user, pursuit, 0));
+        //        turns.add(new Turn(target, pivot, 0));
+
+        user.setSpeed(1000);
+        battle.takeTurns(turns);
+        final int normalDamage = target.getMaxHP() - target.getCurrentHP();
+
+        target.fullRestore();
+        user.setSpeed(1);
+        battle.takeTurns(turns);
+        final int boostedDamage = target.getMaxHP() - target.getCurrentHP();
+
+        assertThat(normalDamage * 2).isEqualTo(boostedDamage);
+
         assertThat(false).isTrue();
     }
 
@@ -122,7 +137,7 @@ class PursuitTests {
                 return 1;
             }
         };
-        final List<Turn> turns = new ArrayList<>();
+        final Queue<Turn> turns = new ArrayDeque<>();
         turns.add(new Turn(ally, switchTargetMove, 0));
         turns.add(new Turn(user, pursuit, 0));
 
@@ -136,7 +151,7 @@ class PursuitTests {
     void testDoesNotWorkAfterEjectButton() {
         battle.getPlayerTwo().getTeam().add(getDummyPokemon("bench 1"));
         //        target.setHeldItem(EjectButton.EJECT_BUTTON); TODO: Implement
-        final List<Turn> turns = new ArrayList<>();
+        final Queue<Turn> turns = new ArrayDeque<>();
         turns.add(new Turn(ally, new SonicBoom(), 0));
         turns.add(new Turn(user, pursuit, 0));
 
@@ -155,7 +170,7 @@ class PursuitTests {
         target.setSpeed(1); // ensure that target switches after otherTarget
         target.addVolatileStatus(new VolatileStatus(VolatileStatusType.CENTER_OF_ATTENTION, 3));
 
-        final List<Turn> turns = new ArrayList<>();
+        final Queue<Turn> turns = new ArrayDeque<>();
         turns.add(new Turn(otherTarget, null, 2));
         turns.add(new Turn(target, null, 3));
         turns.add(new Turn(user, pursuit, 0)); //aiming at target
