@@ -10,7 +10,7 @@ import static org.shorts.model.abilities.Scrappy.SCRAPPY;
 
 public class SonicBoom extends Move {
 
-    static final int FIXED_DAMAGE = 20;
+    public static final int FIXED_DAMAGE = 20;
 
     public SonicBoom() {
         super("Sonic Boom", 0, 90, Type.NORMAL, Category.SPECIAL, Range.NORMAL, 32, false, 0);
