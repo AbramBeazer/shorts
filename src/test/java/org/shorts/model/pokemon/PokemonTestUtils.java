@@ -48,4 +48,9 @@ public final class PokemonTestUtils {
         return getDummyPokemon(100);
     }
 
+    public static Pokemon getDummyPokemon(String name) {
+        final Pokemon mon = getDummyPokemon(100);
+        mon.setNickname(name);
+        return mon;
+    }
 }
