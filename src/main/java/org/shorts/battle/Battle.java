@@ -287,11 +287,9 @@ public class Battle {
         }
     }
 
-    public void takeTurns() throws Exception {
-        for (int i = 0; i < activeMonsPerSide; i++) {
-            playerOne.getTeam().get(i).setMovedThisTurn(false);
-            playerTwo.getTeam().get(i).setMovedThisTurn(false);
-        }
+    public void takeTurns() {
+        playerOne.getTeam().forEach(mon -> mon.setMovedThisTurn(false));
+        playerTwo.getTeam().forEach(mon -> mon.setMovedThisTurn(false));
 
         //take player input
         List<Turn> turns = new ArrayList<>();
@@ -388,7 +386,7 @@ public class Battle {
     //        }
     //    }
 
-    private List<Turn> pollPlayerInput(Trainer trainer) throws IOException {
+    private List<Turn> pollPlayerInput(Trainer trainer) {
         final List<Turn> turns = new ArrayList<>();
         for (int i = 0; i < trainer.getActivePokemon().size(); i++) {
 
@@ -467,6 +465,7 @@ public class Battle {
                 }
 
             } while (!choiceValid);
+
             if (choice >= 4 + activeMonsPerSide) {
                 turns.add(new Turn(pokemon, null, choice));
             }
@@ -563,7 +562,7 @@ public class Battle {
         }
     }
 
-    private int promptChoiceOfTarget(Pokemon pokemon, Trainer player, List<Pokemon> pokemonInRange) throws IOException {
+    private int promptChoiceOfTarget(Pokemon pokemon, Trainer player, List<Pokemon> pokemonInRange) {
         System.out.println("SELECT TARGET");
         List<Pokemon> opponents = getOpposingTrainer(player).getActivePokemon();
         List<Pokemon> selfAndAllies = player.getActivePokemon();
