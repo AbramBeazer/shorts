@@ -263,7 +263,9 @@ public class Battle {
         }
 
         while (!(playerOne.hasLost() || playerTwo.hasLost())) {
-            takeTurns();
+            playerOne.getTeam().forEach(mon -> mon.setMovedThisTurn(false));
+            playerTwo.getTeam().forEach(mon -> mon.setMovedThisTurn(false));
+            takeTurns(pollTurns());
             handleFloatingEffects();
             if (!(playerOne.hasLost() || playerTwo.hasLost())) {
                 replaceFaintedMons();
@@ -287,14 +289,15 @@ public class Battle {
         }
     }
 
-    public void takeTurns() {
-        playerOne.getTeam().forEach(mon -> mon.setMovedThisTurn(false));
-        playerTwo.getTeam().forEach(mon -> mon.setMovedThisTurn(false));
-
+    public List<Turn> pollTurns() {
         //take player input
-        List<Turn> turns = new ArrayList<>();
+        final List<Turn> turns = new ArrayList<>();
         turns.addAll(pollPlayerInput(playerOne));
         turns.addAll(pollPlayerInput(playerTwo));
+        return turns;
+    }
+
+    public void takeTurns(List<Turn> turns) {
 
         turns.sort((t1, t2) -> {
             int priority = Integer.compare(t2.getPriority(this), t1.getPriority(this));
