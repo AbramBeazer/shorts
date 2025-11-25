@@ -69,7 +69,7 @@ public class Turn {
         } else {
             System.out.println(player.getName() + " recalled " + user.toString() + "!");
             final int index = player.getTeam().indexOf(user);
-            player.switchPokemon(index, singleTargetIndex - 4);
+            player.switchPokemon(index, singleTargetIndex);
             System.out.println(player.getName() + " sent out " + player.getTeam().get(index).toString() + "!");
             player.applyEntryHazards(player.getTeam().get(index));
         }

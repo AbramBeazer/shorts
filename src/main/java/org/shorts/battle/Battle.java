@@ -442,32 +442,35 @@ public class Battle {
                 choice = Integer.parseInt(scanner.nextLine());
                 if (choice <= 0 || choice > 9) {
                     choiceValid = false;
-                } else if (choice <= 4 && invalidMoves.contains(pokemon.getMoves()[choice - 1])) {
-                    choiceValid = false;
-                } else if (choice > 4 && (trainer.getTeam().get(choice - 4).hasFainted() || pokemon.isTrapped(this))) {
-                    choiceValid = false;
-                } else if (choice < 4 + activeMonsPerSide) {
-                    choiceValid = true;
-
-                    final Move move = pokemon.getMoves()[choice - 1];
-                    final Range range = move.getRange(pokemon);
-                    final List<Pokemon> possibleTargets = getPokemonWithinRange(pokemon, move.getRange(pokemon));
-                    if (possibleTargets.size() > 1 && range.isPromptForTargetChoice()) {
-                        int singleTargetIndex = promptChoiceOfTarget(pokemon, trainer, possibleTargets);
-                        if (singleTargetIndex == 6) {
-                            continue;
-                        }
-                        turns.add(new Turn(pokemon, move, singleTargetIndex));
+                } else if (choice <= 4) {
+                    if (invalidMoves.contains(pokemon.getMoves()[choice - 1])) {
+                        choiceValid = false;
                     } else {
-                        turns.add(new Turn(pokemon, move));
+                        choiceValid = true;
+
+                        final Move move = pokemon.getMoves()[choice - 1];
+                        final Range range = move.getRange(pokemon);
+                        final List<Pokemon> possibleTargets = getPokemonWithinRange(pokemon, move.getRange(pokemon));
+                        if (possibleTargets.size() > 1 && range.isPromptForTargetChoice()) {
+                            int singleTargetIndex = promptChoiceOfTarget(pokemon, trainer, possibleTargets);
+                            if (singleTargetIndex == 6) {
+                                continue;
+                            }
+                            turns.add(new Turn(pokemon, move, singleTargetIndex));
+                        } else {
+                            turns.add(new Turn(pokemon, move));
+                        }
+                    }
+                } else if (choice >= 4 + activeMonsPerSide) {
+                    if (trainer.getTeam().get(choice - 4).hasFainted() || pokemon.isTrapped(this)) {
+                        choiceValid = false;
+                    } else {
+                        choiceValid = true;
+                        turns.add(new Turn(pokemon, null, choice - 4));
                     }
                 }
 
             } while (!choiceValid);
-
-            if (choice >= 4 + activeMonsPerSide) {
-                turns.add(new Turn(pokemon, null, choice));
-            }
         }
         return turns;
     }
