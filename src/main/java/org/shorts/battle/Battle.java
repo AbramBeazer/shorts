@@ -390,10 +390,10 @@ public class Battle {
         final List<Turn> turns = new ArrayList<>();
         for (int i = 0; i < trainer.getActivePokemon().size(); i++) {
 
-            Pokemon pokemon = trainer.getActivePokemon().get(i);
+            final Pokemon pokemon = trainer.getActivePokemon().get(i);
 
-            Set<Move> disabledMoves = new HashSet<>();
-            Set<Move> invalidMoves = new HashSet<>();
+            final Set<Move> disabledMoves = new HashSet<>();
+            final Set<Move> invalidMoves = new HashSet<>();
             for (Move move : pokemon.getMoves()) {
                 if (pokemon.hasVolatileStatus(DISABLED) && pokemon.getVolatileStatus(DISABLED).getMove().equals(move)) {
                     disabledMoves.add(move);
@@ -408,7 +408,6 @@ public class Battle {
             }
             int option = 1;
 
-            Set<Move> movesToUse;
             System.out.println("\n\nWhat will " + pokemon + " do?");
             System.out.println(
                 DECIMAL.format(100d * pokemon.getCurrentHP() / pokemon.getMaxHP()) + " % HP (" + pokemon.getCurrentHP()
