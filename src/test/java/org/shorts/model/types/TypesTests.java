@@ -57,20 +57,62 @@ class TypesTests {
     void testStabSuperEffective() {
         attacker.setTypes(Set.of(Type.FIRE, Type.FIGHTING));
         Set<Type> defenderTypes = Set.of(Type.ICE, Type.DARK);
-        assertThat(Type.getSTABMultiplier(Type.FIRE, attacker) * Type.getTypeMultiplier(
-            Type.FIRE,
-            defenderTypes)).isEqualTo(
-            Type.STAB * Type.SUPER_EFFECTIVE);
+        assertThat(
+            Type.getSTABMultiplier(Type.FIRE, attacker) * Type.getTypeMultiplier(Type.FIRE, defenderTypes))
+            .isEqualTo(Type.STAB * Type.SUPER_EFFECTIVE);
+    }
+
+    @Test
+    void testTeraSuperEffective() {
+        attacker.setTypes(Set.of(Type.FIRE, Type.FIGHTING));
+        attacker.setTera(true);
+        attacker.setTeraType(Type.BUG);
+        Set<Type> defenderTypes = Set.of(Type.ICE, Type.DARK);
+        assertThat(
+            Type.getSTABMultiplier(Type.BUG, attacker) * Type.getTypeMultiplier(Type.BUG, defenderTypes))
+            .isEqualTo(Type.STAB * Type.SUPER_EFFECTIVE);
+    }
+
+    @Test
+    void testStabPlusTeraSuperEffective() {
+        attacker.setTypes(Set.of(Type.FIRE, Type.FIGHTING));
+        attacker.setTera(true);
+        attacker.setTeraType(Type.FIRE);
+        Set<Type> defenderTypes = Set.of(Type.ICE, Type.DARK);
+        assertThat(
+            Type.getSTABMultiplier(Type.FIRE, attacker) * Type.getTypeMultiplier(Type.FIRE, defenderTypes))
+            .isEqualTo(Type.TERA_STAB * Type.SUPER_EFFECTIVE);
     }
 
     @Test
     void testStabQuadEffective() {
         attacker.setTypes(Set.of(Type.FIRE, Type.FIGHTING));
         Set<Type> defenderTypes = Set.of(Type.ICE, Type.DARK);
-        assertThat(Type.getSTABMultiplier(Type.FIGHTING, attacker) * Type.getTypeMultiplier(
-            Type.FIGHTING,
-            defenderTypes)).isEqualTo(
-            Type.STAB * Type.QUAD_EFFECTIVE);
+        assertThat(
+            Type.getSTABMultiplier(Type.FIGHTING, attacker) * Type.getTypeMultiplier(Type.FIGHTING, defenderTypes))
+            .isEqualTo(Type.STAB * Type.QUAD_EFFECTIVE);
+    }
+
+    @Test
+    void testTeraQuadEffective() {
+        attacker.setTypes(Set.of(Type.NORMAL));
+        attacker.setTera(true);
+        attacker.setTeraType(Type.FIGHTING);
+        Set<Type> defenderTypes = Set.of(Type.ICE, Type.DARK);
+        assertThat(
+            Type.getSTABMultiplier(Type.FIGHTING, attacker) * Type.getTypeMultiplier(Type.FIGHTING, defenderTypes))
+            .isEqualTo(Type.STAB * Type.QUAD_EFFECTIVE);
+    }
+
+    @Test
+    void testStabPlusTeraQuadEffective() {
+        attacker.setTypes(Set.of(Type.FIRE, Type.FIGHTING));
+        attacker.setTera(true);
+        attacker.setTeraType(Type.FIGHTING);
+        Set<Type> defenderTypes = Set.of(Type.ICE, Type.DARK);
+        assertThat(
+            Type.getSTABMultiplier(Type.FIGHTING, attacker) * Type.getTypeMultiplier(Type.FIGHTING, defenderTypes))
+            .isEqualTo(Type.TERA_STAB * Type.QUAD_EFFECTIVE);
     }
 
     @Test
@@ -80,29 +122,69 @@ class TypesTests {
     }
 
     @Test
+    void testStabNotVeryEffective() {
+        attacker.setTypes(Set.of(Type.POISON));
+        Set<Type> defenderTypes = Set.of(Type.POISON, Type.FLYING);
+        assertThat(Type.getSTABMultiplier(Type.POISON, attacker) * Type.getTypeMultiplier(Type.POISON, defenderTypes))
+            .isEqualTo(Type.STAB * Type.NOT_VERY_EFFECTIVE);
+    }
+
+    @Test
+    void testTeraNotVeryEffective() {
+        attacker.setTypes(Set.of(Type.NORMAL));
+        attacker.setTera(true);
+        attacker.setTeraType(Type.POISON);
+        Set<Type> defenderTypes = Set.of(Type.POISON, Type.FLYING);
+        assertThat(
+            Type.getSTABMultiplier(Type.POISON, attacker) * Type.getTypeMultiplier(Type.POISON, defenderTypes))
+            .isEqualTo(Type.STAB * Type.NOT_VERY_EFFECTIVE);
+    }
+
+    @Test
+    void testStabPlusTeraNotVeryEffective() {
+        attacker.setTypes(Set.of(Type.POISON));
+        attacker.setTera(true);
+        attacker.setTeraType(Type.POISON);
+        Set<Type> defenderTypes = Set.of(Type.POISON, Type.FLYING);
+        assertThat(Type.getSTABMultiplier(Type.POISON, attacker) * Type.getTypeMultiplier(Type.POISON, defenderTypes))
+            .isEqualTo(Type.TERA_STAB * Type.NOT_VERY_EFFECTIVE);
+    }
+
+    @Test
     void testQuadResist() {
         Set<Type> defenderTypes = Set.of(Type.POISON, Type.FLYING);
         assertThat(Type.getTypeMultiplier(Type.FIGHTING, defenderTypes)).isEqualTo(Type.QUAD_RESIST);
     }
 
     @Test
-    void testStabNotVeryEffective() {
-        attacker.setTypes(Set.of(Type.POISON));
+    void testStabQuadResist() {
+        attacker.setTypes(Set.of(Type.FIGHTING));
         Set<Type> defenderTypes = Set.of(Type.POISON, Type.FLYING);
-        assertThat(Type.getSTABMultiplier(Type.POISON, attacker) * Type.getTypeMultiplier(
-            Type.POISON,
-            defenderTypes)).isEqualTo(
-            Type.STAB * Type.NOT_VERY_EFFECTIVE);
+        assertThat(
+            Type.getSTABMultiplier(Type.FIGHTING, attacker) * Type.getTypeMultiplier(Type.FIGHTING, defenderTypes))
+            .isEqualTo(Type.STAB * Type.QUAD_RESIST);
     }
 
     @Test
-    void testStabQuadResist() {
-        attacker.setTypes(Set.of(Type.FIGHTING, Type.STEEL));
+    void testTeraQuadResist() {
+        attacker.setTypes(Set.of(Type.NORMAL));
+        attacker.setTera(true);
+        attacker.setTeraType(Type.FIGHTING);
         Set<Type> defenderTypes = Set.of(Type.POISON, Type.FLYING);
-        assertThat(Type.getSTABMultiplier(Type.FIGHTING, attacker) * Type.getTypeMultiplier(
-            Type.FIGHTING,
-            defenderTypes)).isEqualTo(
-            Type.STAB * Type.QUAD_RESIST);
+        assertThat(
+            Type.getSTABMultiplier(Type.FIGHTING, attacker) * Type.getTypeMultiplier(Type.FIGHTING, defenderTypes))
+            .isEqualTo(Type.STAB * Type.QUAD_RESIST);
+    }
+
+    @Test
+    void testStabPlusTeraQuadResist() {
+        attacker.setTypes(Set.of(Type.FIGHTING));
+        attacker.setTera(true);
+        attacker.setTeraType(Type.FIGHTING);
+        Set<Type> defenderTypes = Set.of(Type.POISON, Type.FLYING);
+        assertThat(
+            Type.getSTABMultiplier(Type.FIGHTING, attacker) * Type.getTypeMultiplier(Type.FIGHTING, defenderTypes))
+            .isEqualTo(Type.TERA_STAB * Type.QUAD_RESIST);
     }
 
     @Test
