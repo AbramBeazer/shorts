@@ -89,6 +89,8 @@ public class Pokemon {
     private HeldItem consumedItem = NoItem.NO_ITEM;
     private byte happiness;
     private int turnsInBattle;
+    private boolean tera = false;
+    private Type teraType;
 
     protected Pokemon(String pokedexNo, String nickname, String speciesName, Set<Type> types, Ability ability) {
         this.pokedexNo = pokedexNo;
@@ -662,6 +664,22 @@ public class Pokemon {
 
     public void setTurnsInBattle(int turnsInBattle) {
         this.turnsInBattle = turnsInBattle;
+    }
+
+    public boolean isTera() {
+        return tera;
+    }
+
+    public void setTera(boolean tera) {
+        this.tera = tera;
+    }
+
+    public Type getTeraType() {
+        return teraType;
+    }
+
+    public void setTeraType(Type teraType) {
+        this.teraType = teraType;
     }
 
     public boolean isGrounded() {

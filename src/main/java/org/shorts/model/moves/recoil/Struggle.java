@@ -15,20 +15,20 @@ public class Struggle extends RecoilAttack {
     }
 
     @Override
-    protected double getSTABMultiplier(Set<Type> attackerTypes) throws TooManyTypesException {
-        return 1;
+    protected double getSTABMultiplier(Pokemon attacker) throws TooManyTypesException {
+        return Type.NON_STAB;
     }
 
     @Override
     protected double getBaseTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
-        return 1;
+        return Type.NEUTRAL;
     }
 
     @Override
     public void inflictRecoil(Pokemon user, int damageDealt) {
         user.takeDamage(
             (int) MathUtils.roundHalfUp(user.getMaxHP() * this.recoilPercentage),
-            String.format("%s was damaged by the recoil!", user.toString()));
+            String.format("%s was damaged by the recoil!", user));
     }
 
     public static final Struggle STRUGGLE = new Struggle();

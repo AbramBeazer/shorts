@@ -525,7 +525,7 @@ public abstract class Move implements IMove {
             return 0;
         }
 
-        double stabMultiplier = getSTABMultiplier(user.getTypes());
+        double stabMultiplier = getSTABMultiplier(user);
 
         baseDamage = roundHalfDown(baseDamage * getNumTargetsMultiplier());
         if (!battle.isWeatherSuppressed()) {
@@ -587,9 +587,8 @@ public abstract class Move implements IMove {
         return Type.getTypeMultiplier(this.getType(), defenderTypes);
     }
 
-    protected double getSTABMultiplier(Set<Type> attackerTypes) throws TooManyTypesException {
-        //TODO: Deal with Terrastalization and stuff.
-        return Type.getSTABMultiplier(this.getType(), attackerTypes);
+    protected double getSTABMultiplier(Pokemon attacker) throws TooManyTypesException {
+        return Type.getSTABMultiplier(this.getType(), attacker);
     }
 
     protected double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {

@@ -7,10 +7,14 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.shorts.model.pokemon.Pokemon;
+
 public class Type {
 
-    public static final double NEUTRAL = 1;
+    public static final double NON_STAB = 1;
     public static final double STAB = 1.5;
+    public static final double TERA_STAB = 2;
+    public static final double NEUTRAL = 1;
     public static final double SUPER_EFFECTIVE = 2;
 
     public static final double QUAD_EFFECTIVE = 4;
@@ -72,11 +76,17 @@ public class Type {
         return multiplier;
     }
 
-    public static double getSTABMultiplier(Type moveType, Set<Type> attackerTypes) throws TooManyTypesException {
-        if (attackerTypes.size() > 2) {
-            throw new TooManyTypesException(attackerTypes);
+    public static double getSTABMultiplier(Type moveType, Pokemon attacker) throws TooManyTypesException {
+        if (attacker.getTypes().size() > 2) {
+            throw new TooManyTypesException(attacker.getTypes());
         }
-        return attackerTypes.contains(moveType) ? STAB : 1;
+        if (attacker.getTypes().contains(moveType)) {
+            return attacker.isTera() && moveType.equals(attacker.getTeraType()) ? TERA_STAB : STAB;
+        } else if (attacker.isTera() && moveType.equals(attacker.getTeraType())) {
+            return STAB;
+        } else {
+            return NON_STAB;
+        }
     }
 
     public static final Type NORMAL = new Type(
