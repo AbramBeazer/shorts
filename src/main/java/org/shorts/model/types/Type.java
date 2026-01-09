@@ -59,6 +59,7 @@ public class Type {
         this.immunities = Objects.requireNonNull(immunities, "Type's immunities cannot be null");
     }
 
+    //TODO: Add terastallization
     public static double getTypeMultiplier(Type moveType, Set<Type> defenderTypes) throws TooManyTypesException {
         if (defenderTypes.size() > 2) {
             throw new TooManyTypesException(defenderTypes);
