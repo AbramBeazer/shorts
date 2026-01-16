@@ -205,7 +205,8 @@ public class Pokemon {
     }
 
     public void changeStat(int stages, StatEnum stat) {
-        if (this.getAbility() == CONTRARY) {
+        if (this.getAbility() == CONTRARY
+            && !this.hasVolatileStatus(ABILITY_IGNORED) && !this.hasVolatileStatus(ABILITY_SUPPRESSED)) {
             stages = stages * -1;
         }
         switch (stat) {
