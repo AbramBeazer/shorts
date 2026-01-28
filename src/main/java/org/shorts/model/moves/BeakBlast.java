@@ -1,7 +1,10 @@
 package org.shorts.model.moves;
 
+import java.util.List;
+
 import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 public class BeakBlast extends Move implements BallBombMove {
@@ -15,5 +18,9 @@ public class BeakBlast extends Move implements BallBombMove {
         return -3;
     }
 
-    //TODO: Implement -- this is similar to Focus Punch
+    @Override
+    public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
+        user.removeVolatileStatus(VolatileStatusType.BEAK_BLAST);
+        super.execute(user, targets, battle);
+    }
 }
