@@ -992,4 +992,35 @@ public class Pokemon {
             && !this.hasVolatileStatus(SEMI_INVULNERABLE) && !this.hasVolatileStatus(ABILITY_SUPPRESSED)
             && !this.hasVolatileStatus(ABILITY_IGNORED)) || this.hasVolatileStatus(MAGIC_COAT);
     }
+
+    public boolean attemptToMove(Move move, Battle battle) {
+        if (this.getStatus().getType().equals(StatusType.SLEEP)
+            && this.getStatus().getTurnsRemaining() > 0 && !move.canBeUsedWhileSleeping()) {
+            System.out.printf("%s is fast asleep.", this);
+            return false;
+        } else if (this.getStatus().equals(Status.PARALYZE) && RANDOM.nextInt(4) == 0) {
+            System.out.printf("%s couldn't move because it's paralyzed!", this);
+            return false;
+        } else if (this.getStatus().equals(Status.FREEZE)) {
+            if (move.isThawingMove() || RANDOM.nextInt(5) == 4) {
+                //TODO: Should this only happen if the user passes the confusion and attract checks?
+                this.thaw();
+            } else {
+                System.out.printf("%s is frozen solid!", this);
+                return false;
+            }
+        }
+
+        //IMPORTANT that these conditionals remain independent of the previous one.
+        if (this.hasVolatileStatus(CONFUSED) && RANDOM.nextInt(3) == 0) {
+            System.out.printf("%s hurt itself in its confusion!");
+            return false;
+        }
+        if (this.hasVolatileStatus(INFATUATED) && RANDOM.nextInt(2) == 0) {
+            System.out.printf("%s is immobilized by love!");
+            return false;
+        }
+
+        return true;
+    }
 }

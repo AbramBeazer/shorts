@@ -62,10 +62,15 @@ public class Turn {
                     .collect(Collectors.toList());
             }
             System.out.println(user.toString() + " used " + move.getName() + "!");
-            move.execute(
-                user,
-                targets,
-                battle);
+            if (user.attemptToMove(move, battle)) {
+                user.setMovedThisTurn(true);
+                move.execute(
+                    user,
+                    targets,
+                    battle);
+            } else {
+                user.setLastMoveFailed(true);
+            }
         } else {
             System.out.println(player.getName() + " recalled " + user.toString() + "!");
             final int index = player.getTeam().indexOf(user);
