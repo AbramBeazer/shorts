@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 import org.shorts.model.abilities.HailImmuneAbility;
 import org.shorts.model.abilities.SandImmuneAbility;
+import org.shorts.model.moves.BeakBlast;
+import org.shorts.model.moves.FocusPunch;
 import org.shorts.model.moves.MeFirst;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
@@ -18,6 +20,7 @@ import org.shorts.model.moves.floating.FloatingEffect;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
+import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
 
 import static org.shorts.Main.DECIMAL;
@@ -306,6 +309,8 @@ public class Battle {
                 return priority;
             }
         });
+
+        handleStartOfTurnEffects(turns);
 
         for (Turn turn : turns) {
             if (!turn.getUser().hasFainted()) {
@@ -800,6 +805,21 @@ public class Battle {
 
         //TODO: Check if weather stopping happens before or after taking hail/sand damage
         decrementAllCounters();
+    }
+
+    void handleStartOfTurnEffects(List<Turn> turns) {
+        turns.stream()
+            .filter(turn -> turn.getMove() instanceof FocusPunch)
+            .forEach(turn -> {
+                System.out.printf("%s is tightening its focus!%n", turn.getUser());
+                turn.getUser().addVolatileStatus(new VolatileStatus(FOCUS_PUNCH, 0));
+            });
+        turns.stream()
+            .filter(turn -> turn.getMove() instanceof BeakBlast)
+            .forEach(turn -> {
+                System.out.printf("%s started heating up its beak!%n", turn.getUser());
+                turn.getUser().addVolatileStatus(new VolatileStatus(BEAK_BLAST, 0));
+            });
     }
 
     void handleFloatingEffects() {

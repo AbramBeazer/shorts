@@ -67,6 +67,8 @@ public enum VolatileStatusType implements AbstractStatusType {
     //FIXATED, -- only in Legends: Arceus
     BIDING,
     MUST_RECHARGE,
+    FOCUS_PUNCH,
+    BEAK_BLAST,
     CHARGING_MOVE, //move
     SEMI_INVULNERABLE, //move
     FLINCH,
