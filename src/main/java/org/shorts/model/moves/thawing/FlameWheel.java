@@ -2,13 +2,14 @@ package org.shorts.model.moves.thawing;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.moves.GetsSheerForceBoost;
+import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class FlameWheel extends ThawingMove implements GetsSheerForceBoost {
+public class FlameWheel extends Move implements GetsSheerForceBoost, ThawingMove {
 
     public FlameWheel() {
         super("Flame Wheel", 60, 100, Type.FIRE, Category.PHYSICAL, Range.NORMAL, 40, true, 10);

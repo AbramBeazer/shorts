@@ -1,16 +1,15 @@
 package org.shorts.model.moves.recoil;
 
-import java.util.List;
-
 import org.shorts.battle.Battle;
 import org.shorts.model.moves.GetsSheerForceBoost;
 import org.shorts.model.moves.Range;
+import org.shorts.model.moves.thawing.ThawingMove;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class FlareBlitz extends RecoilAttack implements GetsSheerForceBoost {
+public class FlareBlitz extends RecoilAttack implements GetsSheerForceBoost, ThawingMove {
 
     public FlareBlitz() {
         super(
@@ -24,12 +23,6 @@ public class FlareBlitz extends RecoilAttack implements GetsSheerForceBoost {
             true,
             10,
             1 / 3d);
-    }
-
-    @Override
-    public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
-        user.thaw();
-        super.execute(user, targets, battle);
     }
 
     @Override

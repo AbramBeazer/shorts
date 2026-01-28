@@ -2,13 +2,14 @@ package org.shorts.model.moves.thawing;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.moves.GetsSheerForceBoost;
+import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class SacredFire extends ThawingMove implements GetsSheerForceBoost {
+public class SacredFire extends Move implements ThawingMove, GetsSheerForceBoost {
 
     public SacredFire() {
         super("Sacred Fire", 100, 95, Type.FIRE, Category.PHYSICAL, Range.NORMAL, 8, false, 50);

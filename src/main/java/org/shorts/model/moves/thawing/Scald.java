@@ -2,13 +2,14 @@ package org.shorts.model.moves.thawing;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.moves.GetsSheerForceBoost;
+import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class Scald extends ThawingMove implements GetsSheerForceBoost {
+public class Scald extends Move implements ThawingMove, GetsSheerForceBoost {
 
     public Scald() {
         super("Scald", 80, 100, Type.WATER, Category.SPECIAL, Range.NORMAL, 24, false, 30);

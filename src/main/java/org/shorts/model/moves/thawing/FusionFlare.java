@@ -1,9 +1,10 @@
 package org.shorts.model.moves.thawing;
 
+import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.types.Type;
 
-public class FusionFlare extends ThawingMove {
+public class FusionFlare extends Move implements ThawingMove {
 
     public FusionFlare() {
         super("Fusion Flare", 100, 100, Type.FIRE, Category.SPECIAL, Range.NORMAL, 8, false, 100);

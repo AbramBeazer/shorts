@@ -3,13 +3,14 @@ package org.shorts.model.moves.thawing;
 import org.shorts.battle.Battle;
 import org.shorts.model.moves.GetsSheerForceBoost;
 import org.shorts.model.moves.HealingMove;
+import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-public class MatchaGotcha extends ThawingMove implements HealingMove, GetsSheerForceBoost {
+public class MatchaGotcha extends Move implements HealingMove, GetsSheerForceBoost, ThawingMove {
 
     public MatchaGotcha() {
         super("Matcha Gotcha", 80, 90, Type.GRASS, Category.SPECIAL, Range.ALL_ADJACENT_OPPONENTS, 24, false, 20);
