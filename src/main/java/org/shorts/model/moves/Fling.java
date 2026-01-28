@@ -89,6 +89,8 @@ public class Fling extends Move {
                         target.removeVolatileStatus(SUBSTITUTE);
                     }
 
+                } else {
+                    user.setLastMoveFailed(false);
                 }
                 user.setHeldItem(NO_ITEM);
                 user.setConsumedItem(item);

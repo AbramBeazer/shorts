@@ -322,7 +322,7 @@ public abstract class Move implements IMove {
     }
 
     public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
-        user.setMovedThisTurn(true);
+
         this.decrementPP();
         if (targets.isEmpty()) {
             System.out.println("But there was no target...");
@@ -381,6 +381,9 @@ public abstract class Move implements IMove {
                     }
                 }
             }
+            if (targets.stream().anyMatch(target -> isTargetProtected(user, target, battle))) {
+                user.setLastMoveFailed(false);
+            }
         }
 
         user.setLastMoveUsed(this);
@@ -415,8 +418,12 @@ public abstract class Move implements IMove {
 
     protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         //TODO: Implement semi-invulnerable
-        if (rollToHit(user, target, battle) && !isTargetProtected(user, target, battle)) {
-            doHit(user, target, battle);
+        if (rollToHit(user, target, battle)) {
+            if (isTargetProtected(user, target, battle)) {
+                user.setLastMoveFailed(false);
+            } else {
+                doHit(user, target, battle);
+            }
         }
     }
 
@@ -524,6 +531,7 @@ public abstract class Move implements IMove {
 
         if (typeMultiplier == IMMUNE) {
             System.out.println("It didn't affect " + target);
+            user.setLastMoveFailed(true);
             return 0;
         }
 
