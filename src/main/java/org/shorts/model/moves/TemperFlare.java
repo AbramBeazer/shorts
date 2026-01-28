@@ -13,8 +13,7 @@ public class TemperFlare extends Move {
     }
 
     @Override
-    public double getPower(Pokemon user, Pokemon target, Battle battle) {
-        double power = super.getPower(user, target, battle);
-        return user.isLastMoveFailed() ? MULTIPLIER * power : power;
+    protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
+        return user.isLastMoveFailed() ? MULTIPLIER : 1;
     }
 }
