@@ -243,6 +243,7 @@ public abstract class Move implements IMove {
         final boolean hit = HIT_RANDOM.nextInt(100) < threshold;
         if (!hit) {
             System.out.println(user + "'s attack missed!");
+            user.setLastMoveFailed(true);
         }
         return hit;
     }
@@ -476,6 +477,7 @@ public abstract class Move implements IMove {
                 user.afterAttack(target, battle, this);
             }
         }
+        user.setLastMoveFailed(false);
     }
 
     protected boolean isTargetProtected(Pokemon user, Pokemon target, Battle battle) {
