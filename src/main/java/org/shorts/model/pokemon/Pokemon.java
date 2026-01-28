@@ -66,6 +66,7 @@ public class Pokemon {
 
     private Move[] moves = new Move[4];
     private Move lastMoveUsed;
+    private boolean lastMoveFailed;
     private boolean movedThisTurn;
     private Sex sex;
     private int level;
@@ -639,6 +640,14 @@ public class Pokemon {
 
     public void setLastMoveUsed(Move lastMoveUsed) {
         this.lastMoveUsed = lastMoveUsed;
+    }
+
+    public boolean isLastMoveFailed() {
+        return lastMoveFailed;
+    }
+
+    public void setLastMoveFailed(boolean lastMoveFailed) {
+        this.lastMoveFailed = lastMoveFailed;
     }
 
     public boolean hasMovedThisTurn() {

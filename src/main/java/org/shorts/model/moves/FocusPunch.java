@@ -1,7 +1,10 @@
 package org.shorts.model.moves;
 
+import java.util.List;
+
 import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 public class FocusPunch extends Move implements PunchingMove {
@@ -15,5 +18,14 @@ public class FocusPunch extends Move implements PunchingMove {
         return -3;
     }
 
-    //TODO: Implement this and Beak Blast
+    @Override
+    public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
+        if (user.hasVolatileStatus(VolatileStatusType.FOCUS_PUNCH)) {
+            user.removeVolatileStatus(VolatileStatusType.FOCUS_PUNCH);
+            super.execute(user, targets, battle);
+        } else {
+            System.out.printf("%s lost its focus and couldn't move!", user);
+            user.setLastMoveFailed(true);
+        }
+    }
 }
