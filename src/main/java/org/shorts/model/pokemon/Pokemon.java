@@ -857,6 +857,16 @@ public class Pokemon {
     }
 
     public void afterHit(Pokemon opponent, Battle battle, int previousHP, Move move) {
+
+        if (this.hasVolatileStatus(FOCUS_PUNCH)) {
+            this.removeVolatileStatus(FOCUS_PUNCH);
+        } else if (this.hasVolatileStatus(BEAK_BLAST)
+            && move.isContact(opponent) && StatusType.BURN.isStatusPossible(this, opponent, battle)) {
+            opponent.setStatus(Status.BURN);
+        }
+        //TODO: What should the order of these be?
+        // What happens if you hit a Pokemon that's charging Beak Blast but has Static as its ability?
+        // Would the attacker be burned or paralyzed?
         if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
             || this.getAbility() instanceof UnsuppressableAbility) {
             ability.afterHit(this, opponent, battle, previousHP, move);
