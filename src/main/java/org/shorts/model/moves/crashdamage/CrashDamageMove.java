@@ -21,13 +21,6 @@ public abstract class CrashDamageMove extends Move {
     }
 
     @Override
-    public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
-        if (battle.getGravityTurns() <= 0) {
-            execute(user, targets, battle);
-        }
-    }
-
-    @Override
     protected void executeOnTarget(Pokemon user, Pokemon target, Battle battle) {
         if (rollToHit(user, target, battle) && !isTargetProtected(user, target, battle)) {
             doHit(user, target, battle);
