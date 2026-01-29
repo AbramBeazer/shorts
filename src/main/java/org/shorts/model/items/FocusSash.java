@@ -20,6 +20,7 @@ public class FocusSash extends HeldItem {
             user.setCurrentHP(1);
             System.out.println(user.getNickname() + " held on due to Focus Sash!");
         }
+        user.setConsumedItem(this);
         user.setHeldItem(NO_ITEM);
     }
 }
