@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Weather;
 import org.shorts.model.Nature;
@@ -19,6 +18,7 @@ import org.shorts.model.abilities.Pickup;
 import org.shorts.model.abilities.UnsuppressableAbility;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.NoItem;
+import org.shorts.model.moves.HurtItselfInConfusion;
 import org.shorts.model.moves.Move;
 import org.shorts.model.status.AutotomizedStatus;
 import org.shorts.model.status.HelpingHandStatus;
@@ -725,11 +725,16 @@ public class Pokemon {
     }
 
     public void decrementVolatileStatusTurns() {
-        volatileStatuses.forEach((key, value) -> value.decrementTurns());
+        volatileStatuses.forEach((key, value) -> {
+            if (key == CONFUSED && !this.hasVolatileStatus(FLINCH) && !this.hasVolatileStatus(MUST_RECHARGE)
+                && !this.getStatus().getType().equals(StatusType.SLEEP) && !this.getStatus().equals(Status.FREEZE)) {
+                value.decrementTurns();
+            }
+        });
         volatileStatuses.entrySet()
             .removeIf(entry ->
                 entry.getValue() != null && entry.getValue().getTurnsRemaining() == 0
-                    && !entry.getKey().equals(PERISH));
+                    && entry.getKey() != PERISH && entry.getKey() != CONFUSED);
     }
 
     public boolean isAtFullHP() {
@@ -978,6 +983,14 @@ public class Pokemon {
         }
     }
 
+    public void wakeUp() {
+        if (this.getStatus().getType() == StatusType.SLEEP) {
+            System.out.printf("%s woke up!", this);
+
+            this.setStatus(Status.NONE);
+        }
+    }
+
     public void maxPotion() {
         this.setCurrentHP(this.maxHP);
     }
@@ -994,10 +1007,13 @@ public class Pokemon {
     }
 
     public boolean attemptToMove(Move move, Battle battle) {
-        if (this.getStatus().getType().equals(StatusType.SLEEP)
-            && this.getStatus().getTurnsRemaining() > 0 && !move.canBeUsedWhileSleeping()) {
-            System.out.printf("%s is fast asleep.", this);
-            return false;
+        if (this.getStatus().getType().equals(StatusType.SLEEP)) {
+            if (this.getStatus().getTurnsRemaining() > 0) {
+                System.out.printf("%s is fast asleep.", this);
+                return move.canBeUsedWhileSleeping();
+            } else {
+                this.wakeUp();
+            }
         } else if (this.getStatus().equals(Status.PARALYZE) && RANDOM.nextInt(4) == 0) {
             System.out.printf("%s couldn't move because it's paralyzed!", this);
             return false;
@@ -1012,9 +1028,15 @@ public class Pokemon {
         }
 
         //IMPORTANT that these conditionals remain independent of the previous one.
-        if (this.hasVolatileStatus(CONFUSED) && RANDOM.nextInt(3) == 0) {
-            System.out.printf("%s hurt itself in its confusion!");
-            return false;
+        if (this.hasVolatileStatus(CONFUSED)) {
+            if (this.getVolatileStatus(CONFUSED).getTurnsRemaining() == 0) {
+                this.removeVolatileStatus(CONFUSED);
+                System.out.printf("%s snapped out of confusion!");
+            } else if (RANDOM.nextInt(3) == 0) {
+                HurtItselfInConfusion.HURT_ITSELF_IN_CONFUSION.execute(this, List.of(this), battle);
+                System.out.printf("%s hurt itself in its confusion!");
+                return false;
+            }
         }
         if (this.hasVolatileStatus(INFATUATED) && RANDOM.nextInt(2) == 0) {
             System.out.printf("%s is immobilized by love!");
