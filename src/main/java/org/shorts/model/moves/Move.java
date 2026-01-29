@@ -14,9 +14,6 @@ import org.shorts.model.abilities.SuperEffectiveReducingAbility;
 import org.shorts.model.abilities.statpreserving.PreserveAccuracyIgnoreEvasionAbility;
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
-import org.shorts.model.moves.entryhazardsetter.EntryHazardSetter;
-import org.shorts.model.moves.thawing.ThawingMove;
-import org.shorts.model.moves.trapping.binding.Whirlpool;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.PumpedStatus;
 import org.shorts.model.status.Status;
@@ -41,7 +38,6 @@ import static org.shorts.model.abilities.Hustle.HUSTLE;
 import static org.shorts.model.abilities.IceScales.ICE_SCALES;
 import static org.shorts.model.abilities.Infiltrator.INFILTRATOR;
 import static org.shorts.model.abilities.MagicBounce.MAGIC_BOUNCE;
-import static org.shorts.model.abilities.MagicGuard.MAGIC_GUARD;
 import static org.shorts.model.abilities.Merciless.MERCILESS;
 import static org.shorts.model.abilities.Neuroforce.NEUROFORCE;
 import static org.shorts.model.abilities.Prankster.PRANKSTER;
@@ -220,7 +216,7 @@ public abstract class Move implements IMove {
     }
 
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (!(user.getAbility() == SHEER_FORCE && this.getsSheerForceBoost()) && secondaryEffectChance > 0) {
+        if (secondaryEffectChance > 0 && !(user.getAbility() == SHEER_FORCE && this.getsSheerForceBoost())) {
 
             final int chance = getSecondaryEffectChance() * (user.getAbility().equals(SERENE_GRACE) ? 2 : 1);
             if (RANDOM.nextInt(100) < chance) {
@@ -366,13 +362,13 @@ public abstract class Move implements IMove {
                 } else {
                     executeOnTarget(user, target, battle);
                 }
-                if (user.getCurrentHP() == 0) {
+                if (user.hasFainted()) {
                     user.afterFaint(battle);
                 }
 
                 //TODO: Should I do takeDamage -> afterFaint for each target, or takeDamage for each, then afterFaint for each?
                 //TODO: Handle Endure, Destiny Bond, etc.
-                if (target.getCurrentHP() == 0) {
+                if (target.hasFainted()) {
                     //Or should I have this call in Pokemon.takeDamage()?
                     System.out.println(target + " fainted!");
                     target.afterFaint(battle);
@@ -448,7 +444,7 @@ public abstract class Move implements IMove {
 
                 int damage = calculateDamage(user, target, battle);
                 if (damage <= 0) {
-                    break;
+                    throw new RuntimeException("Damage cannot be zero or negative!");
                 }
 
                 final boolean hitSub = checkForHitSub(user, target);
@@ -495,13 +491,6 @@ public abstract class Move implements IMove {
             && this.range != Range.BOTH_SIDES && battle.getCorrespondingTrainer(user) != battle.getCorrespondingTrainer(
             target) && !(user.getAbility() == UNSEEN_FIST && !user.hasVolatileStatus(ABILITY_SUPPRESSED)
             && this.isContact(user));
-    }
-
-    protected void checkForLifeOrbRecoil(Pokemon user) {
-        if (user.getHeldItem() == LIFE_ORB && user.getAbility() != MAGIC_GUARD && !(user.getAbility() == SHEER_FORCE
-            && this.getsSheerForceBoost())) {
-            user.takeDamage(user.getMaxHP() / 10);
-        }
     }
 
     //TODO: Remember to override this in Transform and Sky Drop -- Infiltrator still can't get through a substitute when using those moves.
@@ -614,7 +603,7 @@ public abstract class Move implements IMove {
         return 1;
     }
 
-    private double getRandomMultiplier() {
+    protected double getRandomMultiplier() {
         return (DAMAGE_RANDOM.nextInt(16) + 85) / 100d;
     }
 
@@ -790,7 +779,7 @@ public abstract class Move implements IMove {
             base = roundHalfUp(base * 5324d / divisor);
         }
         if (user.getHeldItem() instanceof MetronomeItem) {
-            MetronomeItem metronome = (MetronomeItem) user.getHeldItem();
+            final MetronomeItem metronome = (MetronomeItem) user.getHeldItem();
             double metronomeMultiplier = 1 + (metronome.getPreviousUses() * 819d / divisor);
             base = roundHalfUp(base * metronomeMultiplier);
         }
