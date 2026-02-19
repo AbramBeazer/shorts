@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
+import org.shorts.battle.Turn;
 import org.shorts.model.pokemon.Pokemon;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,6 +41,14 @@ class TemperFlareTests {
     @Test
     void testPowerDoublesIfLastMoveFailed() {
         user.setLastMoveFailed(true);
+        assertThat(move.getPowerMultipliers(user, target, battle)).isEqualTo(TemperFlare.MULTIPLIER);
+    }
+
+    @Test
+    void testMissCausesPowerToDouble() {
+        Main.HIT_RANDOM = MAX_RANDOM;
+        new Turn(user, new Tackle(), 0).takeTurn(battle);
+        assertThat(user.isLastMoveFailed()).isTrue();
         assertThat(move.getPowerMultipliers(user, target, battle)).isEqualTo(TemperFlare.MULTIPLIER);
     }
 }
