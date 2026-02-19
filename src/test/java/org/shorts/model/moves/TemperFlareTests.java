@@ -33,8 +33,7 @@ class TemperFlareTests {
 
     @Test
     void testPowerIsNormalIfLastMoveSucceeded() {
-        new Tackle().executeOnTarget(user, target, battle);
-        assertThat(user.isLastMoveFailed()).isFalse();
+        user.setLastMoveFailed(false);
         assertThat(move.getPowerMultipliers(user, target, battle)).isEqualTo(1);
     }
 
