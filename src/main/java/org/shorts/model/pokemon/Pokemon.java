@@ -1031,15 +1031,15 @@ public class Pokemon {
         if (this.hasVolatileStatus(CONFUSED)) {
             if (this.getVolatileStatus(CONFUSED).getTurnsRemaining() == 0) {
                 this.removeVolatileStatus(CONFUSED);
-                System.out.printf("%s snapped out of confusion!");
+                System.out.printf("%s snapped out of confusion!", this);
             } else if (RANDOM.nextInt(3) == 0) {
                 HurtItselfInConfusion.HURT_ITSELF_IN_CONFUSION.execute(this, List.of(this), battle);
-                System.out.printf("%s hurt itself in its confusion!");
+                System.out.printf("%s hurt itself in its confusion!", this);
                 return false;
             }
         }
         if (this.hasVolatileStatus(INFATUATED) && RANDOM.nextInt(2) == 0) {
-            System.out.printf("%s is immobilized by love!");
+            System.out.printf("%s is immobilized by love!", this);
             return false;
         }
 
