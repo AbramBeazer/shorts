@@ -1,9 +1,18 @@
 package org.shorts.model.abilities;
 
+import java.util.List;
+import java.util.Set;
+
+import org.shorts.model.moves.Move;
+import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.status.TypeChangeStatus;
+import org.shorts.model.status.VolatileStatusType;
+
 public class ProteanLibero extends Ability {
+
     private boolean activated;
 
-    private ProteanLibero(String name){
+    private ProteanLibero(String name) {
         super(name);
         activated = false;
     }
@@ -16,8 +25,12 @@ public class ProteanLibero extends Ability {
         this.activated = activated;
     }
 
+    @Override
+    public void beforeAttack(Pokemon self, List<Pokemon> opponents, Move move) {
+        self.addVolatileStatus(new TypeChangeStatus(VolatileStatusType.TYPE_CHANGE, -1, self.getTypes()));
+        self.setTypes(Set.of(move.getType()));
+    }
 
-
-    private static final ProteanLibero PROTEAN = new ProteanLibero("Protean");
-    private static final ProteanLibero LIBERO = new ProteanLibero("Libero");
+    public static final ProteanLibero PROTEAN = new ProteanLibero("Protean");
+    public static final ProteanLibero LIBERO = new ProteanLibero("Libero");
 }

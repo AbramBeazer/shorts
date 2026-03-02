@@ -21,6 +21,7 @@ import org.shorts.model.types.Type;
 import static org.assertj.core.api.Assertions.*;
 import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
 import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
+import static org.shorts.model.abilities.ProteanLibero.*;
 import static org.shorts.model.pokemon.PokemonTestUtils.*;
 
 class ProteanLiberoTests {
@@ -32,6 +33,7 @@ class ProteanLiberoTests {
     @BeforeEach
     void setup() {
         user = getDummyPokemon();
+        user.setAbility(PROTEAN);
         target = getDummyPokemon();
         battle = new DummyBattle(user, target);
         Main.HIT_RANDOM = ZERO_RANDOM;

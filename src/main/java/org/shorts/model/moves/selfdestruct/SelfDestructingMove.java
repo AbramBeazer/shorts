@@ -24,16 +24,18 @@ public abstract class SelfDestructingMove extends Move {
         this.decrementPP();
 
         if (targets.isEmpty()) {
+            user.beforeAttack(targets, this);
             user.setCurrentHP(0);
             System.out.println(user + " fainted!");
-
+            user.setLastMoveFailed(false);
         } else if (targets.stream().anyMatch(target -> target.getAbility() == DAMP)
             || targets.stream()
             .allMatch(target -> Type.getTypeMultiplier(this.getType(), target.getTypes()) == Type.IMMUNE)) {
 
             System.out.println("But it failed!");
-
+            user.setLastMoveFailed(true);
         } else {
+            user.beforeAttack(targets, this);
             for (Pokemon target : targets) {
                 //TODO:
                 //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
@@ -58,6 +60,7 @@ public abstract class SelfDestructingMove extends Move {
             if (hits > 0) {
                 user.setCurrentHP(0);
                 System.out.println(user + " fainted!");
+                user.setLastMoveFailed(false);
             }
         }
         user.setLastMoveUsed(this);

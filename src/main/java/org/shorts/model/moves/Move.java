@@ -324,8 +324,8 @@ public abstract class Move implements IMove {
             System.out.println("But there was no target...");
             return;
         }
+        user.beforeAttack(targets, this);
         for (Pokemon target : targets) {
-            user.beforeAttack(target); //TODO: Is this correct?
 
             //TODO:
             //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.

@@ -814,12 +814,12 @@ public class Pokemon {
         //Again, I don't want to consume an item if the ability's going to nullify the effect anyway.
     }
 
-    public void beforeAttack(Pokemon target) {
+    public void beforeAttack(List<Pokemon> targets, Move move) {
         if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
             || this.getAbility() instanceof UnsuppressableAbility) {
-            ability.beforeAttack(this, target);
+            ability.beforeAttack(this, targets, move);
         }
-        heldItem.beforeAttack(this, target);
+        heldItem.beforeAttack(this, targets, move);
     }
 
     public void afterAttack(Pokemon opponent, Battle battle, Move move) {

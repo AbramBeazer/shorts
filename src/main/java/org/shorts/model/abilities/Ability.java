@@ -1,5 +1,6 @@
 package org.shorts.model.abilities;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.shorts.battle.Battle;
@@ -49,7 +50,7 @@ public abstract class Ability {
         return 1;
     }
 
-    public void beforeAttack(Pokemon self, Pokemon opponent) {
+    public void beforeAttack(Pokemon self, List<Pokemon> opponents, Move move) {
     }
 
     public void afterAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
