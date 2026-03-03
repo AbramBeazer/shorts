@@ -444,7 +444,7 @@ public abstract class Move implements IMove {
 
                 int damage = calculateDamage(user, target, battle);
                 if (damage <= 0) {
-                    throw new RuntimeException("Damage cannot be zero or negative!");
+                    break;
                 }
 
                 final boolean hitSub = checkForHitSub(user, target);
