@@ -24,6 +24,7 @@ import org.shorts.model.status.AutotomizedStatus;
 import org.shorts.model.status.HelpingHandStatus;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
+import org.shorts.model.status.TypeChangeStatus;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
@@ -943,6 +944,11 @@ public class Pokemon {
         heldItem.beforeSwitchOut(this, opponent, battle);
 
         Pickup.removeFromConsumedItems(this);
+
+        if (this.hasVolatileStatus(TYPE_CHANGE)) {
+            this.setTypes(((TypeChangeStatus) this.getVolatileStatus(TYPE_CHANGE)).getOriginalTypes());
+        }
+        this.volatileStatuses.clear();
     }
 
     public void onWeatherChange(Battle battle) {
