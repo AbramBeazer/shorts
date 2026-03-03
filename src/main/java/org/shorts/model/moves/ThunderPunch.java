@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class ThunderPunch extends Move implements PunchingMove, GetsSheerForceBoost {
 
     public ThunderPunch() {
-        super("Thunder Punch", 75, 100, Type.ICE, Category.PHYSICAL, Range.NORMAL, 24, true, 10);
+        super("Thunder Punch", 75, 100, Type.ELECTRIC, Category.PHYSICAL, Range.NORMAL, 24, true, 10);
     }
 
     @Override
