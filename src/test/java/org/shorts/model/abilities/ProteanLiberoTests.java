@@ -8,8 +8,10 @@ import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
 import org.shorts.battle.Turn;
+import org.shorts.model.moves.Curse;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Tackle;
+import org.shorts.model.moves.ThunderPunch;
 import org.shorts.model.moves.Toxic;
 import org.shorts.model.moves.WaterPulse;
 import org.shorts.model.moves.recoil.Struggle;
@@ -132,6 +134,148 @@ class ProteanLiberoTests {
         user.setStatus(Status.FREEZE);
         new Turn(user, new WaterPulse(), 0).takeTurn(battle);
         assertThat(user.getTypes()).isNotEqualTo(expectedType);
+    }
+
+    @Test
+    void testNaturePower() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testMetronome() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testMoveThatChangesMoveType() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testWithElectrify() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testWithIonDeluge() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testDoesNotActivateIfTerastallized() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testTeraNeutralizesExistingEffectsOfProtean() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testActivatesAgainAfterSwitchingOutAndBackIn() {
+        assertThat(false).isTrue();
+    }
+
+    @Test
+    void testGhostCurseEvenIfCraftyShieldFollowMeRagePowder() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testCurseWithElectrifyChangesStats() {
+        //        user.addVolatileStatus(new VolatileStatus(VolatileStatusType.ELECTRIFIED));
+
+        new Turn(user, new Curse()).takeTurn(battle);
+        assertThat(user.getTypes()).isEqualTo(Set.of(ELECTRIC));
+        assertThat(user.getStageAttack()).isOne();
+        assertThat(user.getStageDefense()).isOne();
+        assertThat(user.getStageSpeed()).isEqualTo(-1);
+    }
+
+    @Test
+    void testWithCamoflauge() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testActivatesIfRoarFails() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testActivatesIfWhirlwindFails() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testActivatesIfForestsCurseFails() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testActivatesIfTrickOrTreatFails() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testNewTypeMaintainedIfAbilityReplaced() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testNewTypeMaintainedIfAbilityNullified() {
+        assertThat(false).isTrue();
+
+    }
+
+    @Test
+    void testActivatesIfTargetIsProtected() {
+        target.addVolatileStatus(new VolatileStatus(VolatileStatusType.PROTECTED, 1));
+        final Set<Type> expectedType = Set.of(ELECTRIC);
+        new Turn(user, new ThunderPunch(), 0).takeTurn(battle);
+        assertThat(target.isAtFullHP()).isTrue();
+        assertThat(user.getTypes()).isEqualTo(expectedType);
+    }
+
+    @Test
+    void testActivatesIfMoveMisses() {
+        Main.HIT_RANDOM = MAX_RANDOM;
+        final Set<Type> expectedType = Set.of(ELECTRIC);
+        new Turn(user, new ThunderPunch(), 0).takeTurn(battle);
+        assertThat(target.isAtFullHP()).isTrue();
+        assertThat(user.getTypes()).isEqualTo(expectedType);
+    }
+
+    @Test
+    void testActivatesIfTargetIsSemiInvulnerable() {
+        target.addVolatileStatus(new VolatileStatus(VolatileStatusType.SEMI_INVULNERABLE, 1));
+        final Set<Type> expectedType = Set.of(ELECTRIC);
+        new Turn(user, new ThunderPunch(), 0).takeTurn(battle);
+        assertThat(target.isAtFullHP()).isTrue();
+        assertThat(user.getTypes()).isEqualTo(expectedType);
+    }
+
+    @Test
+    void testActivatesIfTargetIsImmune() {
+        target.setTypes(Set.of(GROUND));
+        final Set<Type> expectedType = Set.of(ELECTRIC);
+        new Turn(user, new ThunderPunch(), 0).takeTurn(battle);
+        assertThat(target.isAtFullHP()).isTrue();
+        assertThat(user.getTypes()).isEqualTo(expectedType);
     }
 
 }
