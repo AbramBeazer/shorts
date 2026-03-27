@@ -15,7 +15,7 @@ public class DrainPunch extends Move implements PunchingMove, HealingMove, Drain
 
     @Override
     public boolean canBeUsed(Pokemon user, List<Pokemon> targets, Battle battle) {
-        return super.canBeUsed(user, targets, battle) && !user.hasVolatileStatus(VolatileStatusType.HEAL_BLOCKED);
+        return super.canBeUsed(user, targets, battle) && !user.isHealBlocked();
     }
 
     //TODO: Implement DrainingMove

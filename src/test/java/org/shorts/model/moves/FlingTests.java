@@ -398,7 +398,7 @@ class FlingTests {
         assertThat(target.hasVolatileStatus(VolatileStatusType.ENCORED)).isFalse();
         assertThat(target.hasVolatileStatus(VolatileStatusType.TORMENTED)).isFalse();
         assertThat(target.hasVolatileStatus(VolatileStatusType.DISABLED)).isFalse();
-        assertThat(target.hasVolatileStatus(VolatileStatusType.HEAL_BLOCKED)).isFalse();
+        assertThat(target.isHealBlocked()).isFalse();
         assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(MENTAL_HERB);

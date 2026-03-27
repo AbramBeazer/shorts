@@ -515,7 +515,7 @@ public class Pokemon {
     }
 
     public void heal(int health) {
-        if (!this.hasFainted() && !this.hasVolatileStatus(HEAL_BLOCKED)) {
+        if (!this.hasFainted() && !this.isHealBlocked()) {
             if (health <= 0) {
                 throw new IllegalArgumentException("Health restored must be positive");
             }
@@ -742,6 +742,10 @@ public class Pokemon {
 
     public boolean isBehindSub() {
         return hasVolatileStatus(SUBSTITUTE);
+    }
+
+    public boolean isHealBlocked() {
+        return hasVolatileStatus(HEAL_BLOCKED);
     }
 
     public boolean isAtFullHP() {

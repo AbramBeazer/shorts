@@ -777,7 +777,7 @@ public class Battle {
                             String.format("%s is hurt by its burn!", mon));
                     }
                 } else if (mon.getAbility() == POISON_HEAL && mon.getStatus() == Status.POISON
-                    || mon.getStatus().getType() == StatusType.TOXIC_POISON && !mon.hasVolatileStatus(HEAL_BLOCKED)) {
+                    || mon.getStatus().getType() == StatusType.TOXIC_POISON && !mon.isHealBlocked()) {
                     mon.heal(mon.getMaxHP() / 8);
                 }
             }
