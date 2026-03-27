@@ -15,8 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
 import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.pokemon.PokemonTestUtils.*;
-import static org.shorts.model.types.Type.FLYING;
-import static org.shorts.model.types.Type.WATER;
+import static org.shorts.model.types.Type.*;
 
 class FreezeDryTests {
 
@@ -38,9 +37,25 @@ class FreezeDryTests {
     }
 
     @Test
-    void testGetMultiplierOnWaterType() {
+    void testGetBaseTypeMultiplierOnWaterType() {
         target.setTypes(Set.of(WATER));
         assertThat(move.getBaseTypeMultiplier(target.getTypes())).isEqualTo(Type.SUPER_EFFECTIVE);
+    }
+
+    @Test
+    void testGetTypeMultiplierOnTeraNormal() {
+        target.setTypes(Set.of(WATER));
+        target.setTera(true);
+        target.setTeraType(NORMAL);
+        assertThat(move.getTypeMultiplier(user, target, battle)).isEqualTo(NEUTRAL);
+    }
+
+    @Test
+    void testGetTypeMultiplierOnTeraWater() {
+        target.setTypes(Set.of(WATER, FLYING));
+        target.setTera(true);
+        target.setTeraType(WATER);
+        assertThat(move.getTypeMultiplier(user, target, battle)).isEqualTo(SUPER_EFFECTIVE);
     }
 
     @Test
