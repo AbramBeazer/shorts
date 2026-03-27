@@ -544,33 +544,40 @@ public abstract class Move implements IMove {
         return (int) baseDamage;
     }
 
+    protected Set<Type> getTargetTypes(Pokemon target) {
+        return target.isTera() ? Set.of(target.getTeraType()) : target.getTypes();
+    }
+
     protected double getTypeMultiplier(Pokemon user, Pokemon target, Battle battle) {
-        double multiplier = getBaseTypeMultiplier(target.getTypes());
+        final Set<Type> targetTypes = getTargetTypes(target);
+        double multiplier = getBaseTypeMultiplier(targetTypes);
+        //TODO: Don't I still want beforeHit to apply in the edge cases down below?
         multiplier *= target.beforeHit(user, battle, this);
 
-        if (!target.isGrounded() && target.getTypes().contains(FLYING) && (target.getHeldItem() == IRON_BALL)) {
+        if (!target.isGrounded() && targetTypes.contains(FLYING) && target.getHeldItem() == IRON_BALL) {
             multiplier = 1;
-        } else if (target.isGrounded() && target.getTypes().contains(FLYING) && this.type == GROUND && (
-            target.getHeldItem() != IRON_BALL)) {
-            multiplier = getBaseTypeMultiplier(target.getTypes()
+        } else if (target.isGrounded() && targetTypes.contains(FLYING) && this.type == GROUND
+            && target.getHeldItem() != IRON_BALL) {
+            multiplier = getBaseTypeMultiplier(targetTypes
                 .stream()
                 .filter(t -> t != FLYING)
                 .collect(Collectors.toSet()));
-        } else if (multiplier == IMMUNE && (target.getHeldItem() == RING_TARGET || target.hasVolatileStatus(
-            VolatileStatusType.IDENTIFIED))) {
-            multiplier = getBaseTypeMultiplier(target.getTypes()
+        } else if (multiplier == IMMUNE &&
+            (target.getHeldItem() == RING_TARGET || target.hasVolatileStatus(VolatileStatusType.IDENTIFIED))) {
+            multiplier = getBaseTypeMultiplier(targetTypes
                 .stream()
                 .filter(t -> !t.getImmunities().contains(this.type.getId()))
                 .collect(Collectors.toSet()));
-        } else if (user.getAbility() == SCRAPPY && (this.type == NORMAL || this.type == FIGHTING) && target.getTypes()
-            .contains(GHOST)) {
-            multiplier = getBaseTypeMultiplier(target.getTypes()
+        } else if (user.getAbility() == SCRAPPY && (this.type == NORMAL || this.type == FIGHTING)
+            && targetTypes.contains(GHOST)) {
+            //TODO: What if a Scrappy attacker uses a Fighting attack on a Ghost/Flying target that's grounded or holding Iron Ball?
+            multiplier = getBaseTypeMultiplier(targetTypes
                 .stream()
                 .filter(t -> t != GHOST)
                 .collect(Collectors.toSet()));
         } else if (battle.getWeather() == Weather.EXTREME_WIND && !battle.isWeatherSuppressed()
             && getBaseTypeMultiplier(Set.of(FLYING)) >= SUPER_EFFECTIVE) {
-            multiplier = getBaseTypeMultiplier(target.getTypes()
+            multiplier = getBaseTypeMultiplier(targetTypes
                 .stream()
                 .filter(t -> t != FLYING)
                 .collect(Collectors.toSet()));
@@ -583,7 +590,6 @@ public abstract class Move implements IMove {
     }
 
     protected double getBaseTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
-        //TODO: Deal with Terrastalization and stuff.
         return Type.getTypeMultiplier(this.getType(), defenderTypes);
     }
 
