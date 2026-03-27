@@ -39,7 +39,7 @@ class ThawingMoveTests {
     @Test
     void testThawsFrozenTarget() {
         ThawingMove move = new Scald();
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(target.getStatus()).isNotEqualTo(FREEZE);
     }
 
@@ -47,7 +47,7 @@ class ThawingMoveTests {
     void testThawsFrozenUser() {
         ThawingMove move = new SteamEruption();
         user.setStatus(Status.FREEZE);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(user.getStatus()).isNotEqualTo(FREEZE);
     }
 
@@ -55,11 +55,11 @@ class ThawingMoveTests {
     void testRegularDamagingFireMoveThawsTargetButNotUser() {
         Move move = new Ember();
         target.setStatus(Status.FREEZE);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(target.getStatus()).isNotEqualTo(FREEZE);
 
         user.setStatus(Status.FREEZE);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(user.getStatus()).isEqualTo(FREEZE);
     }
 }

@@ -49,7 +49,7 @@ public class WindRiderTests {
     @Test
     void testImmuneToWindMoves() {
         move = new PetalBlizzard();
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
 
         assertThat(target.isAtFullHP()).isTrue();
         assertThat(target.getStageAttack()).isOne();
@@ -59,7 +59,7 @@ public class WindRiderTests {
     void testActivatedByWhirlwind() {
         move = new Whirlwind();
 
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
 
         assertThat(target.getStageAttack()).isOne();
         assertThat(target).isEqualTo(battle.getCorrespondingTrainer(target).getTeam().get(0));
@@ -69,7 +69,7 @@ public class WindRiderTests {
     void testActivatedByTailwind() {
         double regularSpeed = target.calculateSpeed(battle);
         move = new Tailwind();
-        move.execute(target, List.of(target), battle);
+        move.executeWrapper(target, List.of(target), battle);
 
         assertThat(target.getStageAttack()).isOne();
         assertThat(target.calculateSpeed(battle)).isEqualTo(2 * regularSpeed);
@@ -78,7 +78,7 @@ public class WindRiderTests {
     @Test
     void testNotActivatedBySandstorm() {
         move = new Sandstorm();
-        move.execute(user, List.of(user, target), battle);
+        move.executeWrapper(user, List.of(user, target), battle);
 
         assertThat(battle.getWeather()).isEqualTo(Weather.SAND);
         assertThat(target.getStageAttack()).isZero();

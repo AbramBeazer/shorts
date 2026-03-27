@@ -36,21 +36,21 @@ class GastroAcidTests {
     @Test
     void testSuppressesMostAbilities() {
         target.setAbility(TORRENT);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(target.hasVolatileStatus(ABILITY_SUPPRESSED)).isTrue();
     }
 
     @Test
     void testDoesNotSuppressUnsuppressableAbilities() {
         target.setAbility(COMATOSE);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(target.hasVolatileStatus(ABILITY_SUPPRESSED)).isFalse();
     }
 
     @Test
     void testReflectedByMagicBounce() {
         target.setAbility(MAGIC_BOUNCE);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(target.hasVolatileStatus(ABILITY_SUPPRESSED)).isFalse();
         assertThat(user.hasVolatileStatus(ABILITY_SUPPRESSED)).isTrue();
     }
@@ -58,7 +58,7 @@ class GastroAcidTests {
     @Test
     void testReflectedByMagicCoat() {
         target.addVolatileStatus(new VolatileStatus(VolatileStatusType.MAGIC_COAT, 1));
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(target.hasVolatileStatus(ABILITY_SUPPRESSED)).isFalse();
         assertThat(user.hasVolatileStatus(ABILITY_SUPPRESSED)).isTrue();
     }
@@ -67,7 +67,7 @@ class GastroAcidTests {
     void testNotReflectedByMagicBounceWhenUserHasMoldBreaker() {
         user.setAbility(MOLD_BREAKER);
         target.setAbility(MAGIC_BOUNCE);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(target.hasVolatileStatus(ABILITY_SUPPRESSED)).isTrue();
         assertThat(user.hasVolatileStatus(ABILITY_SUPPRESSED)).isFalse();
     }

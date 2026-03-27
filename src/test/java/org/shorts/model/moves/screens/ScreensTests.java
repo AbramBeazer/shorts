@@ -43,7 +43,7 @@ class ScreensTests {
     void testReflectSetsScreen() {
         final Move move = new Reflect();
 
-        move.execute(screenSetter, player.getActivePokemon(), battle);
+        move.executeWrapper(screenSetter, player.getActivePokemon(), battle);
         assertThat(player.getReflectTurns()).isEqualTo(5);
         assertThat(player.getLightScreenTurns()).isZero();
         assertThat(player.getAuroraVeilTurns()).isZero();
@@ -53,7 +53,7 @@ class ScreensTests {
     void testLightScreenSetsScreen() {
         final Move move = new LightScreen();
 
-        move.execute(screenSetter, player.getActivePokemon(), battle);
+        move.executeWrapper(screenSetter, player.getActivePokemon(), battle);
         assertThat(player.getReflectTurns()).isZero();
         assertThat(player.getLightScreenTurns()).isEqualTo(5);
         assertThat(player.getAuroraVeilTurns()).isZero();
@@ -65,7 +65,7 @@ class ScreensTests {
         battle.setWeather(Weather.HAIL, 5);
         final Move move = new AuroraVeil();
 
-        move.execute(screenSetter, player.getActivePokemon(), battle);
+        move.executeWrapper(screenSetter, player.getActivePokemon(), battle);
         assertThat(player.getReflectTurns()).isZero();
         assertThat(player.getLightScreenTurns()).isZero();
         assertThat(player.getAuroraVeilTurns()).isEqualTo(5);
@@ -76,7 +76,7 @@ class ScreensTests {
         battle.setWeather(Weather.SNOW, 5);
         final Move move = new AuroraVeil();
 
-        move.execute(screenSetter, player.getActivePokemon(), battle);
+        move.executeWrapper(screenSetter, player.getActivePokemon(), battle);
         assertThat(player.getReflectTurns()).isZero();
         assertThat(player.getLightScreenTurns()).isZero();
         assertThat(player.getAuroraVeilTurns()).isEqualTo(5);
@@ -86,7 +86,7 @@ class ScreensTests {
     void testAuroraVeilFailsWithoutSnowOrHail() {
         final Move move = new AuroraVeil();
 
-        move.execute(screenSetter, player.getActivePokemon(), battle);
+        move.executeWrapper(screenSetter, player.getActivePokemon(), battle);
         assertThat(player.getReflectTurns()).isZero();
         assertThat(player.getLightScreenTurns()).isZero();
         assertThat(player.getAuroraVeilTurns()).isZero();
@@ -98,7 +98,7 @@ class ScreensTests {
         battle.setWeatherSuppressed(true);
         final Move move = new AuroraVeil();
 
-        move.execute(screenSetter, player.getActivePokemon(), battle);
+        move.executeWrapper(screenSetter, player.getActivePokemon(), battle);
         assertThat(player.getReflectTurns()).isZero();
         assertThat(player.getLightScreenTurns()).isZero();
         assertThat(player.getAuroraVeilTurns()).isZero();
@@ -110,7 +110,7 @@ class ScreensTests {
         battle.setWeatherSuppressed(true);
         final Move move = new AuroraVeil();
 
-        move.execute(screenSetter, player.getActivePokemon(), battle);
+        move.executeWrapper(screenSetter, player.getActivePokemon(), battle);
         assertThat(player.getReflectTurns()).isZero();
         assertThat(player.getLightScreenTurns()).isZero();
         assertThat(player.getAuroraVeilTurns()).isZero();
@@ -121,7 +121,7 @@ class ScreensTests {
         battle.setWeather(Weather.SNOW, 1);
         final Move move = new AuroraVeil();
 
-        move.execute(screenSetter, player.getActivePokemon(), battle);
+        move.executeWrapper(screenSetter, player.getActivePokemon(), battle);
         assertThat(player.getReflectTurns()).isZero();
         assertThat(player.getLightScreenTurns()).isZero();
         assertThat(player.getAuroraVeilTurns()).isEqualTo(5);
@@ -142,9 +142,9 @@ class ScreensTests {
         }
         battle.setWeather(Weather.SNOW, 1);
 
-        new Reflect().execute(player.getActivePokemon().get(0), player.getActivePokemon(), battle);
-        new LightScreen().execute(player.getActivePokemon().get(1), player.getActivePokemon(), battle);
-        new AuroraVeil().execute(player.getActivePokemon().get(2), player.getActivePokemon(), battle);
+        new Reflect().executeWrapper(player.getActivePokemon().get(0), player.getActivePokemon(), battle);
+        new LightScreen().executeWrapper(player.getActivePokemon().get(1), player.getActivePokemon(), battle);
+        new AuroraVeil().executeWrapper(player.getActivePokemon().get(2), player.getActivePokemon(), battle);
 
         assertThat(player.getAuroraVeilTurns()).isEqualTo(8);
         assertThat(player.getReflectTurns()).isEqualTo(8);
@@ -157,12 +157,12 @@ class ScreensTests {
         player.setReflectTurns(1);
         final Move attack = new Tackle();
 
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int halvedDamage = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
         screenSetter.maxPotion();
 
         player.setReflectTurns(0);
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int fullDamage = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
 
         assertThat(fullDamage).isEqualTo(halvedDamage * 2);
@@ -174,12 +174,12 @@ class ScreensTests {
         player.setLightScreenTurns(1);
         final Move attack = new Surf();
 
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int halvedDamage = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
         screenSetter.maxPotion();
 
         player.setLightScreenTurns(0);
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int fullDamage = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
 
         assertThat(fullDamage).isEqualTo(halvedDamage * 2);
@@ -191,12 +191,12 @@ class ScreensTests {
         player.setAuroraVeilTurns(1);
         final Move attack = new Tackle();
 
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int halvedDamage = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
         screenSetter.maxPotion();
 
         player.setAuroraVeilTurns(0);
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int fullDamage = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
 
         assertThat(fullDamage).isEqualTo(halvedDamage * 2);
@@ -208,12 +208,12 @@ class ScreensTests {
         player.setAuroraVeilTurns(1);
         final Move attack = new Surf();
 
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int halvedDamage = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
         screenSetter.maxPotion();
 
         player.setAuroraVeilTurns(0);
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int fullDamage = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
 
         assertThat(fullDamage).isEqualTo(halvedDamage * 2);
@@ -226,12 +226,12 @@ class ScreensTests {
         player.setReflectTurns(1);
         final Move attack = new Tackle();
 
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int damageWithBothScreens = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
         screenSetter.maxPotion();
 
         player.setAuroraVeilTurns(0);
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int damageWithOneScreen = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
 
         assertThat(damageWithOneScreen).isEqualTo(damageWithBothScreens);
@@ -244,12 +244,12 @@ class ScreensTests {
         player.setLightScreenTurns(1);
         final Move attack = new Surf();
 
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int damageWithBothScreens = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
         screenSetter.maxPotion();
 
         player.setAuroraVeilTurns(0);
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int damageWithOneScreen = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
 
         assertThat(damageWithOneScreen).isEqualTo(damageWithBothScreens);
@@ -262,12 +262,12 @@ class ScreensTests {
         player.setReflectTurns(5);
 
         final Move attack = new Tackle();
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int damageWithScreens = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
         screenSetter.maxPotion();
 
         Main.CRIT_RANDOM = ZERO_RANDOM;
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final double damageWithCrit = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
 
         assertThat(damageWithCrit).isEqualTo(damageWithScreens * 2 * Move.REGULAR_CRIT_MULTIPLIER);
@@ -280,12 +280,12 @@ class ScreensTests {
         player.setLightScreenTurns(5);
 
         final Move attack = new Surf();
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final int damageWithScreens = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
         screenSetter.maxPotion();
 
         Main.CRIT_RANDOM = ZERO_RANDOM;
-        attack.execute(opponent, List.of(screenSetter), battle);
+        attack.executeWrapper(opponent, List.of(screenSetter), battle);
         final double damageWithCrit = screenSetter.getMaxHP() - screenSetter.getCurrentHP();
 
         assertThat(damageWithCrit).isEqualTo(damageWithScreens * 2 * Move.REGULAR_CRIT_MULTIPLIER);
@@ -304,14 +304,14 @@ class ScreensTests {
         player = battle.getPlayerOne();
         player.setReflectTurns(5);
 
-        physicalAttack.execute(opponent, player.getActivePokemon(), battle);
+        physicalAttack.executeWrapper(opponent, player.getActivePokemon(), battle);
         final int physicalDamageWithReflect = mon1.getMaxHP() - mon1.getCurrentHP();
         assertThat(physicalDamageWithReflect).isEqualTo(mon2.getMaxHP() - mon2.getCurrentHP())
             .isEqualTo(mon3.getMaxHP() - mon3.getCurrentHP());
         player.getActivePokemon().forEach(Pokemon::maxPotion);
 
         player.setReflectTurns(0);
-        physicalAttack.execute(opponent, player.getActivePokemon(), battle);
+        physicalAttack.executeWrapper(opponent, player.getActivePokemon(), battle);
         final int physicalDamageNoReflect = mon1.getMaxHP() - mon1.getCurrentHP();
         assertThat(physicalDamageNoReflect).isEqualTo(mon2.getMaxHP() - mon2.getCurrentHP())
             .isEqualTo(mon3.getMaxHP() - mon3.getCurrentHP());
@@ -332,14 +332,14 @@ class ScreensTests {
         player = battle.getPlayerOne();
         player.setLightScreenTurns(5);
 
-        specialAttack.execute(opponent, player.getActivePokemon(), battle);
+        specialAttack.executeWrapper(opponent, player.getActivePokemon(), battle);
         final int specialDamageWithLightScreen = mon1.getMaxHP() - mon1.getCurrentHP();
         assertThat(specialDamageWithLightScreen).isEqualTo(mon2.getMaxHP() - mon2.getCurrentHP())
             .isEqualTo(mon3.getMaxHP() - mon3.getCurrentHP());
         player.getActivePokemon().forEach(Pokemon::maxPotion);
 
         player.setLightScreenTurns(0);
-        specialAttack.execute(opponent, player.getActivePokemon(), battle);
+        specialAttack.executeWrapper(opponent, player.getActivePokemon(), battle);
         final int specialDamageNoScreen = mon1.getMaxHP() - mon1.getCurrentHP();
         assertThat(specialDamageNoScreen).isEqualTo(mon2.getMaxHP() - mon2.getCurrentHP())
             .isEqualTo(mon3.getMaxHP() - mon3.getCurrentHP());
@@ -360,14 +360,14 @@ class ScreensTests {
         player = battle.getPlayerOne();
         player.setAuroraVeilTurns(5);
 
-        physicalAttack.execute(opponent, player.getActivePokemon(), battle);
+        physicalAttack.executeWrapper(opponent, player.getActivePokemon(), battle);
         final int physicalDamageWithReflect = mon1.getMaxHP() - mon1.getCurrentHP();
         assertThat(physicalDamageWithReflect).isEqualTo(mon2.getMaxHP() - mon2.getCurrentHP())
             .isEqualTo(mon3.getMaxHP() - mon3.getCurrentHP());
         player.getActivePokemon().forEach(Pokemon::maxPotion);
 
         player.setAuroraVeilTurns(0);
-        physicalAttack.execute(opponent, player.getActivePokemon(), battle);
+        physicalAttack.executeWrapper(opponent, player.getActivePokemon(), battle);
         final int physicalDamageNoReflect = mon1.getMaxHP() - mon1.getCurrentHP();
         assertThat(physicalDamageNoReflect).isEqualTo(mon2.getMaxHP() - mon2.getCurrentHP())
             .isEqualTo(mon3.getMaxHP() - mon3.getCurrentHP());
@@ -388,14 +388,14 @@ class ScreensTests {
         player = battle.getPlayerOne();
         player.setAuroraVeilTurns(5);
 
-        specialAttack.execute(opponent, player.getActivePokemon(), battle);
+        specialAttack.executeWrapper(opponent, player.getActivePokemon(), battle);
         final int specialDamageWithLightScreen = mon1.getMaxHP() - mon1.getCurrentHP();
         assertThat(specialDamageWithLightScreen).isEqualTo(mon2.getMaxHP() - mon2.getCurrentHP())
             .isEqualTo(mon3.getMaxHP() - mon3.getCurrentHP());
         player.getActivePokemon().forEach(Pokemon::maxPotion);
 
         player.setAuroraVeilTurns(0);
-        specialAttack.execute(opponent, player.getActivePokemon(), battle);
+        specialAttack.executeWrapper(opponent, player.getActivePokemon(), battle);
         final int specialDamageNoScreen = mon1.getMaxHP() - mon1.getCurrentHP();
         assertThat(specialDamageNoScreen).isEqualTo(mon2.getMaxHP() - mon2.getCurrentHP())
             .isEqualTo(mon3.getMaxHP() - mon3.getCurrentHP());

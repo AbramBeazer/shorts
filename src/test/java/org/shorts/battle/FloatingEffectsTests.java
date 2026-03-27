@@ -20,7 +20,7 @@ class FloatingEffectsTests {
         final Battle battle = new DummyBattle(user, target);
         final DoomDesire move = new DoomDesire();
 
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         for (int i = 0; i < move.getDuration(); i++) {
             battle.handleFloatingEffects();
         }
@@ -35,7 +35,7 @@ class FloatingEffectsTests {
         final Battle battle = new DummyBattle(user, target);
         final FutureSight move = new FutureSight();
 
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         for (int i = 0; i < move.getDuration(); i++) {
             battle.handleFloatingEffects();
         }
@@ -53,7 +53,7 @@ class FloatingEffectsTests {
         final Battle battle = new DummyBattle(user, target);
         final Wish move = new Wish();
 
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         for (int i = 0; i < move.getDuration(); i++) {
             battle.handleFloatingEffects();
         }

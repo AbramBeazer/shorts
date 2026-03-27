@@ -54,7 +54,7 @@ class TeatimeTests {
         assertThat(enemy1.isAtFullHP()).isTrue();
         assertThat(enemy2.isAtFullHP()).isTrue();
 
-        move.execute(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
+        move.executeWrapper(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
 
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(teammate.getHeldItem()).isEqualTo(NO_ITEM);
@@ -78,7 +78,7 @@ class TeatimeTests {
         assertThat(((Berry) enemy1.getHeldItem()).isWithinThreshold(enemy1)).isFalse();
         assertThat(((Berry) enemy2.getHeldItem()).isWithinThreshold(enemy2)).isFalse();
 
-        move.execute(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
+        move.executeWrapper(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
 
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(teammate.getHeldItem()).isEqualTo(NO_ITEM);
@@ -100,7 +100,7 @@ class TeatimeTests {
     void testBypassesSubstitute() {
         enemy1.addVolatileStatus(new SubstituteStatus(100));
 
-        move.execute(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
+        move.executeWrapper(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
 
         assertThat(enemy1.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(enemy1.getConsumedItem()).isEqualTo(ORAN_BERRY);
@@ -110,7 +110,7 @@ class TeatimeTests {
     void testDoesNotBypassSemiInvulnerable() {
         enemy2.addVolatileStatus(new VolatileStatus(VolatileStatusType.SEMI_INVULNERABLE, 1));
 
-        move.execute(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
+        move.executeWrapper(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
 
         assertThat(enemy2.getHeldItem()).isEqualTo(ORAN_BERRY);
         assertThat(enemy2.getConsumedItem()).isEqualTo(NO_ITEM);
@@ -121,7 +121,7 @@ class TeatimeTests {
         user.setAbility(UNNERVE);
         enemy1.setAbility(UNNERVE);
 
-        move.execute(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
+        move.executeWrapper(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
 
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(teammate.getHeldItem()).isEqualTo(NO_ITEM);
@@ -137,7 +137,7 @@ class TeatimeTests {
     void testIgnoresMagicRoom() {
         battle.setMagicRoomTurns(4);
 
-        move.execute(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
+        move.executeWrapper(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
 
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(teammate.getHeldItem()).isEqualTo(NO_ITEM);
@@ -159,7 +159,7 @@ class TeatimeTests {
         enemy1.setCurrentHP(enemy1.getMaxHP() * 3 / 4);
         enemy2.setAbility(MOTOR_DRIVE);
 
-        move.execute(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
+        move.executeWrapper(user, battle.getPokemonWithinRange(user, move.getRange(user)), battle);
 
         assertThat(user.getHeldItem()).isEqualTo(CELL_BATTERY);
         assertThat(user.getConsumedItem()).isEqualTo(NO_ITEM);

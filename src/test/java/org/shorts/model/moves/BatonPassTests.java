@@ -31,7 +31,7 @@ class BatonPassTests {
     @Test
     void testAbilitySuppressionNotBatonPassed() {
         user.addVolatileStatus(VolatileStatus.ABILITY_SUPPRESSED);
-        bp.execute(user, List.of(user), battle);
+        bp.executeWrapper(user, List.of(user), battle);
         assertThat(false).isTrue();
     }
 }
