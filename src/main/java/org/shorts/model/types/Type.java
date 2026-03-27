@@ -1,6 +1,7 @@
 package org.shorts.model.types;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -225,8 +226,22 @@ public class Type {
         List.of(TypeId.FIGHTING, TypeId.BUG, TypeId.DARK),
         List.of(TypeId.DRAGON));
 
+    public static final Type STELLAR = new Type(
+        TypeId.STELLAR,
+        "Stellar",
+        List.of(TypeId.GROUND, TypeId.PSYCHIC),
+        List.of(TypeId.GRASS, TypeId.FIGHTING, TypeId.POISON, TypeId.BUG, TypeId.FAIRY),
+        List.of());
+
+    /*Stellar is supereffective against Terastallized Pokémon and no Pokémon can be Stellar-type without terastallizing.
+     Stellar Pokémon retain the defensive profile of their original types.
+     However, if a Pokémon is hacked to be Stellar-type without terastallizing, it has the defensive properties of a Poison-type.*/
+
     @Override
     public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
         if (obj instanceof Type) {
             Type t = (Type) obj;
             return t.id.equals(this.id);
@@ -293,6 +308,29 @@ public class Type {
         DRAGON,
         DARK,
         STEEL,
-        FAIRY
+        FAIRY,
+        STELLAR
+    }
+
+    public class StellarType extends Type {
+
+        private Set<Type> alreadyBoostedByStellar;
+
+        public StellarType() {
+            super(
+                TypeId.STELLAR,
+                "Stellar",
+                List.of(TypeId.GROUND, TypeId.PSYCHIC),
+                List.of(TypeId.GRASS, TypeId.FIGHTING, TypeId.POISON, TypeId.BUG, TypeId.FAIRY),
+                List.of());
+            alreadyBoostedByStellar = new HashSet<>();
+        }
+
+        public Set<Type> getAlreadyBoostedByStellar() {
+            if (alreadyBoostedByStellar == null) {
+                alreadyBoostedByStellar = new HashSet<>();
+            }
+            return alreadyBoostedByStellar;
+        }
     }
 }
