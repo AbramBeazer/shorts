@@ -84,7 +84,7 @@ public class Fling extends Move {
 
                     this.trySecondaryEffect(user, target, battle);
 
-                    if (target.hasVolatileStatus(SUBSTITUTE)
+                    if (target.isBehindSub()
                         && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
                         target.removeVolatileStatus(SUBSTITUTE);
                     }
@@ -103,7 +103,7 @@ public class Fling extends Move {
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         //TODO: Should the target consume the flung item if the sub took the attack?
-        if (!target.hasVolatileStatus(SUBSTITUTE)) {
+        if (!target.isBehindSub()) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

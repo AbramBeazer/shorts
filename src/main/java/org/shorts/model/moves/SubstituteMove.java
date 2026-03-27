@@ -18,7 +18,7 @@ public class SubstituteMove extends Move {
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         subHP = (int) Math.ceil((double) user.getMaxHP() / 4);
-        if (!user.hasVolatileStatus(SUBSTITUTE) && user.getCurrentHP() > subHP) {
+        if (!user.isBehindSub() && user.getCurrentHP() > subHP) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

@@ -30,7 +30,7 @@ public enum StatusType implements AbstractStatusType {
         final Trainer trainer =
             battle.getCorrespondingTrainer(target);
         if (target.getStatus().getType() != NONE || trainer.getSafeguardTurns() > 0
-            || target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)
+            || target.isBehindSub()
             || (target.isGrounded() && battle.getTerrain() == Terrain.MISTY)
             || (!target.hasVolatileStatus(ABILITY_IGNORED) && target.getAbility() instanceof StatusImmuneAbility
             && ((StatusImmuneAbility) target.getAbility()).getImmunities().contains(this))) {

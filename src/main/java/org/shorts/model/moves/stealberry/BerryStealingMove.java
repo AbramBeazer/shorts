@@ -28,7 +28,7 @@ public abstract class BerryStealingMove extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.getHeldItem() instanceof Berry && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)
+        if (target.getHeldItem() instanceof Berry && !target.isBehindSub()
             && target.getAbility() != STICKY_HOLD) {
             super.trySecondaryEffect(user, target, battle);
         }

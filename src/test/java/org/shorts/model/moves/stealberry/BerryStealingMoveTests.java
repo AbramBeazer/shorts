@@ -87,7 +87,7 @@ class BerryStealingMoveTests {
         move.executeOnTarget(user, target, battle);
 
         assertThat(target.getCurrentHP()).isEqualTo(target.getMaxHP());
-        assertThat(target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)).isFalse();
+        assertThat(target.isBehindSub()).isFalse();
         assertThat(target.getHeldItem()).isEqualTo(ORAN_BERRY);
         assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP() - 10);

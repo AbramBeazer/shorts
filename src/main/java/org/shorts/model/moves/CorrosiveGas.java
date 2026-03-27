@@ -30,7 +30,7 @@ public class CorrosiveGas extends Move implements AffectedByMagicBounce {
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         final PokedexEntry entry = target.getPokedexEntry();
         final HeldItem item = target.getHeldItem();
-        if (!target.hasVolatileStatus(SUBSTITUTE) && (target.getAbility() != STICKY_HOLD || target.hasVolatileStatus(
+        if (!target.isBehindSub() && (target.getAbility() != STICKY_HOLD || target.hasVolatileStatus(
             ABILITY_SUPPRESSED) || target.hasVolatileStatus(ABILITY_IGNORED)) && !(
             entry.equalsSpecies(Pokedex.get("Giratina")) && item == GRISEOUS_ORB) && !(
             entry.equalsSpecies(Pokedex.get("Arceus")) && item instanceof PlateItem) && !(

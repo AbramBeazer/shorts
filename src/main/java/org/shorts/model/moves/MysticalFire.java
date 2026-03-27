@@ -14,7 +14,7 @@ public class MysticalFire extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.isDropPossible(StatEnum.SPATK) && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
+        if (target.isDropPossible(StatEnum.SPATK) && !target.isBehindSub()) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

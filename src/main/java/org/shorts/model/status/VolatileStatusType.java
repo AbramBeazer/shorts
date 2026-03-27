@@ -88,16 +88,16 @@ public enum VolatileStatusType implements AbstractStatusType {
                 case DROWSY:
                     return battle.getCorrespondingTrainer(target).getSafeguardTurns() == 0;
                 case CANT_ESCAPE:
-                    return !target.hasVolatileStatus(SUBSTITUTE) && !target.hasVolatileStatus(NO_RETREAT)
+                    return !target.isBehindSub() && !target.hasVolatileStatus(NO_RETREAT)
                         && !target.hasVolatileStatus(OCTOLOCKED);
                 case OCTOLOCKED:
-                    return !target.hasVolatileStatus(SUBSTITUTE);
+                    return !target.isBehindSub();
                 case FLINCH:
-                    return !target.hasVolatileStatus(SUBSTITUTE);
+                    return !target.isBehindSub();
                 case CONFUSED:
-                    return !target.hasVolatileStatus(SUBSTITUTE); //TODO: Make sure that this blocks only Confuse Ray, but not self-inflicted confusion from Outrage or Thrash.
+                    return !target.isBehindSub(); //TODO: Make sure that this blocks only Confuse Ray, but not self-inflicted confusion from Outrage or Thrash.
                 case SEEDED:
-                    return !target.hasVolatileStatus(SUBSTITUTE);
+                    return !target.isBehindSub();
                 default:
                     return true;
             }

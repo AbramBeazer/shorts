@@ -27,7 +27,7 @@ public class InfernalParade extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (StatusType.BURN.isStatusPossible(user, target, battle) && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
+        if (StatusType.BURN.isStatusPossible(user, target, battle) && !target.isBehindSub()) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

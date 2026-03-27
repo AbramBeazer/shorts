@@ -461,7 +461,7 @@ public abstract class Move implements IMove {
                 }
 
                 this.trySecondaryEffect(user, target, battle);
-                if (target.hasVolatileStatus(SUBSTITUTE)
+                if (target.isBehindSub()
                     && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
                     target.removeVolatileStatus(SUBSTITUTE);
                 }
@@ -497,7 +497,7 @@ public abstract class Move implements IMove {
 
     //TODO: Remember to override this in Transform and Sky Drop -- Infiltrator still can't get through a substitute when using those moves.
     protected boolean checkForHitSub(Pokemon user, Pokemon target) {
-        return target.hasVolatileStatus(SUBSTITUTE) && (user.getAbility() != INFILTRATOR || user.hasVolatileStatus(
+        return target.isBehindSub() && (user.getAbility() != INFILTRATOR || user.hasVolatileStatus(
             ABILITY_SUPPRESSED));
     }
 

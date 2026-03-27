@@ -740,6 +740,10 @@ public class Pokemon {
                     && !entry.getKey().equals(PERISH));
     }
 
+    public boolean isBehindSub() {
+        return hasVolatileStatus(SUBSTITUTE);
+    }
+
     public boolean isAtFullHP() {
         return currentHP == maxHP;
     }
@@ -834,7 +838,7 @@ public class Pokemon {
     }
 
     public boolean isDropPossible(StatEnum stat) {
-        if (this.hasVolatileStatus(SUBSTITUTE)) {
+        if (this.isBehindSub()) {
             return false;
         }
         if (!canChangeStat(-1, stat)) {

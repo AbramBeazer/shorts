@@ -115,7 +115,7 @@ class InfiltratorTests {
         final int subHP = target.getMaxHP() / 4;
         target.addVolatileStatus(new SubstituteStatus(subHP));
         move.execute(user, List.of(target), battle);
-        assertThat(target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)).isTrue();
+        assertThat(target.isBehindSub()).isTrue();
         assertThat(((SubstituteStatus) target.getVolatileStatus(VolatileStatusType.SUBSTITUTE)).getSubHP()).isEqualTo(
             subHP);
         assertThat(target.getCurrentHP()).isLessThan(target.getMaxHP());

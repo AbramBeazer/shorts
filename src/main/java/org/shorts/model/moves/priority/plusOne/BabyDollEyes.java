@@ -22,7 +22,7 @@ public class BabyDollEyes extends Move implements AffectedByMagicBounce {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.isDropPossible(StatEnum.ATK) && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
+        if (target.isDropPossible(StatEnum.ATK) && !target.isBehindSub()) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

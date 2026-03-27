@@ -19,7 +19,7 @@ public class Soak extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (!target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE) && target.getAbility() != MULTITYPE
+        if (!target.isBehindSub() && target.getAbility() != MULTITYPE
             && target.getAbility() != RKS_SYSTEM
             //TODO: && !target.isTera() && !(target.getAbility() instanceof Disguise && ((Disguise) target.getAbility()).isIntact())
         ) {

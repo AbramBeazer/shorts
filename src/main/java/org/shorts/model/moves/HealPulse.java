@@ -15,7 +15,7 @@ public class HealPulse extends Move implements PulseMove, HealingMove, AffectedB
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (!target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE) && !target.isAtFullHP()) {
+        if (!target.isBehindSub() && !target.isAtFullHP()) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

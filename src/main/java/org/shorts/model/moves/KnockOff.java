@@ -45,7 +45,7 @@ public class KnockOff extends Move {
     //      I need to verify when Life Orb damage happens. Does it happen after Rough Skin/Iron Barbs/Rocky Helmet damage?
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (!user.hasFainted() && bonusDamageApplies(user, target) && !target.hasVolatileStatus(SUBSTITUTE)
+        if (!user.hasFainted() && bonusDamageApplies(user, target) && !target.isBehindSub()
             && (target.getAbility() != STICKY_HOLD || target.hasFainted() || target.hasVolatileStatus(
             ABILITY_IGNORED) || target.hasVolatileStatus(ABILITY_SUPPRESSED))) {
 
