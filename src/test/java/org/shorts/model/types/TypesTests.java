@@ -50,7 +50,7 @@ class TypesTests {
     @Test
     void testQuadEffective() {
         Set<Type> defenderTypes = Set.of(Type.ICE, Type.DARK);
-        assertThat(Type.getTypeMultiplier(Type.FIGHTING, defenderTypes)).isEqualTo(Type.QUAD_EFFECTIVE);
+        assertThat(Type.getTypeMultiplier(Type.FIGHTING, defenderTypes)).isEqualTo(Type.EXTREMELY_EFFECTIVE);
     }
 
     @Test
@@ -90,7 +90,7 @@ class TypesTests {
         Set<Type> defenderTypes = Set.of(Type.ICE, Type.DARK);
         assertThat(
             Type.getSTABMultiplier(Type.FIGHTING, attacker) * Type.getTypeMultiplier(Type.FIGHTING, defenderTypes))
-            .isEqualTo(Type.STAB * Type.QUAD_EFFECTIVE);
+            .isEqualTo(Type.STAB * Type.EXTREMELY_EFFECTIVE);
     }
 
     @Test
@@ -101,7 +101,7 @@ class TypesTests {
         Set<Type> defenderTypes = Set.of(Type.ICE, Type.DARK);
         assertThat(
             Type.getSTABMultiplier(Type.FIGHTING, attacker) * Type.getTypeMultiplier(Type.FIGHTING, defenderTypes))
-            .isEqualTo(Type.STAB * Type.QUAD_EFFECTIVE);
+            .isEqualTo(Type.STAB * Type.EXTREMELY_EFFECTIVE);
     }
 
     @Test
@@ -112,7 +112,7 @@ class TypesTests {
         Set<Type> defenderTypes = Set.of(Type.ICE, Type.DARK);
         assertThat(
             Type.getSTABMultiplier(Type.FIGHTING, attacker) * Type.getTypeMultiplier(Type.FIGHTING, defenderTypes))
-            .isEqualTo(Type.TERA_STAB * Type.QUAD_EFFECTIVE);
+            .isEqualTo(Type.TERA_STAB * Type.EXTREMELY_EFFECTIVE);
     }
 
     @Test

@@ -46,7 +46,7 @@ class FreezeDryTests {
     @Test
     void testGetMultiplierQuadEffectiveOnWaterType() {
         target.setTypes(Set.of(WATER, FLYING));
-        assertThat(move.getBaseTypeMultiplier(target.getTypes())).isEqualTo(Type.QUAD_EFFECTIVE);
+        assertThat(move.getBaseTypeMultiplier(target.getTypes())).isEqualTo(Type.EXTREMELY_EFFECTIVE);
     }
 
     @Test

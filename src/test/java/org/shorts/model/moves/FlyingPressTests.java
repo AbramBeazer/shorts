@@ -52,7 +52,7 @@ class FlyingPressTests {
 
     @Test
     void testBothDoubleEqualsQuadruple() {
-        assertThat(flyingPress.getBaseTypeMultiplier(Set.of(GRASS, ICE))).isEqualTo(QUAD_EFFECTIVE);
+        assertThat(flyingPress.getBaseTypeMultiplier(Set.of(GRASS, ICE))).isEqualTo(EXTREMELY_EFFECTIVE);
     }
 
 

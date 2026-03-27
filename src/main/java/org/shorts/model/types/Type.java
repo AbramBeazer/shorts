@@ -17,7 +17,7 @@ public class Type {
     public static final double NEUTRAL = 1;
     public static final double SUPER_EFFECTIVE = 2;
 
-    public static final double QUAD_EFFECTIVE = 4;
+    public static final double EXTREMELY_EFFECTIVE = 4;
     public static final double OCTO_EFFECTIVE = 8;
     public static final double NOT_VERY_EFFECTIVE = 0.5;
 
