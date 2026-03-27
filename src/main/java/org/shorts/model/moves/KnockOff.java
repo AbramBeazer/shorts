@@ -59,7 +59,7 @@ public class KnockOff extends Move {
     }
 
     private boolean bonusDamageApplies(Pokemon user, Pokemon target) {
-        //TODO: Does Knock Off work on Ogerpon's masks?
+        //TODO: A mask held by Ogerpon cannot be knocked off.
         final PokedexEntry targetDex = target.getPokedexEntry();
         final PokedexEntry userDex = user.getPokedexEntry();
         if (target.getHeldItem() == NO_ITEM) {
