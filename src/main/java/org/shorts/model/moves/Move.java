@@ -14,9 +14,6 @@ import org.shorts.model.abilities.SuperEffectiveReducingAbility;
 import org.shorts.model.abilities.statpreserving.PreserveAccuracyIgnoreEvasionAbility;
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
-import org.shorts.model.moves.entryhazardsetter.EntryHazardSetter;
-import org.shorts.model.moves.thawing.ThawingMove;
-import org.shorts.model.moves.trapping.binding.Whirlpool;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.PumpedStatus;
 import org.shorts.model.status.Status;
@@ -89,17 +86,7 @@ import static org.shorts.model.status.VolatileStatusType.PUMPED;
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 import static org.shorts.model.status.VolatileStatusType.TARRED;
-import static org.shorts.model.types.Type.FIGHTING;
-import static org.shorts.model.types.Type.FIRE;
-import static org.shorts.model.types.Type.FLYING;
-import static org.shorts.model.types.Type.GHOST;
-import static org.shorts.model.types.Type.GROUND;
-import static org.shorts.model.types.Type.ICE;
-import static org.shorts.model.types.Type.IMMUNE;
-import static org.shorts.model.types.Type.NEUTRAL;
-import static org.shorts.model.types.Type.NORMAL;
-import static org.shorts.model.types.Type.SUPER_EFFECTIVE;
-import static org.shorts.model.types.Type.WATER;
+import static org.shorts.model.types.Type.*;
 
 public abstract class Move implements IMove {
 
@@ -320,9 +307,23 @@ public abstract class Move implements IMove {
         return Objects.hash(name, power, accuracy, type, maxPP, contact, secondaryEffectChance);
     }
 
-    public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
+    //TODO: Find a way to prevent moves from being selected if they can't be used. Does this apply if the move is called by Metronome or Assist?
+    public boolean canBeUsed(Pokemon user, List<Pokemon> targets, Battle battle) {
+        return this.getCurrentPP() > 0;
+    }
+
+    public void executeWrapper(Pokemon user, List<Pokemon> targets, Battle battle) {
+        beforeExecute(user, targets, battle);
+        execute(user, targets, battle);
+        afterExecute(user, targets, battle);
+    }
+
+    protected void beforeExecute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setMovedThisTurn(true);
         this.decrementPP();
+    }
+
+    public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
         if (targets.isEmpty()) {
             System.out.println("But there was no target...");
             return;
@@ -381,8 +382,17 @@ public abstract class Move implements IMove {
                 }
             }
         }
+    }
 
+    protected void afterExecute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setLastMoveUsed(this);
+        markTypeAsAlreadyStellarBoosted(user);
+    }
+
+    protected void markTypeAsAlreadyStellarBoosted(Pokemon user) {
+        if (user.isTera() && user.getTeraType() instanceof Type.StellarType stellar) {
+            stellar.getAlreadyBoostedByStellar().add(this.type);
+        }
     }
 
     protected void executeOnSide(Pokemon user, Battle battle) {
@@ -545,10 +555,17 @@ public abstract class Move implements IMove {
     }
 
     protected Set<Type> getTargetTypes(Pokemon target) {
-        return target.isTera() ? Set.of(target.getTeraType()) : target.getTypes();
+        if (!target.isTera() || STELLAR.equals(target.getTeraType())) {
+            return target.getTypes();
+        }
+        return Set.of(target.getTeraType());
     }
 
     protected double getTypeMultiplier(Pokemon user, Pokemon target, Battle battle) {
+        if (STELLAR.equals(this.type) && target.isTera()) {
+            return SUPER_EFFECTIVE;
+        }
+
         final Set<Type> targetTypes = getTargetTypes(target);
         double multiplier = getBaseTypeMultiplier(targetTypes);
         //TODO: Don't I still want beforeHit to apply in the edge cases down below?

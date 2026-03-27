@@ -62,7 +62,7 @@ public class Turn {
                     .collect(Collectors.toList());
             }
             System.out.println(user.toString() + " used " + move.getName() + "!");
-            move.execute(
+            move.executeWrapper(
                 user,
                 targets,
                 battle);

@@ -27,9 +27,9 @@ public class FlareBlitz extends RecoilAttack implements GetsSheerForceBoost {
     }
 
     @Override
-    public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
+    public void beforeExecute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.thaw();
-        super.execute(user, targets, battle);
+        super.beforeExecute(user, targets, battle);
     }
 
     @Override
