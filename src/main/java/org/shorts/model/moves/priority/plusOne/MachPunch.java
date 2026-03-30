@@ -14,7 +14,7 @@ public class MachPunch extends Move implements PunchingMove {
     }
 
     @Override
-    public int getPriority(Pokemon attacker, Battle battle) {
+    public int getBasePriority(Pokemon attacker, Battle battle) {
         return 1;
     }
 }

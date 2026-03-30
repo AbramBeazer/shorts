@@ -6,7 +6,6 @@ import org.shorts.model.moves.AffectedByMagicBounce;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 public class BabyDollEyes extends Move implements AffectedByMagicBounce {
@@ -16,7 +15,7 @@ public class BabyDollEyes extends Move implements AffectedByMagicBounce {
     }
 
     @Override
-    public int getPriority(Pokemon attacker, Battle battle) {
+    public int getBasePriority(Pokemon attacker, Battle battle) {
         return 1;
     }
 

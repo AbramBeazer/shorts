@@ -39,7 +39,7 @@ public class Turn {
         if (move == null) {
             return 6;
         } else {
-            return move.getPriority(user, battle) + move.getAbilityPriorityBonus(user);
+            return move.getPriority(user, battle);
         }
     }
 

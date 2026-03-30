@@ -23,7 +23,7 @@ public class HelpingHandMove extends Move {
     }
 
     @Override
-    public int getPriority(Pokemon attacker, Battle battle) {
+    public int getBasePriority(Pokemon attacker, Battle battle) {
         return 5;
     }
 }
