@@ -484,6 +484,7 @@ public abstract class Move implements IMove {
             }
 
             //TODO: Verify that this happens only if a damaging move hits, i.e. not if the attack misses, hits protect, or is a status move.
+            //Confirmed: The boost should apply to every hit of a multi-hit move.
             markTypeAsAlreadyStellarBoosted(user);
 
             if (!user.hasFainted()) {

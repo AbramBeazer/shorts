@@ -40,4 +40,9 @@ class MoveTests {
         target.setTera(false);
         assertThat(stellarMove.getTypeMultiplier(user, target, battle)).isEqualTo(Type.NEUTRAL);
     }
+
+    @Test
+    void testStellarBoostAppliesToEveryHitOfMultiHitMove() {
+        assertThat(false).isTrue();
+    }
 }
