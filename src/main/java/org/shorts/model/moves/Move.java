@@ -390,8 +390,11 @@ public abstract class Move implements IMove {
     }
 
     protected void markTypeAsAlreadyStellarBoosted(Pokemon user) {
+
+        //TODO: Should this only apply if the move is a damage-dealing move?
+        //TODO: This shouldn't be added to the set if the attack was blocked by Protect.
         if (user.isTera() && user.getTeraType() instanceof Type.StellarType stellar) {
-            stellar.getAlreadyBoostedByStellar().add(this.type);
+            stellar.getPreviouslyBoosted().add(this.type);
         }
     }
 
@@ -535,6 +538,7 @@ public abstract class Move implements IMove {
             return 0;
         }
 
+        //TODO: I'm guessing the Stellar boost will apply for all hits of a multi-hit move and not just the first one? Test that on Showdown.
         double stabMultiplier = getSTABMultiplier(user);
 
         baseDamage = roundHalfDown(baseDamage * getNumTargetsMultiplier());

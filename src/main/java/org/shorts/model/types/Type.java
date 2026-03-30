@@ -17,6 +17,7 @@ public class Type {
     public static final double TERA_STAB = 2;
     public static final double NEUTRAL = 1;
     public static final double SUPER_EFFECTIVE = 2;
+    public static final double STELLAR_BOOST_NON_STAB = 4915d / 4096d; //1.2
 
     public static final double EXTREMELY_EFFECTIVE = 4;
     public static final double OCTO_EFFECTIVE = 8;
@@ -81,13 +82,18 @@ public class Type {
         if (attacker.getTypes().size() > 2) {
             throw new TooManyTypesException(attacker.getTypes());
         }
-        if (attacker.getTypes().contains(moveType)) {
-            return attacker.isTera() && moveType.equals(attacker.getTeraType()) ? TERA_STAB : STAB;
-        } else if (attacker.isTera() && moveType.equals(attacker.getTeraType())) {
-            return STAB;
-        } else {
-            return NON_STAB;
+
+        if (attacker.isTera()) {
+            if (attacker.getTeraType() instanceof StellarType stellar && !stellar.getPreviouslyBoosted()
+                .contains(moveType)) {
+                return attacker.getTypes().contains(moveType) ? TERA_STAB : STELLAR_BOOST_NON_STAB;
+            } else if (attacker.getTypes().contains(moveType)) {
+                return attacker.getTeraType().equals(moveType) ? TERA_STAB : STAB;
+            } else {
+                return attacker.getTeraType().equals(moveType) ? STAB : NON_STAB;
+            }
         }
+        return attacker.getTypes().contains(moveType) ? STAB : NON_STAB;
     }
 
     public static final Type NORMAL = new Type(
@@ -226,17 +232,6 @@ public class Type {
         List.of(TypeId.FIGHTING, TypeId.BUG, TypeId.DARK),
         List.of(TypeId.DRAGON));
 
-    public static final Type STELLAR = new Type(
-        TypeId.STELLAR,
-        "Stellar",
-        List.of(TypeId.GROUND, TypeId.PSYCHIC),
-        List.of(TypeId.GRASS, TypeId.FIGHTING, TypeId.POISON, TypeId.BUG, TypeId.FAIRY),
-        List.of());
-
-    /*Stellar is supereffective against Terastallized Pokémon and no Pokémon can be Stellar-type without terastallizing.
-     Stellar Pokémon retain the defensive profile of their original types.
-     However, if a Pokémon is hacked to be Stellar-type without terastallizing, it has the defensive properties of a Poison-type.*/
-
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -314,7 +309,7 @@ public class Type {
 
     public class StellarType extends Type {
 
-        private Set<Type> alreadyBoostedByStellar;
+        private Set<Type> previouslyBoosted;
 
         public StellarType() {
             super(
@@ -323,14 +318,19 @@ public class Type {
                 List.of(TypeId.GROUND, TypeId.PSYCHIC),
                 List.of(TypeId.GRASS, TypeId.FIGHTING, TypeId.POISON, TypeId.BUG, TypeId.FAIRY),
                 List.of());
-            alreadyBoostedByStellar = new HashSet<>();
+
+            previouslyBoosted = new HashSet<>();
+            /*Stellar is supereffective against Terastallized Pokémon and no Pokémon can be Stellar-type without terastallizing.
+            Stellar Pokémon retain the defensive profile of their original types.
+            However, if a Pokémon is hacked to be Stellar-type without terastallizing, it has the defensive properties of a Poison-type.*/
         }
 
-        public Set<Type> getAlreadyBoostedByStellar() {
-            if (alreadyBoostedByStellar == null) {
-                alreadyBoostedByStellar = new HashSet<>();
+        public Set<Type> getPreviouslyBoosted() {
+            if (previouslyBoosted == null) {
+                previouslyBoosted = new HashSet<>();
             }
-            return alreadyBoostedByStellar;
+            return previouslyBoosted;
         }
     }
+
 }
