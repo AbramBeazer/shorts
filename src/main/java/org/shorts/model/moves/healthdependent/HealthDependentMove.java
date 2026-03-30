@@ -2,11 +2,12 @@ package org.shorts.model.moves.healthdependent;
 
 import org.shorts.battle.Battle;
 import org.shorts.model.moves.Move;
+import org.shorts.model.moves.PowerVaries;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public abstract class HealthDependentMove extends Move {
+public abstract class HealthDependentMove extends Move implements PowerVaries {
 
     static final int MAX_POWER = 150;
 

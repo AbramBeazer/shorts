@@ -91,4 +91,8 @@ public interface IMove {
     default boolean doubleDamageToFly() {
         return false;
     }
+
+    default boolean getsTera60Boost() {
+        return true;
+    }
 }

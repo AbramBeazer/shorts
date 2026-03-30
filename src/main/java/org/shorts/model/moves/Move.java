@@ -55,7 +55,6 @@ import static org.shorts.model.abilities.Sniper.SNIPER;
 import static org.shorts.model.abilities.SnowCloak.SNOW_CLOAK;
 import static org.shorts.model.abilities.SuperLuck.SUPER_LUCK;
 import static org.shorts.model.abilities.TangledFeet.TANGLED_FEET;
-import static org.shorts.model.abilities.TeraformZero.*;
 import static org.shorts.model.abilities.ThickFat.THICK_FAT;
 import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
 import static org.shorts.model.abilities.Triage.TRIAGE;
@@ -177,7 +176,11 @@ public abstract class Move implements IMove {
         return contact;
     }
 
-    public int getPriority(Pokemon attacker, Battle battle) {
+    public int getPriority(Pokemon user, Battle battle) {
+        return getBasePriority(user, battle) + getAbilityPriorityBonus(user);
+    }
+
+    public int getBasePriority(Pokemon attacker, Battle battle) {
         return 0;
     }
 
@@ -391,7 +394,8 @@ public abstract class Move implements IMove {
 
     protected void markTypeAsAlreadyStellarBoosted(Pokemon user) {
         if (user.isTera() && user.getTeraType() instanceof Type.StellarType stellar
-            && user.getPokedexEntry().getPokedexNo() != 1024) { //Terapagos-Stellar always gets this boost, so don't add to the set.
+            && user.getPokedexEntry().getPokedexNo()
+            != 1024) { //Terapagos-Stellar always gets this boost, so don't add to the set.
             stellar.getPreviouslyBoosted().add(this.type);
         }
     }
@@ -623,7 +627,14 @@ public abstract class Move implements IMove {
     protected double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
         double basePower = this.getPower(user, target, battle) * this.getPowerMultipliers(user, target, battle);
         basePower *= user.getMovePowerMultipliers(target, battle, this);
-        //TODO: Handle weather multipliers, terrain multipliers, mud sport, etc.
+
+        if (basePower < 60 && user.isTera() && user.getTeraType().equals(this.type)
+            && this.getNumHits(true, true) == 1 && this.getPriority(user, battle) == 0
+            && this.getsTera60Boost()) {
+
+            basePower = 60;
+        }
+        //TODO: Handle terrain multipliers, mud sport, etc.
         //TODO: Investigate what, if anything, I need to do on the target's side of things.
         return basePower;
     }
