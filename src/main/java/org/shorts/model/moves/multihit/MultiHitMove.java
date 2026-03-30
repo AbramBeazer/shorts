@@ -50,7 +50,7 @@ public abstract class MultiHitMove extends Move {
     }
 
     @Override
-    public boolean getsTera60Boost() {
+    public boolean hasMinPower60WhenTera() {
         return false;
     }
 }

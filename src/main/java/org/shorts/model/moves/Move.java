@@ -628,7 +628,7 @@ public abstract class Move implements IMove {
         double basePower = this.getPower(user, target, battle) * this.getPowerMultipliers(user, target, battle);
         basePower *= user.getMovePowerMultipliers(target, battle, this);
 
-        if (basePower < 60 && this.getsTera60Boost()
+        if (basePower < 60 && this.hasMinPower60WhenTera()
             && user.isTera() && user.getTeraType().equals(this.type)
             && this.getPriority(user, battle) == 0) {
 

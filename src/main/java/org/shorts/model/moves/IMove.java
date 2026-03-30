@@ -92,7 +92,7 @@ public interface IMove {
         return false;
     }
 
-    default boolean getsTera60Boost() {
+    default boolean hasMinPower60WhenTera() {
         return true;
     }
 }
