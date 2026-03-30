@@ -924,6 +924,7 @@ public class Pokemon {
             this.volatileStatuses.clear();
             Pickup.removeFromConsumedItems(this);
 
+            this.setTera(false);
             this.setStatus(Status.FAINTED);
         }
     }
