@@ -4,7 +4,7 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class GrassKnot extends Move {
+public class GrassKnot extends Move implements WeightDependentMove {
 
     public GrassKnot() {
         super("Grass Knot", 0, 100, Type.GRASS, Category.SPECIAL, Range.NORMAL, 32, true, 0);
@@ -26,5 +26,10 @@ public class GrassKnot extends Move {
         } else {
             return 120;
         }
+    }
+
+    @Override
+    public boolean getsTera60Boost() {
+        return false;
     }
 }
