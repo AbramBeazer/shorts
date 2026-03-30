@@ -4,7 +4,7 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class StoredPower extends Move {
+public class StoredPower extends Move implements PowerVaries {
 
     protected static final int MAX_BOOSTS = 42;
 

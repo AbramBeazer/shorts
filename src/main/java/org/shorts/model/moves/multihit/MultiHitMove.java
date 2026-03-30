@@ -48,4 +48,9 @@ public abstract class MultiHitMove extends Move {
             }
         }
     }
+
+    @Override
+    public boolean getsTera60Boost() {
+        return false;
+    }
 }

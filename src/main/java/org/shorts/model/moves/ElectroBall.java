@@ -4,7 +4,7 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class ElectroBall extends Move implements BallBombMove {
+public class ElectroBall extends Move implements BallBombMove, SpeedComparisonMove {
 
     public ElectroBall() {
         super("Electro Ball", 40, 100, Type.ELECTRIC, Category.SPECIAL, Range.NORMAL, 16, false, 0);

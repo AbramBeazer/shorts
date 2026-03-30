@@ -36,7 +36,7 @@ import static org.shorts.model.items.TypeBoostItem.POISON_BARB;
 import static org.shorts.model.items.WhiteHerb.WHITE_HERB;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
-public class Fling extends Move {
+public class Fling extends Move implements PowerVaries {
 
     public Fling() {
         super("Fling", 0, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL, 16, false, 100);

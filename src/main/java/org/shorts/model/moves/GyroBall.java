@@ -4,7 +4,7 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class GyroBall extends Move implements BallBombMove {
+public class GyroBall extends Move implements BallBombMove, SpeedComparisonMove {
 
     public GyroBall() {
         super("Gyro Ball", 25, 100, Type.STEEL, Category.PHYSICAL, Range.NORMAL, 8, true, 0);
