@@ -27,9 +27,4 @@ public class GrassKnot extends Move implements WeightDependentMove {
             return 120;
         }
     }
-
-    @Override
-    public boolean getsTera60Boost() {
-        return false;
-    }
 }

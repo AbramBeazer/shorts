@@ -27,9 +27,4 @@ public class LowKick extends Move implements KickingMove, WeightDependentMove {
             return 120;
         }
     }
-
-    @Override
-    public boolean getsTera60Boost() {
-        return false;
-    }
 }
