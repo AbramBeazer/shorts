@@ -559,14 +559,14 @@ public abstract class Move implements IMove {
     }
 
     protected Set<Type> getTargetTypes(Pokemon target) {
-        if (!target.isTera() || STELLAR.equals(target.getTeraType())) {
+        if (!target.isTera() || target.getTeraType() instanceof Type.StellarType) {
             return target.getTypes();
         }
         return Set.of(target.getTeraType());
     }
 
     protected double getTypeMultiplier(Pokemon user, Pokemon target, Battle battle) {
-        if (STELLAR.equals(this.type) && target.isTera()) {
+        if (target.isTera() && target.getTeraType() instanceof Type.StellarType) {
             return SUPER_EFFECTIVE;
         }
 
