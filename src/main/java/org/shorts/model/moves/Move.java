@@ -55,6 +55,7 @@ import static org.shorts.model.abilities.Sniper.SNIPER;
 import static org.shorts.model.abilities.SnowCloak.SNOW_CLOAK;
 import static org.shorts.model.abilities.SuperLuck.SUPER_LUCK;
 import static org.shorts.model.abilities.TangledFeet.TANGLED_FEET;
+import static org.shorts.model.abilities.TeraformZero.*;
 import static org.shorts.model.abilities.ThickFat.THICK_FAT;
 import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
 import static org.shorts.model.abilities.Triage.TRIAGE;
@@ -389,7 +390,8 @@ public abstract class Move implements IMove {
     }
 
     protected void markTypeAsAlreadyStellarBoosted(Pokemon user) {
-        if (user.isTera() && user.getTeraType() instanceof Type.StellarType stellar) {
+        if (user.isTera() && user.getTeraType() instanceof Type.StellarType stellar
+            && user.getPokedexEntry().getPokedexNo() != 1024) { //Terapagos-Stellar always gets this boost, so don't add to the set.
             stellar.getPreviouslyBoosted().add(this.type);
         }
     }
@@ -481,7 +483,7 @@ public abstract class Move implements IMove {
                 System.out.println("Hit " + hitNum + " times!");
             }
 
-            //TODO: Verify that this happens only if a damaging move hits, i.e. not if the attack misses, hits protect, or is a status move.l
+            //TODO: Verify that this happens only if a damaging move hits, i.e. not if the attack misses, hits protect, or is a status move.
             markTypeAsAlreadyStellarBoosted(user);
 
             if (!user.hasFainted()) {
