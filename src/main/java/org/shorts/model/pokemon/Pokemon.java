@@ -1,12 +1,12 @@
 package org.shorts.model.pokemon;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.Weather;
 import org.shorts.model.Nature;
@@ -20,6 +20,8 @@ import org.shorts.model.abilities.UnsuppressableAbility;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.NoItem;
 import org.shorts.model.moves.Move;
+import org.shorts.model.moves.TeraBlast;
+import org.shorts.model.moves.TeraStarstorm;
 import org.shorts.model.status.AutotomizedStatus;
 import org.shorts.model.status.HelpingHandStatus;
 import org.shorts.model.status.Status;
@@ -674,6 +676,23 @@ public class Pokemon {
         this.tera = tera;
     }
 
+    public void terastallize() {
+        if (getTeraType() == null) {
+            throw new RuntimeException("Cannot terastallize if tera type is null!");
+        } //TODO: Should this fail more gracefully? Should I default to Normal?
+        setTera(true);
+        Arrays.stream(this.getMoves())
+            .filter(move -> move instanceof TeraBlast || move instanceof TeraStarstorm)
+            .forEach(move -> move.setType(getTeraType()));
+    }
+
+    private void teraOff() {
+        setTera(false);
+        Arrays.stream(this.getMoves())
+            .filter(move -> move instanceof TeraBlast || move instanceof TeraStarstorm)
+            .forEach(move -> move.setType(Type.NORMAL));
+    }
+
     public Type getTeraType() {
         return teraType;
     }
@@ -924,7 +943,7 @@ public class Pokemon {
             this.volatileStatuses.clear();
             Pickup.removeFromConsumedItems(this);
 
-            this.setTera(false);
+            this.teraOff();
             this.setStatus(Status.FAINTED);
         }
     }
