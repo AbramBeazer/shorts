@@ -4,6 +4,8 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.shorts.model.moves.Move;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.PokemonTestUtils;
 
@@ -192,6 +194,26 @@ class TypesTests {
         Set<Type> defenderTypes = Set.of(Type.NORMAL, Type.GHOST);
         assertThat(Type.getTypeMultiplier(Type.NORMAL, defenderTypes)).isEqualTo(Type.IMMUNE);
         assertThat(Type.getTypeMultiplier(Type.GHOST, defenderTypes)).isEqualTo(Type.IMMUNE);
+    }
+
+    @Test
+    void testStellarBoostSTAB() {
+        attacker.setTypes(Set.of(Type.STEEL, Type.GHOST));
+        attacker.setTera(true);
+        Type.StellarType stellar = new Type.StellarType();
+        attacker.setTeraType(stellar);
+
+        assertThat(Type.getSTABMultiplier(Type.STEEL, attacker)).isEqualTo(Type.TERA_STAB);
+        assertThat(Type.getSTABMultiplier(Type.GHOST, attacker)).isEqualTo(Type.TERA_STAB);
+        assertThat(Type.getSTABMultiplier(Type.WATER, attacker)).isEqualTo(Type.STELLAR_BOOST_NON_STAB);
+        assertThat(Type.getSTABMultiplier(stellar, attacker)).isEqualTo(Type.STELLAR_BOOST_NON_STAB);
+
+        stellar.getPreviouslyBoosted().addAll(Set.of(Type.STEEL, Type.GHOST, Type.WATER, stellar));
+
+        assertThat(Type.getSTABMultiplier(Type.STEEL, attacker)).isEqualTo(Type.STAB);
+        assertThat(Type.getSTABMultiplier(Type.GHOST, attacker)).isEqualTo(Type.STAB);
+        assertThat(Type.getSTABMultiplier(Type.WATER, attacker)).isEqualTo(Type.NON_STAB);
+        assertThat(Type.getSTABMultiplier(stellar, attacker)).isEqualTo(Type.NON_STAB);
     }
 
     @Test

@@ -386,13 +386,9 @@ public abstract class Move implements IMove {
 
     protected void afterExecute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setLastMoveUsed(this);
-        markTypeAsAlreadyStellarBoosted(user);
     }
 
     protected void markTypeAsAlreadyStellarBoosted(Pokemon user) {
-
-        //TODO: Should this only apply if the move is a damage-dealing move?
-        //TODO: This shouldn't be added to the set if the attack was blocked by Protect.
         if (user.isTera() && user.getTeraType() instanceof Type.StellarType stellar) {
             stellar.getPreviouslyBoosted().add(this.type);
         }
@@ -484,6 +480,9 @@ public abstract class Move implements IMove {
             if (hitNum > 1) {
                 System.out.println("Hit " + hitNum + " times!");
             }
+
+            //TODO: Verify that this happens only if a damaging move hits, i.e. not if the attack misses, hits protect, or is a status move.l
+            markTypeAsAlreadyStellarBoosted(user);
 
             if (!user.hasFainted()) {
                 user.afterAttack(target, battle, this);

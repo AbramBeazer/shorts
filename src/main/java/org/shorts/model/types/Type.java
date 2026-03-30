@@ -84,9 +84,11 @@ public class Type {
         }
 
         if (attacker.isTera()) {
-            if (attacker.getTeraType() instanceof StellarType stellar && !stellar.getPreviouslyBoosted()
-                .contains(moveType)) {
-                return attacker.getTypes().contains(moveType) ? TERA_STAB : STELLAR_BOOST_NON_STAB;
+            if (attacker.getTeraType() instanceof StellarType stellar) {
+                if (!stellar.getPreviouslyBoosted()
+                    .contains(moveType)) {
+                    return attacker.getTypes().contains(moveType) ? TERA_STAB : STELLAR_BOOST_NON_STAB;
+                }
             } else if (attacker.getTypes().contains(moveType)) {
                 return attacker.getTeraType().equals(moveType) ? TERA_STAB : STAB;
             } else {
@@ -307,7 +309,7 @@ public class Type {
         STELLAR
     }
 
-    public class StellarType extends Type {
+    public static class StellarType extends Type {
 
         private Set<Type> previouslyBoosted;
 
