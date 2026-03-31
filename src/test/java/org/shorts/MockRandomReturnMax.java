@@ -6,7 +6,7 @@ public class MockRandomReturnMax extends Random {
 
     @Override
     public int nextInt(int bound) {
-        return Integer.MAX_VALUE;
+        return bound - 1;
     }
 
     private MockRandomReturnMax() {
