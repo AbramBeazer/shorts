@@ -661,6 +661,7 @@ public abstract class Move implements IMove {
     }
 
     private double getNumTargetsMultiplier() {
+        //TODO: Implement
         return 1;
     }
 

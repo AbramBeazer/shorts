@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.shorts.Main;
+import org.shorts.MockRandomReturnMax;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
 import org.shorts.battle.Turn;
@@ -32,6 +34,7 @@ class TeraStarstormTests {
         target2 = PokemonTestUtils.getDummyPokemon();
         target2.setTeraType(Type.NORMAL);
         battle = new DummyBattle(List.of(user, PokemonTestUtils.getDummyPokemon()), List.of(target1, target2), 2);
+        Main.DAMAGE_RANDOM = MockRandomReturnMax.MAX_RANDOM;
     }
 
     @Test
