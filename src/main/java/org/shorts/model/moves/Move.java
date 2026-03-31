@@ -11,6 +11,7 @@ import org.shorts.battle.Weather;
 import org.shorts.model.abilities.FullHealthHalfDamageAbility;
 import org.shorts.model.abilities.MagicBounce;
 import org.shorts.model.abilities.SuperEffectiveReducingAbility;
+import org.shorts.model.abilities.Technician;
 import org.shorts.model.abilities.statpreserving.PreserveAccuracyIgnoreEvasionAbility;
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
@@ -629,15 +630,24 @@ public abstract class Move implements IMove {
     }
 
     protected double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
-        double basePower = this.getPower(user, target, battle) * this.getPowerMultipliers(user, target, battle);
-        basePower *= user.getMovePowerMultipliers(target, battle, this);
+        double basePower = this.getPower(user, target, battle);
+        //Apply Technician boost before other modifiers
+        if (user.getAbility() == Technician.TECHNICIAN && !user.hasVolatileStatus(ABILITY_SUPPRESSED)
+            && basePower <= Technician.BASE_POWER_THRESHOLD) {
 
-        if (basePower < 60 && this.hasMinPower60WhenTera()
-            && user.isTera() && user.getTeraType().equals(this.type)
+            basePower *= Technician.MULTIPLIER;
+        }
+        //If the user is terastallized, the move matches the tera type, the move isn't a multi-hit move,
+        // a priority move, or a move with variable power (e.g. Gyro Ball, Magnitude, Low Kick, Eruption, etc.),
+        // and the post-Technician power is less than 60, then boost the move to 60 base power.
+        if (user.isTera() && user.getTeraType().equals(this.type) && basePower < 60 && this.hasMinPower60WhenTera()
             && this.getPriority(user, battle) == 0) {
 
             basePower = 60;
         }
+        basePower *= this.getPowerMultipliers(user, target, battle);
+        basePower *= user.getMovePowerMultipliers(target, battle, this);
+
         //TODO: Handle terrain multipliers, mud sport, etc.
         //TODO: Investigate what, if anything, I need to do on the target's side of things.
         return basePower;
