@@ -2,15 +2,19 @@ package org.shorts.model.moves;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
+import org.shorts.model.moves.multihit.MultiHitMove;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.PokemonTestUtils;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.shorts.MockRandomReturnMax.*;
+import static org.shorts.MockRandomReturnZero.*;
 
-class StellarBoostTests {
+class StellarTests {
 
     private Pokemon user;
     private Pokemon target;
@@ -21,6 +25,7 @@ class StellarBoostTests {
         user = PokemonTestUtils.getDummyPokemon();
         target = PokemonTestUtils.getDummyPokemon();
         battle = new DummyBattle(user, target);
+        Main.DAMAGE_RANDOM = MAX_RANDOM;
     }
 
     @Test
@@ -43,6 +48,34 @@ class StellarBoostTests {
 
     @Test
     void testStellarBoostAppliesToEveryHitOfMultiHitMove() {
-        assertThat(false).isTrue();
+        final Move multiHitMove = new MultiHitMove(
+            "test two hits",
+            60,
+            100,
+            Type.NORMAL,
+            Move.Category.PHYSICAL,
+            Range.NORMAL,
+            8,
+            true,
+            0,
+            2,
+            2) {
+
+        };
+
+        final int noTera = multiHitMove.calculateDamage(user, target, battle);
+        final Type.StellarType stellar = new Type.StellarType();
+        user.setTeraType(stellar);
+        user.terastallize();
+        final int withTera = multiHitMove.calculateDamage(user, target, battle);
+
+        assertThat(withTera).isGreaterThanOrEqualTo((int) (noTera * Type.TERA_STAB
+            / Type.STAB)); //this division is necessary because noTera still got regular STAB.
+
+        stellar.getPreviouslyBoosted().clear();
+        multiHitMove.doHit(user, target, battle);
+        final int damage = target.getMaxHP() - target.getCurrentHP();
+        assertThat(damage).isGreaterThan(withTera + noTera);
+        assertThat(damage).isEqualTo(withTera * 2);
     }
 }

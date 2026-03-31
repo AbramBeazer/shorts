@@ -549,7 +549,6 @@ public abstract class Move implements IMove {
             return 0;
         }
 
-        //TODO: I'm guessing the Stellar boost will apply for all hits of a multi-hit move and not just the first one? Test that on Showdown.
         double stabMultiplier = getSTABMultiplier(user);
 
         baseDamage = roundHalfDown(baseDamage * getNumTargetsMultiplier());
