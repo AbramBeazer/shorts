@@ -7,13 +7,14 @@ import org.shorts.model.types.Type;
 public class StoredPower extends Move implements PowerVaries {
 
     protected static final int MAX_BOOSTS = 42;
+    protected static final int BASE_POWER = 20;
 
     public StoredPower() {
-        super("Stored Power", 20, 100, Type.PSYCHIC, Category.SPECIAL, Range.NORMAL, 16, false, 0);
+        super("Stored Power", BASE_POWER, 100, Type.PSYCHIC, Category.SPECIAL, Range.NORMAL, 16, false, 0);
     }
 
     @Override
-    protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
+    public double getPower(Pokemon user, Pokemon target, Battle battle) {
         final int boosts = Math.max(0, user.getStageAttack())
             + Math.max(0, user.getStageDefense())
             + Math.max(0, user.getStageSpecialAttack())
@@ -21,6 +22,6 @@ public class StoredPower extends Move implements PowerVaries {
             + Math.max(0, user.getStageSpeed())
             + Math.max(0, user.getStageEvasion())
             + Math.max(0, user.getStageAccuracy());
-        return 1 + (double) Math.min(MAX_BOOSTS, boosts);
+        return BASE_POWER * (1 + (double) Math.min(MAX_BOOSTS, boosts));
     }
 }

@@ -32,13 +32,14 @@ class StoredPowerTests {
         user.setStageSpeed(6);
         user.setStageEvasion(6);
         user.setStageAccuracy(6);
+        final double expectedPower = (StoredPower.MAX_BOOSTS + 1) * StoredPower.BASE_POWER;
 
-        assertThat(storedPower.getPowerMultipliers(user, target, battle)).isEqualTo((StoredPower.MAX_BOOSTS + 1));
+        assertThat(storedPower.getPower(user, target, battle)).isEqualTo(expectedPower);
     }
 
     @Test
     void testNoBoosts() {
-        assertThat(storedPower.getPowerMultipliers(user, target, battle)).isEqualTo(1);
+        assertThat(storedPower.getPower(user, target, battle)).isEqualTo(StoredPower.BASE_POWER);
     }
 
     @Test
@@ -46,6 +47,7 @@ class StoredPowerTests {
         user.setStageAttack(5);
         user.setStageDefense(-2);
 
-        assertThat(storedPower.getPowerMultipliers(user, target, battle)).isEqualTo(user.getStageAttack() + 1);
+        final double expectedPower = (user.getStageAttack() + 1) * StoredPower.BASE_POWER;
+        assertThat(storedPower.getPower(user, target, battle)).isEqualTo(expectedPower);
     }
 }
