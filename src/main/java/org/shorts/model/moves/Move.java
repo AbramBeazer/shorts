@@ -100,7 +100,7 @@ public abstract class Move implements IMove {
     private final double power;
     private final double accuracy;
     private Type type;
-    private final Category category;
+    private Category category;
     private final Range range;
     private int currentPP;
     private final int maxPP;
@@ -155,6 +155,10 @@ public abstract class Move implements IMove {
 
     public Category getCategory() {
         return category;
+    }
+
+    protected void setCategory(Category category) {
+        this.category = category;
     }
 
     public Range getRange(Pokemon user) {
