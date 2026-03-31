@@ -11,7 +11,6 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.pokemon.PokemonTestUtils;
 import org.shorts.model.types.Type;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TeraStarstormTests {
@@ -60,5 +59,41 @@ class TeraStarstormTests {
 
         assertThat(target1.isAtFullHP()).isFalse();
         assertThat(target2.isAtFullHP()).isFalse();
+    }
+
+    @Test
+    void testUsesHigherAttackStatAfterStagesWhenTera() {
+        final int higherAttack = 300;
+        final int lowerSpAtk = 299;
+        user.setAttack(higherAttack);
+        user.setSpecialAttack(lowerSpAtk);
+
+        new Turn(user, move, 0).takeTurn(battle);
+        assertThat(move.getCategory()).isEqualTo(Move.Category.SPECIAL);
+        assertThat(move.getAttackingStat(user, target1, battle)).isEqualTo(lowerSpAtk);
+
+        target1.fullRestore();
+        user.terastallize();
+        new Turn(user, move, 0).takeTurn(battle);
+        assertThat(move.getCategory()).isEqualTo(Move.Category.PHYSICAL);
+        assertThat(move.getAttackingStat(user, target1, battle)).isEqualTo(higherAttack);
+
+        target1.fullRestore();
+        user.setStageSpecialAttack(1);
+        new Turn(user, move, 0).takeTurn(battle);
+        assertThat(move.getCategory()).isEqualTo(Move.Category.SPECIAL);
+        assertThat(move.getAttackingStat(user, target1, battle)).isEqualTo(lowerSpAtk * 1.5);
+
+        target1.fullRestore();
+        user.setStageAttack(3);
+        user.setTera(false);
+        new Turn(user, move, 0).takeTurn(battle);
+        assertThat(move.getCategory()).isEqualTo(Move.Category.SPECIAL);
+        assertThat(move.getAttackingStat(user, target1, battle)).isEqualTo(lowerSpAtk * 1.5);
+    }
+
+    @Test
+    void testGalvanizeDoesNotChangeTypeWhenTera() {
+        assertThat(false).isTrue();
     }
 }

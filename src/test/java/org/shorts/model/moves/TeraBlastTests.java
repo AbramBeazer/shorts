@@ -81,4 +81,9 @@ class TeraBlastTests {
     void testAffectedByGalvanizeWhenNotTera() {
         assertThat(false).isTrue();
     }
+
+
+    //TODO: Ogerpon, Terapagos, Forest's Curse, Adaptability,
+    //TODO: Terastallized Pokémon cannot have their type changed from moves and Abilities such as Soak, Double Shock, Imposter, Protean, or Transform.
+    // A Pokémon using Transform before Terastallizing will not copy its opponent's Tera Type and will instead keep its own.
 }
