@@ -10,7 +10,7 @@ import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.*;
 
-class MoveTests {
+class StellarBoostTests {
 
     private Pokemon user;
     private Pokemon target;
