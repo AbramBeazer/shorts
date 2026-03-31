@@ -647,7 +647,7 @@ public abstract class Move implements IMove {
         basePower *= this.getPowerMultipliers(user, target, battle);
         basePower *= user.getMovePowerMultipliers(target, battle, this);
 
-        //TODO: Handle terrain multipliers, mud sport, etc.
+        //TODO: Handle terrain multipliers, mud sport, water sport, etc.
         //TODO: Investigate what, if anything, I need to do on the target's side of things.
         return basePower;
     }
