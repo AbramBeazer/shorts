@@ -11,19 +11,19 @@ public class ElectroBall extends Move implements BallBombMove, SpeedComparisonMo
     }
 
     @Override
-    protected double getPowerMultipliers(Pokemon user, Pokemon target, Battle battle) {
+    public double getPower(Pokemon user, Pokemon target, Battle battle) {
         double percentage = target.calculateSpeed(battle) / user.calculateSpeed(battle);
 
-        if (percentage > 1) {
-            return 1;
+        if (percentage > 1 || percentage == 0d) {
+            return 40;
         } else if (percentage > 0.5) {
-            return 1.5;
+            return 60;
         } else if (percentage > 1 / 3d) {
-            return 2;
+            return 80;
         } else if (percentage > 0.25) {
-            return 3;
+            return 120;
         } else {
-            return 3.75;
+            return 150;
         }
     }
 }
