@@ -117,29 +117,34 @@ class WeakMoveTeraBoostTests {
         user.setHeldItem(FOCUS_SASH);
         final Move fling = new Fling();
 
-        assertThat(magnitude.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(gyroBall.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(electroBall.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(heatCrash.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(heavySlam.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(lowKick.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(grassKnot.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(dragonEnergy.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(eruption.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(waterSpout.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(fling.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
+        testVariablePowerMove(magnitude);
+        testVariablePowerMove(gyroBall);
+        testVariablePowerMove(electroBall);
+        testVariablePowerMove(heatCrash);
+        testVariablePowerMove(heavySlam);
+        testVariablePowerMove(lowKick);
+        testVariablePowerMove(grassKnot);
+        testVariablePowerMove(dragonEnergy);
+        testVariablePowerMove(eruption);
+        testVariablePowerMove(waterSpout);
+        testVariablePowerMove(fling);
 
         user.terastallize();
-        assertThat(magnitude.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(gyroBall.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(electroBall.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(heatCrash.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(heavySlam.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(lowKick.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(grassKnot.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(dragonEnergy.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(eruption.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(waterSpout.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
-        assertThat(fling.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
+        testVariablePowerMove(magnitude);
+        testVariablePowerMove(gyroBall);
+        testVariablePowerMove(electroBall);
+        testVariablePowerMove(heatCrash);
+        testVariablePowerMove(heavySlam);
+        testVariablePowerMove(lowKick);
+        testVariablePowerMove(grassKnot);
+        testVariablePowerMove(dragonEnergy);
+        testVariablePowerMove(eruption);
+        testVariablePowerMove(waterSpout);
+        testVariablePowerMove(fling);
+    }
+
+    private void testVariablePowerMove(Move move) {
+        user.setTeraType(move.getType());
+        assertThat(move.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
     }
 }
