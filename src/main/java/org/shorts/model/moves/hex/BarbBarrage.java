@@ -28,7 +28,7 @@ public class BarbBarrage extends Move {
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         if (StatusType.POISON.isStatusPossible(user, target, battle)
-            && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
+            && !target.isBehindSub()) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

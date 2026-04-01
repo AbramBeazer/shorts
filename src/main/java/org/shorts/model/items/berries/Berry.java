@@ -84,7 +84,7 @@ public abstract class Berry extends HeldItem {
         System.out.println(user.getNickname() + " ate the " + this.getName());
 
         if (!user.hasVolatileStatus(ABILITY_SUPPRESSED)) {
-            if (user.getAbility() == CHEEK_POUCH && !user.hasVolatileStatus(HEAL_BLOCKED)) {
+            if (user.getAbility() == CHEEK_POUCH && !user.isHealBlocked()) {
                 user.heal(user.getMaxHP() / 3);
             } else if (user.getAbility() instanceof CudChew) {
                 ((CudChew) user.getAbility()).setBerryToRegurgitate(this);

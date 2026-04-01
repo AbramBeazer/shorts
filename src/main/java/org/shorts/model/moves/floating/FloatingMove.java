@@ -34,8 +34,6 @@ public class FloatingMove extends Move {
 
     @Override
     public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
-        user.setMovedThisTurn(true);
-        this.decrementPP();
         if (targets.isEmpty()) {
             System.out.println("But there was no target...");
             return;

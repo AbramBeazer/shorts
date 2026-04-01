@@ -45,25 +45,25 @@ class FlashFireTests {
     @Test
     void testNoDamageFromFireMove() {
         assertThat(ffMon.beforeHit(other, battle, ember)).isZero();
-        ember.execute(other, List.of(ffMon), battle);
+        ember.executeWrapper(other, List.of(ffMon), battle);
         assertThat(ffMon.getMaxHP()).isEqualTo(ffMon.getCurrentHP());
     }
 
     @Test
     void testFireBoostedAfterHit() {
         assertThat(ffMon.getAttackMultipliersFromAbilityAndItem(other, battle, ember)).isEqualTo(1);
-        ember.execute(ffMon, List.of(other), battle);
+        ember.executeWrapper(ffMon, List.of(other), battle);
         int baseDamage = other.getMaxHP() - other.getCurrentHP();
         other.setCurrentHP(other.getMaxHP());
 
-        ember.execute(other, List.of(ffMon), battle);
+        ember.executeWrapper(other, List.of(ffMon), battle);
         assertThat(ability.isActivated()).isTrue();
 
         assertThat(ffMon.getAttackMultipliersFromAbilityAndItem(
             other,
             battle,
             ember)).isEqualTo(FlashFire.MULTIPLIER);
-        ember.execute(ffMon, List.of(other), battle);
+        ember.executeWrapper(ffMon, List.of(other), battle);
         int boostedDamage = other.getMaxHP() - other.getCurrentHP();
         assertThat(boostedDamage).isGreaterThan(baseDamage);
     }
@@ -71,18 +71,18 @@ class FlashFireTests {
     @Test
     void testFireBoostedPersistsAfterMultipleAttacks() {
         assertThat(ffMon.getAttackMultipliersFromAbilityAndItem(other, battle, ember)).isEqualTo(1);
-        ember.execute(ffMon, List.of(other), battle);
+        ember.executeWrapper(ffMon, List.of(other), battle);
         int baseDamage = other.getMaxHP() - other.getCurrentHP();
         other.setCurrentHP(other.getMaxHP());
 
-        ember.execute(other, List.of(ffMon), battle);
+        ember.executeWrapper(other, List.of(ffMon), battle);
         assertThat(ability.isActivated()).isTrue();
 
         assertThat(ffMon.getAttackMultipliersFromAbilityAndItem(
             other,
             battle,
             ember)).isEqualTo(FlashFire.MULTIPLIER);
-        ember.execute(ffMon, List.of(other), battle);
+        ember.executeWrapper(ffMon, List.of(other), battle);
         int boostedDamage = other.getMaxHP() - other.getCurrentHP();
         assertThat(boostedDamage).isGreaterThan(baseDamage);
 
@@ -92,7 +92,7 @@ class FlashFireTests {
             other,
             battle,
             ember)).isEqualTo(FlashFire.MULTIPLIER);
-        ember.execute(ffMon, List.of(other), battle);
+        ember.executeWrapper(ffMon, List.of(other), battle);
         int boostedDamage2 = other.getMaxHP() - other.getCurrentHP();
         assertThat(boostedDamage2).isEqualTo(boostedDamage).isGreaterThan(baseDamage);
     }
@@ -102,13 +102,13 @@ class FlashFireTests {
         final Move move = new HeatCrash();
         assertThat(ffMon.getAttackMultipliersFromAbilityAndItem(other, battle, move)).isEqualTo(1);
 
-        move.execute(ffMon, List.of(other), battle);
+        move.executeWrapper(ffMon, List.of(other), battle);
         int baseDamage = other.getMaxHP() - other.getCurrentHP();
         other.setCurrentHP(other.getMaxHP());
 
         assertThat(ffMon.beforeHit(other, battle, move)).isZero();
         ffMon.setStatus(Status.FREEZE);
-        move.execute(other, List.of(ffMon), battle);
+        move.executeWrapper(other, List.of(ffMon), battle);
         assertThat(ffMon.getMaxHP()).isEqualTo(ffMon.getCurrentHP());
         assertThat(ability.isActivated()).isTrue();
         assertThat(ffMon.getStatus()).isEqualTo(Status.NONE);
@@ -117,7 +117,7 @@ class FlashFireTests {
             other,
             battle,
             move)).isEqualTo(FlashFire.MULTIPLIER);
-        move.execute(ffMon, List.of(other), battle);
+        move.executeWrapper(ffMon, List.of(other), battle);
         int boostedDamage = other.getMaxHP() - other.getCurrentHP();
         assertThat(boostedDamage).isGreaterThan(baseDamage);
     }
@@ -128,13 +128,13 @@ class FlashFireTests {
 
         assertThat(ffMon.getAttackMultipliersFromAbilityAndItem(other, battle, ember)).isEqualTo(1);
 
-        ember.execute(ffMon, List.of(other), battle);
+        ember.executeWrapper(ffMon, List.of(other), battle);
         int baseDamage = other.getMaxHP() - other.getCurrentHP();
         other.setCurrentHP(other.getMaxHP());
 
         assertThat(ffMon.beforeHit(other, battle, ember)).isZero();
         ffMon.setStatus(Status.FREEZE);
-        wisp.execute(other, List.of(ffMon), battle);
+        wisp.executeWrapper(other, List.of(ffMon), battle);
         assertThat(ffMon.getMaxHP()).isEqualTo(ffMon.getCurrentHP());
         assertThat(ability.isActivated()).isTrue();
         assertThat(ffMon.getStatus()).isEqualTo(Status.FREEZE);
@@ -143,7 +143,7 @@ class FlashFireTests {
             other,
             battle,
             ember)).isEqualTo(FlashFire.MULTIPLIER);
-        ember.execute(ffMon, List.of(other), battle);
+        ember.executeWrapper(ffMon, List.of(other), battle);
         int boostedDamage = other.getMaxHP() - other.getCurrentHP();
         assertThat(boostedDamage).isGreaterThan(baseDamage);
     }
@@ -161,7 +161,7 @@ class FlashFireTests {
     @Test
     void testDoesNotActivateWhenProtected() {
         ffMon.addVolatileStatus(new VolatileStatus(VolatileStatusType.PROTECTED, 1));
-        ember.execute(other, List.of(ffMon), battle);
+        ember.executeWrapper(other, List.of(ffMon), battle);
         assertThat(ability.isActivated()).isFalse();
     }
 
@@ -171,12 +171,12 @@ class FlashFireTests {
 
         assertThat(ffMon.getAttackMultipliersFromAbilityAndItem(other, battle, ember)).isEqualTo(1);
 
-        ember.execute(ffMon, List.of(other), battle);
+        ember.executeWrapper(ffMon, List.of(other), battle);
         int baseDamage = other.getMaxHP() - other.getCurrentHP();
         other.setCurrentHP(other.getMaxHP());
 
         assertThat(ffMon.beforeHit(other, battle, willOWisp)).isZero();
-        willOWisp.execute(other, List.of(ffMon), battle);
+        willOWisp.executeWrapper(other, List.of(ffMon), battle);
         assertThat(ffMon.getMaxHP()).isEqualTo(ffMon.getCurrentHP());
         assertThat(ability.isActivated()).isTrue();
 
@@ -186,7 +186,7 @@ class FlashFireTests {
             other,
             battle,
             ember)).isEqualTo(FlashFire.MULTIPLIER);
-        ember.execute(ffMon, List.of(other), battle);
+        ember.executeWrapper(ffMon, List.of(other), battle);
         int boostedDamage = other.getMaxHP() - other.getCurrentHP();
         assertThat(boostedDamage).isGreaterThan(baseDamage);
     }

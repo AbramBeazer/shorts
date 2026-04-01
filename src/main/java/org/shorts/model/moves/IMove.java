@@ -95,4 +95,8 @@ public interface IMove {
     default boolean canBeUsedWhileSleeping() {
         return false;
     }
+
+    default boolean hasMinPower60WhenTera() {
+        return true;
+    }
 }

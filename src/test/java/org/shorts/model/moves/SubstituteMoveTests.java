@@ -71,7 +71,7 @@ class SubstituteMoveTests {
         dragonRage.executeOnTarget(attacker, subber, battle);
         assertThat(subber.getCurrentHP()).isEqualTo(subber.getMaxHP() - subHp);
         assertThat(sub.getSubHP()).isEqualTo(subHp - DragonRage.FIXED_DAMAGE);
-        assertThat(subber.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)).isTrue();
+        assertThat(subber.isBehindSub()).isTrue();
     }
 
     @Test
@@ -85,7 +85,7 @@ class SubstituteMoveTests {
         seismicToss.executeOnTarget(attacker, subber, battle);
         assertThat(subber.getCurrentHP()).isEqualTo(subber.getMaxHP() - subHp);
         assertThat(sub.getSubHP()).isEqualTo(subHp - attacker.getLevel()).isZero();
-        assertThat(subber.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)).isFalse();
+        assertThat(subber.isBehindSub()).isFalse();
     }
 
     @Test
@@ -99,12 +99,12 @@ class SubstituteMoveTests {
         dragonRage.executeOnTarget(attacker, subber, battle);
         assertThat(subber.getCurrentHP()).isEqualTo(subber.getMaxHP() - subHp);
         assertThat(sub.getSubHP()).isEqualTo(subHp - DragonRage.FIXED_DAMAGE);
-        assertThat(subber.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)).isTrue();
+        assertThat(subber.isBehindSub()).isTrue();
 
         seismicToss.executeOnTarget(attacker, subber, battle);
         assertThat(subber.getCurrentHP()).isEqualTo(subber.getMaxHP() - subHp);
         assertThat(sub.getSubHP()).isEqualTo(subHp - attacker.getLevel()).isZero();
-        assertThat(subber.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)).isFalse();
+        assertThat(subber.isBehindSub()).isFalse();
     }
 
     @Test
@@ -120,7 +120,7 @@ class SubstituteMoveTests {
         subber.setTypes(Set.of(DRAGON, FLYING));
         new IcicleSpear().executeOnTarget(attacker, subber, battle);
         assertThat(sub.getSubHP()).isZero();
-        assertThat(subber.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)).isFalse();
+        assertThat(subber.isBehindSub()).isFalse();
         assertThat(subber.getCurrentHP()).isLessThan(subber.getMaxHP() - subHp);
     }
 

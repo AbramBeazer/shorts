@@ -17,7 +17,7 @@ public class Nuzzle extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (PARALYZE.isStatusPossible(user, target, battle) && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
+        if (PARALYZE.isStatusPossible(user, target, battle) && !target.isBehindSub()) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

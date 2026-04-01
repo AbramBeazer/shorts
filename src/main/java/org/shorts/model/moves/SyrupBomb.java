@@ -16,7 +16,7 @@ public class SyrupBomb extends Move implements BallBombMove, GetsSheerForceBoost
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         //TODO: Does this hit through Substitute?
         if (!user.hasVolatileStatus(VolatileStatusType.SYRUP_BOMBED)
-            && !user.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
+            && !user.isBehindSub()) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

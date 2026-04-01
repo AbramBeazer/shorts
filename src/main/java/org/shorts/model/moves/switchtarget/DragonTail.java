@@ -15,7 +15,7 @@ public class DragonTail extends SwitchTargetMove {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (!target.hasVolatileStatus(SUBSTITUTE)) {
+        if (!target.isBehindSub()) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

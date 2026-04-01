@@ -25,10 +25,8 @@ public class Wish extends FloatingMove {
     }
 
     @Override
-    public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
-        if (!user.hasVolatileStatus(VolatileStatusType.HEAL_BLOCKED)) {
-            super.execute(user, targets, battle);
-        }
+    public boolean canBeUsed(Pokemon user, List<Pokemon> targets, Battle battle) {
+        return super.canBeUsed(user, targets, battle) && !user.isHealBlocked();
     }
 
     @Override

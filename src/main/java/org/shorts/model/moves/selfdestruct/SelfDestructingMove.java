@@ -20,9 +20,6 @@ public abstract class SelfDestructingMove extends Move {
 
     @Override
     public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
-        user.setMovedThisTurn(true);
-        this.decrementPP();
-
         if (targets.isEmpty()) {
             user.beforeAttack(targets, this);
             user.setCurrentHP(0);
@@ -63,7 +60,6 @@ public abstract class SelfDestructingMove extends Move {
                 user.setLastMoveFailed(false);
             }
         }
-        user.setLastMoveUsed(this);
     }
 
     @Override

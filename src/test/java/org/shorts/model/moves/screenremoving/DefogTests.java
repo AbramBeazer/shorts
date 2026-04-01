@@ -39,7 +39,7 @@ class DefogTests {
     @Test
     void testLowersTargetEvasion() {
         assertThat(enemy.getStageEvasion()).isZero();
-        defog.execute(user, List.of(enemy), battle);
+        defog.executeWrapper(user, List.of(enemy), battle);
         assertThat(enemy.getStageEvasion()).isEqualTo(-1);
     }
 
@@ -47,7 +47,7 @@ class DefogTests {
     void testIgnoreAccuracyCheck() {
         Main.HIT_RANDOM = MAX_RANDOM;
         assertThat(enemy.getStageEvasion()).isZero();
-        defog.execute(user, List.of(enemy), battle);
+        defog.executeWrapper(user, List.of(enemy), battle);
         assertThat(enemy.getStageEvasion()).isEqualTo(-1);
     }
 
@@ -55,7 +55,7 @@ class DefogTests {
     void testDoesNotLowerEvasionOfTargetBehindSubstitute() {
         enemy.addVolatileStatus(new SubstituteStatus(100));
         assertThat(enemy.getStageEvasion()).isZero();
-        defog.execute(user, List.of(enemy), battle);
+        defog.executeWrapper(user, List.of(enemy), battle);
         assertThat(enemy.getStageEvasion()).isZero();
     }
 
@@ -63,7 +63,7 @@ class DefogTests {
     void testDoesNotLowerEvasionOfSemiInvulnerableTarget() {
         enemy.addVolatileStatus(new VolatileStatus(VolatileStatusType.SEMI_INVULNERABLE, 1));
         assertThat(enemy.getStageEvasion()).isZero();
-        defog.execute(user, List.of(enemy), battle);
+        defog.executeWrapper(user, List.of(enemy), battle);
         assertThat(enemy.getStageEvasion()).isZero();
     }
 
@@ -81,7 +81,7 @@ class DefogTests {
         opponent.addRocks();
         opponent.addStickyWeb();
 
-        defog.execute(user, List.of(enemy), battle);
+        defog.executeWrapper(user, List.of(enemy), battle);
 
         assertThat(player.getToxicSpikes()).isZero();
         assertThat(player.getSpikes()).isZero();
@@ -110,7 +110,7 @@ class DefogTests {
         opponent.setMistTurns(5);
         opponent.setSafeguardTurns(5);
 
-        defog.execute(user, List.of(enemy), battle);
+        defog.executeWrapper(user, List.of(enemy), battle);
 
         assertThat(player.getLightScreenTurns()).isEqualTo(5);
         assertThat(player.getReflectTurns()).isEqualTo(5);
@@ -128,7 +128,7 @@ class DefogTests {
     @Test
     void testClearsTerrainFromField() {
         battle.setTerrain(Terrain.GRASSY, -1);
-        defog.execute(user, List.of(enemy), battle);
+        defog.executeWrapper(user, List.of(enemy), battle);
         assertThat(battle.getTerrain()).isEqualTo(Terrain.NONE);
     }
 
@@ -150,7 +150,7 @@ class DefogTests {
         opponent.setMistTurns(5);
         opponent.setSafeguardTurns(5);
 
-        defog.execute(user, List.of(enemy), battle);
+        defog.executeWrapper(user, List.of(enemy), battle);
 
         assertThat(player.getLightScreenTurns()).isZero();
         assertThat(player.getReflectTurns()).isZero();

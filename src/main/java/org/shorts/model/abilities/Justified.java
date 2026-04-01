@@ -18,7 +18,7 @@ public class Justified extends Ability {
     @Override
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
         //TODO: Make sure the logic for hitting/damaging/breaking a sub happens before this.
-        if (move.getType() == Type.DARK && !opponent.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
+        if (move.getType() == Type.DARK && !opponent.isBehindSub()) {
             self.changeStat(1, StatEnum.ATK);
         }
     }

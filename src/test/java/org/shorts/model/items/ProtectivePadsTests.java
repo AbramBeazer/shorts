@@ -48,21 +48,21 @@ class ProtectivePadsTests {
     @Test
     void testUserProtectedFromDamageAfterContact() {
         target.setAbility(DamageOnContactAbility.IRON_BARBS);
-        contactMove.execute(user, List.of(target), battle);
+        contactMove.executeWrapper(user, List.of(target), battle);
         assertThat(user.isAtFullHP()).isTrue();
     }
 
     @Test
     void testUserProtectedFromStatusOnContact() {
         target.setAbility(ContactStatusAbility.FLAME_BODY);
-        contactMove.execute(user, List.of(target), battle);
+        contactMove.executeWrapper(user, List.of(target), battle);
         assertThat(user.getStatus()).isEqualTo(Status.NONE);
     }
 
     @Test
     void testUserProtectedFromEffectSpore() {
         target.setAbility(EffectSpore.EFFECT_SPORE);
-        contactMove.execute(user, List.of(target), battle);
+        contactMove.executeWrapper(user, List.of(target), battle);
         assertThat(user.getStatus()).isEqualTo(Status.NONE);
     }
 
@@ -71,7 +71,7 @@ class ProtectivePadsTests {
         target.setAbility(DamageOnContactAbility.IRON_BARBS);
         user.setAbility(UnseenFist.UNSEEN_FIST);
         target.addVolatileStatus(new VolatileStatus(VolatileStatusType.PROTECTED, 1));
-        contactMove.execute(user, List.of(target), battle);
+        contactMove.executeWrapper(user, List.of(target), battle);
         assertThat(user.isAtFullHP()).isTrue();
         assertThat(target.isAtFullHP()).isFalse();
     }

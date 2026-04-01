@@ -53,19 +53,19 @@ class ScreenRemovingMoveTests {
     void testRemovesScreenAndDealsRegularDamage() {
         final Trainer targetTrainer = battle.getCorrespondingTrainer(target);
 
-        move.execute(user, List.of(target), battle);
-        int damageWithNoScreens = target.getMaxHP() - target.getCurrentHP();
+        move.executeWrapper(user, List.of(target), battle);
+        int damageWithNoScreens = target.getHpDiff();
         target.maxPotion();
 
         targetTrainer.setAuroraVeilTurns(5);
         targetTrainer.setReflectTurns(5);
         targetTrainer.setLightScreenTurns(5);
 
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(targetTrainer.getAuroraVeilTurns()).isZero();
         assertThat(targetTrainer.getReflectTurns()).isZero();
         assertThat(targetTrainer.getLightScreenTurns()).isZero();
-        assertThat(target.getMaxHP() - target.getCurrentHP()).isEqualTo(damageWithNoScreens);
+        assertThat(target.getHpDiff()).isEqualTo(damageWithNoScreens);
     }
 
     @Test
@@ -77,7 +77,7 @@ class ScreenRemovingMoveTests {
         targetTrainer.setReflectTurns(5);
         targetTrainer.setLightScreenTurns(5);
 
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(targetTrainer.getAuroraVeilTurns()).isEqualTo(5);
         assertThat(targetTrainer.getReflectTurns()).isEqualTo(5);
         assertThat(targetTrainer.getLightScreenTurns()).isEqualTo(5);
@@ -89,19 +89,19 @@ class ScreenRemovingMoveTests {
         battle = new DummyBattle(List.of(user, target), List.of(getDummyPokemon()), 2);
         final Trainer targetTrainer = battle.getCorrespondingTrainer(target);
 
-        move.execute(user, List.of(target), battle);
-        int damageWithNoScreens = target.getMaxHP() - target.getCurrentHP();
+        move.executeWrapper(user, List.of(target), battle);
+        int damageWithNoScreens = target.getHpDiff();
         target.maxPotion();
 
         targetTrainer.setAuroraVeilTurns(5);
         targetTrainer.setReflectTurns(5);
         targetTrainer.setLightScreenTurns(5);
 
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(battle.getCorrespondingTrainer(user)).isEqualTo(targetTrainer);
         assertThat(targetTrainer.getAuroraVeilTurns()).isZero();
         assertThat(targetTrainer.getReflectTurns()).isZero();
         assertThat(targetTrainer.getLightScreenTurns()).isZero();
-        assertThat(target.getMaxHP() - target.getCurrentHP()).isEqualTo(damageWithNoScreens);
+        assertThat(target.getHpDiff()).isEqualTo(damageWithNoScreens);
     }
 }

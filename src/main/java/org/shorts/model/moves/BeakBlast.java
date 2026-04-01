@@ -14,7 +14,7 @@ public class BeakBlast extends Move implements BallBombMove {
     }
 
     @Override
-    public int getPriority(Pokemon attacker, Battle battle) {
+    public int getBasePriority(Pokemon attacker, Battle battle) {
         return -3;
     }
 

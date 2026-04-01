@@ -47,7 +47,7 @@ class InfernalParadeTests {
     @Test
     void testBurn() {
         assertThat(target.getStatus()).isEqualTo(Status.NONE);
-        infernalParade.execute(user, List.of(target), battle);
+        infernalParade.executeWrapper(user, List.of(target), battle);
         assertThat(target.getStatus()).isEqualTo(Status.BURN);
     }
 }

@@ -19,7 +19,7 @@ public class Defog extends Move implements AffectedByMagicBounce {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (!target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)
+        if (!target.isBehindSub()
             && !target.hasVolatileStatus(VolatileStatusType.SEMI_INVULNERABLE)
             && target.isDropPossible(StatEnum.EVASION)) {
             target.changeStat(-1, StatEnum.EVASION);

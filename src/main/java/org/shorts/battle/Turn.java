@@ -39,7 +39,7 @@ public class Turn {
         if (move == null) {
             return 6;
         } else {
-            return move.getPriority(user, battle) + move.getAbilityPriorityBonus(user);
+            return move.getPriority(user, battle);
         }
     }
 
@@ -64,7 +64,7 @@ public class Turn {
             System.out.println(user.toString() + " used " + move.getName() + "!");
             if (user.attemptToMove(move, battle)) {
                 user.setMovedThisTurn(true);
-                move.execute(
+                move.executeWrapper(
                     user,
                     targets,
                     battle);

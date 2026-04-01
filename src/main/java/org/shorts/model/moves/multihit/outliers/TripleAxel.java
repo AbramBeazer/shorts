@@ -48,7 +48,7 @@ public class TripleAxel extends Move {
                     if (!hitSub) {
                         target.afterHit(user, battle, previousTargetHP, this);
                     }
-                    if (target.hasVolatileStatus(SUBSTITUTE)
+                    if (target.isBehindSub()
                         && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
                         target.removeVolatileStatus(SUBSTITUTE);
                     }

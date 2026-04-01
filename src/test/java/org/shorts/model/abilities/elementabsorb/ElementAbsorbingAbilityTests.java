@@ -53,7 +53,7 @@ class ElementAbsorbingAbilityTests {
         final int halfHealth = user.getMaxHP() / 2;
         user.setCurrentHP(halfHealth);
         user.addVolatileStatus(new VolatileStatus(VolatileStatusType.PROTECTED, 1));
-        new ThunderFang().execute(other, List.of(user), battle);
+        new ThunderFang().executeWrapper(other, List.of(user), battle);
         assertThat(user.getCurrentHP()).isEqualTo(halfHealth);
     }
 
@@ -76,7 +76,7 @@ class ElementAbsorbingAbilityTests {
             2) {
 
         };
-        move.execute(other, List.of(user), battle);
+        move.executeWrapper(other, List.of(user), battle);
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP() * 3 / 4);
     }
 
@@ -85,7 +85,7 @@ class ElementAbsorbingAbilityTests {
         user.setAbility(VOLT_ABSORB);
         final Move move = new Thunder();
         user.takeDamage(10);
-        move.execute(other, List.of(user), battle);
+        move.executeWrapper(other, List.of(user), battle);
         assertThat(user.getStatus()).isEqualTo(Status.NONE);
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP());
     }
@@ -95,7 +95,7 @@ class ElementAbsorbingAbilityTests {
         user.setAbility(VOLT_ABSORB);
         final Move move = new ThunderWave();
         user.takeDamage(10);
-        move.execute(other, List.of(user), battle);
+        move.executeWrapper(other, List.of(user), battle);
         assertThat(user.getStatus()).isEqualTo(Status.NONE);
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP());
     }
@@ -105,7 +105,7 @@ class ElementAbsorbingAbilityTests {
         user.setAbility(WATER_ABSORB);
         final Move move = new Surf();
         user.takeDamage(10);
-        move.execute(other, List.of(user), battle);
+        move.executeWrapper(other, List.of(user), battle);
         assertThat(user.getStatus()).isEqualTo(Status.NONE);
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP());
     }
@@ -117,7 +117,7 @@ class ElementAbsorbingAbilityTests {
         user.setAbility(WATER_ABSORB);
         final Move move = new Soak();
         user.takeDamage(10);
-        move.execute(other, List.of(user), battle);
+        move.executeWrapper(other, List.of(user), battle);
         assertThat(user.getTypes()).doesNotContain(Type.WATER);
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP());
     }
@@ -127,7 +127,7 @@ class ElementAbsorbingAbilityTests {
         user.setAbility(EARTH_EATER);
         final Move move = new Earthquake();
         user.takeDamage(10);
-        move.execute(other, List.of(user), battle);
+        move.executeWrapper(other, List.of(user), battle);
         assertThat(user.getStatus()).isEqualTo(Status.NONE);
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP());
     }
@@ -137,7 +137,7 @@ class ElementAbsorbingAbilityTests {
         user.setAbility(EARTH_EATER);
         final Move move = new SandAttack();
         user.takeDamage(10);
-        move.execute(other, List.of(user), battle);
+        move.executeWrapper(other, List.of(user), battle);
         assertThat(user.getStageAccuracy()).isZero();
         assertThat(user.getCurrentHP()).isEqualTo(user.getMaxHP());
     }

@@ -46,56 +46,56 @@ class InfiltratorTests {
     @Test
     void testBypassesReflectWithPhysicalMove() {
         final Move move = new Tackle();
-        move.execute(user, List.of(target), battle);
-        final int damageNoScreens = target.getMaxHP() - target.getCurrentHP();
+        move.executeWrapper(user, List.of(target), battle);
+        final int damageNoScreens = target.getHpDiff();
         target.maxPotion();
 
         trainer.setReflectTurns(4);
-        move.execute(user, List.of(target), battle);
-        assertThat(damageNoScreens).isEqualTo(target.getMaxHP() - target.getCurrentHP());
+        move.executeWrapper(user, List.of(target), battle);
+        assertThat(damageNoScreens).isEqualTo(target.getHpDiff());
     }
 
     @Test
     void testBypassesLightScreenWithSpecialMove() {
         final Move move = new Surf();
-        move.execute(user, List.of(target), battle);
-        final int damageNoScreens = target.getMaxHP() - target.getCurrentHP();
+        move.executeWrapper(user, List.of(target), battle);
+        final int damageNoScreens = target.getHpDiff();
         target.maxPotion();
 
         trainer.setLightScreenTurns(4);
-        move.execute(user, List.of(target), battle);
-        assertThat(damageNoScreens).isEqualTo(target.getMaxHP() - target.getCurrentHP());
+        move.executeWrapper(user, List.of(target), battle);
+        assertThat(damageNoScreens).isEqualTo(target.getHpDiff());
     }
 
     @Test
     void testBypassesAuroraVeilWithPhysicalMove() {
         final Move move = new Tackle();
-        move.execute(user, List.of(target), battle);
-        final int damageNoScreens = target.getMaxHP() - target.getCurrentHP();
+        move.executeWrapper(user, List.of(target), battle);
+        final int damageNoScreens = target.getHpDiff();
         target.maxPotion();
 
         trainer.setAuroraVeilTurns(4);
-        move.execute(user, List.of(target), battle);
-        assertThat(damageNoScreens).isEqualTo(target.getMaxHP() - target.getCurrentHP());
+        move.executeWrapper(user, List.of(target), battle);
+        assertThat(damageNoScreens).isEqualTo(target.getHpDiff());
     }
 
     @Test
     void testBypassesAuroraVeilWithSpecialMove() {
         final Move move = new Surf();
-        move.execute(user, List.of(target), battle);
-        final int damageNoScreens = target.getMaxHP() - target.getCurrentHP();
+        move.executeWrapper(user, List.of(target), battle);
+        final int damageNoScreens = target.getHpDiff();
         target.maxPotion();
 
         trainer.setAuroraVeilTurns(4);
-        move.execute(user, List.of(target), battle);
-        assertThat(damageNoScreens).isEqualTo(target.getMaxHP() - target.getCurrentHP());
+        move.executeWrapper(user, List.of(target), battle);
+        assertThat(damageNoScreens).isEqualTo(target.getHpDiff());
     }
 
     @Test
     void testIgnoresSafeguard() {
         final Move move = new ThunderWave();
         trainer.setSafeguardTurns(5);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(user.getStatus().getType()).isNotEqualTo(PARALYZE);
     }
 
@@ -104,7 +104,7 @@ class InfiltratorTests {
         assertThat(target.getStageDefense()).isZero();
         final Move move = new Crunch();
         trainer.setMistTurns(5);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(target.getStageDefense()).isEqualTo(-1);
     }
 
@@ -114,8 +114,8 @@ class InfiltratorTests {
         final Move move = new Tackle();
         final int subHP = target.getMaxHP() / 4;
         target.addVolatileStatus(new SubstituteStatus(subHP));
-        move.execute(user, List.of(target), battle);
-        assertThat(target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)).isTrue();
+        move.executeWrapper(user, List.of(target), battle);
+        assertThat(target.isBehindSub()).isTrue();
         assertThat(((SubstituteStatus) target.getVolatileStatus(VolatileStatusType.SUBSTITUTE)).getSubHP()).isEqualTo(
             subHP);
         assertThat(target.getCurrentHP()).isLessThan(target.getMaxHP());

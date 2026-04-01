@@ -49,7 +49,7 @@ class MagicBounceTests {
 
     @Test
     void testBounceStatusMove() {
-        new Spore().execute(user, List.of(bouncer), new DummyBattle(user, bouncer));
+        new Spore().executeWrapper(user, List.of(bouncer), new DummyBattle(user, bouncer));
         assertThat(bouncer.getStatus()).isEqualTo(Status.NONE);
         assertThat(user.getStatus().getType()).isEqualTo(SLEEP);
     }
@@ -59,17 +59,17 @@ class MagicBounceTests {
         user.setAbility(new FlashFire());
         user.setTypes(Set.of(ELECTRIC));
 
-        new ThunderWave().execute(user, List.of(bouncer), new DummyBattle(user, bouncer));
+        new ThunderWave().executeWrapper(user, List.of(bouncer), new DummyBattle(user, bouncer));
         assertThat(bouncer.getStatus()).isEqualTo(Status.NONE);
         assertThat(user.getStatus()).isEqualTo(Status.NONE);
 
         user.setTypes(Set.of(GROUND));
 
-        new ThunderWave().execute(user, List.of(bouncer), new DummyBattle(user, bouncer));
+        new ThunderWave().executeWrapper(user, List.of(bouncer), new DummyBattle(user, bouncer));
         assertThat(bouncer.getStatus()).isEqualTo(Status.NONE);
         assertThat(user.getStatus()).isEqualTo(Status.NONE);
 
-        new WillOWisp().execute(user, List.of(bouncer), new DummyBattle(user, bouncer));
+        new WillOWisp().executeWrapper(user, List.of(bouncer), new DummyBattle(user, bouncer));
         assertThat(bouncer.getStatus()).isEqualTo(Status.NONE);
         assertThat(user.getStatus()).isEqualTo(Status.NONE);
     }
@@ -78,7 +78,7 @@ class MagicBounceTests {
     void testBouncedMoveCannotBeReBounced() {
         user.setAbility(MAGIC_BOUNCE);
 
-        new ThunderWave().execute(user, List.of(bouncer), new DummyBattle(user, bouncer));
+        new ThunderWave().executeWrapper(user, List.of(bouncer), new DummyBattle(user, bouncer));
         assertThat(bouncer.getStatus()).isEqualTo(Status.NONE);
         assertThat(user.getStatus().getType()).isEqualTo(PARALYZE);
     }

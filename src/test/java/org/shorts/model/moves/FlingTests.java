@@ -266,12 +266,12 @@ class FlingTests {
 
         user.setHeldItem(LOADED_DICE);
         fling.executeOnTarget(user, target, battle);
-        int unboostedDamage = target.getMaxHP() - target.getCurrentHP();
+        int unboostedDamage = target.getHpDiff();
         target.fullRestore();
 
         user.setHeldItem(BLACK_GLASSES);
         fling.executeOnTarget(user, target, battle);
-        int boostedDamage = target.getMaxHP() - target.getCurrentHP();
+        int boostedDamage = target.getHpDiff();
 
         assertThat(boostedDamage).isGreaterThan(unboostedDamage);
     }
@@ -290,12 +290,12 @@ class FlingTests {
         assertThat(LOADED_DICE.getFlingPower()).isEqualTo(LIFE_ORB.getFlingPower());
         user.setHeldItem(LOADED_DICE);
         fling.executeOnTarget(user, target, battle);
-        int unboostedDamage = target.getMaxHP() - target.getCurrentHP();
+        int unboostedDamage = target.getHpDiff();
         target.fullRestore();
 
         user.setHeldItem(LIFE_ORB);
         fling.executeOnTarget(user, target, battle);
-        int boostedDamage = target.getMaxHP() - target.getCurrentHP();
+        int boostedDamage = target.getHpDiff();
 
         assertThat(boostedDamage).isGreaterThan(unboostedDamage);
         assertThat(user.getMaxHP()).isEqualTo(user.getCurrentHP());
@@ -398,7 +398,7 @@ class FlingTests {
         assertThat(target.hasVolatileStatus(VolatileStatusType.ENCORED)).isFalse();
         assertThat(target.hasVolatileStatus(VolatileStatusType.TORMENTED)).isFalse();
         assertThat(target.hasVolatileStatus(VolatileStatusType.DISABLED)).isFalse();
-        assertThat(target.hasVolatileStatus(VolatileStatusType.HEAL_BLOCKED)).isFalse();
+        assertThat(target.isHealBlocked()).isFalse();
         assertThat(target.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(MENTAL_HERB);

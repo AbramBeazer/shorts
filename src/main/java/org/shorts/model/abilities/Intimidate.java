@@ -38,7 +38,7 @@ public class Intimidate extends Ability {
     protected void tryEffect(Pokemon self, Battle battle) {
         List<Pokemon> targets = battle.getPokemonWithinRange(self, this.getRange());
         for (Pokemon opponent : targets) {
-            if (!opponent.hasVolatileStatus(SUBSTITUTE) && opponent.isDropPossible(StatEnum.ATK)
+            if (!opponent.isBehindSub() && opponent.isDropPossible(StatEnum.ATK)
                 && opponent.getAbility() != OWN_TEMPO && opponent.getAbility() != OBLIVIOUS
                 && opponent.getAbility() != INNER_FOCUS && opponent.getAbility() != SCRAPPY) {
 

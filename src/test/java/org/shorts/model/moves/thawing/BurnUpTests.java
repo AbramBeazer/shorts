@@ -45,20 +45,20 @@ class BurnUpTests {
     @Test
     void testThawsFrozenTarget() {
         target.setStatus(Status.FREEZE);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(target.getStatus()).isEqualTo(NONE);
     }
 
     @Test
     void testThawsFrozenUser() {
         user.setStatus(Status.FREEZE);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(user.getStatus()).isEqualTo(NONE);
     }
 
     @Test
     void testUserLosesFireTypeAfterAttack() {
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(user.getTypes()).doesNotContain(Type.FIRE);
         assertThat(user.getTypes()).isEmpty();
     }
@@ -70,7 +70,7 @@ class BurnUpTests {
         userTypes.add(Type.FLYING);
         user.setTypes(userTypes);
 
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(user.getTypes()).doesNotContain(Type.FIRE).contains(Type.FLYING);
     }
 
@@ -78,7 +78,7 @@ class BurnUpTests {
     void testFailsToThawUserIfUserIsNotFireType() {
         user.setStatus(Status.FREEZE);
         user.setTypes(Set.of(Type.WATER));
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(user.getStatus()).isEqualTo(FREEZE);
     }
 

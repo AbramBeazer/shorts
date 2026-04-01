@@ -43,7 +43,7 @@ class WishTests {
         Battle battle = new DummyBattle(user, getDummyPokemon());
 
         assertThat(battle.getFloatingEffects()).isEmpty();
-        new Wish().execute(user, List.of(user), battle);
+        new Wish().executeWrapper(user, List.of(user), battle);
         assertThat(battle.getFloatingEffects()).isEmpty();
     }
 
