@@ -99,4 +99,12 @@ class TeraStarstormTests {
     void testGalvanizeDoesNotChangeTypeWhenTera() {
         assertThat(false).isTrue();
     }
+
+    @Test
+    void testAffectedByGalvanizeWhenNotTera() {
+        //        user.setAbility(GALVANIZE);
+        assertThat(move.getType()).isEqualTo(Type.ELECTRIC);
+        //TODO: This may not be how it actually works -- I may have to check to see if it doesn't affect Ground and does x2 to water and flying.
+    }
+
 }
