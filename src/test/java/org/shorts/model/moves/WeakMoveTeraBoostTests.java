@@ -54,6 +54,18 @@ class WeakMoveTeraBoostTests {
     }
 
     @Test
+    void testBoostsMoveStillWeakAfterTechnician() {
+        // final Move move = new Nuzzle();
+        //        assertThat(move.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
+        //        user.setAbility(Technician.TECHNICIAN);
+        //        assertThat(move.calculateMovePower(user, target, battle)).isLessThan(SIXTY);
+        //        user.setTeraType(move.getType());
+        //        user.terastallize();
+        //        assertThat(move.calculateMovePower(user, target, battle)).isEqualTo(SIXTY);
+        assertThat(false).isTrue();
+    }
+
+    @Test
     void testDoesNotLowerTechnicianBoostedMoveToSixty() {
         final Move move = new TerrainPulse();
         assertThat(move.calculateMovePower(user, target, battle)).isLessThan(SIXTY);

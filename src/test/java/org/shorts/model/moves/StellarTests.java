@@ -74,7 +74,7 @@ class StellarTests {
 
         stellar.getPreviouslyBoosted().clear();
         multiHitMove.doHit(user, target, battle);
-        final int damage = target.getMaxHP() - target.getCurrentHP();
+        final int damage = target.getHpDiff();
         assertThat(damage).isGreaterThan(withTera + noTera);
         assertThat(damage).isEqualTo(withTera * 2);
     }

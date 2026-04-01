@@ -116,7 +116,7 @@ class BerryStealingMoveTests {
     void testTargetEatsJabocaBerryBeforeUserStealsIt() {
         target.setHeldItem(JABOCA_BERRY);
         move.executeOnTarget(user, target, battle);
-        final int damage = target.getMaxHP() - target.getCurrentHP();
+        final int damage = target.getHpDiff();
 
         assertThat(target.getCurrentHP()).isEqualTo(target.getMaxHP() - damage);
         assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);
@@ -129,12 +129,12 @@ class BerryStealingMoveTests {
     @Test
     void testTargetEatsTypeResistBerryBeforeUserStealsIt() {
         move.executeOnTarget(user, target, battle);
-        final int baseDamage = target.getMaxHP() - target.getCurrentHP();
+        final int baseDamage = target.getHpDiff();
         target.fullRestore();
 
         target.setHeldItem(CHILAN_BERRY);
         move.executeOnTarget(user, target, battle);
-        final int reducedDamage = target.getMaxHP() - target.getCurrentHP();
+        final int reducedDamage = target.getHpDiff();
 
         assertThat(reducedDamage).isEqualTo(baseDamage / 2);
         assertThat(target.getHeldItem()).isEqualTo(NO_ITEM);

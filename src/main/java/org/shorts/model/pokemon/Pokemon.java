@@ -393,6 +393,10 @@ public class Pokemon {
         this.maxHP = maxHP;
     }
 
+    public int getHpDiff() {
+        return maxHP - currentHP;
+    }
+
     public double calculateAttack() {
         double multiplier = ability.onCalculateAttack(this) * heldItem.onCalculateAttack(this);
         return calculateAttackWithoutAbilityOrItem() * multiplier;

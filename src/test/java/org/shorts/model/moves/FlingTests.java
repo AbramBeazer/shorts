@@ -266,12 +266,12 @@ class FlingTests {
 
         user.setHeldItem(LOADED_DICE);
         fling.executeOnTarget(user, target, battle);
-        int unboostedDamage = target.getMaxHP() - target.getCurrentHP();
+        int unboostedDamage = target.getHpDiff();
         target.fullRestore();
 
         user.setHeldItem(BLACK_GLASSES);
         fling.executeOnTarget(user, target, battle);
-        int boostedDamage = target.getMaxHP() - target.getCurrentHP();
+        int boostedDamage = target.getHpDiff();
 
         assertThat(boostedDamage).isGreaterThan(unboostedDamage);
     }
@@ -290,12 +290,12 @@ class FlingTests {
         assertThat(LOADED_DICE.getFlingPower()).isEqualTo(LIFE_ORB.getFlingPower());
         user.setHeldItem(LOADED_DICE);
         fling.executeOnTarget(user, target, battle);
-        int unboostedDamage = target.getMaxHP() - target.getCurrentHP();
+        int unboostedDamage = target.getHpDiff();
         target.fullRestore();
 
         user.setHeldItem(LIFE_ORB);
         fling.executeOnTarget(user, target, battle);
-        int boostedDamage = target.getMaxHP() - target.getCurrentHP();
+        int boostedDamage = target.getHpDiff();
 
         assertThat(boostedDamage).isGreaterThan(unboostedDamage);
         assertThat(user.getMaxHP()).isEqualTo(user.getCurrentHP());

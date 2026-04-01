@@ -47,48 +47,48 @@ class InfiltratorTests {
     void testBypassesReflectWithPhysicalMove() {
         final Move move = new Tackle();
         move.executeWrapper(user, List.of(target), battle);
-        final int damageNoScreens = target.getMaxHP() - target.getCurrentHP();
+        final int damageNoScreens = target.getHpDiff();
         target.maxPotion();
 
         trainer.setReflectTurns(4);
         move.executeWrapper(user, List.of(target), battle);
-        assertThat(damageNoScreens).isEqualTo(target.getMaxHP() - target.getCurrentHP());
+        assertThat(damageNoScreens).isEqualTo(target.getHpDiff());
     }
 
     @Test
     void testBypassesLightScreenWithSpecialMove() {
         final Move move = new Surf();
         move.executeWrapper(user, List.of(target), battle);
-        final int damageNoScreens = target.getMaxHP() - target.getCurrentHP();
+        final int damageNoScreens = target.getHpDiff();
         target.maxPotion();
 
         trainer.setLightScreenTurns(4);
         move.executeWrapper(user, List.of(target), battle);
-        assertThat(damageNoScreens).isEqualTo(target.getMaxHP() - target.getCurrentHP());
+        assertThat(damageNoScreens).isEqualTo(target.getHpDiff());
     }
 
     @Test
     void testBypassesAuroraVeilWithPhysicalMove() {
         final Move move = new Tackle();
         move.executeWrapper(user, List.of(target), battle);
-        final int damageNoScreens = target.getMaxHP() - target.getCurrentHP();
+        final int damageNoScreens = target.getHpDiff();
         target.maxPotion();
 
         trainer.setAuroraVeilTurns(4);
         move.executeWrapper(user, List.of(target), battle);
-        assertThat(damageNoScreens).isEqualTo(target.getMaxHP() - target.getCurrentHP());
+        assertThat(damageNoScreens).isEqualTo(target.getHpDiff());
     }
 
     @Test
     void testBypassesAuroraVeilWithSpecialMove() {
         final Move move = new Surf();
         move.executeWrapper(user, List.of(target), battle);
-        final int damageNoScreens = target.getMaxHP() - target.getCurrentHP();
+        final int damageNoScreens = target.getHpDiff();
         target.maxPotion();
 
         trainer.setAuroraVeilTurns(4);
         move.executeWrapper(user, List.of(target), battle);
-        assertThat(damageNoScreens).isEqualTo(target.getMaxHP() - target.getCurrentHP());
+        assertThat(damageNoScreens).isEqualTo(target.getHpDiff());
     }
 
     @Test

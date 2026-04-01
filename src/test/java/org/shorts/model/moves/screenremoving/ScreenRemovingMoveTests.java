@@ -54,7 +54,7 @@ class ScreenRemovingMoveTests {
         final Trainer targetTrainer = battle.getCorrespondingTrainer(target);
 
         move.executeWrapper(user, List.of(target), battle);
-        int damageWithNoScreens = target.getMaxHP() - target.getCurrentHP();
+        int damageWithNoScreens = target.getHpDiff();
         target.maxPotion();
 
         targetTrainer.setAuroraVeilTurns(5);
@@ -65,7 +65,7 @@ class ScreenRemovingMoveTests {
         assertThat(targetTrainer.getAuroraVeilTurns()).isZero();
         assertThat(targetTrainer.getReflectTurns()).isZero();
         assertThat(targetTrainer.getLightScreenTurns()).isZero();
-        assertThat(target.getMaxHP() - target.getCurrentHP()).isEqualTo(damageWithNoScreens);
+        assertThat(target.getHpDiff()).isEqualTo(damageWithNoScreens);
     }
 
     @Test
@@ -90,7 +90,7 @@ class ScreenRemovingMoveTests {
         final Trainer targetTrainer = battle.getCorrespondingTrainer(target);
 
         move.executeWrapper(user, List.of(target), battle);
-        int damageWithNoScreens = target.getMaxHP() - target.getCurrentHP();
+        int damageWithNoScreens = target.getHpDiff();
         target.maxPotion();
 
         targetTrainer.setAuroraVeilTurns(5);
@@ -102,6 +102,6 @@ class ScreenRemovingMoveTests {
         assertThat(targetTrainer.getAuroraVeilTurns()).isZero();
         assertThat(targetTrainer.getReflectTurns()).isZero();
         assertThat(targetTrainer.getLightScreenTurns()).isZero();
-        assertThat(target.getMaxHP() - target.getCurrentHP()).isEqualTo(damageWithNoScreens);
+        assertThat(target.getHpDiff()).isEqualTo(damageWithNoScreens);
     }
 }
