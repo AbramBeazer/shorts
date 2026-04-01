@@ -53,7 +53,7 @@ class BarbBarrageTests {
     @Test
     void testBurn() {
         assertThat(target.getStatus()).isEqualTo(Status.NONE);
-        barbBarrage.execute(user, List.of(target), battle);
+        barbBarrage.executeWrapper(user, List.of(target), battle);
         assertThat(target.getStatus()).isEqualTo(Status.POISON);
     }
 }

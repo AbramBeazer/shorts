@@ -32,7 +32,7 @@ public class TripleArrows extends Move implements HighCritChanceMove, GetsSheerF
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (user.getAbility() != SHEER_FORCE && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
+        if (user.getAbility() != SHEER_FORCE && !target.isBehindSub()) {
             if (target.isDropPossible(StatEnum.DEF) && RANDOM.nextInt(100) < DEFENSE_DROP_CHANCE * (user.getAbility()
                 .equals(SERENE_GRACE) ? 2 : 1)) {
                 target.changeStat(-1, StatEnum.DEF);

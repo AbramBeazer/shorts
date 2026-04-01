@@ -30,7 +30,7 @@ public class Howl extends Move implements SoundEffect {
     protected boolean affectsTarget(Pokemon user, Pokemon target) {
         boolean canAffect = target.canChangeStat(1, StatEnum.ATK);
         if (user != target) {
-            if (target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
+            if (target.isBehindSub()) {
                 canAffect &=
                     user.getAbility() == INFILTRATOR && !user.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
                         && target.canChangeStat(1, StatEnum.ATK);

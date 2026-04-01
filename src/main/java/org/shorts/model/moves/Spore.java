@@ -17,7 +17,7 @@ public class Spore extends Move implements PowderSporeEffect, AffectedByMagicBou
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         //TODO: Maybe the check for substitute and semi-invulnerable should be in the parent method.
-        if (target.hasVolatileStatus(SUBSTITUTE) || target.hasVolatileStatus(SEMI_INVULNERABLE)
+        if (target.isBehindSub() || target.hasVolatileStatus(SEMI_INVULNERABLE)
             || !this.asPowderSporeEffectData().canActivate(target)) {
             System.out.println("It doesn't affect " + target.getNickname());
         } else {

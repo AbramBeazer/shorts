@@ -38,14 +38,14 @@ class FlareBlitzTests {
 
     @Test
     void testThawsFrozenTarget() {
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(target.getStatus()).isNotEqualTo(FREEZE);
     }
 
     @Test
     void testThawsFrozenUser() {
         user.setStatus(Status.FREEZE);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(user.getStatus()).isNotEqualTo(FREEZE);
     }
 }

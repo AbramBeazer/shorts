@@ -4,7 +4,7 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class HeavySlam extends Move implements HitsMinimize {
+public class HeavySlam extends Move implements HitsMinimize, WeightComparisonMove {
 
     public HeavySlam() {
         super("Heavy Slam", 0, 100, Type.STEEL, Category.PHYSICAL, Range.NORMAL, 16, true, 0);

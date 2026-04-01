@@ -36,7 +36,7 @@ import static org.shorts.model.items.TypeBoostItem.POISON_BARB;
 import static org.shorts.model.items.WhiteHerb.WHITE_HERB;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 
-public class Fling extends Move {
+public class Fling extends Move implements PowerVaries {
 
     public Fling() {
         super("Fling", 0, 100, Type.DARK, Category.PHYSICAL, Range.NORMAL, 16, false, 100);
@@ -84,7 +84,7 @@ public class Fling extends Move {
 
                     this.trySecondaryEffect(user, target, battle);
 
-                    if (target.hasVolatileStatus(SUBSTITUTE)
+                    if (target.isBehindSub()
                         && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
                         target.removeVolatileStatus(SUBSTITUTE);
                     }
@@ -105,7 +105,7 @@ public class Fling extends Move {
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         //TODO: Should the target consume the flung item if the sub took the attack?
-        if (!target.hasVolatileStatus(SUBSTITUTE)) {
+        if (!target.isBehindSub()) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

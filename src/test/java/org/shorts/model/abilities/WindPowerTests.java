@@ -50,7 +50,7 @@ public class WindPowerTests {
     @Test
     void testNotImmuneToWindMoves() {
         move = new PetalBlizzard();
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
 
         assertThat(target.isAtFullHP()).isFalse();
         assertThat(target.hasVolatileStatus(VolatileStatusType.CHARGED)).isTrue();
@@ -60,7 +60,7 @@ public class WindPowerTests {
     void testNotActivatedByWhirlwind() {
         move = new Whirlwind();
 
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
 
         assertThat(target.hasVolatileStatus(VolatileStatusType.CHARGED)).isFalse();
         assertThat(targetTeammate).isEqualTo(battle.getCorrespondingTrainer(target).getTeam().get(0));
@@ -70,7 +70,7 @@ public class WindPowerTests {
     void testActivatedByTailwind() {
         double regularSpeed = target.calculateSpeed(battle);
         move = new Tailwind();
-        move.execute(target, List.of(target), battle);
+        move.executeWrapper(target, List.of(target), battle);
 
         assertThat(target.hasVolatileStatus(VolatileStatusType.CHARGED)).isTrue();
         assertThat(target.calculateSpeed(battle)).isEqualTo(2 * regularSpeed);
@@ -79,7 +79,7 @@ public class WindPowerTests {
     @Test
     void testNotActivatedBySandstorm() {
         move = new Sandstorm();
-        move.execute(user, List.of(user, target), battle);
+        move.executeWrapper(user, List.of(user, target), battle);
 
         assertThat(battle.getWeather()).isEqualTo(Weather.SAND);
         assertThat(target.hasVolatileStatus(VolatileStatusType.CHARGED)).isFalse();

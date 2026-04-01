@@ -41,7 +41,7 @@ class CellBatteryTests {
     @Test
     void testActivatesWhenHitByElectricMove() {
         assertThat(holder.getStageAttack()).isZero();
-        move.execute(opponent, List.of(holder), battle);
+        move.executeWrapper(opponent, List.of(holder), battle);
         assertThat(holder.getStageAttack()).isOne();
         assertThat(holder.getConsumedItem()).isEqualTo(CELL_BATTERY);
         assertThat(holder.getHeldItem()).isEqualTo(NO_ITEM);
@@ -50,7 +50,7 @@ class CellBatteryTests {
     @Test
     void testDoesNotActivateForStatusMoves() {
         assertThat(holder.getStageAttack()).isZero();
-        new ThunderWave().execute(opponent, List.of(holder), battle);
+        new ThunderWave().executeWrapper(opponent, List.of(holder), battle);
         assertThat(holder.getStageAttack()).isZero();
         assertThat(holder.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(holder.getHeldItem()).isEqualTo(CELL_BATTERY);
@@ -61,7 +61,7 @@ class CellBatteryTests {
         holder.setTypes(Set.of(GROUND));
 
         assertThat(holder.getStageAttack()).isZero();
-        move.execute(opponent, List.of(holder), battle);
+        move.executeWrapper(opponent, List.of(holder), battle);
         assertThat(holder.getStageAttack()).isZero();
         assertThat(holder.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(holder.getHeldItem()).isEqualTo(CELL_BATTERY);
@@ -72,7 +72,7 @@ class CellBatteryTests {
         holder.setAbility(MOTOR_DRIVE);
 
         assertThat(holder.getStageAttack()).isZero();
-        move.execute(opponent, List.of(holder), battle);
+        move.executeWrapper(opponent, List.of(holder), battle);
         assertThat(holder.getStageAttack()).isZero();
         assertThat(holder.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(holder.getHeldItem()).isEqualTo(CELL_BATTERY);
@@ -83,7 +83,7 @@ class CellBatteryTests {
         holder.setAbility(LIGHTNING_ROD);
 
         assertThat(holder.getStageAttack()).isZero();
-        move.execute(opponent, List.of(holder), battle);
+        move.executeWrapper(opponent, List.of(holder), battle);
         assertThat(holder.getStageAttack()).isZero();
         assertThat(holder.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(holder.getHeldItem()).isEqualTo(CELL_BATTERY);
@@ -93,7 +93,7 @@ class CellBatteryTests {
     void testDoesNotActivateIfAttackCannotBeChanged() {
         holder.setStageAttack(6);
 
-        move.execute(opponent, List.of(holder), battle);
+        move.executeWrapper(opponent, List.of(holder), battle);
         assertThat(holder.getStageAttack()).isEqualTo(6);
         assertThat(holder.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(holder.getHeldItem()).isEqualTo(CELL_BATTERY);
@@ -101,7 +101,7 @@ class CellBatteryTests {
         holder.setStageAttack(-6);
         holder.setAbility(CONTRARY);
 
-        move.execute(opponent, List.of(holder), battle);
+        move.executeWrapper(opponent, List.of(holder), battle);
         assertThat(holder.getStageAttack()).isEqualTo(-6);
         assertThat(holder.getConsumedItem()).isEqualTo(NO_ITEM);
         assertThat(holder.getHeldItem()).isEqualTo(CELL_BATTERY);

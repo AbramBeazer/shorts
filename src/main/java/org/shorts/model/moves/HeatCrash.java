@@ -4,7 +4,7 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-public class HeatCrash extends Move implements HitsMinimize {
+public class HeatCrash extends Move implements HitsMinimize, WeightComparisonMove {
 
     public HeatCrash() {
         super("Heat Crash", 0, 100, Type.FIRE, Category.PHYSICAL, Range.NORMAL, 16, true, 0);

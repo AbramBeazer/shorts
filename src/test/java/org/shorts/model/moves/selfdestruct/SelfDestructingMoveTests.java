@@ -46,7 +46,7 @@ class SelfDestructingMoveTests {
     void testFailsWhenDampIsPresent() {
         opp1.setAbility(Damp.DAMP);
 
-        move.execute(boomer, List.of(teammate, opp1, opp2), battle);
+        move.executeWrapper(boomer, List.of(teammate, opp1, opp2), battle);
 
         assertThat(boomer.hasFainted()).isFalse();
         assertThat(teammate.isAtFullHP()).isTrue();
@@ -63,7 +63,7 @@ class SelfDestructingMoveTests {
         opp1.setTypes(types);
         opp2.setTypes(types);
 
-        move.execute(boomer, List.of(teammate, opp1, opp2), battle);
+        move.executeWrapper(boomer, List.of(teammate, opp1, opp2), battle);
 
         assertThat(boomer.hasFainted()).isFalse();
         assertThat(teammate.isAtFullHP()).isTrue();
@@ -79,7 +79,7 @@ class SelfDestructingMoveTests {
         opp1.setTypes(types);
         opp2.setTypes(types);
 
-        move.execute(boomer, List.of(teammate, opp1, opp2), battle);
+        move.executeWrapper(boomer, List.of(teammate, opp1, opp2), battle);
 
         assertThat(boomer.hasFainted()).isTrue();
         assertThat(teammate.isAtFullHP()).isFalse();
@@ -91,7 +91,7 @@ class SelfDestructingMoveTests {
 
     @Test
     void testUserFaintsWithNoTargets() {
-        move.execute(boomer, List.of(), battle);
+        move.executeWrapper(boomer, List.of(), battle);
 
         assertThat(boomer.hasFainted()).isTrue();
         assertThat(move.getCurrentPP()).isLessThan(move.getMaxPP());
@@ -102,7 +102,7 @@ class SelfDestructingMoveTests {
     void testUserDoesNotFaintIfMoveMisses() {
         Main.HIT_RANDOM = MockRandomReturnMax.MAX_RANDOM;
 
-        move.execute(boomer, List.of(teammate, opp1, opp2), battle);
+        move.executeWrapper(boomer, List.of(teammate, opp1, opp2), battle);
 
         assertThat(boomer.hasFainted()).isFalse();
         assertThat(teammate.isAtFullHP()).isTrue();

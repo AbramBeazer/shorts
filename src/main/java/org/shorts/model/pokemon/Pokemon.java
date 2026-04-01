@@ -1,5 +1,6 @@
 package org.shorts.model.pokemon;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +21,8 @@ import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.NoItem;
 import org.shorts.model.moves.HurtItselfInConfusion;
 import org.shorts.model.moves.Move;
+import org.shorts.model.moves.TeraBlast;
+import org.shorts.model.moves.TeraStarstorm;
 import org.shorts.model.status.AutotomizedStatus;
 import org.shorts.model.status.HelpingHandStatus;
 import org.shorts.model.status.Status;
@@ -90,6 +93,8 @@ public class Pokemon {
     private HeldItem consumedItem = NoItem.NO_ITEM;
     private byte happiness;
     private int turnsInBattle;
+    private boolean tera = false;
+    private Type teraType;
 
     protected Pokemon(String pokedexNo, String nickname, String speciesName, Set<Type> types, Ability ability) {
         this.pokedexNo = pokedexNo;
@@ -391,10 +396,17 @@ public class Pokemon {
         this.maxHP = maxHP;
     }
 
+    public int getHpDiff() {
+        return maxHP - currentHP;
+    }
+
     public double calculateAttack() {
-        double multiplier = 1;
-        multiplier *= ability.onCalculateAttack(this) * heldItem.onCalculateAttack(this);
-        return this.attack * getStageMultiplier(stageAttack) * multiplier;
+        double multiplier = ability.onCalculateAttack(this) * heldItem.onCalculateAttack(this);
+        return calculateAttackWithoutAbilityOrItem() * multiplier;
+    }
+
+    public double calculateAttackWithoutAbilityOrItem() {
+        return this.attack * getStageMultiplier(stageAttack);
     }
 
     public void setAttack(int attack) {
@@ -402,16 +414,12 @@ public class Pokemon {
     }
 
     public double calculateDefense(Battle battle) {
-        double multiplier = ability.onCalculateDefense(this) * heldItem.onCalculateDefense(this);
-        if (types.contains(Type.ICE) && !battle.isWeatherSuppressed() && battle.getWeather() == Weather.SNOW) {
-            multiplier *= 1.5;
-        }
-        return this.defense * getStageMultiplier(stageDefense) * multiplier;
+        return calculateDefenseIgnoreStage(battle) * getStageMultiplier(stageDefense);
     }
 
     public double calculateDefenseIgnoreStage(Battle battle) {
         double multiplier = ability.onCalculateDefense(this) * heldItem.onCalculateDefense(this);
-        if (types.contains(Type.ICE) && !battle.isWeatherSuppressed() && battle.getWeather() == Weather.SNOW) {
+        if (battle.getWeather() == Weather.SNOW && types.contains(Type.ICE) && !battle.isWeatherSuppressed()) {
             multiplier *= 1.5;
         }
         return this.defense * multiplier;
@@ -423,7 +431,11 @@ public class Pokemon {
 
     public double calculateSpecialAttack() {
         double multiplier = ability.onCalculateSpecialAttack(this) * heldItem.onCalculateSpecialAttack(this);
-        return this.specialAttack * getStageMultiplier(stageSpecialAttack) * multiplier;
+        return calculateSpecialAttackWithoutAbilityOrItem() * multiplier;
+    }
+
+    public double calculateSpecialAttackWithoutAbilityOrItem() {
+        return this.specialAttack * getStageMultiplier(stageSpecialAttack);
     }
 
     public void setSpecialAttack(int specialAttack) {
@@ -459,22 +471,15 @@ public class Pokemon {
     }
 
     public double getStatApplyStage(StatEnum stat) {
-        switch (stat) {
-            case HP:
-                return this.getCurrentHP();
-            case ATK:
-                return this.attack * getStageMultiplier(this.stageAttack);
-            case DEF:
-                return this.defense * getStageMultiplier(this.stageDefense);
-            case SPATK:
-                return this.specialAttack * getStageMultiplier(this.stageSpecialAttack);
-            case SPDEF:
-                return this.specialDefense * getStageMultiplier(this.stageSpecialDefense);
-            case SPEED:
-                return this.speed * getStageMultiplier(this.stageSpeed);
-            default:
-                throw new IllegalArgumentException("This method is not for accuracy or evasion");
-        }
+        return switch (stat) {
+            case HP -> this.getCurrentHP();
+            case ATK -> this.attack * getStageMultiplier(this.stageAttack);
+            case DEF -> this.defense * getStageMultiplier(this.stageDefense);
+            case SPATK -> this.specialAttack * getStageMultiplier(this.stageSpecialAttack);
+            case SPDEF -> this.specialDefense * getStageMultiplier(this.stageSpecialDefense);
+            case SPEED -> this.speed * getStageMultiplier(this.stageSpeed);
+            default -> throw new IllegalArgumentException("This method is not for accuracy or evasion");
+        };
     }
 
     private double getStageMultiplier(int stage) {
@@ -515,7 +520,7 @@ public class Pokemon {
     }
 
     public void heal(int health) {
-        if (!this.hasFainted() && !this.hasVolatileStatus(HEAL_BLOCKED)) {
+        if (!this.hasFainted() && !this.isHealBlocked()) {
             if (health <= 0) {
                 throw new IllegalArgumentException("Health restored must be positive");
             }
@@ -674,6 +679,39 @@ public class Pokemon {
         this.turnsInBattle = turnsInBattle;
     }
 
+    public boolean isTera() {
+        return tera;
+    }
+
+    public void setTera(boolean tera) {
+        this.tera = tera;
+    }
+
+    public void terastallize() {
+        if (getTeraType() == null) {
+            throw new RuntimeException("Cannot terastallize if tera type is null!");
+        } //TODO: Should this fail more gracefully? Should I default to Normal?
+        setTera(true);
+        Arrays.stream(this.getMoves())
+            .filter(move -> move instanceof TeraBlast || move instanceof TeraStarstorm)
+            .forEach(move -> move.setType(getTeraType()));
+    }
+
+    private void teraOff() {
+        setTera(false);
+        Arrays.stream(this.getMoves())
+            .filter(move -> move instanceof TeraBlast || move instanceof TeraStarstorm)
+            .forEach(move -> move.setType(Type.NORMAL));
+    }
+
+    public Type getTeraType() {
+        return teraType;
+    }
+
+    public void setTeraType(Type teraType) {
+        this.teraType = teraType;
+    }
+
     public boolean isGrounded() {
         //This override Grounded status type is caused by Iron Ball, Ingrain, SmackDown, Thousand Arrows, and Gravity.
         if (hasVolatileStatus(GROUNDED) || hasVolatileStatus(ROOTED)) {
@@ -735,6 +773,14 @@ public class Pokemon {
             .removeIf(entry ->
                 entry.getValue() != null && entry.getValue().getTurnsRemaining() == 0
                     && entry.getKey() != PERISH && entry.getKey() != CONFUSED);
+    }
+
+    public boolean isBehindSub() {
+        return hasVolatileStatus(SUBSTITUTE);
+    }
+
+    public boolean isHealBlocked() {
+        return hasVolatileStatus(HEAL_BLOCKED);
     }
 
     public boolean isAtFullHP() {
@@ -831,7 +877,7 @@ public class Pokemon {
     }
 
     public boolean isDropPossible(StatEnum stat) {
-        if (this.hasVolatileStatus(SUBSTITUTE)) {
+        if (this.isBehindSub()) {
             return false;
         }
         if (!canChangeStat(-1, stat)) {
@@ -923,6 +969,7 @@ public class Pokemon {
             this.volatileStatuses.clear();
             Pickup.removeFromConsumedItems(this);
 
+            this.teraOff();
             this.setStatus(Status.FAINTED);
         }
     }

@@ -40,14 +40,14 @@ class MotorDriveTests {
     @Test
     void testNoDamageFromElectricMoves() {
         assertThat(mdMon.beforeHit(other, battle, move)).isZero();
-        move.execute(other, List.of(mdMon), battle);
+        move.executeWrapper(other, List.of(mdMon), battle);
         assertThat(mdMon.getMaxHP()).isEqualTo(mdMon.getCurrentHP());
     }
 
     @Test
     void testSpeedBoostedAfterHit() {
         assertThat(mdMon.getStageSpeed()).isZero();
-        move.execute(other, List.of(mdMon), battle);
+        move.executeWrapper(other, List.of(mdMon), battle);
         assertThat(mdMon.getStageSpeed()).isOne();
     }
 
@@ -55,14 +55,14 @@ class MotorDriveTests {
     void testDoesNotActivateIfProtected() {
         assertThat(mdMon.getStageSpeed()).isZero();
         mdMon.addVolatileStatus(new VolatileStatus(VolatileStatusType.PROTECTED, 1));
-        move.execute(other, List.of(mdMon), battle);
+        move.executeWrapper(other, List.of(mdMon), battle);
         assertThat(mdMon.getStageSpeed()).isZero();
     }
 
     @Test
     void testActivatesWhenHitByStatusMove() {
         assertThat(mdMon.getStageSpeed()).isZero();
-        new ThunderWave().execute(other, List.of(mdMon), battle);
+        new ThunderWave().executeWrapper(other, List.of(mdMon), battle);
         assertThat(mdMon.getStageSpeed()).isOne();
         assertThat(mdMon.getStatus()).isEqualTo(NONE);
     }
@@ -72,7 +72,7 @@ class MotorDriveTests {
         mdMon.setHeldItem(CELL_BATTERY);
 
         assertThat(mdMon.getStageSpeed()).isZero();
-        move.execute(other, List.of(mdMon), battle);
+        move.executeWrapper(other, List.of(mdMon), battle);
         assertThat(mdMon.getStageSpeed()).isOne();
 
         assertThat(mdMon.getConsumedItem()).isEqualTo(NO_ITEM);

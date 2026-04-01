@@ -48,4 +48,9 @@ public abstract class MultiHitMove extends Move {
             }
         }
     }
+
+    @Override
+    public boolean hasMinPower60WhenTera() {
+        return false;
+    }
 }

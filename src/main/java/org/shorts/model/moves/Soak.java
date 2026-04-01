@@ -19,12 +19,15 @@ public class Soak extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (!target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE) && target.getAbility() != MULTITYPE
-            && target.getAbility() != RKS_SYSTEM
-            //TODO: && !target.isTera() && !(target.getAbility() instanceof Disguise && ((Disguise) target.getAbility()).isIntact())
-        ) {
+        if (target.isBehindSub() || target.getAbility() == MULTITYPE || target.getAbility() == RKS_SYSTEM
+            || target.isTera()) {
+            System.out.println("But it failed!");
+        } else {
             super.trySecondaryEffect(user, target, battle);
         }
+        //TODO: Make sure the type-change effect ends when the affected mon switches out, uses Transform, mega evolves, undergoes primal reversion, uses Dynamax,
+        // or otherwise changes form (Castform, Cherrim, Darmanitan, Aegislash, Zygarde, Oricorio, Wishiwashi, Minior,
+        // Mimikyu, Cramorant, Eiscue, Morpeko, Zacian, Zamazenta, Palafin, Terapagos, Ash-Greninja).
     }
 
     @Override

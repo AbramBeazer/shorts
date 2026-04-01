@@ -14,7 +14,7 @@ public class RazorShell extends Move implements SlicingMove, GetsSheerForceBoost
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.isDropPossible(StatEnum.DEF) && !target.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)) {
+        if (target.isDropPossible(StatEnum.DEF) && !target.isBehindSub()) {
             super.trySecondaryEffect(user, target, battle);
         }
     }

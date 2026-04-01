@@ -51,7 +51,7 @@ public class TripleKick extends Move implements KickingMove {
                         target.afterHit(user, battle, previousTargetHP, this);
                     }
 
-                    if (target.hasVolatileStatus(SUBSTITUTE)
+                    if (target.isBehindSub()
                         && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
                         target.removeVolatileStatus(SUBSTITUTE);
                     }

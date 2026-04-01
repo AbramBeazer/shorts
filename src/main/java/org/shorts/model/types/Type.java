@@ -1,19 +1,25 @@
 package org.shorts.model.types;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.shorts.model.pokemon.Pokemon;
+
 public class Type {
 
-    public static final double NEUTRAL = 1;
+    public static final double NON_STAB = 1;
     public static final double STAB = 1.5;
+    public static final double TERA_STAB = 2;
+    public static final double NEUTRAL = 1;
     public static final double SUPER_EFFECTIVE = 2;
+    public static final double STELLAR_BOOST_NON_STAB = 4915d / 4096d; //1.2
 
-    public static final double QUAD_EFFECTIVE = 4;
+    public static final double EXTREMELY_EFFECTIVE = 4;
     public static final double OCTO_EFFECTIVE = 8;
     public static final double NOT_VERY_EFFECTIVE = 0.5;
 
@@ -72,11 +78,24 @@ public class Type {
         return multiplier;
     }
 
-    public static double getSTABMultiplier(Type moveType, Set<Type> attackerTypes) throws TooManyTypesException {
-        if (attackerTypes.size() > 2) {
-            throw new TooManyTypesException(attackerTypes);
+    public static double getSTABMultiplier(Type moveType, Pokemon attacker) throws TooManyTypesException {
+        if (attacker.getTypes().size() > 2) {
+            throw new TooManyTypesException(attacker.getTypes());
         }
-        return attackerTypes.contains(moveType) ? STAB : 1;
+
+        if (attacker.isTera()) {
+            if (attacker.getTeraType() instanceof StellarType stellar) {
+                if (!stellar.getPreviouslyBoosted()
+                    .contains(moveType)) {
+                    return attacker.getTypes().contains(moveType) ? TERA_STAB : STELLAR_BOOST_NON_STAB;
+                }
+            } else if (attacker.getTypes().contains(moveType)) {
+                return attacker.getTeraType().equals(moveType) ? TERA_STAB : STAB;
+            } else {
+                return attacker.getTeraType().equals(moveType) ? STAB : NON_STAB;
+            }
+        }
+        return attacker.getTypes().contains(moveType) ? STAB : NON_STAB;
     }
 
     public static final Type NORMAL = new Type(
@@ -217,6 +236,9 @@ public class Type {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
         if (obj instanceof Type) {
             Type t = (Type) obj;
             return t.id.equals(this.id);
@@ -283,6 +305,34 @@ public class Type {
         DRAGON,
         DARK,
         STEEL,
-        FAIRY
+        FAIRY,
+        STELLAR
     }
+
+    public static class StellarType extends Type {
+
+        private Set<Type> previouslyBoosted;
+
+        public StellarType() {
+            super(
+                TypeId.STELLAR,
+                "Stellar",
+                List.of(TypeId.GROUND, TypeId.PSYCHIC),
+                List.of(TypeId.GRASS, TypeId.FIGHTING, TypeId.POISON, TypeId.BUG, TypeId.FAIRY),
+                List.of());
+
+            previouslyBoosted = new HashSet<>();
+            /*Stellar is supereffective against Terastallized Pokémon and no Pokémon can be Stellar-type without terastallizing.
+            Stellar Pokémon retain the defensive profile of their original types.
+            However, if a Pokémon is hacked to be Stellar-type without terastallizing, it has the defensive properties of a Poison-type.*/
+        }
+
+        public Set<Type> getPreviouslyBoosted() {
+            if (previouslyBoosted == null) {
+                previouslyBoosted = new HashSet<>();
+            }
+            return previouslyBoosted;
+        }
+    }
+
 }

@@ -42,7 +42,7 @@ class CrashDamageMoveTests {
     @Test
     void testCannotBeUsedInGravity() {
         battle.setGravityTurns(1);
-        move.execute(user, List.of(target), battle);
+        move.executeWrapper(user, List.of(target), battle);
         assertThat(target.isAtFullHP()).isTrue();
         assertThat(user.isAtFullHP()).isTrue();
     }

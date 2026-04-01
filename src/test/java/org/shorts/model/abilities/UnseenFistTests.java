@@ -36,7 +36,7 @@ class UnseenFistTests {
     void testGetsThroughProtectWithContactMove() {
         assertThat(target.isAtFullHP()).isTrue();
 
-        new Tackle().execute(user, List.of(target), battle);
+        new Tackle().executeWrapper(user, List.of(target), battle);
 
         assertThat(target.isAtFullHP()).isFalse();
     }
@@ -45,7 +45,7 @@ class UnseenFistTests {
     void testTargetIsProtectedForNonContactMove() {
         assertThat(target.isAtFullHP()).isTrue();
 
-        new StoneEdge().execute(user, List.of(target), battle);
+        new StoneEdge().executeWrapper(user, List.of(target), battle);
 
         assertThat(target.isAtFullHP()).isTrue();
     }
@@ -55,7 +55,7 @@ class UnseenFistTests {
         assertThat(target.isAtFullHP()).isTrue();
 
         user.setHeldItem(PunchingGlove.PUNCHING_GLOVE);
-        new CometPunch().execute(user, List.of(target), battle);
+        new CometPunch().executeWrapper(user, List.of(target), battle);
 
         assertThat(target.isAtFullHP()).isTrue();
     }

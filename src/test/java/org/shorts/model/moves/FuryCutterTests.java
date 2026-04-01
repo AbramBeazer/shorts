@@ -45,14 +45,14 @@ class FuryCutterTests {
         FuryCutter furyCutter = new FuryCutter();
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.execute(user, allTargets, battle);
+        furyCutter.executeWrapper(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.execute(user, allTargets, battle);
+        furyCutter.executeWrapper(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(2);
 
         Main.HIT_RANDOM = MAX_RANDOM;
-        furyCutter.execute(user, allTargets, battle);
+        furyCutter.executeWrapper(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
     }
 
@@ -61,16 +61,16 @@ class FuryCutterTests {
         FuryCutter furyCutter = new FuryCutter();
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.execute(user, allTargets, battle);
+        furyCutter.executeWrapper(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.execute(user, allTargets, battle);
+        furyCutter.executeWrapper(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(2);
 
-        furyCutter.execute(user, allTargets, battle);
+        furyCutter.executeWrapper(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(4);
 
-        furyCutter.execute(user, allTargets, battle);
+        furyCutter.executeWrapper(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(4);
     }
 
@@ -79,14 +79,14 @@ class FuryCutterTests {
         FuryCutter furyCutter = new FuryCutter();
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.execute(user, allTargets, battle);
+        furyCutter.executeWrapper(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.execute(user, allTargets, battle);
+        furyCutter.executeWrapper(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(2);
 
-        new Earthquake().execute(user, allTargets, battle);
-        furyCutter.execute(user, allTargets, battle);
+        new Earthquake().executeWrapper(user, allTargets, battle);
+        furyCutter.executeWrapper(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
     }
 
@@ -97,10 +97,10 @@ class FuryCutterTests {
         FuryCutter furyCutter = new FuryCutter();
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.execute(user, allTargets, battle);
+        furyCutter.executeWrapper(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(1);
 
-        furyCutter.execute(user, allTargets, battle);
+        furyCutter.executeWrapper(user, allTargets, battle);
         assertThat(furyCutter.getPowerMultipliers(user, target, battle)).isEqualTo(2);
 
         assertThat(furyCutter.calculateMovePower(user, target, battle)).isEqualTo(

@@ -36,7 +36,7 @@ public class Covet extends Move {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (user.getHeldItem() == NO_ITEM && target.getHeldItem() != NO_ITEM && !target.hasVolatileStatus(SUBSTITUTE)
+        if (user.getHeldItem() == NO_ITEM && target.getHeldItem() != NO_ITEM && !target.isBehindSub()
             && !user.hasFainted() && (target.getAbility() != STICKY_HOLD || target.hasFainted()
             || target.hasVolatileStatus(ABILITY_SUPPRESSED) || target.hasVolatileStatus(ABILITY_IGNORED))
             && !(target.getHeldItem() == GRISEOUS_ORB && (user instanceof Giratina || target instanceof Giratina))

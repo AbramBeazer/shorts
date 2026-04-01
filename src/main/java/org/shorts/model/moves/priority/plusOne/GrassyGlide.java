@@ -14,7 +14,7 @@ public class GrassyGlide extends Move {
     }
 
     @Override
-    public int getPriority(Pokemon attacker, Battle battle) {
+    public int getBasePriority(Pokemon attacker, Battle battle) {
         if (battle.getTerrain() == Terrain.GRASSY && attacker.isGrounded()) {
             return 1;
         } else {

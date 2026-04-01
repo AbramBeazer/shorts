@@ -15,7 +15,7 @@ public class SitrusBerry extends Berry {
 
     @Override
     public boolean canDoEffect(Pokemon user) {
-        return user.getCurrentHP() < user.getMaxHP() && !user.hasVolatileStatus(VolatileStatusType.HEAL_BLOCKED);
+        return user.getCurrentHP() < user.getMaxHP() && !user.isHealBlocked();
     }
 
     @Override

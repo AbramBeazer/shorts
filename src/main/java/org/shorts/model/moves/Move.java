@@ -11,6 +11,7 @@ import org.shorts.battle.Weather;
 import org.shorts.model.abilities.FullHealthHalfDamageAbility;
 import org.shorts.model.abilities.MagicBounce;
 import org.shorts.model.abilities.SuperEffectiveReducingAbility;
+import org.shorts.model.abilities.Technician;
 import org.shorts.model.abilities.statpreserving.PreserveAccuracyIgnoreEvasionAbility;
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
@@ -85,17 +86,7 @@ import static org.shorts.model.status.VolatileStatusType.PUMPED;
 import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
 import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
 import static org.shorts.model.status.VolatileStatusType.TARRED;
-import static org.shorts.model.types.Type.FIGHTING;
-import static org.shorts.model.types.Type.FIRE;
-import static org.shorts.model.types.Type.FLYING;
-import static org.shorts.model.types.Type.GHOST;
-import static org.shorts.model.types.Type.GROUND;
-import static org.shorts.model.types.Type.ICE;
-import static org.shorts.model.types.Type.IMMUNE;
-import static org.shorts.model.types.Type.NEUTRAL;
-import static org.shorts.model.types.Type.NORMAL;
-import static org.shorts.model.types.Type.SUPER_EFFECTIVE;
-import static org.shorts.model.types.Type.WATER;
+import static org.shorts.model.types.Type.*;
 
 public abstract class Move implements IMove {
 
@@ -109,7 +100,7 @@ public abstract class Move implements IMove {
     private final double power;
     private final double accuracy;
     private Type type;
-    private final Category category;
+    private Category category;
     private final Range range;
     private int currentPP;
     private final int maxPP;
@@ -166,6 +157,10 @@ public abstract class Move implements IMove {
         return category;
     }
 
+    protected void setCategory(Category category) {
+        this.category = category;
+    }
+
     public Range getRange(Pokemon user) {
         return range;
     }
@@ -185,7 +180,11 @@ public abstract class Move implements IMove {
         return contact;
     }
 
-    public int getPriority(Pokemon attacker, Battle battle) {
+    public int getPriority(Pokemon user, Battle battle) {
+        return getBasePriority(user, battle) + getAbilityPriorityBonus(user);
+    }
+
+    public int getBasePriority(Pokemon attacker, Battle battle) {
         return 0;
     }
 
@@ -317,9 +316,23 @@ public abstract class Move implements IMove {
         return Objects.hash(name, power, accuracy, type, maxPP, contact, secondaryEffectChance);
     }
 
-    public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
+    //TODO: Find a way to prevent moves from being selected if they can't be used. Does this apply if the move is called by Metronome or Assist?
+    public boolean canBeUsed(Pokemon user, List<Pokemon> targets, Battle battle) {
+        return this.getCurrentPP() > 0;
+    }
 
+    public void executeWrapper(Pokemon user, List<Pokemon> targets, Battle battle) {
+        beforeExecute(user, targets, battle);
+        execute(user, targets, battle);
+        afterExecute(user, targets, battle);
+    }
+
+    protected void beforeExecute(Pokemon user, List<Pokemon> targets, Battle battle) {
+        user.setMovedThisTurn(true);
         this.decrementPP();
+    }
+
+    public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
         if (targets.isEmpty()) {
             System.out.println("But there was no target...");
             return;
@@ -381,8 +394,18 @@ public abstract class Move implements IMove {
                 user.setLastMoveFailed(false);
             }
         }
+    }
 
+    protected void afterExecute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setLastMoveUsed(this);
+    }
+
+    protected void markTypeAsAlreadyStellarBoosted(Pokemon user) {
+        if (user.isTera() && user.getTeraType() instanceof Type.StellarType stellar
+            && user.getPokedexEntry().getPokedexNo()
+            != 1024) { //Terapagos-Stellar always gets this boost, so don't add to the set.
+            stellar.getPreviouslyBoosted().add(this.type);
+        }
     }
 
     protected void executeOnSide(Pokemon user, Battle battle) {
@@ -465,7 +488,7 @@ public abstract class Move implements IMove {
                 }
 
                 this.trySecondaryEffect(user, target, battle);
-                if (target.hasVolatileStatus(SUBSTITUTE)
+                if (target.isBehindSub()
                     && ((SubstituteStatus) target.getVolatileStatus(SUBSTITUTE)).getSubHP() == 0) {
                     target.removeVolatileStatus(SUBSTITUTE);
                 }
@@ -475,6 +498,10 @@ public abstract class Move implements IMove {
             if (hitNum > 1) {
                 System.out.println("Hit " + hitNum + " times!");
             }
+
+            //TODO: Verify that this happens only if a damaging move hits, i.e. not if the attack misses, hits protect, or is a status move.
+            //Confirmed: The boost should apply to every hit of a multi-hit move.
+            markTypeAsAlreadyStellarBoosted(user);
 
             if (!user.hasFainted()) {
                 user.afterAttack(target, battle, this);
@@ -495,7 +522,7 @@ public abstract class Move implements IMove {
 
     //TODO: Remember to override this in Transform and Sky Drop -- Infiltrator still can't get through a substitute when using those moves.
     protected boolean checkForHitSub(Pokemon user, Pokemon target) {
-        return target.hasVolatileStatus(SUBSTITUTE) && (user.getAbility() != INFILTRATOR || user.hasVolatileStatus(
+        return target.isBehindSub() && (user.getAbility() != INFILTRATOR || user.hasVolatileStatus(
             ABILITY_SUPPRESSED));
     }
 
@@ -524,7 +551,7 @@ public abstract class Move implements IMove {
             return 0;
         }
 
-        double stabMultiplier = getSTABMultiplier(user.getTypes());
+        double stabMultiplier = getSTABMultiplier(user);
 
         baseDamage = roundHalfDown(baseDamage * getNumTargetsMultiplier());
         if (!battle.isWeatherSuppressed()) {
@@ -543,33 +570,47 @@ public abstract class Move implements IMove {
         return (int) baseDamage;
     }
 
+    protected Set<Type> getTargetTypes(Pokemon target) {
+        if (!target.isTera() || target.getTeraType() instanceof Type.StellarType) {
+            return target.getTypes();
+        }
+        return Set.of(target.getTeraType());
+    }
+
     protected double getTypeMultiplier(Pokemon user, Pokemon target, Battle battle) {
-        double multiplier = getBaseTypeMultiplier(target.getTypes());
+        if (this.type instanceof Type.StellarType && target.isTera()) {
+            return SUPER_EFFECTIVE;
+        }
+
+        final Set<Type> targetTypes = getTargetTypes(target);
+        double multiplier = getBaseTypeMultiplier(targetTypes);
+        //TODO: Don't I still want beforeHit to apply in the edge cases down below?
         multiplier *= target.beforeHit(user, battle, this);
 
-        if (!target.isGrounded() && target.getTypes().contains(FLYING) && (target.getHeldItem() == IRON_BALL)) {
+        if (!target.isGrounded() && targetTypes.contains(FLYING) && target.getHeldItem() == IRON_BALL) {
             multiplier = 1;
-        } else if (target.isGrounded() && target.getTypes().contains(FLYING) && this.type == GROUND && (
-            target.getHeldItem() != IRON_BALL)) {
-            multiplier = getBaseTypeMultiplier(target.getTypes()
+        } else if (target.isGrounded() && targetTypes.contains(FLYING) && this.type == GROUND
+            && target.getHeldItem() != IRON_BALL) {
+            multiplier = getBaseTypeMultiplier(targetTypes
                 .stream()
                 .filter(t -> t != FLYING)
                 .collect(Collectors.toSet()));
-        } else if (multiplier == IMMUNE && (target.getHeldItem() == RING_TARGET || target.hasVolatileStatus(
-            VolatileStatusType.IDENTIFIED))) {
-            multiplier = getBaseTypeMultiplier(target.getTypes()
+        } else if (multiplier == IMMUNE &&
+            (target.getHeldItem() == RING_TARGET || target.hasVolatileStatus(VolatileStatusType.IDENTIFIED))) {
+            multiplier = getBaseTypeMultiplier(targetTypes
                 .stream()
                 .filter(t -> !t.getImmunities().contains(this.type.getId()))
                 .collect(Collectors.toSet()));
-        } else if (user.getAbility() == SCRAPPY && (this.type == NORMAL || this.type == FIGHTING) && target.getTypes()
-            .contains(GHOST)) {
-            multiplier = getBaseTypeMultiplier(target.getTypes()
+        } else if (user.getAbility() == SCRAPPY && (this.type == NORMAL || this.type == FIGHTING)
+            && targetTypes.contains(GHOST)) {
+            //TODO: What if a Scrappy attacker uses a Fighting attack on a Ghost/Flying target that's grounded or holding Iron Ball?
+            multiplier = getBaseTypeMultiplier(targetTypes
                 .stream()
                 .filter(t -> t != GHOST)
                 .collect(Collectors.toSet()));
         } else if (battle.getWeather() == Weather.EXTREME_WIND && !battle.isWeatherSuppressed()
             && getBaseTypeMultiplier(Set.of(FLYING)) >= SUPER_EFFECTIVE) {
-            multiplier = getBaseTypeMultiplier(target.getTypes()
+            multiplier = getBaseTypeMultiplier(targetTypes
                 .stream()
                 .filter(t -> t != FLYING)
                 .collect(Collectors.toSet()));
@@ -582,19 +623,33 @@ public abstract class Move implements IMove {
     }
 
     protected double getBaseTypeMultiplier(Set<Type> defenderTypes) throws TooManyTypesException {
-        //TODO: Deal with Terrastalization and stuff.
         return Type.getTypeMultiplier(this.getType(), defenderTypes);
     }
 
-    protected double getSTABMultiplier(Set<Type> attackerTypes) throws TooManyTypesException {
-        //TODO: Deal with Terrastalization and stuff.
-        return Type.getSTABMultiplier(this.getType(), attackerTypes);
+    protected double getSTABMultiplier(Pokemon attacker) throws TooManyTypesException {
+        return Type.getSTABMultiplier(this.getType(), attacker);
     }
 
     protected double calculateMovePower(Pokemon user, Pokemon target, Battle battle) {
-        double basePower = this.getPower(user, target, battle) * this.getPowerMultipliers(user, target, battle);
+        double basePower = this.getPower(user, target, battle);
+        //Apply Technician boost before other modifiers
+        if (user.getAbility() == Technician.TECHNICIAN && !user.hasVolatileStatus(ABILITY_SUPPRESSED)
+            && basePower <= Technician.BASE_POWER_THRESHOLD) {
+
+            basePower *= Technician.MULTIPLIER;
+        }
+        //If the user is terastallized, the move matches the tera type, the move isn't a multi-hit move,
+        // a priority move, or a move with variable power (e.g. Gyro Ball, Magnitude, Low Kick, Eruption, etc.),
+        // and the post-Technician power is less than 60, then boost the move to 60 base power.
+        if (user.isTera() && user.getTeraType().equals(this.type) && basePower < 60 && this.hasMinPower60WhenTera()
+            && this.getPriority(user, battle) == 0) {
+
+            basePower = 60;
+        }
+        basePower *= this.getPowerMultipliers(user, target, battle);
         basePower *= user.getMovePowerMultipliers(target, battle, this);
-        //TODO: Handle weather multipliers, terrain multipliers, mud sport, etc.
+
+        //TODO: Handle terrain multipliers, mud sport, water sport, etc.
         //TODO: Investigate what, if anything, I need to do on the target's side of things.
         return basePower;
     }
@@ -608,6 +663,7 @@ public abstract class Move implements IMove {
     }
 
     private double getNumTargetsMultiplier() {
+        //TODO: Implement
         return 1;
     }
 
