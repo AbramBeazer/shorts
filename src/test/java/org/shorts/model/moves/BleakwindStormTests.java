@@ -12,6 +12,7 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.MockRandomMiss.*;
 import static org.shorts.MockRandomReturnMax.*;
 import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
@@ -44,7 +45,7 @@ public class BleakwindStormTests {
 
     @Test
     void testAlwaysHitsDuringRain() {
-        Main.HIT_RANDOM = MAX_RANDOM; //Move will miss unless rain is up
+        Main.HIT_RANDOM = ALWAYS_MISS; //Move will miss unless rain is up
 
         battle.setWeather(Weather.RAIN, 5);
         assertThat(move.rollToHit(user, target, battle)).isTrue();
@@ -54,7 +55,7 @@ public class BleakwindStormTests {
 
     @Test
     void testMissesSemiInvulnerableTargetsEvenInRain() { //TODO: Implement semi-invulnerability
-        Main.HIT_RANDOM = MAX_RANDOM; //Move will miss unless rain is up
+        Main.HIT_RANDOM = ALWAYS_MISS; //Move will miss unless rain is up
 
         battle.setWeather(Weather.RAIN, 5);
         target.addVolatileStatus(new VolatileStatus(VolatileStatusType.SEMI_INVULNERABLE, 1, new Dig()));

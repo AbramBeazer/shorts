@@ -15,6 +15,8 @@ import org.shorts.model.moves.ThunderPunch;
 import org.shorts.model.moves.Toxic;
 import org.shorts.model.moves.WaterPulse;
 import org.shorts.model.moves.recoil.Struggle;
+import org.shorts.model.moves.switchtarget.Roar;
+import org.shorts.model.moves.switchtarget.Whirlwind;
 import org.shorts.model.moves.thawing.FlameWheel;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
@@ -24,6 +26,7 @@ import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.shorts.MockRandomMiss.*;
 import static org.shorts.MockRandomReturnMax.*;
 import static org.shorts.MockRandomReturnZero.*;
 import static org.shorts.model.pokemon.PokemonTestUtils.*;
@@ -34,11 +37,13 @@ class ProteanLiberoTests {
     private Pokemon user;
     private Pokemon target;
     private Battle battle;
+    private ProteanLibero protean;
 
     @BeforeEach
     void setup() {
         user = getDummyPokemon();
-        user.setAbility(ProteanLibero.createProtean());
+        protean = ProteanLibero.createProtean();
+        user.setAbility(protean);
         target = getDummyPokemon();
         battle = new DummyBattle(user, target);
         Main.HIT_RANDOM = ZERO_RANDOM;
@@ -75,14 +80,14 @@ class ProteanLiberoTests {
 
         new Turn(user, move, 0).takeTurn(battle);
         assertThat(user.getTypes()).isEqualTo(expectedType);
-        assertThat(((ProteanLibero) user.getAbility()).isActivated()).isFalse();
+        assertThat(protean.isActivated()).isFalse();
     }
 
     @Test
     void testUserChangesTypeAndHitsWithToxic() {
         user.setStageAccuracy(-6);
         target.setStageEvasion(6);
-        Main.HIT_RANDOM = MAX_RANDOM;
+        Main.HIT_RANDOM = ALWAYS_MISS;
         new Turn(user, new Toxic(), 0).takeTurn(battle);
         assertThat(user.getTypes()).isEqualTo(Set.of(POISON));
         assertThat(target.getStatus().getType()).isEqualTo(StatusType.TOXIC_POISON);
@@ -174,6 +179,11 @@ class ProteanLiberoTests {
     }
 
     @Test
+    void testWithRagingBull() {
+        assertThat(false).isTrue();
+    }
+
+    @Test
     void testWithElectrifyMakesProteanChangeUserToElectric() {//Electrify is not in Gen 9
         assertThat(false).isTrue();
 
@@ -189,14 +199,23 @@ class ProteanLiberoTests {
     void testDoesNotActivateIfTerastallized() {
         user.setTeraType(ELECTRIC);
         user.terastallize();
-        new Turn(user, new FlameWheel()).takeTurn(battle);
+        final Move move = new FlameWheel();
+        new Turn(user, move).takeTurn(battle);
 
+        assertThat(protean.isActivated()).isFalse();
+        assertThat(user.getTypes()).doesNotContain(move.getType());
     }
 
     @Test
     void testTeraNeutralizesExistingEffectsOfProtean() {
-        assertThat(false).isTrue();
+        final Set<Type> originalTypes = user.getTypes();
+        new Turn(user, new FlameWheel()).takeTurn(battle);
 
+        user.setTeraType(ELECTRIC);
+        user.terastallize();
+
+        assertThat(user.getTypes()).isEqualTo(originalTypes);
+        assertThat(user.hasVolatileStatus(VolatileStatusType.TYPE_CHANGE)).isFalse();
     }
 
     @Test
@@ -228,32 +247,29 @@ class ProteanLiberoTests {
     }
 
     @Test
-    void testWithRagingBull() {
-        assertThat(false).isTrue();
-    }
-
-    @Test
     void testActivatesIfRoarFails() {
-        assertThat(false).isTrue();
-
+        target.setAbility(SuctionCups.SUCTION_CUPS);
+        new Turn(user, new Roar(), 0).takeTurn(battle);
+        assertThat(battle.getOpposingTrainer(user).getActivePokemon()).contains(target);
+        assertThat(protean.isActivated()).isTrue();
     }
 
     @Test
     void testActivatesIfWhirlwindFails() {
-        assertThat(false).isTrue();
-
+        target.setAbility(SuctionCups.SUCTION_CUPS);
+        new Turn(user, new Whirlwind(), 0).takeTurn(battle);
+        assertThat(battle.getOpposingTrainer(user).getActivePokemon()).contains(target);
+        assertThat(protean.isActivated()).isTrue();
     }
 
     @Test
     void testActivatesIfForestsCurseFails() {
         assertThat(false).isTrue();
-
     }
 
     @Test
     void testActivatesIfTrickOrTreatFails() {
         assertThat(false).isTrue();
-
     }
 
     @Test
@@ -265,7 +281,6 @@ class ProteanLiberoTests {
     @Test
     void testNewTypeMaintainedIfAbilityNullified() {
         assertThat(false).isTrue();
-
     }
 
     @Test
@@ -279,7 +294,7 @@ class ProteanLiberoTests {
 
     @Test
     void testActivatesIfMoveMisses() {
-        Main.HIT_RANDOM = MAX_RANDOM;
+        Main.HIT_RANDOM = ALWAYS_MISS;
         final Set<Type> expectedType = Set.of(ELECTRIC);
         new Turn(user, new ThunderPunch(), 0).takeTurn(battle);
         assertThat(target.isAtFullHP()).isTrue();

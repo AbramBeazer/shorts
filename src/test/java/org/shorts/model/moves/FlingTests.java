@@ -19,32 +19,32 @@ import org.shorts.model.status.SubstituteStatus;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
-import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
-import static org.shorts.model.abilities.Klutz.KLUTZ;
-import static org.shorts.model.abilities.Unnerve.UNNERVE;
-import static org.shorts.model.items.BoosterEnergy.BOOSTER_ENERGY;
-import static org.shorts.model.items.DriveItem.SHOCK_DRIVE;
-import static org.shorts.model.items.FlameOrb.FLAME_ORB;
-import static org.shorts.model.items.Gem.DARK_GEM;
-import static org.shorts.model.items.KingsRock.KINGS_ROCK;
-import static org.shorts.model.items.Leftovers.LEFTOVERS;
-import static org.shorts.model.items.LifeOrb.LIFE_ORB;
-import static org.shorts.model.items.LightBall.LIGHT_BALL;
-import static org.shorts.model.items.LoadedDice.LOADED_DICE;
-import static org.shorts.model.items.MentalHerb.MENTAL_HERB;
-import static org.shorts.model.items.NoItem.NO_ITEM;
-import static org.shorts.model.items.PlateItem.SPLASH_PLATE;
-import static org.shorts.model.items.PrimalOrb.RED_ORB;
-import static org.shorts.model.items.RazorFang.RAZOR_FANG;
-import static org.shorts.model.items.RustedShield.RUSTED_SHIELD;
-import static org.shorts.model.items.RustedSword.RUSTED_SWORD;
-import static org.shorts.model.items.ToxicOrb.TOXIC_ORB;
-import static org.shorts.model.items.TypeBoostItem.BLACK_GLASSES;
-import static org.shorts.model.items.TypeBoostItem.POISON_BARB;
-import static org.shorts.model.items.berries.OranBerry.ORAN_BERRY;
-import static org.shorts.model.items.berries.SitrusBerry.SITRUS_BERRY;
+import static org.assertj.core.api.Assertions.*;
+import static org.shorts.MockRandomMiss.*;
+import static org.shorts.MockRandomReturnMax.*;
+import static org.shorts.MockRandomReturnZero.*;
+import static org.shorts.model.abilities.Klutz.*;
+import static org.shorts.model.abilities.Unnerve.*;
+import static org.shorts.model.items.BoosterEnergy.*;
+import static org.shorts.model.items.DriveItem.*;
+import static org.shorts.model.items.FlameOrb.*;
+import static org.shorts.model.items.Gem.*;
+import static org.shorts.model.items.KingsRock.*;
+import static org.shorts.model.items.Leftovers.*;
+import static org.shorts.model.items.LifeOrb.*;
+import static org.shorts.model.items.LightBall.*;
+import static org.shorts.model.items.LoadedDice.*;
+import static org.shorts.model.items.MentalHerb.*;
+import static org.shorts.model.items.NoItem.*;
+import static org.shorts.model.items.PlateItem.*;
+import static org.shorts.model.items.PrimalOrb.*;
+import static org.shorts.model.items.RazorFang.*;
+import static org.shorts.model.items.RustedShield.*;
+import static org.shorts.model.items.RustedSword.*;
+import static org.shorts.model.items.ToxicOrb.*;
+import static org.shorts.model.items.TypeBoostItem.*;
+import static org.shorts.model.items.berries.OranBerry.*;
+import static org.shorts.model.items.berries.SitrusBerry.*;
 import static org.shorts.model.status.Status.BURN;
 import static org.shorts.model.status.Status.NONE;
 import static org.shorts.model.status.Status.PARALYZE;
@@ -462,7 +462,7 @@ class FlingTests {
 
     @Test
     void testItemNotConsumedIfAttackMisses() {
-        Main.HIT_RANDOM = MAX_RANDOM;
+        Main.HIT_RANDOM = ALWAYS_MISS;
         user.setHeldItem(LEFTOVERS);
         fling.executeOnTarget(user, target, battle);
 

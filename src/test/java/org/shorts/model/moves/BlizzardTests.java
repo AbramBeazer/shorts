@@ -12,6 +12,7 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.shorts.MockRandomMiss.*;
 import static org.shorts.MockRandomReturnMax.*;
 import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
@@ -44,7 +45,7 @@ public class BlizzardTests {
 
     @Test
     void testAlwaysHitsDuringSnowOrHail() {
-        Main.HIT_RANDOM = MAX_RANDOM; //Move will miss unless snow/hail is up
+        Main.HIT_RANDOM = ALWAYS_MISS; //Move will miss unless snow/hail is up
 
         battle.setWeather(Weather.SNOW, 5);
         assertThat(move.rollToHit(user, target, battle)).isTrue();
@@ -54,7 +55,7 @@ public class BlizzardTests {
 
     @Test
     void testMissesSemiInvulnerableTargetsEvenInSnowOrHail() { //TODO: Implement semi-invulnerability
-        Main.HIT_RANDOM = MAX_RANDOM; //Move will miss unless snow/hail is up
+        Main.HIT_RANDOM = ALWAYS_MISS; //Move will miss unless snow/hail is up
 
         battle.setWeather(Weather.SNOW, 5);
         target.addVolatileStatus(new VolatileStatus(VolatileStatusType.SEMI_INVULNERABLE, 1, new Dig()));
