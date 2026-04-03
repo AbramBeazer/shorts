@@ -24,8 +24,8 @@ import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
-import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
+import static org.shorts.MockRandomReturnMax.*;
+import static org.shorts.MockRandomReturnZero.*;
 import static org.shorts.model.pokemon.PokemonTestUtils.*;
 import static org.shorts.model.types.Type.*;
 
@@ -65,6 +65,17 @@ class ProteanLiberoTests {
         assertThat(user.getTypes()).isEqualTo(expectedType);
         final double stabDamage = target.getMaxHP() - target.getCurrentHP();
         assertThat(stabDamage).isEqualTo(baseDamage * Type.STAB);
+    }
+
+    @Test
+    void testDoesNotActivateIfUsersLoneTypeIsMoveType() {
+        final Move move = new FlameWheel();
+        final Set<Type> expectedType = Set.of(move.getType());
+        user.setTypes(expectedType);
+
+        new Turn(user, move, 0).takeTurn(battle);
+        assertThat(user.getTypes()).isEqualTo(expectedType);
+        assertThat(((ProteanLibero) user.getAbility()).isActivated()).isFalse();
     }
 
     @Test
@@ -137,6 +148,14 @@ class ProteanLiberoTests {
     }
 
     @Test
+    void testActivatesIfThawsSelf() {
+        final Set<Type> expectedType = Set.of(FIRE);
+        user.setStatus(Status.FREEZE);
+        new Turn(user, new FlameWheel(), 0).takeTurn(battle);
+        assertThat(user.getTypes()).isEqualTo(expectedType);
+    }
+
+    @Test
     void testNaturePower() {
         assertThat(false).isTrue();
 
@@ -155,20 +174,22 @@ class ProteanLiberoTests {
     }
 
     @Test
-    void testWithElectrify() {
+    void testWithElectrifyMakesProteanChangeUserToElectric() {//Electrify is not in Gen 9
         assertThat(false).isTrue();
 
     }
 
     @Test
-    void testWithIonDeluge() {
+    void testWithIonDeluge() { //Ion Deluge is not in Gen 8 or 9
         assertThat(false).isTrue();
 
     }
 
     @Test
     void testDoesNotActivateIfTerastallized() {
-        assertThat(false).isTrue();
+        user.setTeraType(ELECTRIC);
+        user.terastallize();
+        new Turn(user, new FlameWheel()).takeTurn(battle);
 
     }
 
@@ -190,7 +211,7 @@ class ProteanLiberoTests {
     }
 
     @Test
-    void testCurseWithElectrifyChangesStats() {
+    void testCurseWithElectrifyChangesStats() { //Electrify is not in Gen 9
         //        user.addVolatileStatus(new VolatileStatus(VolatileStatusType.ELECTRIFIED));
 
         new Turn(user, new Curse()).takeTurn(battle);
@@ -201,9 +222,14 @@ class ProteanLiberoTests {
     }
 
     @Test
-    void testWithCamoflauge() {
+    void testWithCamoflauge() { // Camoflauge is not in Gen 8 or 9
         assertThat(false).isTrue();
 
+    }
+
+    @Test
+    void testWithRagingBull() {
+        assertThat(false).isTrue();
     }
 
     @Test

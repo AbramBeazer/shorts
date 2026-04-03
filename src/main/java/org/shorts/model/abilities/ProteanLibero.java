@@ -3,7 +3,6 @@ package org.shorts.model.abilities;
 import java.util.List;
 import java.util.Set;
 
-import org.shorts.battle.Battle;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.recoil.Struggle;
 import org.shorts.model.pokemon.Pokemon;
@@ -29,7 +28,9 @@ public class ProteanLibero extends Ability {
 
     @Override
     public void beforeAttack(Pokemon self, List<Pokemon> opponents, Move move) {
-        if (!isActivated() && !self.isTera() && move != Struggle.STRUGGLE) {
+        if (!isActivated() && !self.isTera()
+            && !self.getTypes().equals(Set.of(move.getType())) && move != Struggle.STRUGGLE) {
+
             self.addVolatileStatus(new TypeChangeStatus(VolatileStatusType.TYPE_CHANGE, -1, self.getTypes()));
             self.setTypes(Set.of(move.getType()));
             setActivated(true);
