@@ -697,6 +697,11 @@ public class Pokemon {
         Arrays.stream(this.getMoves())
             .filter(move -> move instanceof TeraBlast || move instanceof TeraStarstorm)
             .forEach(move -> move.setType(getTeraType()));
+
+        if (getAbility() instanceof ProteanLibero) {
+            this.setTypes(((TypeChangeStatus) this.getVolatileStatus(TYPE_CHANGE)).getOriginalTypes());
+            this.removeVolatileStatus(TYPE_CHANGE);
+        }
     }
 
     private void teraOff() {
