@@ -29,17 +29,11 @@ public class ProteanLibero extends Ability {
 
     @Override
     public void beforeAttack(Pokemon self, List<Pokemon> opponents, Move move) {
-        if (!isActivated() && move != Struggle.STRUGGLE) {
+        if (!isActivated() && !self.isTera() && move != Struggle.STRUGGLE) {
             self.addVolatileStatus(new TypeChangeStatus(VolatileStatusType.TYPE_CHANGE, -1, self.getTypes()));
             self.setTypes(Set.of(move.getType()));
             setActivated(true);
         }
-    }
-
-    @Override
-    public void beforeSwitchOut(Pokemon self, Pokemon opponent, Battle battle) {
-        setActivated(false);
-        super.beforeSwitchOut(self, opponent, battle);
     }
 
     public static ProteanLibero createProtean() {

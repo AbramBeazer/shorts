@@ -16,6 +16,7 @@ import org.shorts.model.abilities.Ability;
 import org.shorts.model.abilities.IgnorableAbility;
 import org.shorts.model.abilities.NullifyingAbility;
 import org.shorts.model.abilities.Pickup;
+import org.shorts.model.abilities.ProteanLibero;
 import org.shorts.model.abilities.UnsuppressableAbility;
 import org.shorts.model.items.HeldItem;
 import org.shorts.model.items.NoItem;
@@ -992,6 +993,9 @@ public class Pokemon {
 
         Pickup.removeFromConsumedItems(this);
 
+        if (this.getAbility() instanceof ProteanLibero proteanLibero) { //even if the ability is suppressed, it should still be reset so it can be activated later.
+            proteanLibero.setActivated(false);
+        }
         if (this.hasVolatileStatus(TYPE_CHANGE)) {
             this.setTypes(((TypeChangeStatus) this.getVolatileStatus(TYPE_CHANGE)).getOriginalTypes());
         }
