@@ -34,21 +34,16 @@ import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 import static org.shorts.Main.*;
-import static org.shorts.model.StatEnum.ATK;
-import static org.shorts.model.StatEnum.DEF;
-import static org.shorts.model.StatEnum.HP;
-import static org.shorts.model.StatEnum.SPATK;
-import static org.shorts.model.StatEnum.SPDEF;
-import static org.shorts.model.StatEnum.SPEED;
-import static org.shorts.model.abilities.Contrary.CONTRARY;
-import static org.shorts.model.abilities.Levitate.LEVITATE;
+import static org.shorts.model.StatEnum.*;
+import static org.shorts.model.abilities.Contrary.*;
+import static org.shorts.model.abilities.Levitate.*;
 import static org.shorts.model.abilities.MagicBounce.*;
-import static org.shorts.model.abilities.trapping.ArenaTrap.ARENA_TRAP;
-import static org.shorts.model.abilities.trapping.MagnetPull.MAGNET_PULL;
-import static org.shorts.model.abilities.trapping.ShadowTag.SHADOW_TAG;
-import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
-import static org.shorts.model.items.FloatStone.FLOAT_STONE;
-import static org.shorts.model.items.ShedShell.SHED_SHELL;
+import static org.shorts.model.abilities.trapping.ArenaTrap.*;
+import static org.shorts.model.abilities.trapping.MagnetPull.*;
+import static org.shorts.model.abilities.trapping.ShadowTag.*;
+import static org.shorts.model.items.AirBalloon.*;
+import static org.shorts.model.items.FloatStone.*;
+import static org.shorts.model.items.ShedShell.*;
 import static org.shorts.model.status.VolatileStatusType.*;
 
 public class Pokemon {
@@ -698,7 +693,8 @@ public class Pokemon {
             .filter(move -> move instanceof TeraBlast || move instanceof TeraStarstorm)
             .forEach(move -> move.setType(getTeraType()));
 
-        if (getAbility() instanceof ProteanLibero) {
+        //TODO: What if the type has been changed multiple times, like Protean activated and then the mon was hit with Soak?
+        if (getAbility() instanceof ProteanLibero proteanLibero && proteanLibero.isActivated()) {
             this.setTypes(((TypeChangeStatus) this.getVolatileStatus(TYPE_CHANGE)).getOriginalTypes());
             this.removeVolatileStatus(TYPE_CHANGE);
         }

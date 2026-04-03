@@ -303,6 +303,7 @@ class ProteanLiberoTests {
 
     @Test
     void testActivatesIfTargetIsSemiInvulnerable() {
+        //TODO: implement semi-invulnerable
         target.addVolatileStatus(new VolatileStatus(VolatileStatusType.SEMI_INVULNERABLE, 1));
         final Set<Type> expectedType = Set.of(ELECTRIC);
         new Turn(user, new ThunderPunch(), 0).takeTurn(battle);
