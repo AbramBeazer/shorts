@@ -23,13 +23,12 @@ import org.shorts.model.status.StatusType;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.types.Type;
 
-import static org.shorts.Main.DECIMAL;
-import static org.shorts.Main.RANDOM;
-import static org.shorts.model.abilities.MagicGuard.MAGIC_GUARD;
-import static org.shorts.model.abilities.PoisonHeal.POISON_HEAL;
-import static org.shorts.model.abilities.VictoryStar.VICTORY_STAR;
-import static org.shorts.model.items.AssaultVest.ASSAULT_VEST;
-import static org.shorts.model.items.SafetyGoggles.SAFETY_GOGGLES;
+import static org.shorts.Main.*;
+import static org.shorts.model.abilities.MagicGuard.*;
+import static org.shorts.model.abilities.PoisonHeal.*;
+import static org.shorts.model.abilities.VictoryStar.*;
+import static org.shorts.model.items.AssaultVest.*;
+import static org.shorts.model.items.SafetyGoggles.*;
 import static org.shorts.model.status.VolatileStatusType.*;
 
 public class Battle {
@@ -222,6 +221,14 @@ public class Battle {
         } else {
             return playerOne;
         }
+    }
+
+    public boolean areTeammates(Pokemon first, Pokemon second) {
+        return getCorrespondingTrainer(first) == getCorrespondingTrainer(second);
+    }
+
+    public boolean areOpponents(Pokemon first, Pokemon second) {
+        return !areTeammates(first, second);
     }
 
     public List<Pokemon> getOpposingActivePokemon(Pokemon pokemon) {
