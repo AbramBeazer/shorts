@@ -11,7 +11,7 @@ import org.shorts.battle.Turn;
 import org.shorts.model.StatEnum;
 import org.shorts.model.moves.CloseCombat;
 import org.shorts.model.moves.Crunch;
-import org.shorts.model.moves.Growl;
+import org.shorts.model.moves.StruggleBug;
 import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.moves.ShellSmash;
@@ -24,7 +24,7 @@ import static org.shorts.model.items.NoItem.*;
 import static org.shorts.model.items.WhiteHerb.*;
 import static org.shorts.model.pokemon.PokemonTestUtils.*;
 
-class DefiantTests {
+class CompetitiveTests {
 
     private Pokemon user;
     private Pokemon ally;
@@ -35,7 +35,7 @@ class DefiantTests {
     @BeforeEach
     void setup() {
         user = getDummyPokemon();
-        user.setAbility(Defiant.DEFIANT);
+        user.setAbility(Competitive.COMPETITIVE);
         ally = getDummyPokemon();
         opponent = getDummyPokemon();
         otherOpponent = getDummyPokemon();
@@ -44,62 +44,63 @@ class DefiantTests {
     }
 
     @Test
-    void testAttackRaisesTwoStagesAfterDropFromOpponent() {
-        assertThat(user.getStageAttack()).isZero();
+    void testSpAtkRaisesTwoStagesAfterDropFromOpponent() {
+        assertThat(user.getStageSpecialAttack()).isZero();
 
-        new Turn(opponent, new Growl(), 0).takeTurn(battle);
-        assertThat(user.getStageAttack()).isOne();
+        new Turn(opponent, new StruggleBug(), 0).takeTurn(battle);
+        assertThat(user.getStageSpecialAttack()).isOne();
+        user.fullRestore();
 
         new Turn(opponent, new Crunch(), 0).takeTurn(battle);
         assertThat(user.getStageDefense()).isEqualTo(-1);
-        assertThat(user.getStageAttack()).isEqualTo(3);
+        assertThat(user.getStageSpecialAttack()).isEqualTo(3);
     }
 
     @Test
-    void testAttackNotRaisedIfDropsOwnStats() {
-        assertThat(user.getStageAttack()).isZero();
+    void testSpAtkNotRaisedIfDropsOwnStats() {
+        assertThat(user.getStageSpecialAttack()).isZero();
         assertThat(user.getStageDefense()).isZero();
         assertThat(user.getStageSpecialDefense()).isZero();
 
         new Turn(user, new CloseCombat(), 0).takeTurn(battle);
         assertThat(user.getStageDefense()).isEqualTo(-1);
         assertThat(user.getStageSpecialDefense()).isEqualTo(-1);
-        assertThat(user.getStageAttack()).isZero();
+        assertThat(user.getStageSpecialAttack()).isZero();
     }
 
     @Test
-    void testAttackNotRaisedIfStatsDroppedByAlly() {
-        assertThat(user.getStageAttack()).isZero();
+    void testSpAtkNotRaisedIfStatsDroppedByAlly() {
+        assertThat(user.getStageSpecialAttack()).isZero();
 
-        new Turn(ally, new Growl(), 2).takeTurn(battle);
-        assertThat(user.getStageAttack()).isEqualTo(-1);
+        new Turn(ally, new StruggleBug(), 2).takeTurn(battle);
+        assertThat(user.getStageSpecialAttack()).isEqualTo(-1);
     }
 
     @Test
-    void testWhiteHerbDoesNotActivateIfDefiantHasAlreadyRestoredStat() {
-        assertThat(user.getStageAttack()).isZero();
+    void testWhiteHerbDoesNotActivateIfCompetitiveHasAlreadyRestoredStat() {
+        assertThat(user.getStageSpecialAttack()).isZero();
 
         user.setHeldItem(WHITE_HERB);
-        new Turn(opponent, new Growl(), 0).takeTurn(battle);
-        assertThat(user.getStageAttack()).isOne();
+        new Turn(opponent, new StruggleBug(), 0).takeTurn(battle);
+        assertThat(user.getStageSpecialAttack()).isOne();
         assertThat(user.getHeldItem()).isEqualTo(WHITE_HERB);
         assertThat(user.getConsumedItem()).isEqualTo(NO_ITEM);
     }
 
     @Test
-    void testDefiantDoesNotActivateButWhiteHerbActivatesForStatDroppedByAlly() {
-        assertThat(user.getStageAttack()).isZero();
+    void testCompetitiveDoesNotActivateButWhiteHerbActivatesForStatDroppedByAlly() {
+        assertThat(user.getStageSpecialAttack()).isZero();
 
         user.setHeldItem(WHITE_HERB);
-        new Turn(ally, new Growl(), 2).takeTurn(battle);
-        assertThat(user.getStageAttack()).isZero();
+        new Turn(ally, new StruggleBug(), 2).takeTurn(battle);
+        assertThat(user.getStageSpecialAttack()).isZero();
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(WHITE_HERB);
     }
 
     @Test
-    void testDefiantDoesNotActivateButWhiteHerbActivatesForStatDroppedBySelf() {
-        assertThat(user.getStageAttack()).isZero();
+    void testCompetitiveDoesNotActivateButWhiteHerbActivatesForStatDroppedBySelf() {
+        assertThat(user.getStageSpecialAttack()).isZero();
         assertThat(user.getStageDefense()).isZero();
         assertThat(user.getStageSpecialDefense()).isZero();
 
@@ -107,7 +108,7 @@ class DefiantTests {
         new Turn(user, new CloseCombat(), 0).takeTurn(battle);
         assertThat(user.getStageDefense()).isZero();
         assertThat(user.getStageSpecialDefense()).isZero();
-        assertThat(user.getStageAttack()).isZero();
+        assertThat(user.getStageSpecialAttack()).isZero();
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(WHITE_HERB);
     }
@@ -118,8 +119,8 @@ class DefiantTests {
         assertThat(user.getStageSpecialAttack()).isZero();
 
         new Turn(opponent, new LowerThreeStats(), 0).takeTurn(battle);
-        assertThat(user.getStageAttack()).isEqualTo(4);
-        assertThat(user.getStageSpecialAttack()).isEqualTo(-2);
+        assertThat(user.getStageAttack()).isEqualTo(-2);
+        assertThat(user.getStageSpecialAttack()).isEqualTo(4);
         assertThat(user.getStageSpeed()).isEqualTo(-2);
     }
 
@@ -130,15 +131,15 @@ class DefiantTests {
 
         user.setHeldItem(WHITE_HERB);
         new Turn(opponent, new LowerThreeStats(), 0).takeTurn(battle);
-        assertThat(user.getStageAttack()).isEqualTo(4);
-        assertThat(user.getStageSpecialAttack()).isZero();
+        assertThat(user.getStageAttack()).isZero();
+        assertThat(user.getStageSpecialAttack()).isEqualTo(4);
         assertThat(user.getStageSpeed()).isZero();
         assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
         assertThat(user.getConsumedItem()).isEqualTo(WHITE_HERB);
     }
 
     @Test
-    void testShellSmashDoesNotActivateDefiant() {
+    void testShellSmashDoesNotActivateCompetitive() {
         assertThat(user.getStageAttack()).isZero();
         assertThat(user.getStageDefense()).isZero();
         assertThat(user.getStageSpecialAttack()).isZero();
@@ -154,7 +155,7 @@ class DefiantTests {
     }
 
     @Test
-    void testShellSmashDoesNotActivateDefiantButActivatesWhiteHerb() {
+    void testShellSmashDoesNotActivateCompetitiveButActivatesWhiteHerb() {
         assertThat(user.getStageAttack()).isZero();
         assertThat(user.getStageDefense()).isZero();
         assertThat(user.getStageSpecialAttack()).isZero();
