@@ -14,6 +14,7 @@ public class WhiteHerb extends HeldItem {
 
     public static final WhiteHerb WHITE_HERB = new WhiteHerb();
 
+    //TODO: Is this when White Herb should activate, or should this activate at end of turn?
     @Override
     public void afterDrop(Pokemon self, Pokemon cause, Battle battle) {
         activate(self);

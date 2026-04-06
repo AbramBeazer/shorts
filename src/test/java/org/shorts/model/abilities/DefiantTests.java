@@ -8,10 +8,14 @@ import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
 import org.shorts.battle.Turn;
+import org.shorts.model.StatEnum;
 import org.shorts.model.moves.CloseCombat;
 import org.shorts.model.moves.Crunch;
 import org.shorts.model.moves.Growl;
+import org.shorts.model.moves.Move;
+import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
+import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.shorts.MockRandomReturnZero.*;
@@ -71,7 +75,7 @@ class DefiantTests {
     }
 
     @Test
-    void testWhiteHerbDoesNotActivateAfterDefiant() {
+    void testWhiteHerbDoesNotActivateIfDefiantHasAlreadyRestoredStat() {
         assertThat(user.getStageAttack()).isZero();
 
         user.setHeldItem(WHITE_HERB);
@@ -82,7 +86,7 @@ class DefiantTests {
     }
 
     @Test
-    void testWhiteHerbActivatesForStatDroppedByAlly() {
+    void testDefiantDoesNotActivateButWhiteHerbActivatesForStatDroppedByAlly() {
         assertThat(user.getStageAttack()).isZero();
 
         user.setHeldItem(WHITE_HERB);
@@ -93,7 +97,7 @@ class DefiantTests {
     }
 
     @Test
-    void testWhiteHerbActivatesForStatDroppedBySelf() {
+    void testDefiantDoesNotActivateButWhiteHerbActivatesForStatDroppedBySelf() {
         assertThat(user.getStageAttack()).isZero();
         assertThat(user.getStageDefense()).isZero();
         assertThat(user.getStageSpecialDefense()).isZero();
@@ -103,15 +107,44 @@ class DefiantTests {
         assertThat(user.getStageDefense()).isZero();
         assertThat(user.getStageSpecialDefense()).isZero();
         assertThat(user.getStageAttack()).isZero();
+        assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
+        assertThat(user.getConsumedItem()).isEqualTo(WHITE_HERB);
     }
 
     @Test
     void testLowersMultipleStats() {
-        assertThat(false).isTrue();
+        assertThat(user.getStageAttack()).isZero();
+        assertThat(user.getStageSpecialAttack()).isZero();
+
+        new Turn(opponent, new LowerThreeStats(), 0).takeTurn(battle);
+        assertThat(user.getStageAttack()).isEqualTo(4);
+        assertThat(user.getStageSpecialAttack()).isEqualTo(-2);
+        assertThat(user.getStageSpeed()).isEqualTo(-2);
     }
 
     @Test
     void testLowersMultipleStatsWithWhiteHerb() {
-        assertThat(false).isTrue();
+        assertThat(user.getStageAttack()).isZero();
+        assertThat(user.getStageSpecialAttack()).isZero();
+
+        user.setHeldItem(WHITE_HERB);
+        new Turn(opponent, new LowerThreeStats(), 0).takeTurn(battle);
+        assertThat(user.getStageAttack()).isEqualTo(4);
+        assertThat(user.getStageSpecialAttack()).isZero();
+        assertThat(user.getStageSpeed()).isZero();
+        assertThat(user.getHeldItem()).isEqualTo(NO_ITEM);
+        assertThat(user.getConsumedItem()).isEqualTo(WHITE_HERB);
+    }
+
+    private static class LowerThreeStats extends Move {
+
+        public LowerThreeStats() {
+            super("Lower Three Stats", 0, -1, Type.NORMAL, Category.STATUS, Range.NORMAL, 10, false, 100);
+        }
+
+        @Override
+        protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+            target.changeStat(battle, user, -2, StatEnum.ATK, StatEnum.SPATK, StatEnum.SPEED);
+        }
     }
 }
