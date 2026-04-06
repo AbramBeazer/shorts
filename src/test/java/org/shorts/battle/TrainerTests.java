@@ -7,34 +7,36 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shorts.model.items.HeavyDutyBoots;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.pokemon.PokemonTestUtils;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.shorts.model.abilities.PinchTypeBoostAbility.TORRENT;
-import static org.shorts.model.items.Leftovers.LEFTOVERS;
+import static org.assertj.core.api.Assertions.*;
+import static org.shorts.model.abilities.PinchTypeBoostAbility.*;
+import static org.shorts.model.items.Leftovers.*;
+import static org.shorts.model.pokemon.PokemonTestUtils.*;
 
 class TrainerTests {
 
     Trainer trainer;
     Pokemon pokemon;
+    Battle battle;
 
     @BeforeEach
     void setup() {
-        pokemon = PokemonTestUtils.getDummyPokemon();
+        pokemon = getDummyPokemon();
         pokemon.setMaxHP(100);
         pokemon.setCurrentHP(100);
         pokemon.setAbility(TORRENT);
         pokemon.setHeldItem(LEFTOVERS);
         trainer = new Trainer("Ash", List.of(pokemon));
+        battle = new Battle(trainer, new Trainer("Gary", List.of(getDummyPokemon())), 1);
     }
 
     @Test
     void testStealthRockNeutral() {
         trainer.addRocks();
-        trainer.applyEntryHazards(pokemon);
+        trainer.applyEntryHazards(pokemon, battle);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() / 8));
     }
 
@@ -42,49 +44,49 @@ class TrainerTests {
     void testStealthRockSuperEffective() {
         pokemon.setTypes(Set.of(Type.FIRE));
         trainer.addRocks();
-        trainer.applyEntryHazards(pokemon);
+        trainer.applyEntryHazards(pokemon, battle);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() / 4));
     }
 
     @Test
     void testSpikesOneLayer() {
         trainer.setSpikes(1);
-        trainer.applyEntryHazards(pokemon);
+        trainer.applyEntryHazards(pokemon, battle);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() / 8));
     }
 
     @Test
     void testSpikesTwoLayers() {
         trainer.setSpikes(2);
-        trainer.applyEntryHazards(pokemon);
+        trainer.applyEntryHazards(pokemon, battle);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() / 6));
     }
 
     @Test
     void testSpikesThreeLayers() {
         trainer.setSpikes(3);
-        trainer.applyEntryHazards(pokemon);
+        trainer.applyEntryHazards(pokemon, battle);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() / 4));
     }
 
     @Test
     void testToxicSpikesOneLayer() {
         trainer.setToxicSpikes(1);
-        trainer.applyEntryHazards(pokemon);
+        trainer.applyEntryHazards(pokemon, battle);
         assertThat(pokemon.getStatus()).isEqualTo(Status.POISON);
     }
 
     @Test
     void testToxicSpikesTwoLayers() {
         trainer.setToxicSpikes(2);
-        trainer.applyEntryHazards(pokemon);
+        trainer.applyEntryHazards(pokemon, battle);
         assertThat(pokemon.getStatus().getType()).isEqualTo(StatusType.TOXIC_POISON);
     }
 
     @Test
     void testStickyWeb() {
         trainer.addStickyWeb();
-        trainer.applyEntryHazards(pokemon);
+        trainer.applyEntryHazards(pokemon, battle);
         assertThat(pokemon.getStageSpeed()).isEqualTo(-1);
     }
 
@@ -94,7 +96,7 @@ class TrainerTests {
         trainer.addRocks();
         trainer.setSpikes(3);
         trainer.setToxicSpikes(2);
-        trainer.applyEntryHazards(pokemon);
+        trainer.applyEntryHazards(pokemon, battle);
         assertThat(pokemon.getStageSpeed()).isEqualTo(-1);
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP() - (pokemon.getMaxHP() * 3 / 8));
         assertThat(pokemon.getStatus().getType()).isEqualTo(StatusType.TOXIC_POISON);
@@ -107,7 +109,7 @@ class TrainerTests {
         trainer.addRocks();
         trainer.setSpikes(3);
         trainer.setToxicSpikes(2);
-        trainer.applyEntryHazards(pokemon);
+        trainer.applyEntryHazards(pokemon, battle);
         assertThat(pokemon.getStageSpeed()).isZero();
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP());
         assertThat(pokemon.getStatus()).isEqualTo(Status.NONE);
@@ -122,7 +124,7 @@ class TrainerTests {
         trainer.addRocks();
         trainer.setSpikes(3);
         trainer.setToxicSpikes(2);
-        trainer.applyEntryHazards(pokemon);
+        trainer.applyEntryHazards(pokemon, battle);
         assertThat(pokemon.getStageSpeed()).isZero();
         assertThat(pokemon.getCurrentHP()).isEqualTo(pokemon.getMaxHP());
         assertThat(pokemon.getStatus()).isEqualTo(Status.NONE);
