@@ -1,7 +1,10 @@
 package org.shorts.model.items;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.abilities.Pickup;
 import org.shorts.model.pokemon.Pokemon;
+
+import static org.shorts.model.items.NoItem.*;
 
 public class WhiteHerb extends HeldItem {
 
@@ -12,7 +15,7 @@ public class WhiteHerb extends HeldItem {
     public static final WhiteHerb WHITE_HERB = new WhiteHerb();
 
     @Override
-    public void afterDrop(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterDrop(Pokemon self, Pokemon cause, Battle battle) {
         activate(self);
     }
 
@@ -22,12 +25,19 @@ public class WhiteHerb extends HeldItem {
     }
 
     private void activate(Pokemon self) {
-        self.setStageAttack(Math.max(0, self.getStageAttack()));
-        self.setStageDefense(Math.max(0, self.getStageDefense()));
-        self.setStageSpecialAttack(Math.max(0, self.getStageSpecialAttack()));
-        self.setStageSpecialDefense(Math.max(0, self.getStageSpecialDefense()));
-        self.setStageSpeed(Math.max(0, self.getStageSpeed()));
-        self.setStageAccuracy(Math.max(0, self.getStageAccuracy()));
-        self.setStageEvasion(Math.max(0, self.getStageEvasion()));
+        if (self.getStageAttack() < 0 || self.getStageDefense() < 0 || self.getStageSpecialAttack() < 0
+            || self.getStageSpecialDefense() < 0 || self.getStageSpeed() < 0) {
+
+            self.setStageAttack(Math.max(0, self.getStageAttack()));
+            self.setStageDefense(Math.max(0, self.getStageDefense()));
+            self.setStageSpecialAttack(Math.max(0, self.getStageSpecialAttack()));
+            self.setStageSpecialDefense(Math.max(0, self.getStageSpecialDefense()));
+            self.setStageSpeed(Math.max(0, self.getStageSpeed()));
+            self.setStageAccuracy(Math.max(0, self.getStageAccuracy()));
+            self.setStageEvasion(Math.max(0, self.getStageEvasion()));
+            self.setConsumedItem(this);
+            self.setHeldItem(NO_ITEM);
+            Pickup.addToConsumedItems(self);
+        }
     }
 }
