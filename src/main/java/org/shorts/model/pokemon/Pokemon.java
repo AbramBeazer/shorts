@@ -32,21 +32,16 @@ import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 import static org.shorts.Main.*;
-import static org.shorts.model.StatEnum.ATK;
-import static org.shorts.model.StatEnum.DEF;
-import static org.shorts.model.StatEnum.HP;
-import static org.shorts.model.StatEnum.SPATK;
-import static org.shorts.model.StatEnum.SPDEF;
-import static org.shorts.model.StatEnum.SPEED;
-import static org.shorts.model.abilities.Contrary.CONTRARY;
-import static org.shorts.model.abilities.Levitate.LEVITATE;
+import static org.shorts.model.StatEnum.*;
+import static org.shorts.model.abilities.Contrary.*;
+import static org.shorts.model.abilities.Levitate.*;
 import static org.shorts.model.abilities.MagicBounce.*;
-import static org.shorts.model.abilities.trapping.ArenaTrap.ARENA_TRAP;
-import static org.shorts.model.abilities.trapping.MagnetPull.MAGNET_PULL;
-import static org.shorts.model.abilities.trapping.ShadowTag.SHADOW_TAG;
-import static org.shorts.model.items.AirBalloon.AIR_BALLOON;
-import static org.shorts.model.items.FloatStone.FLOAT_STONE;
-import static org.shorts.model.items.ShedShell.SHED_SHELL;
+import static org.shorts.model.abilities.trapping.ArenaTrap.*;
+import static org.shorts.model.abilities.trapping.MagnetPull.*;
+import static org.shorts.model.abilities.trapping.ShadowTag.*;
+import static org.shorts.model.items.AirBalloon.*;
+import static org.shorts.model.items.FloatStone.*;
+import static org.shorts.model.items.ShedShell.*;
 import static org.shorts.model.status.VolatileStatusType.*;
 
 public class Pokemon {
@@ -75,6 +70,7 @@ public class Pokemon {
     private int level;
     private int maxHP;
     private int currentHP;
+    //TODO: Would it be better to make all 5 stats into a Map<StatEnum, int>? That could reduce the switch cases in the stat-related methods.
     private int attack;
     private int stageAttack = 0;
     private int defense;
@@ -210,7 +206,7 @@ public class Pokemon {
         return true;
     }
 
-    public void changeStat(int stages, StatEnum stat) {
+    public void changeStat(int stages, StatEnum stat, Battle battle, Pokemon cause) {
         if (this.getAbility() == CONTRARY
             && !this.hasVolatileStatus(ABILITY_IGNORED) && !this.hasVolatileStatus(ABILITY_SUPPRESSED)) {
             stages = stages * -1;
@@ -238,6 +234,10 @@ public class Pokemon {
                 changeEvasion(stages);
                 break;
             default:
+                break;
+        }
+        if (stages < 0) {
+            afterDrop(cause, battle);
         }
     }
 
@@ -892,12 +892,12 @@ public class Pokemon {
         }
     }
 
-    public void afterDrop(Pokemon opponent, Battle battle) {
+    public void afterDrop(Pokemon cause, Battle battle) {
         if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
             || this.getAbility() instanceof UnsuppressableAbility) {
-            ability.afterDrop(this, opponent, battle);
+            ability.afterDrop(this, cause, battle);
         }
-        heldItem.afterDrop(this, opponent, battle);
+        heldItem.afterDrop(this, cause, battle);
     }
 
     public double beforeHit(Pokemon opponent, Battle battle, Move move) {
