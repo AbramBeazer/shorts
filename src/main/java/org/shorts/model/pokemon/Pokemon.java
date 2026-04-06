@@ -206,38 +206,44 @@ public class Pokemon {
         return true;
     }
 
-    public void changeStat(int stages, StatEnum stat, Battle battle, Pokemon cause) {
+    public void changeStat(Battle battle, Pokemon cause, int stages, StatEnum... stats) {
         if (this.getAbility() == CONTRARY
             && !this.hasVolatileStatus(ABILITY_IGNORED) && !this.hasVolatileStatus(ABILITY_SUPPRESSED)) {
             stages = stages * -1;
         }
-        switch (stat) {
-            case ATK:
-                changeAttack(stages);
-                break;
-            case DEF:
-                changeDefense(stages);
-                break;
-            case SPATK:
-                changeSpecialAttack(stages);
-                break;
-            case SPDEF:
-                changeSpecialDefense(stages);
-                break;
-            case SPEED:
-                changeSpeed(stages);
-                break;
-            case ACCURACY:
-                changeAccuracy(stages);
-                break;
-            case EVASION:
-                changeEvasion(stages);
-                break;
-            default:
-                break;
+        for (StatEnum stat : stats) {
+            switch (stat) {
+                case ATK:
+                    changeAttack(stages);
+                    break;
+                case DEF:
+                    changeDefense(stages);
+                    break;
+                case SPATK:
+                    changeSpecialAttack(stages);
+                    break;
+                case SPDEF:
+                    changeSpecialDefense(stages);
+                    break;
+                case SPEED:
+                    changeSpeed(stages);
+                    break;
+                case ACCURACY:
+                    changeAccuracy(stages);
+                    break;
+                case EVASION:
+                    changeEvasion(stages);
+                    break;
+                default:
+                    break;
+            }
+            if (stages < 0 && !this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+                || this.getAbility() instanceof UnsuppressableAbility) {
+                ability.afterDrop(this, cause, battle);
+            }
         }
         if (stages < 0) {
-            afterDrop(cause, battle);
+            heldItem.afterDrop(this, cause, battle);
         }
     }
 
@@ -890,14 +896,6 @@ public class Pokemon {
         } else {
             return heldItem.isDropPossible(stat);
         }
-    }
-
-    public void afterDrop(Pokemon cause, Battle battle) {
-        if (!this.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
-            || this.getAbility() instanceof UnsuppressableAbility) {
-            ability.afterDrop(this, cause, battle);
-        }
-        heldItem.afterDrop(this, cause, battle);
     }
 
     public double beforeHit(Pokemon opponent, Battle battle, Move move) {

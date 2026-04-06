@@ -21,7 +21,7 @@ public class Growl extends Move implements AffectedByMagicBounce, SoundEffect {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-1, StatEnum.ATK, battle, user);
+        target.changeStat(battle, user, -1, StatEnum.ATK);
     }
 
 }

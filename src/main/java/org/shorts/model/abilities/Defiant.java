@@ -16,7 +16,7 @@ public class Defiant extends Ability {
     public void afterDrop(Pokemon self, Pokemon cause, Battle battle) {
         if (battle.areOpponents(self, cause) && self.canChangeStat(2, StatEnum.ATK)) {
 
-            self.changeStat(2, StatEnum.ATK, battle, self);
+            self.changeStat(battle, self, 2, StatEnum.ATK);
         }
     }
 }

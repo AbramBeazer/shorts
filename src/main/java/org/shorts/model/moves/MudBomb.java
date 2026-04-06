@@ -3,7 +3,6 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 public class MudBomb extends Move implements BallBombMove, GetsSheerForceBoost {
@@ -21,6 +20,6 @@ public class MudBomb extends Move implements BallBombMove, GetsSheerForceBoost {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-1, StatEnum.ACCURACY, battle, user);
+        target.changeStat(battle, user, -1, StatEnum.ACCURACY);
     }
 }

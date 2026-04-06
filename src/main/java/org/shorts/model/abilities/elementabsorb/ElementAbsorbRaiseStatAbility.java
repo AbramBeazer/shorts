@@ -22,7 +22,7 @@ public class ElementAbsorbRaiseStatAbility extends Ability implements IgnorableA
     @Override
     public double beforeHit(Pokemon self, Pokemon opponent, Battle battle, Move move) {
         if (move.getType().equals(type) && self.canChangeStat(1, stat)) {
-            self.changeStat(1, stat, battle, self);
+            self.changeStat(battle, self, 1, stat);
             return 0;
         }
         return 1;

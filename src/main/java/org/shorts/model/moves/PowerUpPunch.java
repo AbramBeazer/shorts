@@ -21,6 +21,6 @@ public class PowerUpPunch extends Move implements PunchingMove, GetsSheerForceBo
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        user.changeStat(1, StatEnum.ATK, battle, user);
+        user.changeStat(battle, user, 1, StatEnum.ATK);
     }
 }

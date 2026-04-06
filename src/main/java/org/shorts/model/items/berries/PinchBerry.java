@@ -17,7 +17,7 @@ public class PinchBerry extends Berry {
     @Override
     public void doEffect(Pokemon user) {
         final int stages = user.getAbility() == RIPEN ? 2 : 1;
-        user.changeStat(stages, stat, null, user);
+        user.changeStat(null, user, stages, stat);
     }
 
     public static final PinchBerry LIECHI_BERRY = new PinchBerry("Liechi", StatEnum.ATK);

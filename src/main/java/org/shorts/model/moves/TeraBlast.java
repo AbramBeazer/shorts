@@ -33,8 +33,7 @@ public class TeraBlast extends Move {
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         if (getType() instanceof Type.StellarType) {
-            user.changeStat(-1, StatEnum.ATK, battle, user);
-            user.changeStat(-1, StatEnum.SPATK, battle, user);
+            user.changeStat(battle, user, -1, StatEnum.ATK, StatEnum.SPATK);
         }
     }
 }

@@ -40,19 +40,19 @@ public class Intimidate extends Ability {
                 && opponent.getAbility() != INNER_FOCUS && opponent.getAbility() != SCRAPPY) {
 
                 if (opponent.getAbility() == GUARD_DOG) {
-                    opponent.changeStat(1, StatEnum.ATK, battle, opponent);
+                    opponent.changeStat(battle, opponent, 1, StatEnum.ATK);
                 } else {
-                    opponent.changeStat(-1, StatEnum.ATK, battle, self);
+                    opponent.changeStat(battle, self, -1, StatEnum.ATK);
                 }
 
                 if (opponent.canChangeStat(1, StatEnum.SPEED)) {
                     if (opponent.getAbility() == RATTLED) {
-                        opponent.changeStat(1, StatEnum.SPEED, battle, opponent);
+                        opponent.changeStat(battle, opponent, 1, StatEnum.SPEED);
                     }
                     //TODO: Does Rattled stack with Adrenaline Orb here?
                     if (opponent.getHeldItem() == ADRENALINE_ORB) {
 
-                        opponent.changeStat(1, StatEnum.SPEED, battle, opponent);
+                        opponent.changeStat(battle, opponent, 1, StatEnum.SPEED);
                         opponent.setConsumedItem(opponent.getHeldItem());
                         opponent.setHeldItem(NO_ITEM);
                         Pickup.addToConsumedItems(opponent);

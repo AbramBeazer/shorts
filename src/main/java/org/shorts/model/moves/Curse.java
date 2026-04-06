@@ -34,9 +34,8 @@ public class Curse extends Move {
             target.addVolatileStatus(VolatileStatus.CURSED);
             //TODO: LOGGER.info("{} put a curse on {}!", attacker.getNickname(), defender.getNickname());
         } else {
-            user.changeStat(1, StatEnum.ATK, battle, user);
-            user.changeStat(1, StatEnum.DEF, battle, user);
-            user.changeStat(-1, StatEnum.SPEED, battle, user);
+            user.changeStat(battle, user, 1, StatEnum.ATK, StatEnum.DEF);
+            user.changeStat(battle, user, -1, StatEnum.SPEED);
         }
     }
 

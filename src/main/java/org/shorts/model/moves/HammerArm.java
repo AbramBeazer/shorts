@@ -13,6 +13,6 @@ public class HammerArm extends Move implements PunchingMove {
 
     @Override
     public void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        user.changeStat(-1, StatEnum.SPEED, battle, user);
+        user.changeStat(battle, user, -1, StatEnum.SPEED);
     }
 }

@@ -20,6 +20,6 @@ public class MeteorMash extends Move implements PunchingMove, GetsSheerForceBoos
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        user.changeStat(1, StatEnum.ATK, battle, user);
+        user.changeStat(battle, user, 1, StatEnum.ATK);
     }
 }

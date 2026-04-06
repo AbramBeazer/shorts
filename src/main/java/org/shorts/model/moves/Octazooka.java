@@ -20,6 +20,6 @@ public class Octazooka extends Move implements BallBombMove, GetsSheerForceBoost
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-1, StatEnum.ACCURACY, battle, user);
+        target.changeStat(battle, user, -1, StatEnum.ACCURACY);
     }
 }

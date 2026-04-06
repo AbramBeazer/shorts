@@ -17,7 +17,7 @@ public class Rattled extends Ability {
     @Override
     public void afterHit(Pokemon self, Pokemon opponent, Battle battle, int previousHP, Move move) {
         if (move.getType() == Type.BUG || move.getType() == Type.GHOST || move.getType() == Type.DARK) {
-            self.changeStat(1, StatEnum.SPEED, battle, self);
+            self.changeStat(battle, self, 1, StatEnum.SPEED);
         }
     }
 }

@@ -262,7 +262,7 @@ public class Trainer {
                 }
                 if (stickyWeb && pokemon.isDropPossible(StatEnum.SPEED)) {
                     System.out.println(pokemon + " is slowed by the Sticky Web!");
-                    pokemon.changeStat(-1, StatEnum.SPEED, battle, null);
+                    pokemon.changeStat(battle, null, -1, StatEnum.SPEED);
                 }
             }
         } else { //A Grounded Poison-type Pokémon with Heavy-Duty Boots should still absorb Toxic Spikes

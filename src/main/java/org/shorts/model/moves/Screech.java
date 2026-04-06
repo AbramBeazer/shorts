@@ -21,7 +21,7 @@ public class Screech extends Move implements AffectedByMagicBounce, SoundEffect 
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-2, StatEnum.DEF, battle, user);
+        target.changeStat(battle, user, -2, StatEnum.DEF);
     }
 
 }
