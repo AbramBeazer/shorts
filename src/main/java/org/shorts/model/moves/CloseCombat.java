@@ -13,9 +13,8 @@ public class CloseCombat extends Move {
 
     @Override
     public void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        user.changeStat(-1, StatEnum.DEF);
-        user.changeStat(-1, StatEnum.SPDEF);
-        user.afterDrop(target, battle);
+        user.changeStat(-1, StatEnum.DEF, battle, user);
+        user.changeStat(-1, StatEnum.SPDEF, battle, user);
     }
 
 }

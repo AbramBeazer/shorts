@@ -21,6 +21,6 @@ public class MudBomb extends Move implements BallBombMove, GetsSheerForceBoost {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-1, StatEnum.ACCURACY);
+        target.changeStat(-1, StatEnum.ACCURACY, battle, user);
     }
 }

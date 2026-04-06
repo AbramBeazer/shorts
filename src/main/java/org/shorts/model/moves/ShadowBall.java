@@ -21,6 +21,6 @@ public class ShadowBall extends Move implements BallBombMove, GetsSheerForceBoos
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-1, StatEnum.SPDEF);
+        target.changeStat(-1, StatEnum.SPDEF, battle, user);
     }
 }

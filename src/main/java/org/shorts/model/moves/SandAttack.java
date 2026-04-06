@@ -21,7 +21,7 @@ public class SandAttack extends Move {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-1, StatEnum.ACCURACY);
+        target.changeStat(-1, StatEnum.ACCURACY, battle, user);
     }
 
     @Override

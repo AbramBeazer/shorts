@@ -54,7 +54,7 @@ public abstract class HeldItem {
         return true;
     }
 
-    public void afterDrop(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterDrop(Pokemon self, Pokemon cause, Battle battle) {
     }
 
     public double beforeHit(Pokemon self, Pokemon opponent, Battle battle, Move move) {

@@ -21,7 +21,7 @@ public class BleakwindStorm extends Move implements WindMove{
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-1, StatEnum.SPEED);
+        target.changeStat(-1, StatEnum.SPEED, battle, user);
     }
 
     @Override

@@ -21,6 +21,6 @@ public class MysticalFire extends Move {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-1, StatEnum.SPATK);
+        target.changeStat(-1, StatEnum.SPATK, battle, user);
     }
 }

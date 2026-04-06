@@ -22,7 +22,7 @@ public class Defog extends Move implements AffectedByMagicBounce {
         if (!target.isBehindSub()
             && !target.hasVolatileStatus(VolatileStatusType.SEMI_INVULNERABLE)
             && target.isDropPossible(StatEnum.EVASION)) {
-            target.changeStat(-1, StatEnum.EVASION);
+            target.changeStat(-1, StatEnum.EVASION, battle, user);
         }
         //        if(battle.getWeather() == Weather.FOG){
         //            battle.setWeather(Weather.NONE);

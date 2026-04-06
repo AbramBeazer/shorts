@@ -3,7 +3,6 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 public class Screech extends Move implements AffectedByMagicBounce, SoundEffect {
@@ -22,7 +21,7 @@ public class Screech extends Move implements AffectedByMagicBounce, SoundEffect 
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-2, StatEnum.DEF);
+        target.changeStat(-2, StatEnum.DEF, battle, user);
     }
 
 }

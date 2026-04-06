@@ -21,6 +21,6 @@ public class TropKick extends Move implements KickingMove, GetsSheerForceBoost {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-1, StatEnum.ATK);
+        target.changeStat(-1, StatEnum.ATK, battle, user);
     }
 }

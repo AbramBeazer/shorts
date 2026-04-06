@@ -224,6 +224,9 @@ public class Battle {
     }
 
     public boolean areTeammates(Pokemon first, Pokemon second) {
+        if (first == null || second == null) {
+            return false;
+        }
         return getCorrespondingTrainer(first) == getCorrespondingTrainer(second);
     }
 
@@ -718,10 +721,10 @@ public class Battle {
             }
 
             for (Integer index : switchingInP1) {
-                playerOne.applyEntryHazards(playerOne.getTeam().get(index));
+                playerOne.applyEntryHazards(playerOne.getTeam().get(index), this);
             }
             for (Integer index : switchingInP2) {
-                playerTwo.applyEntryHazards(playerTwo.getTeam().get(index));
+                playerTwo.applyEntryHazards(playerTwo.getTeam().get(index), this);
             }
 
             redo = false;

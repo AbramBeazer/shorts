@@ -14,6 +14,6 @@ public class SpeedBoost extends Ability {
 
     @Override
     public void afterTurn(Pokemon self, Battle battle) {
-        self.changeStat(1, StatEnum.SPEED);
+        self.changeStat(1, StatEnum.SPEED, battle, self);
     }
 }

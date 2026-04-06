@@ -8,6 +8,11 @@ import org.shorts.model.moves.Move;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 
+/*TODO: Is it better to not use static singletons of abilities unless necessary?
+     I thought it'd be better to use singletons so we wouldn't have, say,
+     two instances of Intimidate taking up memory, but it seems like statically
+     declaring an instance of each ability would take up a lot of memory.
+     Some would still need to be singletons, like Pickup, maybe.*/
 public abstract class Ability {
 
     private String name;
@@ -59,7 +64,7 @@ public abstract class Ability {
         return true;
     }
 
-    public void afterDrop(Pokemon self, Pokemon opponent, Battle battle) {
+    public void afterDrop(Pokemon self, Pokemon cause, Battle battle) {
     }
 
     public double beforeHit(Pokemon self, Pokemon opponent, Battle battle, Move move) {

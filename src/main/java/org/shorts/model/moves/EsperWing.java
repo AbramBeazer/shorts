@@ -13,6 +13,6 @@ public class EsperWing extends Move implements HighCritChanceMove, GetsSheerForc
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        user.changeStat(1, StatEnum.SPEED);
+        user.changeStat(1, StatEnum.SPEED, battle, user);
     }
 }

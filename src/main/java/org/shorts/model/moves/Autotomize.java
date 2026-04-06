@@ -6,7 +6,7 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.AutotomizedStatus;
 import org.shorts.model.types.Type;
 
-import static org.shorts.model.status.VolatileStatusType.AUTOTOMIZED;
+import static org.shorts.model.status.VolatileStatusType.*;
 
 public class Autotomize extends Move {
 
@@ -23,7 +23,7 @@ public class Autotomize extends Move {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        user.changeStat(2, StatEnum.SPEED);
+        user.changeStat(2, StatEnum.SPEED, battle, user);
         if (user.hasVolatileStatus(AUTOTOMIZED)) {
             ((AutotomizedStatus) user.getVolatileStatus(AUTOTOMIZED)).incrementLevels();
         } else {

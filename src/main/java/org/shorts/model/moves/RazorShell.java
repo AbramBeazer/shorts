@@ -21,6 +21,6 @@ public class RazorShell extends Move implements SlicingMove, GetsSheerForceBoost
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-1, StatEnum.DEF);
+        target.changeStat(-1, StatEnum.DEF, battle, user);
     }
 }

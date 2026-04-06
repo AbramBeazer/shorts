@@ -7,15 +7,12 @@ import org.shorts.model.StatEnum;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 
-import static org.shorts.model.abilities.GuardDog.GUARD_DOG;
-import static org.shorts.model.abilities.Rattled.RATTLED;
-import static org.shorts.model.abilities.Scrappy.SCRAPPY;
-import static org.shorts.model.abilities.StatusImmuneAbility.INNER_FOCUS;
-import static org.shorts.model.abilities.StatusImmuneAbility.OBLIVIOUS;
-import static org.shorts.model.abilities.StatusImmuneAbility.OWN_TEMPO;
-import static org.shorts.model.items.AdrenalineOrb.ADRENALINE_ORB;
-import static org.shorts.model.items.NoItem.NO_ITEM;
-import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
+import static org.shorts.model.abilities.GuardDog.*;
+import static org.shorts.model.abilities.Rattled.*;
+import static org.shorts.model.abilities.Scrappy.*;
+import static org.shorts.model.abilities.StatusImmuneAbility.*;
+import static org.shorts.model.items.AdrenalineOrb.*;
+import static org.shorts.model.items.NoItem.*;
 
 public class Intimidate extends Ability {
 
@@ -43,22 +40,22 @@ public class Intimidate extends Ability {
                 && opponent.getAbility() != INNER_FOCUS && opponent.getAbility() != SCRAPPY) {
 
                 if (opponent.getAbility() == GUARD_DOG) {
-                    opponent.changeStat(1, StatEnum.ATK);
+                    opponent.changeStat(1, StatEnum.ATK, battle, opponent);
                 } else {
-                    opponent.changeStat(-1, StatEnum.ATK);
-                    opponent.afterDrop(self, battle);
+                    opponent.changeStat(-1, StatEnum.ATK, battle, self);
                 }
 
                 if (opponent.canChangeStat(1, StatEnum.SPEED)) {
                     if (opponent.getAbility() == RATTLED) {
-                        opponent.changeStat(1, StatEnum.SPEED);
+                        opponent.changeStat(1, StatEnum.SPEED, battle, opponent);
                     }
                     //TODO: Does Rattled stack with Adrenaline Orb here?
                     if (opponent.getHeldItem() == ADRENALINE_ORB) {
 
-                        opponent.changeStat(1, StatEnum.SPEED);
+                        opponent.changeStat(1, StatEnum.SPEED, battle, opponent);
                         opponent.setConsumedItem(opponent.getHeldItem());
                         opponent.setHeldItem(NO_ITEM);
+                        Pickup.addToConsumedItems(opponent);
                     }
                 }
             }

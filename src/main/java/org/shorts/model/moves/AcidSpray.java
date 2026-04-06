@@ -3,7 +3,6 @@ package org.shorts.model.moves;
 import org.shorts.battle.Battle;
 import org.shorts.model.StatEnum;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
 public class AcidSpray extends Move implements BallBombMove, GetsSheerForceBoost {
@@ -21,6 +20,6 @@ public class AcidSpray extends Move implements BallBombMove, GetsSheerForceBoost
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(-2, StatEnum.SPDEF);
+        target.changeStat(-2, StatEnum.SPDEF, battle, user);
     }
 }

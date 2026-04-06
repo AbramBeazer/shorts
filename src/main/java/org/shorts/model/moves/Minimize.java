@@ -16,7 +16,7 @@ public class Minimize extends Move {
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         //TODO: Verify that the minimized status should still be added if the move is used when evasion is already maxed out.
-        user.changeStat(2, StatEnum.EVASION);
+        user.changeStat(2, StatEnum.EVASION, battle, user);
         user.addVolatileStatus(new VolatileStatus(VolatileStatusType.MINIMIZED, -1));
     }
 }

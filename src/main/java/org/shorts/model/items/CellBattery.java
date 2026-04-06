@@ -21,7 +21,7 @@ public class CellBattery extends HeldItem {
     public void afterHit(Pokemon user, Pokemon opponent, Battle battle, int previousHP, Move move) {
         if (move.getType().equals(Type.ELECTRIC) && !user.getTypes().contains(Type.GROUND)
             && !(user.getAbility() instanceof ElementAbsorbRaiseStatAbility) && user.canChangeStat(1, ATK)) {
-            user.changeStat(1, ATK);
+            user.changeStat(1, ATK, battle, user);
             user.setConsumedItem(user.getHeldItem());
             user.setHeldItem(NO_ITEM);
         }

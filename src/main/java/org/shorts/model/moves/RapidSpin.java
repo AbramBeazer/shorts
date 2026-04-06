@@ -14,7 +14,7 @@ public class RapidSpin extends Move implements GetsSheerForceBoost {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        user.changeStat(1, StatEnum.SPEED);
+        user.changeStat(1, StatEnum.SPEED, battle, user);
         battle.getCorrespondingTrainer(user).removeEntryHazards();
         user.removeVolatileStatus(VolatileStatusType.SEEDED);
         user.removeVolatileStatus(VolatileStatusType.BOUND);

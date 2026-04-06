@@ -13,7 +13,6 @@ public class IceHammer extends Move implements PunchingMove {
 
     @Override
     public void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        user.changeStat(-1, StatEnum.SPEED);
-        user.afterDrop(target, battle);
+        user.changeStat(-1, StatEnum.SPEED, battle, user);
     }
 }

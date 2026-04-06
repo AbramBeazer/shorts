@@ -24,7 +24,7 @@ public class Howl extends Move implements SoundEffect {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.changeStat(1, StatEnum.ATK);
+        target.changeStat(1, StatEnum.ATK, battle, user);
     }
 
     protected boolean affectsTarget(Pokemon user, Pokemon target) {

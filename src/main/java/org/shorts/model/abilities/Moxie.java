@@ -14,6 +14,6 @@ public class Moxie extends Ability {
 
     @Override
     public void afterKO(Pokemon self, Pokemon opponent, Battle battle) {
-        self.changeStat(1, StatEnum.ATK);
+        self.changeStat(1, StatEnum.ATK, battle, self);
     }
 }

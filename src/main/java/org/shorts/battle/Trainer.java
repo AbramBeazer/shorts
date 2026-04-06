@@ -234,7 +234,7 @@ public class Trainer {
         }
     }
 
-    public void applyEntryHazards(Pokemon pokemon) {
+    public void applyEntryHazards(Pokemon pokemon, Battle battle) {
         boolean boots = pokemon.getHeldItem().equals(HEAVY_DUTY_BOOTS);
         boolean magicGuard = pokemon.getAbility().equals(MAGIC_GUARD);
 
@@ -262,7 +262,7 @@ public class Trainer {
                 }
                 if (stickyWeb && pokemon.isDropPossible(StatEnum.SPEED)) {
                     System.out.println(pokemon + " is slowed by the Sticky Web!");
-                    pokemon.changeStat(-1, StatEnum.SPEED);
+                    pokemon.changeStat(-1, StatEnum.SPEED, battle, null);
                 }
             }
         } else { //A Grounded Poison-type Pokémon with Heavy-Duty Boots should still absorb Toxic Spikes
