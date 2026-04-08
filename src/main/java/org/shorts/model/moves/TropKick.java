@@ -8,7 +8,7 @@ import org.shorts.model.types.Type;
 public class TropKick extends Move implements KickingMove, GetsSheerForceBoost {
 
     public TropKick() {
-        super("Trop Kick", 70, 100, Type.GRASS, Category.PHYSICAL, Range.NORMAL, 24, true, 100);
+        super("Trop Kick", 85, 100, Type.GRASS, Category.PHYSICAL, Range.NORMAL, 24, true, 100);
     }
 
     @Override
