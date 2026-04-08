@@ -9,7 +9,7 @@ import org.shorts.model.types.Type;
 public class DireClaw extends Move implements GetsSheerForceBoost {
 
     public DireClaw() {
-        super("Dire Claw", 80, 100, Type.POISON, Category.PHYSICAL, Range.NORMAL, 24, true, 50);
+        super("Dire Claw", 80, 100, Type.POISON, Category.PHYSICAL, Range.NORMAL, 24, true, 30);
     }
 
     //TODO: Is any of this right? If it rolls poison on a target that's already poisoned, does it then just paralyze it instead?
