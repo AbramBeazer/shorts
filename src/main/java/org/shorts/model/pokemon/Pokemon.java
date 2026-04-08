@@ -1059,7 +1059,7 @@ public class Pokemon {
             } else {
                 this.wakeUp();
             }
-        } else if (this.getStatus().equals(Status.PARALYZE) && RANDOM.nextInt(4) == 0) {
+        } else if (this.getStatus().equals(Status.PARALYZE) && RANDOM.nextInt(8) == 0) {
             System.out.printf("%s couldn't move because it's paralyzed!", this);
             return false;
         } else if (this.getStatus().equals(Status.FREEZE)) {
