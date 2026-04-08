@@ -8,15 +8,17 @@ import org.shorts.model.types.Type;
 
 public class DireClaw extends Move implements GetsSheerForceBoost {
 
-    private Status currentStatus;
-
     public DireClaw() {
-        super("Dire Claw", 80, 100, Type.POISON, Category.PHYSICAL, Range.NORMAL, 24, true, 100);
+        super("Dire Claw", 80, 100, Type.POISON, Category.PHYSICAL, Range.NORMAL, 24, true, 50);
     }
 
+    //TODO: Is any of this right? If it rolls poison on a target that's already poisoned, does it then just paralyze it instead?
+
     @Override
-    public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        final int rand = Main.RANDOM.nextInt(9);
+    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
+        final Status currentStatus;
+
+        final int rand = Main.RANDOM.nextInt(3);
         if (rand == 0) {
             currentStatus = Status.POISON;
         } else if (rand == 1) {
@@ -24,18 +26,9 @@ public class DireClaw extends Move implements GetsSheerForceBoost {
         } else {
             currentStatus = Status.createSleep();
         }
-
         if (currentStatus.getType().isStatusPossible(user, target, battle)) {
-            super.trySecondaryEffect(user, target, battle);
+            target.setStatus(currentStatus);
+            target.afterStatus(user, battle);
         }
-    }
-
-    //TODO: Is any of this right? If it rolls poison on a target that's already poisoned, does it then just paralyze it instead?
-
-    @Override
-    protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.setStatus(currentStatus);
-        target.afterStatus(user, battle);
-        currentStatus = null;
     }
 }
