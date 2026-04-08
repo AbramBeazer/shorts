@@ -11,24 +11,26 @@ public class DireClaw extends Move implements GetsSheerForceBoost {
     private Status currentStatus;
 
     public DireClaw() {
-        super("Dire Claw", 80, 100, Type.POISON, Category.PHYSICAL, Range.NORMAL, 24, true, 50);
+        super("Dire Claw", 80, 100, Type.POISON, Category.PHYSICAL, Range.NORMAL, 24, true, 100);
     }
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        final int rand = Main.RANDOM.nextInt(6);
+        final int rand = Main.RANDOM.nextInt(9);
         if (rand == 0) {
             currentStatus = Status.POISON;
         } else if (rand == 1) {
             currentStatus = Status.PARALYZE;
-        } else if (rand == 2) {
+        } else {
             currentStatus = Status.createSleep();
         }
 
-        if (currentStatus != null && currentStatus.getType().isStatusPossible(user, target, battle)) {
+        if (currentStatus.getType().isStatusPossible(user, target, battle)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }
+
+    //TODO: Is any of this right? If it rolls poison on a target that's already poisoned, does it then just paralyze it instead?
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
