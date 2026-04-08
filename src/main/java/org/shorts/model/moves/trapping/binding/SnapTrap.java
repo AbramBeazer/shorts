@@ -9,5 +9,4 @@ public class SnapTrap extends BindingMove {
         super("Snap Trap", 35, 100, Type.STEEL, Category.PHYSICAL, Range.NORMAL, 24, true, 100);
     }
 
-    //TODO: Implement
 }
