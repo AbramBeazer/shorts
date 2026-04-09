@@ -1,7 +1,5 @@
 package org.shorts.model.status;
 
-import org.shorts.Main;
-
 public class Status extends AbstractStatus {
 
     private final StatusType type;
@@ -18,7 +16,7 @@ public class Status extends AbstractStatus {
 
     //to be used in most cases
     public static Status createSleep() {
-        return new Status(StatusType.SLEEP, Main.RANDOM.nextInt(3) + 1);
+        return new Status(StatusType.SLEEP, 2);
     }
 
     //to be used for Rest and other cases where the sleep lasts a set number of turns.
@@ -39,7 +37,7 @@ public class Status extends AbstractStatus {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Status && this.type.equals(((Status) obj).type);
+        return obj instanceof Status status && this.type.equals(status.type);
     }
 
     @Override

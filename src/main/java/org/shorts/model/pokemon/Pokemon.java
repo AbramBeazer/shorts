@@ -1053,16 +1053,20 @@ public class Pokemon {
 
     public boolean attemptToMove(Move move, Battle battle) {
         if (this.getStatus().getType().equals(StatusType.SLEEP)) {
-            if (this.getStatus().getTurnsRemaining() > 0) {
-                System.out.printf("%s is fast asleep.", this);
-                return move.canBeUsedWhileSleeping();
-            } else {
+            final int sleepTurnsRemaining = this.getStatus().getTurnsRemaining();
+            if (sleepTurnsRemaining == 0 || (sleepTurnsRemaining == 1 && RANDOM.nextInt(3) == 0)) {
                 this.wakeUp();
+            } else {
+                System.out.printf("%s is fast asleep.", this);
+                if (!move.canBeUsedWhileSleeping()) {
+                    return false;
+                }
             }
         } else if (this.getStatus().equals(Status.PARALYZE) && RANDOM.nextInt(8) == 0) {
             System.out.printf("%s couldn't move because it's paralyzed!", this);
             return false;
         } else if (this.getStatus().equals(Status.FREEZE)) {
+            //TODO: Freeze now lasts for maximum of 3 turns.
             if (move.isThawingMove() || RANDOM.nextInt(4) == 3) {
                 //TODO: Should this only happen if the user passes the confusion and attract checks?
                 this.thaw();
