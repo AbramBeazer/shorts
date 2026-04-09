@@ -1063,7 +1063,7 @@ public class Pokemon {
             System.out.printf("%s couldn't move because it's paralyzed!", this);
             return false;
         } else if (this.getStatus().equals(Status.FREEZE)) {
-            if (move.isThawingMove() || RANDOM.nextInt(5) == 4) {
+            if (move.isThawingMove() || RANDOM.nextInt(4) == 3) {
                 //TODO: Should this only happen if the user passes the confusion and attract checks?
                 this.thaw();
             } else {
