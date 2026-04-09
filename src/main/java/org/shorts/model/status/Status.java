@@ -19,9 +19,14 @@ public class Status extends AbstractStatus {
         return new Status(StatusType.SLEEP, 2);
     }
 
+    //TODO: Does the 1/3 wakeup chance apply to Rest?
     //to be used for Rest and other cases where the sleep lasts a set number of turns.
     public static Status createSleepForTurns(int turnsRemaining) {
         return new Status(StatusType.SLEEP, turnsRemaining);
+    }
+
+    public static Status createFreeze() {
+        return new Status(StatusType.FREEZE, 3);
     }
 
     public static Status createToxic() {
@@ -31,7 +36,6 @@ public class Status extends AbstractStatus {
     public static final Status NONE = new Status(StatusType.NONE, -1);
     public static final Status PARALYZE = new Status(StatusType.PARALYZE, -1);
     public static final Status BURN = new Status(StatusType.BURN, -1);
-    public static final Status FREEZE = new Status(StatusType.FREEZE, -1);
     public static final Status POISON = new Status(StatusType.POISON, -1);
     public static final Status FAINTED = new Status(StatusType.FAINTED, -1);
 

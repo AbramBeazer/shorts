@@ -21,6 +21,6 @@ public class IcePunch extends Move implements PunchingMove, GetsSheerForceBoost 
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.setStatus(Status.FREEZE);
+        target.setStatus(Status.createFreeze());
     }
 }

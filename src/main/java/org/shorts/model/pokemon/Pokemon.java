@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.shorts.battle.Battle;
@@ -770,8 +771,9 @@ public class Pokemon {
 
     public void decrementVolatileStatusTurns() {
         volatileStatuses.forEach((key, value) -> {
+            final StatusType statusType = Optional.ofNullable(this.getStatus()).map(Status::getType).orElse(null);
             if (key == CONFUSED && !this.hasVolatileStatus(FLINCH) && !this.hasVolatileStatus(MUST_RECHARGE)
-                && !this.getStatus().getType().equals(StatusType.SLEEP) && !this.getStatus().equals(Status.FREEZE)) {
+                && !StatusType.FREEZE.equals(statusType) && !StatusType.SLEEP.equals(statusType)) {
                 value.decrementTurns();
             }
         });
@@ -1022,7 +1024,7 @@ public class Pokemon {
     }
 
     public void thaw() {
-        if (this.getStatus() == Status.FREEZE) {
+        if (this.getStatus() != null && StatusType.FREEZE.equals(this.getStatus().getType())) {
             System.out.println(this.getNickname() + " was thawed out!");
             this.setStatus(Status.NONE);
         }
@@ -1052,6 +1054,7 @@ public class Pokemon {
     }
 
     public boolean attemptToMove(Move move, Battle battle) {
+        final Status status = Optional.ofNullable(this.getStatus()).orElse(Status.NONE);
         if (this.getStatus().getType().equals(StatusType.SLEEP)) {
             final int sleepTurnsRemaining = this.getStatus().getTurnsRemaining();
             if (sleepTurnsRemaining == 0 || (sleepTurnsRemaining == 1 && RANDOM.nextInt(3) == 0)) {
@@ -1065,9 +1068,8 @@ public class Pokemon {
         } else if (this.getStatus().equals(Status.PARALYZE) && RANDOM.nextInt(8) == 0) {
             System.out.printf("%s couldn't move because it's paralyzed!", this);
             return false;
-        } else if (this.getStatus().equals(Status.FREEZE)) {
-            //TODO: Freeze now lasts for maximum of 3 turns.
-            if (move.isThawingMove() || RANDOM.nextInt(4) == 3) {
+        } else if (this.getStatus().getType().equals(StatusType.FREEZE)) {
+            if (move.isThawingMove() || this.getStatus().getTurnsRemaining() == 0 || RANDOM.nextInt(4) == 3) {
                 //TODO: Should this only happen if the user passes the confusion and attract checks?
                 this.thaw();
             } else {

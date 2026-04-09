@@ -27,7 +27,7 @@ class FacadeTests {
 
         user.setStatus(Status.NONE);
         assertThat(facade.getPowerMultipliers(user, target, battle)).isEqualTo(1);
-        user.setStatus(Status.FREEZE);
+        user.setStatus(Status.createFreeze());
         assertThat(facade.getPowerMultipliers(user, target, battle)).isEqualTo(1);
         user.setStatus(Status.createSleep());
         assertThat(facade.getPowerMultipliers(user, target, battle)).isEqualTo(1);

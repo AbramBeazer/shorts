@@ -13,11 +13,11 @@ import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
-import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
-import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
-import static org.shorts.model.status.Status.FREEZE;
+import static org.assertj.core.api.Assertions.*;
+import static org.shorts.MockRandomReturnMax.*;
+import static org.shorts.MockRandomReturnZero.*;
+import static org.shorts.model.pokemon.PokemonTestUtils.*;
+import static org.shorts.model.status.StatusType.*;
 
 class ThawingMoveTests {
 
@@ -29,7 +29,7 @@ class ThawingMoveTests {
     void setUp() {
         user = getDummyPokemon();
         target = getDummyPokemon();
-        target.setStatus(Status.FREEZE);
+        target.setStatus(Status.createFreeze());
         battle = new DummyBattle(user, target);
         Main.RANDOM = ZERO_RANDOM;
         Main.HIT_RANDOM = ZERO_RANDOM;
@@ -41,27 +41,27 @@ class ThawingMoveTests {
     void testThawsFrozenTarget() {
         Move move = new Scald();
         move.executeWrapper(user, List.of(target), battle);
-        assertThat(target.getStatus()).isNotEqualTo(FREEZE);
+        assertThat(target.getStatus().getType()).isNotEqualTo(FREEZE);
     }
 
     @Test
     void testThawsFrozenUser() {
         Move move = new SteamEruption();
-        user.setStatus(Status.FREEZE);
+        user.setStatus(Status.createFreeze());
 
         new Turn(user, move, 0).takeTurn(battle);
-        assertThat(user.getStatus()).isNotEqualTo(FREEZE);
+        assertThat(user.getStatus().getType()).isNotEqualTo(FREEZE);
     }
 
     @Test
     void testRegularDamagingFireMoveThawsTargetButNotUser() {
         Move move = new Ember();
-        target.setStatus(Status.FREEZE);
+        target.setStatus(Status.createFreeze());
         move.executeWrapper(user, List.of(target), battle);
-        assertThat(target.getStatus()).isNotEqualTo(FREEZE);
+        assertThat(target.getStatus().getType()).isNotEqualTo(FREEZE);
 
-        user.setStatus(Status.FREEZE);
+        user.setStatus(Status.createFreeze());
         new Turn(user, move, 0).takeTurn(battle);
-        assertThat(user.getStatus()).isEqualTo(FREEZE);
+        assertThat(user.getStatus().getType()).isEqualTo(FREEZE);
     }
 }

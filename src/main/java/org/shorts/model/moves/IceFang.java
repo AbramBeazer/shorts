@@ -33,7 +33,7 @@ public class IceFang extends Move implements BitingMove, GetsSheerForceBoost {
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
         if (calculatingFreeze) {
-            target.setStatus(Status.FREEZE);
+            target.setStatus(Status.createFreeze());
         } else {
             target.addVolatileStatus(new VolatileStatus(FLINCH, 1));
         }

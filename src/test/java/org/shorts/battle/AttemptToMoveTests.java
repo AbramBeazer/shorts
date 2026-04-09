@@ -33,7 +33,7 @@ class AttemptToMoveTests {
 
     @Test
     void testFrozenSetsMoveFailedToTrue() {
-        user.setStatus(Status.FREEZE);
+        user.setStatus(Status.createFreeze());
         new Turn(user, new Tackle(), 0).takeTurn(battle);
         assertThat(user.hasMovedThisTurn()).isFalse();
         assertThat(user.isLastMoveFailed()).isTrue();

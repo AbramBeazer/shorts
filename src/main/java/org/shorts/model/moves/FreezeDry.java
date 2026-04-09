@@ -33,7 +33,7 @@ public class FreezeDry extends Move implements GetsSheerForceBoost {
 
     @Override
     public void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.setStatus(Status.FREEZE);
+        target.setStatus(Status.createFreeze());
     }
 
 }

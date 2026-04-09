@@ -9,11 +9,12 @@ import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.types.Type;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
-import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
+import static org.assertj.core.api.Assertions.*;
+import static org.shorts.MockRandomReturnMax.*;
+import static org.shorts.MockRandomReturnZero.*;
 import static org.shorts.model.pokemon.PokemonTestUtils.*;
 import static org.shorts.model.types.Type.*;
 
@@ -68,6 +69,6 @@ class FreezeDryTests {
     void testSecondaryFreezingEffect() {
         assertThat(target.getStatus()).isEqualTo(Status.NONE);
         move.executeOnTarget(user, target, battle);
-        assertThat(target.getStatus()).isEqualTo(Status.FREEZE);
+        assertThat(target.getStatus().getType()).isEqualTo(StatusType.FREEZE);
     }
 }

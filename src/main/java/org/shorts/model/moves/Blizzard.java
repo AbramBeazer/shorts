@@ -22,7 +22,7 @@ public class Blizzard extends Move implements WindMove {
 
     @Override
     protected void applySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        target.setStatus(Status.FREEZE);
+        target.setStatus(Status.createFreeze());
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.shorts.battle.DummyBattle;
 import org.shorts.battle.Weather;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 
@@ -15,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.MockRandomReturnMax.*;
 import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
+import static org.shorts.model.status.Status.*;
 
 public class BlizzardTests {
     private Pokemon user;
@@ -38,7 +40,7 @@ public class BlizzardTests {
     void testFreezesTarget() {
         move.executeOnTarget(user, target, battle);
 
-        assertThat(target.getStatus()).isEqualTo(Status.FREEZE);
+        assertThat(target.getStatus().getType()).isEqualTo(StatusType.FREEZE);
         assertThat(target.isAtFullHP()).isFalse();
     }
 

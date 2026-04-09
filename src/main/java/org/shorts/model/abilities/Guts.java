@@ -1,7 +1,10 @@
 package org.shorts.model.abilities;
 
+import java.util.Optional;
+
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 
 public class Guts extends Ability {
 
@@ -13,7 +16,10 @@ public class Guts extends Ability {
 
     @Override
     public double onCalculateAttack(Pokemon self) {
-        if (self.getStatus() == Status.NONE || self.getStatus() == Status.FREEZE) {
+        final StatusType statusType = Optional.ofNullable(self.getStatus())
+            .map(Status::getType)
+            .orElse(StatusType.NONE);
+        if (statusType.equals(StatusType.NONE) || statusType.equals(StatusType.FREEZE)) {
             return 1;
         } else {
             return GUTS_MULTIPLIER;

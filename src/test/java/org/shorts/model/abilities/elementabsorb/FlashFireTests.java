@@ -13,13 +13,14 @@ import org.shorts.model.moves.Move;
 import org.shorts.model.moves.WillOWisp;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
+import org.shorts.model.status.StatusType;
 import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
-import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
-import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
+import static org.assertj.core.api.Assertions.*;
+import static org.shorts.MockRandomReturnMax.*;
+import static org.shorts.MockRandomReturnZero.*;
+import static org.shorts.model.pokemon.PokemonTestUtils.*;
 
 class FlashFireTests {
 
@@ -107,7 +108,7 @@ class FlashFireTests {
         other.setCurrentHP(other.getMaxHP());
 
         assertThat(ffMon.beforeHit(other, battle, move)).isZero();
-        ffMon.setStatus(Status.FREEZE);
+        ffMon.setStatus(Status.createFreeze());
         move.executeWrapper(other, List.of(ffMon), battle);
         assertThat(ffMon.getMaxHP()).isEqualTo(ffMon.getCurrentHP());
         assertThat(ability.isActivated()).isTrue();
@@ -133,11 +134,11 @@ class FlashFireTests {
         other.setCurrentHP(other.getMaxHP());
 
         assertThat(ffMon.beforeHit(other, battle, ember)).isZero();
-        ffMon.setStatus(Status.FREEZE);
+        ffMon.setStatus(Status.createFreeze());
         wisp.executeWrapper(other, List.of(ffMon), battle);
         assertThat(ffMon.getMaxHP()).isEqualTo(ffMon.getCurrentHP());
         assertThat(ability.isActivated()).isTrue();
-        assertThat(ffMon.getStatus()).isEqualTo(Status.FREEZE);
+        assertThat(ffMon.getStatus().getType()).isEqualTo(StatusType.FREEZE);
 
         assertThat(ffMon.getAttackMultipliersFromAbilityAndItem(
             other,

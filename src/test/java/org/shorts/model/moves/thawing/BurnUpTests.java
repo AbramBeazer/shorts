@@ -17,8 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.shorts.MockRandomReturnMax.MAX_RANDOM;
 import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
-import static org.shorts.model.status.Status.FREEZE;
 import static org.shorts.model.status.Status.NONE;
+import static org.shorts.model.status.StatusType.*;
 
 class BurnUpTests {
 
@@ -44,14 +44,14 @@ class BurnUpTests {
 
     @Test
     void testThawsFrozenTarget() {
-        target.setStatus(Status.FREEZE);
+        target.setStatus(Status.createFreeze());
         move.executeWrapper(user, List.of(target), battle);
         assertThat(target.getStatus()).isEqualTo(NONE);
     }
 
     @Test
     void testThawsFrozenUser() {
-        user.setStatus(Status.FREEZE);
+        user.setStatus(Status.createFreeze());
         move.executeWrapper(user, List.of(target), battle);
         assertThat(user.getStatus()).isEqualTo(NONE);
     }
@@ -76,10 +76,10 @@ class BurnUpTests {
 
     @Test
     void testFailsToThawUserIfUserIsNotFireType() {
-        user.setStatus(Status.FREEZE);
+        user.setStatus(Status.createFreeze());
         user.setTypes(Set.of(Type.WATER));
         move.executeWrapper(user, List.of(target), battle);
-        assertThat(user.getStatus()).isEqualTo(FREEZE);
+        assertThat(user.getStatus().getType()).isEqualTo(FREEZE);
     }
 
 }
