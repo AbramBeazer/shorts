@@ -13,7 +13,7 @@ public class Growl extends Move implements AffectedByMagicBounce, SoundEffect {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.isDropPossible(StatEnum.ATK) && !target.isBehindSub()
+        if (target.isDropPossible(StatEnum.ATK)
             && !SoundEffect.super.soundproofApplies(target)) {
             super.trySecondaryEffect(user, target, battle);
         }

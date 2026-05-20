@@ -64,6 +64,10 @@ public interface IMove {
         return false;
     }
 
+    default boolean isSoundEffect() {
+        return false;
+    }
+
     default boolean getsSheerForceBoost() {
         return false;
     }

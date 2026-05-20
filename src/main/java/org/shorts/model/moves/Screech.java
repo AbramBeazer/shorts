@@ -13,7 +13,7 @@ public class Screech extends Move implements AffectedByMagicBounce, SoundEffect 
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.isDropPossible(StatEnum.DEF) && !target.isBehindSub()
+        if (target.isDropPossible(StatEnum.DEF, true)
             && !SoundEffect.super.soundproofApplies(target)) {
             super.trySecondaryEffect(user, target, battle);
         }
