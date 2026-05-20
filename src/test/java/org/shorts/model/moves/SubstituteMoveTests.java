@@ -1,6 +1,5 @@
 package org.shorts.model.moves;
 
-import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,12 +15,10 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.SubstituteStatus;
 import org.shorts.model.status.VolatileStatusType;
-import org.shorts.model.types.Type;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.shorts.MockRandomReturnMax.*;
 import static org.shorts.MockRandomReturnZero.*;
-import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
 import static org.shorts.model.pokemon.PokemonTestUtils.*;
 import static org.shorts.model.types.Type.*;
 
@@ -129,7 +126,6 @@ class SubstituteMoveTests {
         assertThat(subber.isAtFullHP()).isTrue();
         substituteMove.executeOnTarget(subber, subber, battle);
         assertThat(subber.getCurrentHP()).isEqualTo(subber.getMaxHP() - subHp);
-        SubstituteStatus sub = (SubstituteStatus) subber.getVolatileStatus(VolatileStatusType.SUBSTITUTE);
 
         new Spore().executeOnTarget(attacker, subber, battle);
         assertThat(subber.getStatus()).isEqualTo(Status.NONE);
@@ -141,7 +137,6 @@ class SubstituteMoveTests {
         assertThat(subber.isAtFullHP()).isTrue();
         substituteMove.executeOnTarget(subber, subber, battle);
         assertThat(subber.getCurrentHP()).isEqualTo(subber.getMaxHP() - subHp);
-        SubstituteStatus sub = (SubstituteStatus) subber.getVolatileStatus(VolatileStatusType.SUBSTITUTE);
 
         new Crunch().executeOnTarget(attacker, subber, battle);
         assertThat(subber.getStageDefense()).isZero();
@@ -152,7 +147,6 @@ class SubstituteMoveTests {
         assertThat(subber.isAtFullHP()).isTrue();
         substituteMove.executeOnTarget(subber, subber, battle);
         assertThat(subber.getCurrentHP()).isEqualTo(subber.getMaxHP() - subHp);
-        SubstituteStatus sub = (SubstituteStatus) subber.getVolatileStatus(VolatileStatusType.SUBSTITUTE);
 
         new Bite().executeOnTarget(attacker, subber, battle);
         assertThat(subber.hasVolatileStatus(VolatileStatusType.FLINCH)).isFalse();
@@ -163,9 +157,25 @@ class SubstituteMoveTests {
         assertThat(subber.isAtFullHP()).isTrue();
         substituteMove.executeOnTarget(subber, subber, battle);
         assertThat(subber.getCurrentHP()).isEqualTo(subber.getMaxHP() - subHp);
-        SubstituteStatus sub = (SubstituteStatus) subber.getVolatileStatus(VolatileStatusType.SUBSTITUTE);
 
         new MeanLook().executeOnTarget(attacker, subber, battle);
         assertThat(subber.hasVolatileStatus(VolatileStatusType.CANT_ESCAPE)).isFalse();
+    }
+
+    @Test
+    void testSoundMovesBypassSub() {
+        assertThat(subber.isAtFullHP()).isTrue();
+        substituteMove.executeOnTarget(subber, subber, battle);
+        final int afterSubHp = subber.getCurrentHP();
+        assertThat(afterSubHp).isEqualTo(subber.getMaxHP() - subHp);
+
+        new BugBuzz().executeOnTarget(attacker, subber, battle);
+        assertThat(subber.getCurrentHP()).isLessThan(afterSubHp);
+        assertThat(subber.getStageSpecialDefense()).isEqualTo(-1);
+
+        new Screech().executeOnTarget(attacker, subber, battle);
+        assertThat(subber.getStageDefense()).isEqualTo(-2);
+
+        assertThat(subber.hasVolatileStatus(VolatileStatusType.SUBSTITUTE)).isTrue();
     }
 }

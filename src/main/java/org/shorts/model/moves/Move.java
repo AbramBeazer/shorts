@@ -399,11 +399,15 @@ public abstract class Move implements IMove {
         if (range == Range.OTHER_SIDE) {
 
             Pokemon magicBouncer = this.isAffectedByMagicBounce() ? battle.getOpposingActivePokemon(user)
-                .stream()
-                .filter(t -> t.getAbility() == MAGIC_BOUNCE && !t.hasVolatileStatus(SEMI_INVULNERABLE)
-                    && !t.hasVolatileStatus(ABILITY_SUPPRESSED) && !t.hasVolatileStatus(ABILITY_IGNORED))
-                .findFirst()
-                .orElse(null) : null;
+                                                                    .stream()
+                                                                    .filter(t -> t.getAbility() == MAGIC_BOUNCE
+                                                                                 && !t.hasVolatileStatus(
+                                                                        SEMI_INVULNERABLE)
+                                                                                 && !t.hasVolatileStatus(
+                                                                        ABILITY_SUPPRESSED) && !t.hasVolatileStatus(
+                                                                        ABILITY_IGNORED))
+                                                                    .findFirst()
+                                                                    .orElse(null) : null;
 
             if (magicBouncer == null) {
                 side = battle.getOpposingTrainer(user);
@@ -511,6 +515,9 @@ public abstract class Move implements IMove {
 
     //TODO: Remember to override this in Transform and Sky Drop -- Infiltrator still can't get through a substitute when using those moves.
     protected boolean checkForHitSub(Pokemon user, Pokemon target) {
+        if (this.isSoundEffect()) {
+            return false;
+        }
         return target.isBehindSub() && (user.getAbility() != INFILTRATOR || user.hasVolatileStatus(
             ABILITY_SUPPRESSED));
     }

@@ -77,23 +77,11 @@ class HowlTests {
     }
 
     @Test
-    void testFailsWhenAllyHasSubUnlessUserHasInfiltrator() {
+    void testSucceedsWhenAllyHasSub() {
         ally.addVolatileStatus(new SubstituteStatus(100));
-        assertThat(howl.affectsTarget(user, ally)).isFalse();
-        howl.executeWrapper(user, battle.getPlayerOne().getActivePokemon(), battle);
-        assertThat(user.getStageAttack()).isOne();
-        assertThat(ally.getStageAttack()).isZero();
-
-        user.setAbility(INFILTRATOR);
         assertThat(howl.affectsTarget(user, ally)).isTrue();
         howl.executeWrapper(user, battle.getPlayerOne().getActivePokemon(), battle);
-        assertThat(user.getStageAttack()).isEqualTo(2);
-        assertThat(ally.getStageAttack()).isOne();
-
-        user.addVolatileStatus(VolatileStatus.ABILITY_SUPPRESSED);
-        assertThat(howl.affectsTarget(user, ally)).isFalse();
-        howl.executeWrapper(user, battle.getPlayerOne().getActivePokemon(), battle);
-        assertThat(user.getStageAttack()).isEqualTo(3);
+        assertThat(user.getStageAttack()).isOne();
         assertThat(ally.getStageAttack()).isOne();
     }
 }

@@ -6,7 +6,6 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-import static org.shorts.model.abilities.Infiltrator.*;
 import static org.shorts.model.abilities.Soundproof.*;
 
 public class Howl extends Move implements SoundEffect {
@@ -29,16 +28,9 @@ public class Howl extends Move implements SoundEffect {
 
     protected boolean affectsTarget(Pokemon user, Pokemon target) {
         boolean canAffect = target.canChangeStat(1, StatEnum.ATK);
-        if (user != target) {
-            if (target.isBehindSub()) {
-                canAffect &=
-                    user.getAbility() == INFILTRATOR && !user.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
-                        && target.canChangeStat(1, StatEnum.ATK);
-            }
-            if (target.getAbility() == SOUNDPROOF) {
-                canAffect &= target.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
-                        || target.hasVolatileStatus(VolatileStatusType.ABILITY_IGNORED);
-            }
+        if (user != target && target.getAbility() == SOUNDPROOF) {
+            canAffect &= target.hasVolatileStatus(VolatileStatusType.ABILITY_SUPPRESSED)
+                || target.hasVolatileStatus(VolatileStatusType.ABILITY_IGNORED);
         }
 
         return canAffect;
