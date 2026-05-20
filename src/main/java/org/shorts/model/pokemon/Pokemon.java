@@ -885,7 +885,11 @@ public class Pokemon {
     }
 
     public boolean isDropPossible(StatEnum stat) {
-        if (this.isBehindSub()) {
+        return isDropPossible(stat, false);
+    }
+
+    public boolean isDropPossible(StatEnum stat, boolean ignoreSub) {
+        if (this.isBehindSub() && !ignoreSub) {
             return false;
         }
         if (!canChangeStat(-1, stat)) {

@@ -13,7 +13,7 @@ public class BugBuzz extends Move implements SoundEffect {
 
     @Override
     public void trySecondaryEffect(Pokemon user, Pokemon target, Battle battle) {
-        if (target.isDropPossible(StatEnum.SPDEF)) {
+        if (target.isDropPossible(StatEnum.SPDEF, true)) {
             super.trySecondaryEffect(user, target, battle);
         }
     }
