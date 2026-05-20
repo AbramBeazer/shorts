@@ -10,21 +10,22 @@ import org.shorts.model.status.Status;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.shorts.MockRandomReturnMax.*;
-import static org.shorts.MockRandomReturnZero.ZERO_RANDOM;
-import static org.shorts.model.pokemon.PokemonTestUtils.getDummyPokemon;
+import static org.shorts.MockRandomReturnZero.*;
+import static org.shorts.model.pokemon.PokemonTestUtils.*;
 
-class HeatWaveTests {
+class BugBuzzTests {
+
     private Pokemon user;
     private Pokemon target;
     private Battle battle;
-    private HeatWave move;
+    private BugBuzz move;
 
     @BeforeEach
     void setup() {
         user = getDummyPokemon();
         target = getDummyPokemon();
         battle = new DummyBattle(user, target);
-        move = new HeatWave();
+        move = new BugBuzz();
         Main.HIT_RANDOM = ZERO_RANDOM;
         Main.DAMAGE_RANDOM = ZERO_RANDOM;
         Main.CRIT_RANDOM = MAX_RANDOM;
@@ -32,10 +33,10 @@ class HeatWaveTests {
     }
 
     @Test
-    void testBurnsTarget() {
+    void testLowersSpDef() {
         move.executeOnTarget(user, target, battle);
 
-        assertThat(target.getStatus()).isEqualTo(Status.BURN);
+        assertThat(target.getStageSpecialDefense()).isEqualTo(-1);
         assertThat(target.isAtFullHP()).isFalse();
     }
 }
