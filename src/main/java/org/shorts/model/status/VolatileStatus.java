@@ -2,7 +2,7 @@ package org.shorts.model.status;
 
 import org.shorts.model.moves.Move;
 
-import static org.shorts.Main.RANDOM;
+import static org.shorts.Main.*;
 
 public class VolatileStatus extends AbstractStatus {
 
@@ -30,6 +30,10 @@ public class VolatileStatus extends AbstractStatus {
         return move;
     }
 
+    public void setMove(Move move) {
+        this.move = move;
+    }
+
     public static final VolatileStatus INFATUATED = new VolatileStatus(VolatileStatusType.INFATUATED, -1);
     public static final VolatileStatus CURSED = new VolatileStatus(VolatileStatusType.CURSED, -1);
     public static final VolatileStatus ABILITY_SUPPRESSED = new VolatileStatus(
@@ -44,7 +48,7 @@ public class VolatileStatus extends AbstractStatus {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof VolatileStatus && this.type.equals(((VolatileStatus) obj).type);
+        return obj instanceof VolatileStatus volatileStatus && this.type.equals(volatileStatus.type);
     }
 
     @Override

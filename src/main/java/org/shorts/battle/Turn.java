@@ -62,6 +62,7 @@ public class Turn {
                     .collect(Collectors.toList());
             }
             System.out.println(user.toString() + " used " + move.getName() + "!");
+            //TODO: Should canBeUsed go here?
             if (user.attemptToMove(move, battle)) {
                 user.setMovedThisTurn(true);
                 move.executeWrapper(
