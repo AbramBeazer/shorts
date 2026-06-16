@@ -15,7 +15,7 @@ public class GyroBall extends Move implements BallBombMove, SpeedComparisonMove 
 
     @Override
     public double getPower(Pokemon user, Pokemon target, Battle battle) {
-        final double gyroBallPower = (BASE_POWER * target.calculateSpeed(battle) / user.calculateSpeed(battle)) + 1;
+        final double gyroBallPower = (BASE_POWER * 1d * target.calculateSpeed(battle) / user.calculateSpeed(battle)) + 1;
         return Math.min(MAX_POWER, gyroBallPower);
     }
 }
