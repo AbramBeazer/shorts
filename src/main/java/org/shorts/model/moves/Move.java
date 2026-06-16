@@ -16,11 +16,13 @@ import org.shorts.model.abilities.Technician;
 import org.shorts.model.abilities.statpreserving.PreserveAccuracyIgnoreEvasionAbility;
 import org.shorts.model.items.MetronomeItem;
 import org.shorts.model.items.berries.typeresist.TypeResistBerry;
+import org.shorts.model.moves.recoil.Struggle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.PumpedStatus;
 import org.shorts.model.status.Status;
 import org.shorts.model.status.StatusType;
 import org.shorts.model.status.SubstituteStatus;
+import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.TooManyTypesException;
 import org.shorts.model.types.Type;
@@ -288,10 +290,9 @@ public abstract class Move implements IMove {
         if (o == this) {
             return true;
         }
-        if (!(o instanceof Move)) {
+        if (!(o instanceof Move other)) {
             return false;
         }
-        Move other = (Move) Objects.requireNonNull(o);
         return this.name.equals(other.name) && this.power == other.power && this.accuracy == other.accuracy
             && this.type.equals(other.type) && this.maxPP == other.maxPP && this.contact == other.contact
             && this.secondaryEffectChance == other.secondaryEffectChance;
@@ -304,18 +305,57 @@ public abstract class Move implements IMove {
 
     //TODO: Find a way to prevent moves from being selected if they can't be used. Does this apply if the move is called by Metronome or Assist?
     public boolean canBeUsed(Pokemon user, List<Pokemon> targets, Battle battle) {
-        return this.getCurrentPP() > 0;
+        boolean canBeUsed = true;
+        String reason = null;
+        if (this.getCurrentPP() <= 0) {
+            canBeUsed = false;
+        }
+
+        if (canBeUsed) {
+            if (this.isSoundEffect() && user.hasVolatileStatus(THROAT_CHOPPED)) {
+                canBeUsed = false;
+                reason = "Throat Chop";
+            } else if (this.getCategory() == Category.STATUS && user.hasVolatileStatus(TAUNTED)) {
+                canBeUsed = false;
+                reason = "Taunt";
+            } else if (this.equals(Optional.ofNullable(user.getVolatileStatus(TORMENTED))
+                .map(VolatileStatus::getMove)
+                .orElse(null))) {
+                //TODO: Make sure this doesn't affect moves like Rollout.
+                canBeUsed = false;
+                reason = "Torment";
+            }
+        }
+
+        if (!canBeUsed) {
+            if (this.equals(Optional.ofNullable(user.getVolatileStatus(CHOICE_LOCKED))
+                .map(VolatileStatus::getMove)
+                .orElse(null))
+                || this.equals(Optional.ofNullable(user.getVolatileStatus(ENCORED))
+                .map(VolatileStatus::getMove)
+                .orElse(null))
+            ) {
+                Struggle.STRUGGLE.execute(
+                    user,
+                    battle.getPokemonWithinRange(user, Struggle.STRUGGLE.getRange(user)),
+                    battle);
+            } else if (reason != null) {
+                System.out.printf("%s can't use %s due to %s!", user, this.getName(), reason);
+            }
+        }
+
+        return canBeUsed;
     }
 
     public void executeWrapper(Pokemon user, List<Pokemon> targets, Battle battle) {
-        beforeExecute(user, targets, battle);
-        execute(user, targets, battle);
-        afterExecute(user, targets, battle);
-    }
-
-    protected void beforeExecute(Pokemon user, List<Pokemon> targets, Battle battle) {
-        user.setMovedThisTurn(true);
-        this.decrementPP();
+        if (canBeUsed(user, targets, battle)) {
+            decrementPP();
+            execute(user, targets, battle);
+            afterExecute(user, targets, battle);
+        } else {
+            //TODO: Is this right?
+            user.setLastMoveFailed(true);
+        }
     }
 
     public void execute(Pokemon user, List<Pokemon> targets, Battle battle) {
@@ -399,15 +439,15 @@ public abstract class Move implements IMove {
         if (range == Range.OTHER_SIDE) {
 
             Pokemon magicBouncer = this.isAffectedByMagicBounce() ? battle.getOpposingActivePokemon(user)
-                                                                    .stream()
-                                                                    .filter(t -> t.getAbility() == MAGIC_BOUNCE
-                                                                                 && !t.hasVolatileStatus(
-                                                                        SEMI_INVULNERABLE)
-                                                                                 && !t.hasVolatileStatus(
-                                                                        ABILITY_SUPPRESSED) && !t.hasVolatileStatus(
-                                                                        ABILITY_IGNORED))
-                                                                    .findFirst()
-                                                                    .orElse(null) : null;
+                .stream()
+                .filter(t -> t.getAbility() == MAGIC_BOUNCE
+                             && !t.hasVolatileStatus(
+                    SEMI_INVULNERABLE)
+                             && !t.hasVolatileStatus(
+                    ABILITY_SUPPRESSED) && !t.hasVolatileStatus(
+                    ABILITY_IGNORED))
+                .findFirst()
+                .orElse(null) : null;
 
             if (magicBouncer == null) {
                 side = battle.getOpposingTrainer(user);
@@ -529,7 +569,7 @@ public abstract class Move implements IMove {
 
         //TODO: Critical hits should ignore attack drops and defense buffs.
         double attackingStat = getAttackingStat(user, target, battle) * userAttackMultipliers;
-        double defendingStat = getDefendingStat(user, target, battle) * targetDefenseMultipliers;
+        double defendingStat = getDefendingStat(target, battle) * targetDefenseMultipliers;
         //TODO: Deal with multi-hit moves and the weirdness that is Beat Up.
 
         double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attackingStat / defendingStat) * 0.02) + 2;
@@ -865,7 +905,7 @@ public abstract class Move implements IMove {
         }
     }
 
-    protected double getDefendingStat(Pokemon attacker, Pokemon defender, Battle battle) {
+    protected double getDefendingStat(Pokemon defender, Battle battle) {
         if (category == Category.PHYSICAL) {
             return defender.calculateDefense(battle);
         } else if (category == Category.SPECIAL) {
