@@ -1,8 +1,10 @@
 package org.shorts.model.moves.recoil;
 
+import java.util.List;
 import java.util.Set;
 
 import org.shorts.MathUtils;
+import org.shorts.battle.Battle;
 import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.TooManyTypesException;
@@ -29,6 +31,11 @@ public class Struggle extends RecoilAttack {
         user.takeDamage(
             (int) MathUtils.roundHalfUp(user.getMaxHP() * this.recoilPercentage),
             String.format("%s was damaged by the recoil!", user));
+    }
+
+    @Override
+    public boolean canBeUsed(Pokemon user, List<Pokemon> targets, Battle battle) {
+        return true;
     }
 
     public static final Struggle STRUGGLE = new Struggle();
