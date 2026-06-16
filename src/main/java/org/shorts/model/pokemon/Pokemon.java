@@ -1,7 +1,7 @@
 package org.shorts.model.pokemon;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +84,7 @@ public class Pokemon {
     private int stageAccuracy = 0;
     private int stageEvasion = 0;
     private Status status = Status.NONE;
-    private final Map<VolatileStatusType, VolatileStatus> volatileStatuses = new HashMap<>();
+    private final Map<VolatileStatusType, VolatileStatus> volatileStatuses = new EnumMap<>(VolatileStatusType.class);
     private HeldItem heldItem = NoItem.NO_ITEM;
     private HeldItem consumedItem = NoItem.NO_ITEM;
     private byte happiness;
@@ -460,7 +460,7 @@ public class Pokemon {
         this.specialDefense = specialDefense;
     }
 
-    public double calculateSpeed(Battle battle) {
+    public int calculateSpeed(Battle battle) {
         double multiplier = ability.onCalculateSpeed(this) * heldItem.onCalculateSpeed(this);
         if (this.getStatus() == Status.PARALYZE) {
             multiplier *= 0.5;
@@ -469,7 +469,7 @@ public class Pokemon {
             multiplier *= 2;
         }
         //Verify in which order these calculations should take place.
-        return this.speed * getStageMultiplier(stageSpeed) * multiplier;
+        return (int) (this.speed * getStageMultiplier(stageSpeed) * multiplier);
     }
 
     public void setSpeed(int speed) {
@@ -762,6 +762,14 @@ public class Pokemon {
         volatileStatuses.put(status.getType(), status);
     }
 
+    public void addVolatileStatus(VolatileStatusType volatileStatusType, int turnsRemaining) {
+        volatileStatuses.put(volatileStatusType, new VolatileStatus(volatileStatusType, turnsRemaining));
+    }
+
+    public void addVolatileStatus(VolatileStatusType volatileStatusType, int turnsRemaining, Move move) {
+        volatileStatuses.put(volatileStatusType, new VolatileStatus(volatileStatusType, turnsRemaining, move));
+    }
+
     public void removeVolatileStatus(VolatileStatusType type) {
         if (this.hasVolatileStatus(type)) {
             volatileStatuses.remove(type);
@@ -770,8 +778,8 @@ public class Pokemon {
 
     public void decrementVolatileStatusTurns() {
         volatileStatuses.forEach((key, value) -> {
-            if (key == CONFUSED && !this.hasVolatileStatus(FLINCH) && !this.hasVolatileStatus(MUST_RECHARGE)
-                && !this.getStatus().getType().equals(StatusType.SLEEP) && !this.getStatus().equals(Status.FREEZE)) {
+            if (key != CONFUSED || (!this.hasVolatileStatus(FLINCH) && !this.hasVolatileStatus(MUST_RECHARGE)
+                && !this.getStatus().getType().equals(StatusType.SLEEP) && !this.getStatus().equals(Status.FREEZE))) {
                 value.decrementTurns();
             }
         });
