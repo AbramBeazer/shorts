@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.shorts.model.abilities.HailImmuneAbility;
 import org.shorts.model.abilities.SandImmuneAbility;
@@ -276,7 +276,7 @@ public class Battle {
         }
 
         while (!(playerOne.hasLost() || playerTwo.hasLost())) {
-            takeTurns();
+            takeTurns(resolveTurnOrder(pollTurns()));
             handleFloatingEffects();
             if (!(playerOne.hasLost() || playerTwo.hasLost())) {
                 replaceFaintedMons();
@@ -300,7 +300,35 @@ public class Battle {
         }
     }
 
-    public void takeTurns() throws Exception {
+    private List<Turn> resolveTurnOrder(List<Turn> turns) {
+        return turns.stream().sorted((t1, t2) -> {
+            final int priorityDiff = Integer.compare(t2.getPriority(this), t1.getPriority(this));
+            if (priorityDiff == 0) {
+                final int speedDiff = Integer.compare(
+                    t2.getUser().calculateSpeed(this),
+                    t1.getUser().calculateSpeed(this));
+                if (speedDiff != 0) {
+                    return speedDiff;
+                } else { //speed tie, flip a coin.
+                    return RANDOM.nextInt(2) == 0 ? -1 : 1;
+                }
+            } else {
+                return priorityDiff;
+            }
+        }).toList();
+    }
+
+    public void takeTurns(List<Turn> turns) {
+        handleStartOfTurnEffects(turns);
+
+        for (Turn turn : turns) {
+            if (!turn.getUser().hasFainted()) {
+                turn.takeTurn(this);
+            }
+        }
+    }
+
+    public List<Turn> pollTurns() throws Exception {
         for (int i = 0; i < activeMonsPerSide; i++) {
             playerOne.getTeam().get(i).setMovedThisTurn(false);
             playerTwo.getTeam().get(i).setMovedThisTurn(false);
@@ -311,22 +339,7 @@ public class Battle {
         turns.addAll(pollPlayerInput(playerOne));
         turns.addAll(pollPlayerInput(playerTwo));
 
-        turns.sort((t1, t2) -> {
-            int priority = Integer.compare(t2.getPriority(this), t1.getPriority(this));
-            if (priority == 0) {
-                return Double.compare(t2.getUser().calculateSpeed(this), t1.getUser().calculateSpeed(this));
-            } else {
-                return priority;
-            }
-        });
-
-        handleStartOfTurnEffects(turns);
-
-        for (Turn turn : turns) {
-            if (!turn.getUser().hasFainted()) {
-                turn.takeTurn(this);
-            }
-        }
+        return turns;
 
         //PRIORITY 6
 
@@ -747,12 +760,12 @@ public class Battle {
         allActiveMons.addAll(playerTwo.getActivePokemon());
         return allActiveMons.stream()
             .filter(pokemon -> !pokemon.hasFainted())
-            .sorted(Comparator.comparing(poke -> poke.calculateSpeed(this), Double::compareTo))
-            .collect(Collectors.toList());
+            .sorted(Comparator.comparing(poke -> poke.calculateSpeed(this), Integer::compareTo))
+            .toList();
         //TODO: Does Tailwind change the order in which end-of-turn effects apply?
     }
 
-    void endOfTurn() {
+    public void endOfTurn() {
 
         for (Pokemon mon : getAllActivePokemon()) {
             if (!isWeatherSuppressed() && mon.getHeldItem() != SAFETY_GOGGLES && (
@@ -804,7 +817,14 @@ public class Battle {
         for (Pokemon mon : getAllActivePokemon()) {
             mon.getStatus().decrementTurns();
             mon.decrementVolatileStatusTurns();
-            if (mon.getVolatileStatus(PERISH).getTurnsRemaining() == 0) {
+
+            //Torment should be updated to restrict the last move used. We do it here because if the Torment user goes first, the target should still be able to use the move they used on the last turn.
+            Optional.ofNullable(mon.getVolatileStatus(TORMENTED))
+                .ifPresent(torment -> torment.setMove(mon.getLastMoveUsed()));
+
+            //Perish song should cause fainting if counter is zero.
+            if (Optional.ofNullable(mon.getVolatileStatus(PERISH)).map(VolatileStatus::getTurnsRemaining).orElse(1)
+                == 0) {
                 mon.setCurrentHP(0);
                 mon.afterFaint(this);
             }
