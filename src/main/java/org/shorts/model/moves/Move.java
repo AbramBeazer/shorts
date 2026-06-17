@@ -335,6 +335,7 @@ public abstract class Move implements IMove {
                 .map(VolatileStatus::getMove)
                 .orElse(null))
             ) {
+                //TODO: Will it struggle if it selected this move but the opponent went first and lowered the PP to zero with Spite?
                 Struggle.STRUGGLE.execute(
                     user,
                     battle.getPokemonWithinRange(user, Struggle.STRUGGLE.getRange(user)),
