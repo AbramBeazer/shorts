@@ -578,6 +578,7 @@ public abstract class Move implements IMove {
         if (this.type instanceof Type.StellarType && target.isTera()) {
             return SUPER_EFFECTIVE;
         }
+        //TODO: Implement Wonder Guard
 
         final Set<Type> targetTypes = getTargetTypes(target);
         double multiplier = getBaseTypeMultiplier(targetTypes);
