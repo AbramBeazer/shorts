@@ -11,7 +11,7 @@ import org.shorts.model.status.Status;
 import org.shorts.model.status.SubstituteStatus;
 import org.shorts.model.types.Type;
 
-import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
+import static org.shorts.model.status.VolatileStatusType.*;
 
 public class BeatUp extends Move {
 
@@ -62,10 +62,6 @@ public class BeatUp extends Move {
 
             viableAttackers.clear();
             currentAttackerIndex = 0;
-
-            if (!user.hasFainted()) {
-                user.afterAttack(target, battle, this);
-            }
         }
     }
 

@@ -44,10 +44,10 @@ public abstract class HeldItem {
         return 1;
     }
 
-    public void beforeAttack(Pokemon self, Pokemon opponent) {
+    public void beforeAttack(Pokemon self, Pokemon opponent, Move move) {
     }
 
-    public void afterAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {
+    public void afterAttack(Pokemon user, Battle battle, Move move) {
     }
 
     public boolean isDropPossible(StatEnum stat) {

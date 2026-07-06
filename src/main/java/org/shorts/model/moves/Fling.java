@@ -19,22 +19,21 @@ import org.shorts.model.status.VolatileStatus;
 import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.Type;
 
-import static org.shorts.Main.DECIMAL;
-import static org.shorts.model.abilities.Klutz.KLUTZ;
-import static org.shorts.model.items.BoosterEnergy.BOOSTER_ENERGY;
-import static org.shorts.model.items.FlameOrb.FLAME_ORB;
-import static org.shorts.model.items.GriseousOrb.GRISEOUS_ORB;
-import static org.shorts.model.items.KingsRock.KINGS_ROCK;
-import static org.shorts.model.items.LightBall.LIGHT_BALL;
-import static org.shorts.model.items.MentalHerb.MENTAL_HERB;
-import static org.shorts.model.items.NoItem.NO_ITEM;
-import static org.shorts.model.items.RazorFang.RAZOR_FANG;
-import static org.shorts.model.items.RustedShield.RUSTED_SHIELD;
-import static org.shorts.model.items.RustedSword.RUSTED_SWORD;
-import static org.shorts.model.items.ToxicOrb.TOXIC_ORB;
-import static org.shorts.model.items.TypeBoostItem.POISON_BARB;
-import static org.shorts.model.items.WhiteHerb.WHITE_HERB;
-import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
+import static org.shorts.model.abilities.Klutz.*;
+import static org.shorts.model.items.BoosterEnergy.*;
+import static org.shorts.model.items.FlameOrb.*;
+import static org.shorts.model.items.GriseousOrb.*;
+import static org.shorts.model.items.KingsRock.*;
+import static org.shorts.model.items.LightBall.*;
+import static org.shorts.model.items.MentalHerb.*;
+import static org.shorts.model.items.NoItem.*;
+import static org.shorts.model.items.RazorFang.*;
+import static org.shorts.model.items.RustedShield.*;
+import static org.shorts.model.items.RustedSword.*;
+import static org.shorts.model.items.ToxicOrb.*;
+import static org.shorts.model.items.TypeBoostItem.*;
+import static org.shorts.model.items.WhiteHerb.*;
+import static org.shorts.model.status.VolatileStatusType.*;
 
 public class Fling extends Move implements PowerVaries {
 
@@ -94,10 +93,6 @@ public class Fling extends Move implements PowerVaries {
                 }
                 user.setHeldItem(NO_ITEM);
                 user.setConsumedItem(item);
-
-                if (!user.hasFainted()) {
-                    user.afterAttack(target, battle, this);
-                }
             }
         }
     }

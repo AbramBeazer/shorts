@@ -9,9 +9,9 @@ import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.SubstituteStatus;
 import org.shorts.model.types.Type;
 
-import static org.shorts.model.abilities.SkillLink.SKILL_LINK;
-import static org.shorts.model.items.LoadedDice.LOADED_DICE;
-import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
+import static org.shorts.model.abilities.SkillLink.*;
+import static org.shorts.model.items.LoadedDice.*;
+import static org.shorts.model.status.VolatileStatusType.*;
 
 public class PopulationBomb extends Move implements SlicingMove {
 
@@ -72,10 +72,6 @@ public class PopulationBomb extends Move implements SlicingMove {
             }
             if (hitNum > 1) {
                 System.out.println("Hit " + hitNum + " times!");
-            }
-
-            if (!user.hasFainted()) {
-                user.afterAttack(target, battle, this);
             }
         }
     }

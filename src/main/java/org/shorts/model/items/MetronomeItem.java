@@ -16,7 +16,7 @@ public class MetronomeItem extends HeldItem {
     }
 
     @Override
-    public void afterAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {
+    public void afterAttack(Pokemon user, Battle battle, Move move) {
         if (move != null) {
             if (!this.move.equals(user.getLastMoveUsed())) {
                 this.previousUses = 0;

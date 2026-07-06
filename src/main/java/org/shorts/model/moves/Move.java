@@ -24,68 +24,53 @@ import org.shorts.model.status.VolatileStatusType;
 import org.shorts.model.types.TooManyTypesException;
 import org.shorts.model.types.Type;
 
-import static org.shorts.Main.CRIT_RANDOM;
-import static org.shorts.Main.DAMAGE_RANDOM;
-import static org.shorts.Main.HIT_RANDOM;
-import static org.shorts.Main.RANDOM;
-import static org.shorts.MathUtils.roundHalfDown;
-import static org.shorts.MathUtils.roundHalfUp;
-import static org.shorts.model.abilities.BattleArmor.BATTLE_ARMOR;
-import static org.shorts.model.abilities.CompoundEyes.COMPOUND_EYES;
-import static org.shorts.model.abilities.Fluffy.FLUFFY;
-import static org.shorts.model.abilities.GaleWings.GALE_WINGS;
-import static org.shorts.model.abilities.Guts.GUTS;
-import static org.shorts.model.abilities.Hustle.HUSTLE;
-import static org.shorts.model.abilities.IceScales.ICE_SCALES;
-import static org.shorts.model.abilities.Infiltrator.INFILTRATOR;
-import static org.shorts.model.abilities.MagicBounce.MAGIC_BOUNCE;
-import static org.shorts.model.abilities.Merciless.MERCILESS;
-import static org.shorts.model.abilities.Neuroforce.NEUROFORCE;
-import static org.shorts.model.abilities.Prankster.PRANKSTER;
-import static org.shorts.model.abilities.Pressure.PRESSURE;
-import static org.shorts.model.abilities.PunkRock.PUNK_ROCK;
-import static org.shorts.model.abilities.Ripen.RIPEN;
-import static org.shorts.model.abilities.SandVeil.SAND_VEIL;
-import static org.shorts.model.abilities.Scrappy.SCRAPPY;
-import static org.shorts.model.abilities.SereneGrace.SERENE_GRACE;
-import static org.shorts.model.abilities.SheerForce.SHEER_FORCE;
-import static org.shorts.model.abilities.ShellArmor.SHELL_ARMOR;
-import static org.shorts.model.abilities.SkillLink.SKILL_LINK;
-import static org.shorts.model.abilities.Sniper.SNIPER;
-import static org.shorts.model.abilities.SnowCloak.SNOW_CLOAK;
-import static org.shorts.model.abilities.SuperLuck.SUPER_LUCK;
-import static org.shorts.model.abilities.TangledFeet.TANGLED_FEET;
-import static org.shorts.model.abilities.ThickFat.THICK_FAT;
-import static org.shorts.model.abilities.TintedLens.TINTED_LENS;
-import static org.shorts.model.abilities.Triage.TRIAGE;
-import static org.shorts.model.abilities.UnseenFist.UNSEEN_FIST;
-import static org.shorts.model.items.BrightPowder.BRIGHT_POWDER;
-import static org.shorts.model.items.ExpertBelt.EXPERT_BELT;
-import static org.shorts.model.items.IronBall.IRON_BALL;
-import static org.shorts.model.items.LaxIncense.LAX_INCENSE;
-import static org.shorts.model.items.Leek.LEEK;
-import static org.shorts.model.items.LifeOrb.LIFE_ORB;
-import static org.shorts.model.items.LoadedDice.LOADED_DICE;
-import static org.shorts.model.items.LuckyPunch.LUCKY_PUNCH;
-import static org.shorts.model.items.NoItem.NO_ITEM;
+import static org.shorts.Main.*;
+import static org.shorts.MathUtils.*;
+import static org.shorts.model.abilities.BattleArmor.*;
+import static org.shorts.model.abilities.CompoundEyes.*;
+import static org.shorts.model.abilities.Fluffy.*;
+import static org.shorts.model.abilities.GaleWings.*;
+import static org.shorts.model.abilities.Guts.*;
+import static org.shorts.model.abilities.Hustle.*;
+import static org.shorts.model.abilities.IceScales.*;
+import static org.shorts.model.abilities.Infiltrator.*;
+import static org.shorts.model.abilities.MagicBounce.*;
+import static org.shorts.model.abilities.Merciless.*;
+import static org.shorts.model.abilities.Neuroforce.*;
+import static org.shorts.model.abilities.Prankster.*;
+import static org.shorts.model.abilities.Pressure.*;
+import static org.shorts.model.abilities.PunkRock.*;
+import static org.shorts.model.abilities.Ripen.*;
+import static org.shorts.model.abilities.SandVeil.*;
+import static org.shorts.model.abilities.Scrappy.*;
+import static org.shorts.model.abilities.SereneGrace.*;
+import static org.shorts.model.abilities.SheerForce.*;
+import static org.shorts.model.abilities.ShellArmor.*;
+import static org.shorts.model.abilities.SkillLink.*;
+import static org.shorts.model.abilities.Sniper.*;
+import static org.shorts.model.abilities.SnowCloak.*;
+import static org.shorts.model.abilities.SuperLuck.*;
+import static org.shorts.model.abilities.TangledFeet.*;
+import static org.shorts.model.abilities.ThickFat.*;
+import static org.shorts.model.abilities.TintedLens.*;
+import static org.shorts.model.abilities.Triage.*;
+import static org.shorts.model.abilities.UnseenFist.*;
+import static org.shorts.model.items.BrightPowder.*;
+import static org.shorts.model.items.ExpertBelt.*;
+import static org.shorts.model.items.IronBall.*;
+import static org.shorts.model.items.LaxIncense.*;
+import static org.shorts.model.items.Leek.*;
+import static org.shorts.model.items.LifeOrb.*;
+import static org.shorts.model.items.LoadedDice.*;
+import static org.shorts.model.items.LuckyPunch.*;
+import static org.shorts.model.items.NoItem.*;
 import static org.shorts.model.items.PunchingGlove.*;
-import static org.shorts.model.items.RazorClaw.RAZOR_CLAW;
-import static org.shorts.model.items.RingTarget.RING_TARGET;
-import static org.shorts.model.items.ScopeLens.SCOPE_LENS;
-import static org.shorts.model.items.WideLens.WIDE_LENS;
-import static org.shorts.model.items.ZoomLens.ZOOM_LENS;
-import static org.shorts.model.status.VolatileStatusType.ABILITY_IGNORED;
-import static org.shorts.model.status.VolatileStatusType.ABILITY_SUPPRESSED;
-import static org.shorts.model.status.VolatileStatusType.CONFUSED;
-import static org.shorts.model.status.VolatileStatusType.IDENTIFIED;
-import static org.shorts.model.status.VolatileStatusType.LASER_FOCUS;
-import static org.shorts.model.status.VolatileStatusType.MICLE_BERRY_EFFECT;
-import static org.shorts.model.status.VolatileStatusType.MINIMIZED;
-import static org.shorts.model.status.VolatileStatusType.PROTECTED;
-import static org.shorts.model.status.VolatileStatusType.PUMPED;
-import static org.shorts.model.status.VolatileStatusType.SEMI_INVULNERABLE;
-import static org.shorts.model.status.VolatileStatusType.SUBSTITUTE;
-import static org.shorts.model.status.VolatileStatusType.TARRED;
+import static org.shorts.model.items.RazorClaw.*;
+import static org.shorts.model.items.RingTarget.*;
+import static org.shorts.model.items.ScopeLens.*;
+import static org.shorts.model.items.WideLens.*;
+import static org.shorts.model.items.ZoomLens.*;
+import static org.shorts.model.status.VolatileStatusType.*;
 import static org.shorts.model.types.Type.*;
 
 public abstract class Move implements IMove {
@@ -110,6 +95,7 @@ public abstract class Move implements IMove {
     private final int secondaryEffectChance;
     private boolean disabled = false;
     public static final double REGULAR_CRIT_MULTIPLIER = 1.5;
+    public static final double COMMON_DIVISOR = 4096d;
 
     protected Move(
         String name,
@@ -338,7 +324,7 @@ public abstract class Move implements IMove {
             return;
         }
         for (Pokemon target : targets) {
-            user.beforeAttack(target); //TODO: Is this correct?
+            user.beforeAttack(target, this); //TODO: Is this correct?
 
             //TODO:
             //  If a Pokémon uses Tera Blast while one of its opponents has Pressure, the additional PP will be deducted even if the Pressure Pokémon is not the move's target.
@@ -398,6 +384,9 @@ public abstract class Move implements IMove {
 
     protected void afterExecute(Pokemon user, List<Pokemon> targets, Battle battle) {
         user.setLastMoveUsed(this);
+        if (!user.hasFainted()) {
+            user.afterAttack(battle, this);
+        }
     }
 
     protected void markTypeAsAlreadyStellarBoosted(Pokemon user) {
@@ -415,7 +404,7 @@ public abstract class Move implements IMove {
             Pokemon magicBouncer = this.isAffectedByMagicBounce() ? battle.getOpposingActivePokemon(user)
                 .stream()
                 .filter(t -> t.getAbility() == MAGIC_BOUNCE && !t.hasVolatileStatus(SEMI_INVULNERABLE)
-                    && !t.hasVolatileStatus(ABILITY_SUPPRESSED) && !t.hasVolatileStatus(ABILITY_IGNORED))
+                             && !t.hasVolatileStatus(ABILITY_SUPPRESSED) && !t.hasVolatileStatus(ABILITY_IGNORED))
                 .findFirst()
                 .orElse(null) : null;
 
@@ -444,13 +433,14 @@ public abstract class Move implements IMove {
                 doHit(user, target, battle);
             }
         }
+        target.removeVolatileStatus(VolatileStatusType.ABILITY_IGNORED);
     }
 
     protected void doHit(Pokemon user, Pokemon target, Battle battle) {
         if (this.category == Category.STATUS) {
             //TODO: This may change -- Will-O-Wisp shouldn't burn Flash Fire mons, Thunder Wave won't affect ground-types, and poison moves won't affect steels, but I think other status moves might ignore types.
             //TODO: REFACTOR THIS! getTypeMultiplier calls target.beforeHit!
-            if (target.beforeHit(user, battle, this) > 0 && getTypeMultiplier(user, target, battle) > 0) {
+            if (target.beforeHit(user, battle, this) > 0 && getTypeMultiplier(user, target, battle) > IMMUNE) {
                 this.trySecondaryEffect(user, target, battle);
             }
         } else {
@@ -466,8 +456,12 @@ public abstract class Move implements IMove {
                 final int previousTargetHP = target.getCurrentHP();
 
                 int damage = calculateDamage(user, target, battle);
-                if (damage <= 0) {
-                    throw new RuntimeException("Damage cannot be zero or negative!");
+                if (damage == 0) {
+                    //TODO: Validate that this is correct.
+                    user.setLastMoveFailed(true);
+                    //TODO: Does this boost get used up if the target is immune?
+                    markTypeAsAlreadyStellarBoosted(user);
+                    return;
                 }
 
                 final boolean hitSub = checkForHitSub(user, target);
@@ -502,10 +496,6 @@ public abstract class Move implements IMove {
             //TODO: Verify that this happens only if a damaging move hits, i.e. not if the attack misses, hits protect, or is a status move.
             //Confirmed: The boost should apply to every hit of a multi-hit move.
             markTypeAsAlreadyStellarBoosted(user);
-
-            if (!user.hasFainted()) {
-                user.afterAttack(target, battle, this);
-            }
         }
         user.setLastMoveFailed(false);
     }
@@ -745,8 +735,7 @@ public abstract class Move implements IMove {
 
     private double getOtherMultiplier(
         Pokemon user, Pokemon target, Battle battle, boolean critical, double typeMultiplier) {
-        final double divisor = 4096d;
-        double base = divisor;
+        double base = COMMON_DIVISOR;
         if (this.alwaysHitsMinimize() && target.hasVolatileStatus(MINIMIZED)) {
             base = roundHalfUp(base * 2);
         }
@@ -768,7 +757,7 @@ public abstract class Move implements IMove {
         }
         if (!critical && user.getAbility() != INFILTRATOR) {
             Trainer opposingTrainer = battle.getOpposingTrainer(user);
-            double screenMultiplier = battle.getActiveMonsPerSide() == 1 ? 0.5 : (2732 / divisor);
+            double screenMultiplier = battle.getActiveMonsPerSide() == 1 ? 0.5 : (2732 / COMMON_DIVISOR);
 
             if (opposingTrainer.getAuroraVeilTurns() > 0
                 || (this.category == Category.PHYSICAL && opposingTrainer.getReflectTurns() > 0)
@@ -779,7 +768,7 @@ public abstract class Move implements IMove {
         }
 
         if (this.dealsExtraSuperEffectiveDamage() && typeMultiplier > NEUTRAL) {
-            base = roundHalfUp(base * 5461d / divisor);
+            base = roundHalfUp(base * 5461d / COMMON_DIVISOR);
         }
 
         if (target.getCurrentHP() == target.getMaxHP() && target.getAbility() instanceof FullHealthHalfDamageAbility) {
@@ -815,8 +804,7 @@ public abstract class Move implements IMove {
         if (type == FIRE && target.getAbility() == FLUFFY) {
             base = roundHalfUp(base * 2);
         }
-        if (target.getHeldItem() instanceof TypeResistBerry) {
-            TypeResistBerry berry = (TypeResistBerry) target.getHeldItem();
+        if (target.getHeldItem() instanceof TypeResistBerry berry) {
             if (berry.getType() == this.type && (this.type == NORMAL || typeMultiplier > NEUTRAL)) {
                 final boolean ateBerry = berry.tryEatingOwnBerry(target, battle);
                 if (ateBerry) {
@@ -829,17 +817,16 @@ public abstract class Move implements IMove {
             }
         }
         if (user.getHeldItem() == EXPERT_BELT && typeMultiplier > NEUTRAL) {
-            base = roundHalfUp(base * 4915d / divisor);
+            base = roundHalfUp(base * 4915d / COMMON_DIVISOR);
         }
         if (user.getHeldItem() == LIFE_ORB) {
-            base = roundHalfUp(base * 5324d / divisor);
+            base = roundHalfUp(base * LIFE_ORB_MULTIPLIER);
         }
-        if (user.getHeldItem() instanceof MetronomeItem) {
-            final MetronomeItem metronome = (MetronomeItem) user.getHeldItem();
-            double metronomeMultiplier = 1 + (metronome.getPreviousUses() * 819d / divisor);
+        if (user.getHeldItem() instanceof MetronomeItem metronome) {
+            double metronomeMultiplier = 1 + (metronome.getPreviousUses() * 819d / COMMON_DIVISOR);
             base = roundHalfUp(base * metronomeMultiplier);
         }
-        return base / divisor;
+        return base / COMMON_DIVISOR;
     }
 
     protected void decrementPP() {

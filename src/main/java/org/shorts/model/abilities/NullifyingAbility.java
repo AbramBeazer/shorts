@@ -17,16 +17,10 @@ public class NullifyingAbility extends Ability {
     public static final NullifyingAbility TURBOBLAZE = new NullifyingAbility("Turboblaze");
 
     @Override
-    public void beforeAttack(Pokemon self, Pokemon opponent) {
-        super.beforeAttack(self, opponent);
+    public void beforeAttack(Pokemon self, Pokemon opponent, Move move) {
+        super.beforeAttack(self, opponent, move);
         opponent.addVolatileStatus(VolatileStatus.ABILITY_IGNORED);
     } //TODO: Not sure if this needs to be beforeAttack or onMovePowerCalc. As early as possible for the purposes of ability ignoring.
-
-    @Override
-    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        super.afterAttack(self, opponent, battle, move);
-        opponent.removeVolatileStatus(VolatileStatusType.ABILITY_IGNORED);
-    }
 
     //    Generation IV onward	Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightning Rod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke, Wonder Guard
     //    Generation V onward	Big Pecks, Contrary, Friend Guard, Heavy Metal, Light Metal, Magic Bounce, Multiscale, Sap Sipper, Telepathy, Wonder Skin

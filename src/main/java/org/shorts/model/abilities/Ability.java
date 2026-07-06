@@ -54,10 +54,10 @@ public abstract class Ability {
         return 1;
     }
 
-    public void beforeAttack(Pokemon self, Pokemon opponent) {
+    public void beforeAttack(Pokemon self, Pokemon opponent, Move move) {
     }
 
-    public void afterAttack(Pokemon self, Pokemon opponent, Battle battle, Move move) {
+    public void afterAttack(Pokemon self, Battle battle, Move move) {
     }
 
     public boolean isDropPossible(StatEnum stat) {

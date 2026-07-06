@@ -61,10 +61,6 @@ public class TripleAxel extends Move {
                 System.out.println("Hit " + hitNum + " times!");
             }
             hitNum = 0;
-
-            if (!user.hasFainted()) {
-                user.afterAttack(target, battle, this);
-            }
         }
     }
 

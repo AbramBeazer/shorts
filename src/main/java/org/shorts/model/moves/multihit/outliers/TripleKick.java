@@ -65,10 +65,6 @@ public class TripleKick extends Move implements KickingMove {
                 System.out.println("Hit " + hitNum + " times!");
             }
             hitNum = 0;
-
-            if (!user.hasFainted()) {
-                user.afterAttack(target, battle, this);
-            }
         }
     }
 

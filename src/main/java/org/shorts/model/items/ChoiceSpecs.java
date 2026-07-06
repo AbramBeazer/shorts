@@ -20,7 +20,7 @@ public class ChoiceSpecs extends HeldItem {
     }
 
     @Override
-    public void afterAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {
+    public void beforeAttack(Pokemon user, Pokemon opponent, Move move) {
         if (!user.hasVolatileStatus(VolatileStatusType.CHOICE_LOCKED)) {
             user.addVolatileStatus(new VolatileStatus(VolatileStatusType.CHOICE_LOCKED, -1, move));
         }

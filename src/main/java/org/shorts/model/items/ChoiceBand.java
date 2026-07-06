@@ -23,10 +23,9 @@ public class ChoiceBand extends HeldItem {
     //TODO: Choice Band doesn't boost confusion damage, but does it boost Struggle?
 
     @Override
-    public void afterAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {
-        if (!user.hasVolatileStatus(VolatileStatusType.CHOICE_LOCKED)) {
-            user.addVolatileStatus(new VolatileStatus(VolatileStatusType.CHOICE_LOCKED, -1, move));
+    public void beforeAttack(Pokemon self, Pokemon opponent, Move move) {
+        if (!self.hasVolatileStatus(VolatileStatusType.CHOICE_LOCKED)) {
+            self.addVolatileStatus(new VolatileStatus(VolatileStatusType.CHOICE_LOCKED, -1, move));
         }
     }
-
 }
