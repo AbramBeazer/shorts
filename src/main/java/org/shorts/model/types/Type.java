@@ -83,6 +83,10 @@ public class Type {
             throw new TooManyTypesException(attacker.getTypes());
         }
 
+        if (moveType.equals(TYPELESS)) {
+            return 1;
+        }
+
         if (attacker.isTera()) {
             if (attacker.getTeraType() instanceof StellarType stellar) {
                 if (!stellar.getPreviouslyBoosted()
@@ -239,9 +243,8 @@ public class Type {
         if (obj == this) {
             return true;
         }
-        if (obj instanceof Type) {
-            Type t = (Type) obj;
-            return t.id.equals(this.id);
+        if (obj instanceof Type t) {
+            return this.id.equals(t.id);
         } else {
             return false;
         }
@@ -306,7 +309,8 @@ public class Type {
         DARK,
         STEEL,
         FAIRY,
-        STELLAR
+        STELLAR,
+        TYPELESS
     }
 
     public static class StellarType extends Type {
@@ -335,4 +339,5 @@ public class Type {
         }
     }
 
+    public static final Type TYPELESS = new Type(TypeId.TYPELESS, "Typeless", List.of(), List.of(), List.of());
 }
