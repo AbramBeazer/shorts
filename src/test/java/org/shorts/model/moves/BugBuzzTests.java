@@ -6,7 +6,6 @@ import org.shorts.Main;
 import org.shorts.battle.Battle;
 import org.shorts.battle.DummyBattle;
 import org.shorts.model.pokemon.Pokemon;
-import org.shorts.model.status.Status;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.shorts.MockRandomReturnMax.*;
