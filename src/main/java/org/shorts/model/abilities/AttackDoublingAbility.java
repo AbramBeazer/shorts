@@ -15,7 +15,7 @@ public class AttackDoublingAbility extends Ability {
 
     @Override
     public double getAttackMultipliers(Pokemon self, Pokemon opponent, Battle battle, Move move) {
-        return 2;
+        return move.getCategory() == Move.Category.PHYSICAL ? 2 : 1;
     }
 
 }
