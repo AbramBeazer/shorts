@@ -1,6 +1,7 @@
 package org.shorts.model.items;
 
 import org.shorts.battle.Battle;
+import org.shorts.model.moves.HurtItselfInConfusion;
 import org.shorts.model.moves.Move;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.status.VolatileStatus;
@@ -16,8 +17,10 @@ public class ChoiceBand extends HeldItem {
 
     @Override
     public double getAttackMultipliers(Pokemon user, Pokemon opponent, Battle battle, Move move) {
-        return move.getCategory() == Move.Category.PHYSICAL ? 1.5 : 1;
+        return move.getCategory() == Move.Category.PHYSICAL && !(move instanceof HurtItselfInConfusion) ? 1.5 : 1;
     }
+
+    //TODO: Choice Band doesn't boost confusion damage, but does it boost Struggle?
 
     @Override
     public void afterAttack(Pokemon user, Pokemon opponent, Battle battle, Move move) {
