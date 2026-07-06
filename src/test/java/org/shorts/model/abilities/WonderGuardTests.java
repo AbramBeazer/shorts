@@ -193,6 +193,11 @@ class WonderGuardTests {
     }
 
     @Test
+    void testTarringMakesTargetWeakToFire() {
+        assertThat(false).isTrue();
+    }
+
+    @Test
     void testTraceCopiesWonderGuard() {
         assertThat(false).isTrue();
     }

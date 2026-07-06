@@ -6,7 +6,7 @@ import org.shorts.model.moves.Range;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
-import static org.shorts.model.abilities.Scrappy.SCRAPPY;
+import static org.shorts.model.abilities.Scrappy.*;
 
 public class SonicBoom extends Move {
 
@@ -18,7 +18,7 @@ public class SonicBoom extends Move {
 
     @Override
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
-        if (Type.getTypeMultiplier(this.getType(), target.getTypes()) == 0 && user.getAbility() != SCRAPPY) {
+        if (Type.getTypeMultiplier(this.getType(), target.getTypes()) == Type.IMMUNE && user.getAbility() != SCRAPPY) {
             return 0;
         } else {
             return FIXED_DAMAGE;

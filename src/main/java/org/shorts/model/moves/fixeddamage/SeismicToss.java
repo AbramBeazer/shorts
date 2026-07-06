@@ -16,7 +16,7 @@ public class SeismicToss extends Move {
 
     @Override
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
-        if (Type.getTypeMultiplier(this.getType(), target.getTypes()) == 0 && user.getAbility() != SCRAPPY) {
+        if (Type.getTypeMultiplier(this.getType(), target.getTypes()) == Type.IMMUNE && user.getAbility() != SCRAPPY) {
             return 0;
         } else {
             return user.getLevel();

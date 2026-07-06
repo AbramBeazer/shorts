@@ -4,6 +4,8 @@ import org.shorts.battle.Battle;
 import org.shorts.model.pokemon.Pokemon;
 import org.shorts.model.types.Type;
 
+import static org.shorts.model.abilities.Scrappy.*;
+
 public class SuperFang extends Move {
 
     public SuperFang() {
@@ -12,6 +14,9 @@ public class SuperFang extends Move {
 
     @Override
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
+        if (Type.getTypeMultiplier(this.getType(), target.getTypes()) == Type.IMMUNE && user.getAbility() != SCRAPPY) {
+            return 0;
+        }
         return Math.max(target.getCurrentHP() / 2, 1);
     }
 }

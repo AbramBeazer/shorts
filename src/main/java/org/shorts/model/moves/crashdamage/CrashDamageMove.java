@@ -35,12 +35,11 @@ public abstract class CrashDamageMove extends Move {
     }
 
     @Override
-    protected int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
-        final int base = super.applyMultipliers(user, target, battle, baseDamage);
-        if (base == 0) {
+    protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
+        if (super.calculateDamage(user, target, battle) == 0) {
             crash(user);
         }
-        return base;
+        return 0;
     }
 
     private void crash(Pokemon user) {

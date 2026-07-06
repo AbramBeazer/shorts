@@ -517,6 +517,14 @@ public abstract class Move implements IMove {
     }
 
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
+        double typeMultiplier = this.getTypeMultiplier(user, target, battle);
+
+        if (typeMultiplier == IMMUNE) {
+            System.out.println("It didn't affect " + target);
+            user.setLastMoveFailed(true);
+            return 0;
+        }
+
         double movePower = calculateMovePower(user, target, battle);
         double userAttackMultipliers = user.getAttackMultipliersFromAbilityAndItem(target, battle, this);
         double targetDefenseMultipliers = target.getDefenseMultipliersFromAbilityAndItem(user, battle, this);
@@ -527,19 +535,18 @@ public abstract class Move implements IMove {
         //TODO: Deal with multi-hit moves and the weirdness that is Beat Up.
 
         double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attackingStat / defendingStat) * 0.02) + 2;
-        double realDamage = applyMultipliers(user, target, battle, baseDamage);
+        double realDamage = applyMultipliers(user, target, battle, baseDamage, typeMultiplier);
         return realDamage == 0 ? 0 : (int) Math.max(1, realDamage);
     }
 
-    protected int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
-        boolean isCritical = rollForCrit(user, target, battle);
-        double typeMultiplier = this.getTypeMultiplier(user, target, battle);
+    protected int applyMultipliers(
+        Pokemon user,
+        Pokemon target,
+        Battle battle,
+        double baseDamage,
+        double typeMultiplier) {
 
-        if (typeMultiplier == IMMUNE) {
-            System.out.println("It didn't affect " + target);
-            user.setLastMoveFailed(true);
-            return 0;
-        }
+        boolean isCritical = rollForCrit(user, target, battle);
 
         double stabMultiplier = getSTABMultiplier(user);
 

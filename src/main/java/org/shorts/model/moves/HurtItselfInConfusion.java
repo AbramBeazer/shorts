@@ -15,7 +15,12 @@ public class HurtItselfInConfusion extends Move {
     }
 
     @Override
-    protected int applyMultipliers(Pokemon user, Pokemon target, Battle battle, double baseDamage) {
+    protected int applyMultipliers(
+        Pokemon user,
+        Pokemon target,
+        Battle battle,
+        double baseDamage,
+        double typeMultiplier) {
         return (int) (baseDamage * getRandomMultiplier());
     }
 
@@ -70,7 +75,7 @@ public class HurtItselfInConfusion extends Move {
         double defendingStat = getDefendingStat(user, target, battle);
 
         double baseDamage = ((0.4 * user.getLevel() + 2) * movePower * (attackingStat / defendingStat) * 0.02) + 2;
-        double realDamage = applyMultipliers(user, target, battle, baseDamage);
+        double realDamage = applyMultipliers(user, target, battle, baseDamage, Type.NEUTRAL);
         return realDamage == 0 ? 0 : (int) Math.max(1, realDamage);
     }
 

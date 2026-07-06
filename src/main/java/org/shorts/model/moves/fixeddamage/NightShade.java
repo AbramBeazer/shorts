@@ -14,7 +14,7 @@ public class NightShade extends Move {
 
     @Override
     protected int calculateDamage(Pokemon user, Pokemon target, Battle battle) {
-        if (Type.getTypeMultiplier(this.getType(), target.getTypes()) == 0) {
+        if (Type.getTypeMultiplier(this.getType(), target.getTypes()) == Type.IMMUNE) {
             return 0;
         } else {
             return user.getLevel();
